@@ -6,10 +6,10 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun CheckPermission(
-    vararg permissions: String,
+fun PermissionComponent(
+    permissions: List<String>,
     content: @Composable (() -> Boolean) -> Unit
 ) {
-    val permissionState = rememberMultiplePermissionsState(permissions = permissions.toList())
+    val permissionState = rememberMultiplePermissionsState(permissions = permissions)
     content { permissionState.allPermissionsGranted }
 }

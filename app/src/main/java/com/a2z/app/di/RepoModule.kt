@@ -22,4 +22,7 @@ interface RepoModule {
     fun provideFundRepositoryImpl(repository: FundRepositoryImpl): FundRepository
     @Binds
     fun provideTransactionRepositoryImpl(repository: TransactionRepositoryImpl): TransactionRepository
+
+    @Binds
+    fun provideReportRepositoryImpl(repository: ReportRepositoryImpl): ReportRepository
 }

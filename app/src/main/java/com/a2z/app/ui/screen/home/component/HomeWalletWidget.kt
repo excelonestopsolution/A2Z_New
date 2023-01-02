@@ -62,11 +62,9 @@ fun HomeWalletWidget() {
                     ),
 
                     )
-                //color = PrimaryColor
             ),
 
         ) {
-
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -165,7 +163,9 @@ fun HomeWalletWidget() {
                 }
                 Spacer(modifier = Modifier.weight(1f))
 
-                Row {
+                Row(modifier = Modifier.clickable {
+                    navController.navigate(NavScreen.ShowQRScreen.route)
+                }) {
                     Icon(
                         imageVector = Icons.Default.QrCode,
                         contentDescription = null,
@@ -183,6 +183,4 @@ fun HomeWalletWidget() {
         }
 
     }
-
-
 }

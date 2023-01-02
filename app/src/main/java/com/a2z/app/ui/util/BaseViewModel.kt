@@ -44,6 +44,7 @@ open class BaseViewModel : ViewModel() {
     }
 
     fun progressDialog(message: String = "Loading") {
+        AppUtil.logger("onProgress")
         dialogState.value = StatusDialogType.Progress(message)
     }
 
@@ -104,14 +105,12 @@ open class BaseViewModel : ViewModel() {
         this.collectLatest {
             when (it) {
                 is ResultType.Failure -> {
-
                     AppUtil.logger("OnFailure : ${it.exception}")
-
                     dismissDialog()
                     if (failure != null)
                         failure(it.exception)
                     else {
-                        //todo
+
                     }
                 }
 

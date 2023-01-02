@@ -19,8 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.data.model.fund.FundRequestBank
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.component.permission.PermissionComponent
+import com.a2z.app.ui.screen.util.permission.AppPermissionList
+import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.BackgroundColor
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.FileUtil
 import com.a2z.app.util.extension.removeDateSeparator
 
@@ -28,6 +34,7 @@ import com.a2z.app.util.extension.removeDateSeparator
 @Composable
 fun FundRequestScreen() {
     val viewModel: FundRequestViewModel = hiltViewModel()
+    val navController = LocalNavController.current
     BaseContent(viewModel) {
         Scaffold(
             backgroundColor = BackgroundColor,
@@ -97,17 +104,32 @@ fun FundRequestScreen() {
                                     uploadSlipInput.setValue(file?.name.toString())
                                 },
                                 content = { capture ->
-                                    FileTextField(
-                                        value = uploadSlipInput.formValue(),
-                                        label = "Upload Slip",
-                                        hint = "Select File",
-                                        error = uploadSlipInput.formError(),
-                                        onTrailingClick = {
-                                            viewModel.isImageDialogOpen.value = true
+                                    PermissionComponent(
+                                        permissions = AppPermissionList.cameraStorages()
+                                            .map { it.permission }) { child ->
+                                        FileTextField(
+                                            value = uploadSlipInput.formValue(),
+                                            label = "Upload Slip",
+                                            hint = "Select File",
+                                            error = uploadSlipInput.formError(),
+                                            onTrailingClick = {
+                                                viewModel.isImageDialogOpen.value = true
+                                            }
+                                        ) {
+                                            val childResult = child.invoke()
+                                            if (childResult) capture.invoke()
+                                            else {
+                                                navController.navigate(
+                                                    NavScreen.PermissionScreen.passData(
+                                                        permissionType = PermissionType.CameraAndStorage
+                                                    )
+                                                )
+                                            }
                                         }
-                                    ) { capture.invoke() }
+                                    }
                                 }
                             )
+
                         }
                     )
                 ))

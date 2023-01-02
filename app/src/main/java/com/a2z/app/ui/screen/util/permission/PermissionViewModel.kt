@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.permission
+package com.a2z.app.ui.screen.util.permission
 
 import android.Manifest
 import androidx.compose.runtime.mutableStateOf
@@ -19,29 +19,8 @@ class PermissionViewModel @Inject constructor(
         savedStateHandle.safeSerializable("permissionType")!!
 
     fun getPermissions() = when (permissionType) {
-        PermissionType.Location -> listOf(
-            AppPermission(
-                permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-                title = "COARSE LOCATION", isAccepted = false
-            ), AppPermission(
-                permission = Manifest.permission.ACCESS_FINE_LOCATION,
-                title = "FINE LOCATION",
-                isAccepted = false
-            )
-        )
-        PermissionType.CameraAndStorage -> listOf(
-            AppPermission(
-                permission = Manifest.permission.CAMERA, title = "CAMERA", isAccepted = false
-            ), AppPermission(
-                permission = Manifest.permission.READ_EXTERNAL_STORAGE,
-                title = "READ EXTERNAL STORAGE",
-                isAccepted = false
-            ), AppPermission(
-                permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                title = "WRITE EXTERNAL STORAGE",
-                isAccepted = false
-            )
-        )
+        PermissionType.Location -> AppPermissionList.locations()
+        PermissionType.CameraAndStorage -> AppPermissionList.cameraStorages()
     }
 
     fun getTitle() = when (permissionType) {
@@ -63,6 +42,35 @@ class PermissionViewModel @Inject constructor(
         )
     }
 
+
+}
+
+object AppPermissionList{
+
+    fun locations() =listOf(
+        AppPermission(
+            permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+            title = "COARSE LOCATION", isAccepted = false
+        ), AppPermission(
+            permission = Manifest.permission.ACCESS_FINE_LOCATION,
+            title = "FINE LOCATION",
+            isAccepted = false
+        )
+    )
+
+    fun cameraStorages() = listOf(
+        AppPermission(
+            permission = Manifest.permission.CAMERA, title = "CAMERA", isAccepted = false
+        ), AppPermission(
+            permission = Manifest.permission.READ_EXTERNAL_STORAGE,
+            title = "READ EXTERNAL STORAGE",
+            isAccepted = false
+        ), AppPermission(
+            permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            title = "WRITE EXTERNAL STORAGE",
+            isAccepted = false
+        )
+    )
 
 }
 

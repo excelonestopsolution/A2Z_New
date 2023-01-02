@@ -9,19 +9,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.a2z.app.nav.NavScreen
-import com.a2z.app.ui.screen.permission.PermissionType
+import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
 import com.google.gson.Gson
 
 @Composable
-fun CheckLocationPermission(
+fun LocationPermissionComponent(
     content: @Composable (() -> Boolean) -> Unit
 ) {
 
     val locationService = LocalLocationService.current
 
-    val permissions = arrayOf(
+    val permissions = listOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
     )
@@ -31,15 +31,12 @@ fun CheckLocationPermission(
 
 
     fun navigateToPermissionScreen() {
-
-        val gson = Gson()
-        val target =PermissionType.Location
-        val json = gson.toJson(target)
-
-        navController.navigate(NavScreen.PermissionScreen.passData(Uri.encode(json)))
+        navController.navigate(NavScreen.PermissionScreen.passData(
+            permissionType = PermissionType.Location
+        ))
     }
 
-    CheckPermission(permissions = permissions) { checkPermission ->
+    PermissionComponent(permissions = permissions) { checkPermission ->
 
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.StartIntentSenderForResult(),

@@ -59,14 +59,10 @@ fun PickCameraAndGalleryImage(
     val (fileUri, cameraLauncher) = ImagePickerUtil.pickCameraImage { uri ->
         onResult(uri)
     }
-
     val galleryLauncher = ImagePickerUtil.pickGalleryImage {
         onResult.invoke(it)
     }
-
-
     val isDialogOpen = remember { mutableStateOf(false) }
-
     content(capture = {
         isDialogOpen.value = true
     })

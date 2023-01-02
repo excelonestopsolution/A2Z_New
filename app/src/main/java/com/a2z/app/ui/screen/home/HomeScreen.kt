@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.service.LocalAuth
 import com.a2z.app.service.LocalAuthResultType
 import com.a2z.app.ui.component.BackPressHandler
@@ -35,11 +36,12 @@ import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
 import com.a2z.app.ui.screen.initialBalanceFetched
 import com.a2z.app.ui.theme.BackgroundColor
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
 
 
-var isLocalAuthDone = false
+var useLocalAuth = true
 
 @Composable
 fun HomeScreen(
@@ -49,7 +51,7 @@ fun HomeScreen(
 ) {
 
     val isFromLogin = dashboardViewModel.fromLogin
-    if(isFromLogin) isLocalAuthDone = true
+    if(isFromLogin) useLocalAuth= false
     val context = LocalContext.current
 
 
@@ -63,13 +65,10 @@ fun HomeScreen(
                initialBalanceFetched.value = true
                dashboardViewModel.bottomSheetVisibilityState.value =
                    initialBalanceFetched.value
-               context.showToast(initialBalanceFetched.toString())
                HomeScreenMainContent(dashboardViewModel)
            }
        }
     }
-
-
 
 }
 
@@ -109,13 +108,17 @@ private fun HomeScreenMainContent(
 
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
     val activity = LocalContext.current as FragmentActivity
+    val navController = LocalNavController.current
     LaunchedEffect(true){
         lifecycleScope.launchWhenStarted {
             homeViewModel.homeScreenState.collectLatest {
                 when (it) {
                     is HomeScreenState.OnLogoutComplete -> {
-                        activity.finishAffinity()
-
+                        navController.navigate(NavScreen.LoginScreen.route){
+                            popUpTo(NavScreen.DashboardScreen.route){
+                                inclusive = true
+                            }
+                        }
                     }
                 }
             }
@@ -123,15 +126,14 @@ private fun HomeScreenMainContent(
     }
 
     LaunchedEffect(key1 = homeViewModel.onLaunchEffect.value, block = {
-        if (!isLocalAuthDone)
+        if (useLocalAuth)
             LocalAuth.showBiometricPrompt(activity) {
                 when (it) {
                     is LocalAuthResultType.Error ->
                         homeViewModel.singInDialogState.value = true
                     LocalAuthResultType.Failure -> {}
                     is LocalAuthResultType.Success -> {
-                        isLocalAuthDone = true
-                        activity.showToast("Login Success")
+                        useLocalAuth = false
                     }
                 }
             }

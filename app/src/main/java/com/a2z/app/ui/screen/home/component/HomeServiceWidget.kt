@@ -39,6 +39,7 @@ fun HomeServiceWidget() {
 
 @Composable
 private fun BuildMoneyAndPaymentService() {
+    val navController  = LocalNavController.current
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -68,7 +69,10 @@ private fun BuildMoneyAndPaymentService() {
                         title = "AEPS 1",
                         icon = R.drawable.ic_launcher_aeps2,
                         padding = 14.dp,
-                        color = color
+                        color = color,
+                        onClick = {
+                            navController.navigate(NavScreen.AepsScreen.route)
+                        }
                     )
                     BuildIconAndIconTitle(
                         title = "AEPS 2",

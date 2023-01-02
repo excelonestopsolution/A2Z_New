@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.a2z.app.nav.bottom_bar.DashboardBottomNav
+import com.a2z.app.ui.screen.initialBalanceFetched
 import com.a2z.app.ui.theme.ShapeZeroRounded
 
 @Composable
@@ -23,16 +24,13 @@ fun DashboardScreen(
 
     Scaffold(
         scaffoldState = viewModel.scaffoldState!!,
-        bottomBar = {
-            AnimatedVisibility(visible = viewModel.bottomSheetVisibilityState.value) {
-                DashboardBottomBarWidget(homeBottomNavController)
-            }
-        },
+        bottomBar = { if(initialBalanceFetched.value)
+            DashboardBottomBarWidget(homeBottomNavController) },
         drawerShape = ShapeZeroRounded,
         drawerContent = { DashboardDrawerWidget() },
     ) {
         Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {
-            DashboardBottomNav(homeBottomNavController, viewModel)
+           DashboardBottomNav(homeBottomNavController, viewModel)
         }
     }
 }

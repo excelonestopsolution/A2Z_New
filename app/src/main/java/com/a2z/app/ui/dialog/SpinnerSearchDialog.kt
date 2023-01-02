@@ -100,7 +100,7 @@ fun SpinnerSearchDialog(
                                         color =
                                         when (selectedItemState.value) {
                                             null -> Color.Transparent
-                                            it -> Color.Blue.copy(alpha = 0.1f)
+                                            it -> MaterialTheme.colors.primary.copy(alpha = 0.1f)
                                             else -> Color.Transparent
                                         }
                                     )

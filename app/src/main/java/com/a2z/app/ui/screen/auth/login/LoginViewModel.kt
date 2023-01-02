@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.auth.login
 import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.a2z.app.BuildConfig
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.repository.AuthRepository
@@ -49,7 +50,6 @@ class LoginViewModel @Inject constructor(
             loginCheckState.value = appPreference.loginCheck
             input.validate()
         }
-
         viewModelScope.launch { subscribers() }
 
     }

@@ -22,6 +22,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.common.AmountTextField
+import com.a2z.app.ui.component.common.AppFormCard
+import com.a2z.app.ui.component.common.AppFormUI
+import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.BackgroundColor

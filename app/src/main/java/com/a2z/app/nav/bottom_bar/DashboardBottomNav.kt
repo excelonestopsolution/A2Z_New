@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.HomeScreen
-import com.a2z.app.ui.screen.ledger.LedgerScreen
+import com.a2z.app.ui.screen.report.ledger.LedgerReportScreen
 
 
 @Composable
@@ -22,7 +22,7 @@ fun DashboardBottomNav(navController: NavHostController,
             HomeScreen(viewModel)
         }
         composable("bottom-ledger-page") {
-            LedgerScreen()
+            LedgerReportScreen()
         }
     }
 }

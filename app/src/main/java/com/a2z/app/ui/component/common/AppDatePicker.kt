@@ -22,7 +22,6 @@ fun DatePickerDialog(
     val preDay by remember { mutableStateOf(1) }
 
     val context = LocalContext.current
-    context.showToast(preSelectedDate.toString())
     val datePicker = android.app.DatePickerDialog(
         context,
         { _: DatePicker, year: Int, m: Int, d: Int ->

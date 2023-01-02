@@ -6,6 +6,7 @@ import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.util.AppException
 import com.a2z.app.util.AppUtil
@@ -115,10 +116,16 @@ sealed class NavScreen(val route: String) {
     }
 
     object PermissionScreen : NavScreen("permission-screen".params("permissionType")) {
-        fun passData(permissionType: String) =
-            "permission-screen".args("permissionType" to permissionType)
+        fun passData(permissionType: PermissionType) : String {
+            val gson = Gson()
+            val json = gson.toJson(permissionType)
+            return "permission-screen".args("permissionType" to  Uri.encode(json))
+        }
+
 
     }
 
+    object ShowQRScreen : NavScreen("show-qr-screen")
     object TestScreen : NavScreen("test-screen")
+    object AepsScreen : NavScreen("aeps-screen")
 }

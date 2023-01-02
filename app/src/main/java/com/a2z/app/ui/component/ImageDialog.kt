@@ -23,7 +23,6 @@ fun ImageDialog(imageDialogOpen: MutableState<Boolean>, selectFile: MutableState
         val bitmap = BitmapUtil.uriToBitMap(selectFile.value, context)
 
         if(bitmap == null){
-            context.showToast("bitmap is null")
             return@Dialog
         }
 

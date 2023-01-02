@@ -10,6 +10,7 @@ import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.AppUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,7 +39,6 @@ class HomeViewModel @Inject constructor(
         fetchBanners()
         fetchNews()
         observeLogoutShareFlow()
-
     }
 
     private fun observeLogoutShareFlow() = viewModelScope.launch {
@@ -47,6 +47,7 @@ class HomeViewModel @Inject constructor(
             appPreference.loginCheck = false
             appPreference.loginId = ""
             appPreference.password = ""
+            useLocalAuth = true
             homeScreenState.emit(HomeScreenState.OnLogoutComplete)
         }
     }
@@ -85,15 +86,10 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             _logoutSharedFlow.emit(ResultType.Loading())
-            delay(5000)
+            delay(1000)
             _logoutSharedFlow.emit(ResultType.Success(AppResponse(1,"Logout successfully")))
         }
 
-        /*callApiForShareFlow(_logoutSharedFlow) {
-
-            delay(5000)
-            AppResponse(1,"Logout successfully")
-        }*/
     }
 
 

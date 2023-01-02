@@ -120,8 +120,9 @@ fun BaseResultComponent(
                         this.addView(spaceView)
                     }
 
-                    if(scrollView?.childCount == 0)
-                    scrollView?.addView(linearLayout)
+                    scrollView?.let {sv->
+                        if(sv.childCount ==0) sv.addView(linearLayout)
+                    }
 
 
                 }, modifier = Modifier.padding(16.dp))

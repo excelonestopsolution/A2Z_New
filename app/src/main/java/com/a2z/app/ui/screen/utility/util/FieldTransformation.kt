@@ -4,6 +4,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import com.a2z.app.util.AppUtil
+
+class AadhaarTransformation() : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        return aadhaarFilter(text)
+    }
+}
 
 class DateTransformation() : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
@@ -38,3 +45,36 @@ fun dateFilter(text: AnnotatedString): TransformedText {
 
     return TransformedText(AnnotatedString(out), numberOffsetTranslator)
 }
+
+
+
+fun aadhaarFilter(text: AnnotatedString): TransformedText {
+
+    AppUtil.logger("TestLogger : $text")
+
+    var out = ""
+    for (i in text.indices) {
+        out += text[i]
+        if (i ==3 || i ==7 ) out += "-"
+    }
+
+    val numberOffsetTranslator = object : OffsetMapping {
+        override fun originalToTransformed(offset: Int): Int {
+            if (offset <= 3) return offset
+            if (offset <= 7) return offset +1
+            if (offset <= 11) return offset +2
+            return 14
+        }
+
+        override fun transformedToOriginal(offset: Int): Int {
+            if (offset <=4) return offset
+            if (offset <=9) return offset -1
+            if (offset <=11) return offset -2
+            return 12
+        }
+    }
+
+    return TransformedText(AnnotatedString(out), numberOffsetTranslator)
+}
+
+

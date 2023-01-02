@@ -5,15 +5,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.a2z.app.InitialRouteType
 import com.a2z.app.MainViewModel
+import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
-import com.a2z.app.ui.screen.exception.ExceptionScreen
+import com.a2z.app.ui.screen.util.exception.ExceptionScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
-import com.a2z.app.ui.screen.permission.PermissionScreen
+import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.result.RechargeResultScreen
+import com.a2z.app.ui.screen.show_qrcode.ShowQRCodeScreen
 import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
@@ -30,6 +32,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         InitialRouteType.DASHBOARD_PAGE -> NavScreen.DashboardScreen.route
         InitialRouteType.DEVICE_LOCK_PAGE -> NavScreen.DeviceLockScreen.route
     }
+
 
     NavHost(
         navController = LocalNavController.current,
@@ -102,6 +105,8 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
                 PermissionScreen()
             }
         )
+        composable(route = NavScreen.ShowQRScreen.route, content = { ShowQRCodeScreen() })
+        composable(route = NavScreen.AepsScreen.route, content = { AepsScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

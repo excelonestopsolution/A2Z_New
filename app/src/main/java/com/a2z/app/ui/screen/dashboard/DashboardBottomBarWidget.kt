@@ -9,9 +9,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 private sealed class DashboardBottomBarItem(
@@ -33,12 +37,13 @@ private val dashboardBottomBarList = listOf(
 @Composable
 fun DashboardBottomBarWidget(navController: NavHostController? = null) {
     BottomNavigation() {
-       /* val navBackStackEntry by navController?.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        */
+        val navBackStackEntry = navController?.currentBackStackEntryAsState()
+        val currentDestination = navBackStackEntry?.value?.destination
+
         dashboardBottomBarList.forEach { screen ->
+           val isSelected = currentDestination?.hierarchy?.any{it.route == screen.route} ?: false
             BottomNavigationItem(
-                selected = true/*currentDestination?.hierarchy?.any { it.route == screen.route } == true*/,
+                selected = isSelected,
                 onClick = {
                     navController?.navigate(screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -48,8 +53,11 @@ fun DashboardBottomBarWidget(navController: NavHostController? = null) {
                         restoreState = true
                     }
                 },
-                label = { Text(text = screen.title) },
+                label = { Text(text = screen.title, fontWeight = FontWeight.Bold) },
                 icon = { Icon(imageVector = screen.icon, contentDescription = null) })
         }
+
+
+
     }
 }

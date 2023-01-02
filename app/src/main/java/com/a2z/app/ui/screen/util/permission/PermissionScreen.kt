@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.permission
+package com.a2z.app.ui.screen.util.permission
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -53,21 +53,6 @@ fun PermissionScreen() {
         rememberMultiplePermissionsState(
             permissions = viewModel.getPermissions().map { it.permission })
 
-    /* val lifecycleOwner = LocalLifecycleOwner.current
-     DisposableEffect(key1 = lifecycleOwner, effect = {
-         val observer = LifecycleEventObserver { _, event ->
-             if (event == Lifecycle.Event.ON_START) {
-                 permissionsState.launchMultiplePermissionRequest()
-             }
-         }
-         lifecycleOwner.lifecycle.addObserver(observer)
-
-         onDispose {
-             lifecycleOwner.lifecycle.removeObserver(observer)
-         }
-     })
-
- */
 
 
     Scaffold {

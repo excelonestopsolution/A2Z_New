@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,13 +24,12 @@ import com.a2z.app.R
 import com.a2z.app.ui.component.AppButton
 import com.a2z.app.ui.component.AppCard
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.PinTextField
+import com.a2z.app.ui.component.common.PinTextField
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.collectLifeCycleFlow
 import com.a2z.app.ui.util.resource.BannerType
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginOtpScreen(

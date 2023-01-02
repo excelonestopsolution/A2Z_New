@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.exception
+package com.a2z.app.ui.screen.util.exception
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box

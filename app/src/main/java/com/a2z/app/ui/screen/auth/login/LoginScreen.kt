@@ -18,7 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.permission.CheckLocationPermission
+import com.a2z.app.ui.component.common.AppTextField
+import com.a2z.app.ui.component.common.PasswordTextField
+import com.a2z.app.ui.component.permission.LocationPermissionComponent
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.util.extension.singleResult
@@ -118,7 +120,7 @@ private fun BoxScope.BuildFormWidget(
             Spacer(modifier = Modifier.height(32.dp))
 
 
-            CheckLocationPermission {
+            LocationPermissionComponent {
                 AppButton(
                     text = "     Login     ",
                     icon = {

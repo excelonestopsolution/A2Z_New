@@ -8,6 +8,7 @@ import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.AppUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

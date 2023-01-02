@@ -1,4 +1,4 @@
-package com.a2z.app.ui.component
+package com.a2z.app.ui.component.common
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.a2z.app.R
+import com.a2z.app.ui.component.DatePickerDialog
+import com.a2z.app.ui.screen.utility.util.AadhaarTransformation
 import com.a2z.app.ui.screen.utility.util.DateTransformation
 import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.ui.theme.spacing
@@ -219,6 +221,37 @@ fun MobileTextField(
 
     )
 }
+
+
+@Composable
+fun AadhaarTextField(
+    value: String,
+    onChange: (String) -> Unit,
+    isOutline: Boolean = false,
+    error: FormFieldError = FormErrorType.Initial,
+    topSpace: Dp = MaterialTheme.spacing.small,
+    downText: String? = "Enter 12 digits aadhaar number",
+    trailingIcon: @Composable () -> Unit = {}
+) {
+
+    AppTextField(value = value,
+        label = "Aadhaar Number",
+        onChange = onChange,
+        keyboardType = KeyboardType.Number,
+        leadingIcon = Icons.Default.Input,
+        error = error,
+        maxLength = 12,
+        isOutline = isOutline,
+        topSpace = topSpace,
+        downText = downText,
+        trailingIcon = { trailingIcon() },
+        visualTransformation = AadhaarTransformation()
+
+    )
+}
+
+
+
 
 
 @Composable
@@ -435,7 +468,7 @@ fun DropDownTextField(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(4.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Blue.copy(alpha = 0.1f),
+                backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
 
                 focusedIndicatorColor = Color.Transparent, //hide the indicator
                 unfocusedIndicatorColor = Color.Transparent
@@ -513,7 +546,7 @@ fun SearchTextField(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(4.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Blue.copy(alpha = 0.1f),
+                backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
 
                 focusedIndicatorColor = Color.Transparent, //hide the indicator
                 unfocusedIndicatorColor = Color.Transparent

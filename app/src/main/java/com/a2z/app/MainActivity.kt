@@ -48,12 +48,14 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 viewModel.isLoading.value ?: false
             }
         }
         setContent {
+
             CompositionLocalProvider(
                 LocalNavController provides rememberNavController(),
                 LocalLocationService provides locationService
@@ -69,10 +71,6 @@ class MainActivity : FragmentActivity() {
                             initialRouteType = InitialRouteType.DASHBOARD_PAGE
                         if (!LocalAuth.checkForBiometrics(this))
                             initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
-
-
-
-                        showToast("Hello dev : ${LocalAuth.checkForBiometrics(this)}")
 
                         MainNav(viewModel, initialRouteType)
                     }
