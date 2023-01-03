@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.permission.PermissionComponent
@@ -49,22 +50,16 @@ fun ShowQRCodeScreen() {
         topBar = { NavTopBar(title = "A2Z Accepted Payment") }
     ) {
 
-        ObsComponent(flow = viewModel.qrCodeObs) {
-            BuildContent(it)
+        BaseContent(viewModel) {
+            ObsComponent(flow = viewModel.qrCodeObs) {
+                BuildContentForScreenShot(response = it) {
+                }
+            }
         }
 
     }
 }
 
-
-@Composable
-private fun BuildContent(response: QRCodeResponse) {
-
-       BuildContentForScreenShot(response = response) {
-    }
-
-
-}
 
 @Composable
 private fun BuildContentForScreenShot(

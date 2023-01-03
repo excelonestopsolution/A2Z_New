@@ -11,10 +11,15 @@ import com.a2z.app.data.repository.UtilityRepository
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.ui.screen.utility.util.UtilityUtil
 import com.a2z.app.ui.util.BaseViewModel
+import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,8 +40,8 @@ class OperatorViewModel @Inject constructor(
     val util = UtilityUtil(operatorType = operatorType)
 
     private val _providerResponseObs =
-        MutableLiveData<ResultType<OperatorResponse>>(ResultType.Loading())
-    val providerResponseObs: LiveData<ResultType<OperatorResponse>> = _providerResponseObs
+        MutableStateFlow<ResultType<OperatorResponse>>(ResultType.Loading())
+    val providerResponseObs = _providerResponseObs.asStateFlow()
 
     init {
         fetchOperatorList()
@@ -58,20 +63,13 @@ class OperatorViewModel @Inject constructor(
     }
 
     private fun fetchOperatorList(stateId: String = "") {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            _providerResponseObs.postValue(ResultType.Loading())
-            try {
-
-                val requestType = getRequestTypeFromOperator()
-                val result = utilityRepository.rechargeOperators(
-                    "requestType" to requestType,
-                    "state_id" to stateId
-                )
-                _providerResponseObs.postValue(ResultType.Success(result))
-            } catch (e: java.lang.Exception) {
-                _providerResponseObs.postValue(ResultType.Failure(e))
-            }
+        val requestType = getRequestTypeFromOperator()
+        callApiForShareFlow (
+            flow = _providerResponseObs){
+            utilityRepository.rechargeOperators(
+                "requestType" to requestType,
+                "state_id" to stateId
+            )
         }
     }
 

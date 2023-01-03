@@ -15,6 +15,7 @@ class NetworkClient @Inject constructor(
     private val headerInterceptor: HeaderInterceptor,
     private val networkInterceptor: NetworkInterceptor,
     private val paramInterceptor: ParamInterceptor,
+    private val responseInterceptor: ResponseInterceptor,
 ) {
 
     fun normalClient() = networkClient(true)
@@ -37,7 +38,7 @@ class NetworkClient @Inject constructor(
             .addInterceptor(paramInterceptor)
             .addInterceptor(networkInterceptor)
             .addInterceptor(ExceptionInterceptor())
-            .addInterceptor(ResponseInterceptor())
+            .addInterceptor(responseInterceptor)
             .connectTimeout(0, TimeUnit.MINUTES)
             .readTimeout(0, TimeUnit.MINUTES)
             .writeTimeout(0, TimeUnit.MINUTES)

@@ -14,7 +14,7 @@ import com.a2z.app.ui.screen.utility.util.RechargeUtil
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
-import com.a2z.app.ui.util.extension.callApiForFlow
+import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.extension.safeSerializable
@@ -81,7 +81,7 @@ class RechargeViewModel @Inject constructor(
         MutableStateFlow<ResultType<RechargeOfferResponse>>(ResultType.Loading())
     val rOfferFlow: StateFlow<ResultType<RechargeOfferResponse>> = _rOfferFlow
     private fun fetchROffer() {
-        callApiForFlow(_rOfferFlow, beforeEmit = {
+        callApiForStateFlow(_rOfferFlow, beforeEmit = {
             if (it is ResultType.Success) {
                 if (it.data.status.equals("success", ignoreCase = true)) {
                     rOfferList = it.data.offers
@@ -99,7 +99,7 @@ class RechargeViewModel @Inject constructor(
     private fun fetchDthInfo() {
 
 
-        callApiForFlow(beforeEmit = {
+        callApiForStateFlow(beforeEmit = {
 
             when (it) {
                 is ResultType.Loading -> {

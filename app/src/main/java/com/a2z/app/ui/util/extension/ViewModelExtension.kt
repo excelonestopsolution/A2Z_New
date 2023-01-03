@@ -9,10 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 
-fun <T> BaseViewModel.callApiForFlow(
+fun <T> BaseViewModel.callApiForStateFlow(
     flow: MutableStateFlow<ResultType<T>>? = null,
     beforeEmit: (ResultType<T>) -> Unit = {},
-    useExceptionNavigator: Boolean = true,
+    showExceptionDialog: Boolean = true,
+    popUpOnException: Boolean = true,
     call: suspend () -> T
 ): MutableSharedFlow<ResultType<T>> {
 
@@ -25,7 +26,7 @@ fun <T> BaseViewModel.callApiForFlow(
             beforeEmit(ResultType.Success(response))
             mFlow.emit(ResultType.Success(response))
         } catch (e: Exception) {
-            if (useExceptionNavigator) gotoExceptionScreen(e)
+            if (showExceptionDialog) showExceptionDialog(e,popUpOnException)
             beforeEmit(ResultType.Failure(e))
             mFlow.emit(ResultType.Failure(e))
         }
@@ -36,7 +37,8 @@ fun <T> BaseViewModel.callApiForFlow(
 fun <T> BaseViewModel.callApiForShareFlow(
     flow: MutableSharedFlow<ResultType<T>>? = null,
     beforeEmit: (ResultType<T>) -> Unit = {},
-    useExceptionNavigator: Boolean = true,
+    showExceptionDialog: Boolean = true,
+    popUpOnException: Boolean = true,
     call: suspend () -> T
 ): MutableSharedFlow<ResultType<T>> {
 
@@ -49,7 +51,7 @@ fun <T> BaseViewModel.callApiForShareFlow(
             beforeEmit(ResultType.Success(response))
             mFlow.emit(ResultType.Success(response))
         } catch (e: Exception) {
-            if (useExceptionNavigator) gotoExceptionScreen(e)
+            if (showExceptionDialog) showExceptionDialog(e,popUpOnException)
             beforeEmit(ResultType.Failure(e))
             mFlow.emit(ResultType.Failure(e))
         }

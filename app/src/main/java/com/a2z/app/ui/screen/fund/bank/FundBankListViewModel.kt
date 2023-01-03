@@ -6,7 +6,7 @@ import com.a2z.app.data.model.fund.FundRequestBankListResponse
 import com.a2z.app.data.repository.FundRepository
 import com.a2z.app.ui.screen.fund.method.FundMethodType
 import com.a2z.app.ui.util.BaseViewModel
-import com.a2z.app.ui.util.extension.callApiForFlow
+import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.resource.ResultType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +37,7 @@ class FundBankListViewModel @Inject constructor(
             FundMethodType.CASH_COLLECT -> "CASH_COLLECT"
             else -> ""
         }
-        callApiForFlow(_bankListFlow) { repository.fetchFundBankList(requestType) }
+        callApiForStateFlow(_bankListFlow) { repository.fetchFundBankList(requestType) }
     }
 
 

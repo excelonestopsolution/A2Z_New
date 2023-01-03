@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.a2z.app.nav.bottom_bar.DashboardBottomNav
-import com.a2z.app.ui.screen.initialBalanceFetched
 import com.a2z.app.ui.theme.ShapeZeroRounded
 
 @Composable
@@ -24,7 +23,7 @@ fun DashboardScreen(
 
     Scaffold(
         scaffoldState = viewModel.scaffoldState!!,
-        bottomBar = { if(initialBalanceFetched.value)
+        bottomBar = { if(viewModel.bottomSheetVisibilityState.value)
             DashboardBottomBarWidget(homeBottomNavController) },
         drawerShape = ShapeZeroRounded,
         drawerContent = { DashboardDrawerWidget() },

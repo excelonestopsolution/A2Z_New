@@ -10,11 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.a2z.app.R
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.theme.CircularShape
+import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.util.ExceptionState
 import com.a2z.app.util.Exceptions
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -34,47 +33,43 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
-fun DialogExceptionComponent(exceptionState: MutableState<Exception?>) {
-    val dialogVisibilityState = remember {
-        mutableStateOf(true)
-    }
+fun DialogExceptionComponent(exceptionState: MutableState<ExceptionState?>) {
+
+    val navController = LocalNavController.current
+    val exception = exceptionState.value?.exception
+    val popUp = exceptionState.value?.popUp
 
     if(exceptionState.value == null) return
 
     fun onDismiss() {
-        val exception = exceptionState.value!!
-        dialogVisibilityState.value = false
+        exceptionState.value = null
+        when (exception) {
+            is Exceptions.SessionExpiredException -> {
+                val currentRoute = navController.currentDestination?.route ?: ""
+                navController.popBackStack(currentRoute,true)
+                navController.navigate(NavScreen.LoginScreen.route)
+            }
+            else -> {
+                if(popUp == true) navController.navigateUp()
+            }
+        }
     }
 
-    if (dialogVisibilityState.value) Dialog(
-        onDismissRequest = { onDismiss() },
+    if (exceptionState.value != null) Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
         content = {
-            ExceptionComponentContent(exceptionState.value!!) { onDismiss() }
+          if(exception!=null)  ExceptionComponentContent(exception) { onDismiss() }
         }
     )
-
-}
-
-@Composable
-fun ObsExceptionComponent(exceptionState: Exception) {
-    val dialogVisibilityState = remember {
-        mutableStateOf(true)
-    }
-
-    fun onDismiss() {
-        val exception = exceptionState
-        dialogVisibilityState.value = false
-    }
-
-    ExceptionComponentContent(exceptionState) { onDismiss() }
-
 
 }
 
 
 @Composable
 private fun ExceptionComponentContent(
-    exception : Exception,
+    exception: Exception,
     onDismiss: () -> Unit
 ) {
 

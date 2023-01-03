@@ -4,22 +4,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.AppUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val appRepository: AppRepository,
+    private val repository: AppRepository,
     val appPreference: AppPreference
 ) : BaseViewModel() {
 
@@ -33,9 +34,14 @@ class HomeViewModel @Inject constructor(
 
     val homeScreenState = MutableSharedFlow<HomeScreenState>()
 
+    val balanceFlow = MutableStateFlow<ResultType<BalanceResponse>>(
+        ResultType.Loading()
+    )
+
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
 
     init {
+        fetchWalletBalance()
         fetchBanners()
         fetchNews()
         observeLogoutShareFlow()
@@ -52,6 +58,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun fetchWalletBalance() {
+        callApiForShareFlow (
+            flow =balanceFlow,
+            showExceptionDialog = false)
+        { repository.fetchWalletBalance() }
+    }
 
 
     fun setOnLaunchEffect() {
@@ -59,7 +71,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private fun fetchBanners() {
+    fun fetchBanners() {
         callApiForShareFlow(beforeEmit = {
             if (it is ResultType.Success) {
                 if (it.data.status == 1) {
@@ -68,18 +80,18 @@ class HomeViewModel @Inject constructor(
                     isSliderVisible.value = true
                 }
             }
-        }, useExceptionNavigator = false) { appRepository.fetchBanner() }
+        }, showExceptionDialog = false) { repository.fetchBanner() }
     }
 
     val newsResponseState = mutableStateOf<NewsResponse?>(null)
 
-    private fun fetchNews() {
+    fun fetchNews() {
         callApiForShareFlow(beforeEmit = {
             if (it is ResultType.Success)
                 if (it.data.status == 1)
                     newsResponseState.value = it.data
                 else newsResponseState.value = null
-        }, useExceptionNavigator = false) { appRepository.fetchNews() }
+        }, showExceptionDialog = false) { repository.fetchNews() }
     }
 
     fun logout() {

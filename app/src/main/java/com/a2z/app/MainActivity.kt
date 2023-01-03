@@ -67,8 +67,6 @@ class MainActivity : FragmentActivity() {
                     ) {
 
                         var initialRouteType = InitialRouteType.LOGIN_PAGE
-                        if (appPreference.user?.token != null)
-                            initialRouteType = InitialRouteType.DASHBOARD_PAGE
                         if (!LocalAuth.checkForBiometrics(this))
                             initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
 

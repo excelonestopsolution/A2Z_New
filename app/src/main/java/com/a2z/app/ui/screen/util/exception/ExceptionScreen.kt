@@ -15,6 +15,7 @@ import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.util.AppException
+import com.a2z.app.util.Exceptions
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -22,23 +23,16 @@ fun ExceptionScreen(it: NavBackStackEntry) {
 
     val exception = it.safeParcelable<AppException>("exception")?.exception
     val navController = LocalNavController.current
-    val context = LocalContext.current
 
 
     BackPressHandler(onBack = {
-        navController.navigate(NavScreen.LoginScreen.route) {
-            popUpTo(navController.currentDestination?.route ?: "") {
-                inclusive = true
-            }
-        }
-
-       /* if (exception is Exceptions.SessionExpiredException) {
+        if (exception is Exceptions.SessionExpiredException) {
             navController.navigate(NavScreen.LoginScreen.route) {
-                popUpTo(navController.currentDestination?.route ?: "") {
+                popUpTo(NavScreen.DashboardScreen.route) {
                     inclusive = true
                 }
             }
-        } else navController.navigateUp()*/
+        } else navController.navigateUp()
     }, enabled = true) {
         Scaffold {
             Box(

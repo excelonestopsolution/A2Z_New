@@ -229,9 +229,9 @@ private fun RowScope.BuildIconAndIconTitle(
         Text(
             text = title,
             style = TextStyle(
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.W500,
-                color = Color.Black.copy(alpha = 0.8f)
+                color = Color.Black.copy(alpha = 0.7f)
             ),
             textAlign = TextAlign.Center,
 

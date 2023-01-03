@@ -17,12 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.PasswordTextField
 import com.a2z.app.ui.component.permission.LocationPermissionComponent
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.singleResult
 
 @Composable
@@ -31,6 +33,18 @@ fun LoginScreen(
     navBackStackEntry: NavBackStackEntry,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val navController = LocalNavController.current
+
+    LaunchedEffect(key1 = Unit, block = {
+        if(viewModel.appPreference.user != null){
+            navController.navigate(NavScreen.DashboardScreen.route){
+                popUpTo(NavScreen.LoginScreen.route){
+                    inclusive = true
+                }
+            }
+        }
+    })
 
 
     LaunchedEffect(key1 = Unit){

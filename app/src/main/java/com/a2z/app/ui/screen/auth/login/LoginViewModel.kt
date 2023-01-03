@@ -28,9 +28,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val appUtilDI: AppUtilDI,
-    private val appPreference: AppPreference,
+    val appPreference: AppPreference,
 ) : BaseViewModel() {
-
 
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
@@ -69,7 +68,10 @@ class LoginViewModel @Inject constructor(
                 setBanner(BannerType.Success(title = "User Login", message = message))
                 saveData(user)
                 delay(1000)
-                navigateTo(route = NavScreen.DashboardScreen.passArgs(true), popUpAll = true)
+
+                navigateTo(
+                    route = NavScreen.DashboardScreen.passArgs(true),
+                    popUpAll = true)
             }
             700 -> {
                 val mobile = input.userIdWrapper.getValue()

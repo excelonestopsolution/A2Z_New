@@ -8,6 +8,7 @@ import com.a2z.app.util.NetworkUtil
 import com.a2z.app.util.interceptor.HeaderInterceptor
 import com.a2z.app.util.interceptor.NetworkInterceptor
 import com.a2z.app.util.interceptor.ParamInterceptor
+import com.a2z.app.util.interceptor.ResponseInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +44,14 @@ object AppModule {
         return HeaderInterceptor(appPreference)
     }
 
+    @Provides
+    @Singleton
+    fun provideResponseInterceptor(
+        appPreference: AppPreference,
+    ): ResponseInterceptor {
+        return ResponseInterceptor(appPreference)
+    }
+
 
     @Provides
     @Singleton
@@ -68,11 +77,13 @@ object AppModule {
         headerInterceptor: HeaderInterceptor,
         networkInterceptor: NetworkInterceptor,
         paramInterceptor: ParamInterceptor,
+        responseInterceptor: ResponseInterceptor,
     ): NetworkClient {
         return NetworkClient(
             headerInterceptor = headerInterceptor,
             networkInterceptor = networkInterceptor,
-            paramInterceptor = paramInterceptor
+            paramInterceptor = paramInterceptor,
+            responseInterceptor = responseInterceptor
         )
     }
 

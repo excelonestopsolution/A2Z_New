@@ -6,17 +6,17 @@ import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
-import com.a2z.app.ui.util.extension.callApiForFlow
+import com.a2z.app.ui.util.extension.callApiForShareFlow
+import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.AppUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 
-val initialBalanceFetched = mutableStateOf(false)
 
 @HiltViewModel
 open class AppViewModel @Inject constructor(
@@ -24,34 +24,25 @@ open class AppViewModel @Inject constructor(
     val appPreference: AppPreference
 ) : BaseViewModel() {
 
-    private var showProgress = true
-
-    val balanceFlow = MutableStateFlow<ResultType<BalanceResponse>>(ResultType.Loading())
+    private val _balanceFlow = MutableSharedFlow<ResultType<BalanceResponse>>()
     val balanceObs = mutableStateOf(appPreference.user?.userBalance)
 
 
     init {
-        fetchWalletBalance(false)
-
         viewModelScope.launch {
-            balanceFlow.getLatest(progress = {
-               if(initialBalanceFetched.value) if (showProgress) progressDialog() }
-            ) {
-                if (!initialBalanceFetched.value) return@getLatest
+            _balanceFlow.getLatest {
                 if (it.status == 1) {
-                    if (showProgress)
-                        successBanner("Wallet Balance", "Balance updated successfully!")
+                    successBanner("Wallet Balance", "Balance updated successfully!")
                     balanceObs.value = it.balance.userBalance
                     val user = appPreference.user!!
                     appPreference.user = user.apply { this.userBalance = balanceObs.value!! }
                 } else failureDialog(it.message)
             }
         }
-}
+    }
 
-    fun fetchWalletBalance(progress: Boolean = true) {
-        this.showProgress = progress
-        callApiForFlow(balanceFlow) { repository.fetchWalletBalance() }
+    fun fetchWalletBalance() {
+        callApiForShareFlow(_balanceFlow) { repository.fetchWalletBalance() }
     }
 
 }

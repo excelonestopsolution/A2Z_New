@@ -3,19 +3,18 @@ package com.a2z.app.ui.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.NotificationImportant
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,10 +33,8 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
-import com.a2z.app.ui.screen.initialBalanceFetched
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -46,28 +43,34 @@ var useLocalAuth = true
 @Composable
 fun HomeScreen(
     dashboardViewModel: DashboardViewModel,
-    appViewModel: AppViewModel = hiltViewModel(),
-    viewModel : HomeViewModel = hiltViewModel()
+
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
 
     val isFromLogin = dashboardViewModel.fromLogin
-    if(isFromLogin) useLocalAuth= false
+    if (isFromLogin) useLocalAuth = false
     val context = LocalContext.current
 
 
     BackPressHandler(onBack = {
         viewModel.exitDialogState.value = true
-    }) {
+    }, enabled = false) {
 
-       BaseContent(dashboardViewModel,viewModel) {
-           if (initialBalanceFetched.value) HomeScreenMainContent(dashboardViewModel)
-           else ObsComponent(appViewModel.balanceFlow) {
-               initialBalanceFetched.value = true
-               dashboardViewModel.bottomSheetVisibilityState.value =
-                   initialBalanceFetched.value
-               HomeScreenMainContent(dashboardViewModel)
-           }
-       }
+        BaseContent(dashboardViewModel, viewModel) {
+            if (dashboardViewModel.bottomSheetVisibilityState.value) {
+                HomeScreenMainContent(dashboardViewModel)
+            } else ObsComponent(
+                flow = viewModel.balanceFlow,
+                onRetry = {
+                    viewModel.fetchWalletBalance()
+                    viewModel.fetchBanners()
+                    viewModel.fetchNews()
+                }
+            ) {
+                dashboardViewModel.bottomSheetVisibilityState.value = true
+                HomeScreenMainContent(dashboardViewModel)
+            }
+        }
     }
 
 }
@@ -109,13 +112,13 @@ private fun HomeScreenMainContent(
     val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
     val activity = LocalContext.current as FragmentActivity
     val navController = LocalNavController.current
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         lifecycleScope.launchWhenStarted {
             homeViewModel.homeScreenState.collectLatest {
                 when (it) {
                     is HomeScreenState.OnLogoutComplete -> {
-                        navController.navigate(NavScreen.LoginScreen.route){
-                            popUpTo(NavScreen.DashboardScreen.route){
+                        navController.navigate(NavScreen.LoginScreen.route) {
+                            popUpTo(NavScreen.DashboardScreen.route) {
                                 inclusive = true
                             }
                         }
@@ -153,9 +156,9 @@ private fun BuildNews(homeViewModel: HomeViewModel) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.Message,
+                imageVector = Icons.Default.NotificationImportant,
                 contentDescription = null,
-                tint = Color.Black,
+                tint = MaterialTheme.colors.primaryVariant,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -163,8 +166,8 @@ private fun BuildNews(homeViewModel: HomeViewModel) {
             Text(
                 text = homeViewModel.newsResponseState.value!!.retailerNews,
                 style = TextStyle(
-                    fontSize = 16.sp, fontWeight = FontWeight.Normal,
-                    color = Color.Black,
+                    fontSize = 14.sp, fontWeight = FontWeight.Normal,
+                    color = Color.Black.copy(alpha = 0.7f),
                     textAlign = TextAlign.Start,
                     lineHeight = 24.sp,
                 ),

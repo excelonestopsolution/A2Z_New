@@ -52,7 +52,7 @@ fun HomeExitDialogComponent(
                     TextStyle(
                         color = Color.DarkGray,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 12.sp,
+                        fontSize = 15.sp,
                         textAlign = TextAlign.Center
                     )
                 )

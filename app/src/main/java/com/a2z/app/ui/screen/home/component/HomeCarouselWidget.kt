@@ -54,7 +54,7 @@ fun HomeCarouselWidget(
                 .padding(bottom = 5.dp)
         ) { page ->
             Card(modifier = Modifier
-                .height(166.dp)
+                .height(156.dp)
                 .graphicsLayer {
                     val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
 

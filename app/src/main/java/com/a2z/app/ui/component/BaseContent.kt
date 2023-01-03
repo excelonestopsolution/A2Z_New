@@ -91,9 +91,9 @@ fun BaseContent(
                         CollectLatestWithScope(it.navigateToFlow) {
                             navController.navigate(it.route) {
                                 if (it.popUpAll) {
-                                    popUpTo(navController.currentDestination?.route ?: "") {
-                                        inclusive = true
-                                    }
+                                   popUpTo(NavScreen.DashboardScreen.route){
+                                       inclusive = true
+                                   }
                                 }
                             }
                         }
@@ -102,15 +102,11 @@ fun BaseContent(
                             if (it) navController.navigate(
                                 NavScreen.DashboardScreen.route
                             ) {
-                                popUpTo(NavScreen.DashboardScreen.route) {
+                                popUpTo(NavScreen.LoginScreen.route) {
                                     inclusive = true
                                 }
                             }
                         }
-
-
-
-
 
                         DialogExceptionComponent(it.exceptionState)
 

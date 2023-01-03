@@ -38,8 +38,10 @@ fun OperatorScreen(
         topBar = appBar(), backgroundColor = BackgroundColor
     ) {
         it.calculateBottomPadding()
-        ObsComponent(viewModel.providerResponseObs) { data ->
-            BuildProviderList(data, viewModel.operatorType)
+        BaseContent(viewModel) {
+            ObsComponent(viewModel.providerResponseObs) { data ->
+                BuildProviderList(data, viewModel.operatorType)
+            }
         }
         SpinnerSearchDialog(
             title = "Select Electricity State",

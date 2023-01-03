@@ -21,25 +21,33 @@ data class NavigateTo(
     val popUpAll: Boolean = false
 )
 
+data class ExceptionState(
+    var exception: java.lang.Exception?,
+    val popUp : Boolean
+)
+
 
 open class BaseViewModel : ViewModel() {
     val bannerState = mutableStateOf<BannerType>(BannerType.None)
     val dialogState = mutableStateOf<StatusDialogType>(StatusDialogType.None)
-    val exceptionState = mutableStateOf<java.lang.Exception?>(null)
+    val exceptionState = mutableStateOf<ExceptionState?>(null)
     val dashboardState = MutableSharedFlow<Boolean>()
     val navigateToFlow = MutableSharedFlow<NavigateTo>()
     val navigateUpWithResultFlow = MutableSharedFlow<Map<String, Any>>()
 
-    fun gotoExceptionScreen(e: Exception) {
-        if (e is Exceptions.SessionExpiredException) navigateTo(NavScreen.LoginScreen.route, true)
-        else viewModelScope.launch { exceptionState.value = e }
+    fun showExceptionDialog(e: Exception,popUpOnException : Boolean = true) {
+        if (e is Exceptions.SessionExpiredException)
+            navigateTo(NavScreen.LoginScreen.route, true)
+        else viewModelScope.launch {
+            exceptionState.value = ExceptionState(e,popUpOnException)
+        }
     }
 
     fun gotoMainDashboard() {
         viewModelScope.launch { dashboardState.emit(true) }
     }
 
-    fun dismissDialog() {
+    private fun dismissDialog() {
         dialogState.value = StatusDialogType.None
     }
 
@@ -105,7 +113,6 @@ open class BaseViewModel : ViewModel() {
         this.collectLatest {
             when (it) {
                 is ResultType.Failure -> {
-                    AppUtil.logger("OnFailure : ${it.exception}")
                     dismissDialog()
                     if (failure != null)
                         failure(it.exception)

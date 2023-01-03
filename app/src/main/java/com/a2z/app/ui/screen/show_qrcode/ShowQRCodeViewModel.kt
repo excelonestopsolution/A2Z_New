@@ -12,6 +12,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 
@@ -22,7 +23,7 @@ class ShowQRCodeViewModel @Inject constructor(
 
 
     private val _qrCodeFlow = MutableStateFlow<ResultType<QRCodeResponse>>(ResultType.Loading())
-    val qrCodeObs: MutableStateFlow<ResultType<QRCodeResponse>> = _qrCodeFlow
+    val qrCodeObs = _qrCodeFlow.asStateFlow()
 
 
     init {

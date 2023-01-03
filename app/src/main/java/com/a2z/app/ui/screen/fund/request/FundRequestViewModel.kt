@@ -69,7 +69,7 @@ class FundRequestViewModel @Inject constructor(
             when (it) {
                 is ResultType.Failure -> {
                     dialogState.value = StatusDialogType.None
-                    gotoExceptionScreen(it.exception)
+                    showExceptionDialog(it.exception)
                 }
                 is ResultType.Loading -> dialogState.value = StatusDialogType.Progress()
                 is ResultType.Success -> dialogState.value =
