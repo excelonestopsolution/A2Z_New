@@ -6,6 +6,7 @@ import com.a2z.app.ui.util.resource.FormErrorType
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 typealias VoidCallback = () -> Unit
+typealias ToggleBottomSheet = () -> Unit
 typealias  Callback<T> = (T) -> Unit
 typealias FunCompose = @Composable () -> Unit
 typealias FormFieldError = FormErrorType<String>

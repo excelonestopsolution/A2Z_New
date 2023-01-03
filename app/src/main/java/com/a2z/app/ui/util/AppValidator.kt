@@ -135,6 +135,12 @@ object AppValidator {
     )
 
 
+    fun aadhaarValidation(value: String) = Pair(
+        value.length == 12,
+        "Enter 12 digits aadhaar number"
+    )
+
+
     fun emailValidation(value: String) = Pair(
         validateEmail(value),
         "Enter valid email id"

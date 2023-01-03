@@ -84,13 +84,21 @@ private fun BuildMoneyAndPaymentService() {
                         title = "M-ATM",
                         icon = R.drawable.ic_launcher_matm,
                         padding = 12.dp,
-                        color = color
+                        color = color,
+                        onClick = {navController.navigate(NavScreen.MatmScreen.passArgs(
+                            isMPos = false
+                        ))}
                     )
                     BuildIconAndIconTitle(
                         title = "M-POS",
                         icon = R.drawable.ic_launcher_matm,
                         padding = 12.dp,
-                        color = color
+                        color = color,
+                        onClick = {
+                            navController.navigate(NavScreen.MatmScreen.passArgs(
+                                isMPos = true
+                            ))
+                        }
                     )
                 }
             }

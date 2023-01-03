@@ -59,7 +59,7 @@ fun HomeScreen(
         viewModel.exitDialogState.value = true
     }) {
 
-       BaseContent(appViewModel,dashboardViewModel,viewModel) {
+       BaseContent(dashboardViewModel,viewModel) {
            if (initialBalanceFetched.value) HomeScreenMainContent(dashboardViewModel)
            else ObsComponent(appViewModel.balanceFlow) {
                initialBalanceFetched.value = true

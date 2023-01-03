@@ -25,4 +25,10 @@ interface RepoModule {
 
     @Binds
     fun provideReportRepositoryImpl(repository: ReportRepositoryImpl): ReportRepository
+
+    @Binds
+    fun provideAepsRepositoryImpl(repository: AepsRepositoryImpl): AepsRepository
+
+    @Binds
+    fun provideMatmRepositoryImpl(repository: MatmRepositoryImpl): MatmRepository
 }

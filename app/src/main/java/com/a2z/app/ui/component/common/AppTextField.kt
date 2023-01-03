@@ -211,7 +211,7 @@ fun MobileTextField(
         label = "Mobile Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
-        leadingIcon = Icons.Default.Phone,
+        leadingIcon = Icons.Default.PhoneAndroid,
         error = error,
         maxLength = 10,
         isOutline = isOutline,

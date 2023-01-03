@@ -45,42 +45,40 @@ fun RechargeScreen(
     val appViewModel: AppViewModel = hiltViewModel()
 
 
-    BaseContent(appViewModel) {
-        BaseContent(viewModel) {
-            Scaffold(
-                topBar = {
-                    AppTopBar(
-                        title = viewModel.util.getOperatorTitle("Recharge"),
-                        onBackPress = {
-                            navController.navigateUp()
-                        })
-                },
-                backgroundColor = BackgroundColor
-            ) {
-                it.calculateBottomPadding()
-                AppFormUI(
-                    button = { FormButton(viewModel) },
-                    cardContents = listOf(AppFormCard { FormCard(viewModel) })
+    BaseContent(viewModel) {
+        Scaffold(
+            topBar = {
+                AppTopBar(
+                    title = viewModel.util.getOperatorTitle("Recharge"),
+                    onBackPress = {
+                        navController.navigateUp()
+                    })
+            },
+            backgroundColor = BackgroundColor
+        ) {
+            it.calculateBottomPadding()
+            AppFormUI(
+                button = { FormButton(viewModel) },
+                cardContents = listOf(AppFormCard { FormCard(viewModel) })
+            )
+            ROfferDialog()
+
+            val scope = rememberCoroutineScope()
+            BaseConfirmDialog(
+                title = "Confirm Recharge",
+                state = viewModel.confirmDialogState,
+                amount = viewModel.input.amountInputWrapper.formValue(),
+                titleValues = listOf(
+                    "Operator" to viewModel.operator.operatorName.toString(),
+                    "Mobile" to viewModel.input.numberInputWrapper.formValue()
                 )
-                ROfferDialog()
+            ) {
 
-                val scope = rememberCoroutineScope()
-                BaseConfirmDialog(
-                    title = "Confirm Recharge",
-                    state = viewModel.confirmDialogState,
-                    amount = viewModel.input.amountInputWrapper.formValue(),
-                    titleValues = listOf(
-                        "Operator" to viewModel.operator.operatorName.toString(),
-                        "Mobile" to viewModel.input.numberInputWrapper.formValue()
-                    )
-                ) {
-
-                    proceedToRecharge(scope, viewModel, navController)
-                }
-
+                proceedToRecharge(scope, viewModel, navController)
             }
 
         }
+
     }
 }
 

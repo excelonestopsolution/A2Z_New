@@ -13,6 +13,7 @@ import com.a2z.app.ui.screen.util.exception.ExceptionScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
+import com.a2z.app.ui.screen.matm.MatmScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.result.RechargeResultScreen
 import com.a2z.app.ui.screen.show_qrcode.ShowQRCodeScreen
@@ -22,6 +23,7 @@ import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
 import com.a2z.app.ui.screen.utility.operator.OperatorScreen
 import com.a2z.app.ui.screen.utility.recharge.RechargeScreen
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.util.AppUtil
 
 
 @Composable
@@ -107,6 +109,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         )
         composable(route = NavScreen.ShowQRScreen.route, content = { ShowQRCodeScreen() })
         composable(route = NavScreen.AepsScreen.route, content = { AepsScreen() })
+        composable(route = NavScreen.MatmScreen.route, content = { MatmScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }
