@@ -2,6 +2,8 @@ package com.a2z.app.nav
 
 import android.net.Uri
 import android.os.Parcelable
+import com.a2z.app.data.model.dmt.MoneySender
+import com.a2z.app.data.model.dmt.MoneySenderResponse
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.provider.Operator
@@ -40,12 +42,6 @@ fun Serializable.toEncodedString(): String {
 
 
 sealed class NavScreen(val route: String) {
-    object ExceptionScreen : NavScreen("exception-screen".params("exception")) {
-        fun passArgs(exception: Exception) =
-            "exception-screen".args(
-                "exception" to AppException(exception).toEncodedString()
-            )
-    }
 
     object DeviceLockScreen : NavScreen("device-lock-screen")
     object LoginScreen : NavScreen("login-screen")
@@ -54,7 +50,7 @@ sealed class NavScreen(val route: String) {
         fun passArgs(mobile: String) = "login-otp-screen".args("mobile" to mobile)
     }
 
-    object DashboardScreen : NavScreen("dashboard-screen".params("fromLogin")){
+    object DashboardScreen : NavScreen("dashboard-screen".params("fromLogin")) {
         fun passArgs(fromLogin: Boolean = true) = "dashboard-screen".args(
             "fromLogin" to fromLogin.toString()
         )
@@ -116,10 +112,10 @@ sealed class NavScreen(val route: String) {
     }
 
     object PermissionScreen : NavScreen("permission-screen".params("permissionType")) {
-        fun passData(permissionType: PermissionType) : String {
+        fun passData(permissionType: PermissionType): String {
             val gson = Gson()
             val json = gson.toJson(permissionType)
-            return "permission-screen".args("permissionType" to  Uri.encode(json))
+            return "permission-screen".args("permissionType" to Uri.encode(json))
         }
 
 
@@ -128,7 +124,15 @@ sealed class NavScreen(val route: String) {
     object ShowQRScreen : NavScreen("show-qr-screen")
     object TestScreen : NavScreen("test-screen")
     object AepsScreen : NavScreen("aeps-screen")
-    object MatmScreen : NavScreen("matm-screen".params("isMPos")){
+    object MatmScreen : NavScreen("matm-screen".params("isMPos")) {
         fun passArgs(isMPos: Boolean) = "matm-screen".args("isMPos" to isMPos.toString())
+    }
+
+    //dmt screens
+    object DmtSenderSearchScreen : NavScreen("sender-search-screen")
+    object DmtBeneficiaryListInfoScreen :
+        NavScreen("beneficiary-list-screen".params("moneySender")) {
+        fun passArgs(moneySender: MoneySender) =
+            "beneficiary-list-screen".args("moneySender" to moneySender.toEncodedString())
     }
 }

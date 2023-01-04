@@ -17,6 +17,7 @@ import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtil.Empty
 import com.a2z.app.util.AppUtilDI
+import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.security.AppSecurity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -34,8 +35,7 @@ class LoginViewModel @Inject constructor(
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
 
-    private val loginFlow = MutableSharedFlow<ResultType<User>>()
-
+    private val loginFlow = resultShareFlow<User>()
 
     init {
 

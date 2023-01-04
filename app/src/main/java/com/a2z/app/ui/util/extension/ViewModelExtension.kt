@@ -36,9 +36,9 @@ fun <T> BaseViewModel.callApiForStateFlow(
 
 fun <T> BaseViewModel.callApiForShareFlow(
     flow: MutableSharedFlow<ResultType<T>>? = null,
-    beforeEmit: (ResultType<T>) -> Unit = {},
-    showExceptionDialog: Boolean = true,
-    popUpOnException: Boolean = true,
+    beforeEmit: suspend (ResultType<T>) -> Unit = {},
+    handleException: Boolean = true,
+    popUpScreen: Boolean = true,
     call: suspend () -> T
 ): MutableSharedFlow<ResultType<T>> {
 
@@ -51,7 +51,7 @@ fun <T> BaseViewModel.callApiForShareFlow(
             beforeEmit(ResultType.Success(response))
             mFlow.emit(ResultType.Success(response))
         } catch (e: Exception) {
-            if (showExceptionDialog) showExceptionDialog(e,popUpOnException)
+            if (handleException) showExceptionDialog(e,popUpScreen)
             beforeEmit(ResultType.Failure(e))
             mFlow.emit(ResultType.Failure(e))
         }

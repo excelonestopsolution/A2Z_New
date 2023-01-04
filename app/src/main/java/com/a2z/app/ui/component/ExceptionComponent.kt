@@ -33,7 +33,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
-fun DialogExceptionComponent(exceptionState: MutableState<ExceptionState?>) {
+fun ExceptionDialogComponent(exceptionState: MutableState<ExceptionState?>) {
 
     val navController = LocalNavController.current
     val exception = exceptionState.value?.exception
@@ -45,9 +45,11 @@ fun DialogExceptionComponent(exceptionState: MutableState<ExceptionState?>) {
         exceptionState.value = null
         when (exception) {
             is Exceptions.SessionExpiredException -> {
-                val currentRoute = navController.currentDestination?.route ?: ""
-                navController.popBackStack(currentRoute,true)
-                navController.navigate(NavScreen.LoginScreen.route)
+                navController.navigate(NavScreen.LoginScreen.route){
+                    popUpTo(NavScreen.LoginScreen.route){
+                        inclusive = true
+                    }
+                }
             }
             else -> {
                 if(popUp == true) navController.navigateUp()

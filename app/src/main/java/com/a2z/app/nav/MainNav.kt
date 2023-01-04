@@ -9,7 +9,8 @@ import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
-import com.a2z.app.ui.screen.util.exception.ExceptionScreen
+import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
+import com.a2z.app.ui.screen.dmt.sender.search.SearchSenderScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
@@ -45,14 +46,10 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(
             route = NavScreen.DeviceLockScreen.route,
             content = {
-               DeviceLockScreen()
+                DeviceLockScreen()
             })
 
-        composable(
-            route = NavScreen.ExceptionScreen.route,
-            content = {
-                ExceptionScreen(it)
-            })
+
 
         composable(
             route = NavScreen.LoginScreen.route,
@@ -110,6 +107,15 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.ShowQRScreen.route, content = { ShowQRCodeScreen() })
         composable(route = NavScreen.AepsScreen.route, content = { AepsScreen() })
         composable(route = NavScreen.MatmScreen.route, content = { MatmScreen() })
+        composable(route = NavScreen.DmtSenderSearchScreen.route, content = {
+            SearchSenderScreen()
+        })
+
+        composable(route = NavScreen.DmtBeneficiaryListInfoScreen.route, content = {
+            BeneficiaryListInfoScreen()
+        })
+
+
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

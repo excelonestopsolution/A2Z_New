@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.MainActivity
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.theme.BackgroundColor
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.spacing
 import com.a2z.app.util.VoidCallback
+import com.a2z.app.util.extension.showToast
 import com.mosambee.lib.MosCallback
 
 @Composable
@@ -67,14 +70,16 @@ fun BuildMainContent() {
     val viewModel: MatmViewModel = hiltViewModel()
     val mosCallback = rememberInitializeMATM()
     val input = viewModel.formInput
-
+    val navController = LocalNavController.current
+    val context = LocalContext.current
 
     AppFormUI(
         showWalletCard = false,
         button = {
             BluetoothServiceComponent(onResult = {
-                if (it) viewModel.transaction(mosCallback)
-            }){ action ->
+                context.showToast(it.toString())
+               // if (it) viewModel.transaction(mosCallback)
+            }) { action ->
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -95,6 +100,7 @@ fun BuildMainContent() {
                     )
                 }
             ),
+
             AppFormCard(
                 title = "Transaction Type",
                 contents = {

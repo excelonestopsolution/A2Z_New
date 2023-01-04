@@ -9,9 +9,11 @@ import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,9 +23,8 @@ class FundBankListViewModel @Inject constructor(
 ) : BaseViewModel() {
     var fundMethod  : FundMethod = savedStateHandle.safeParcelable("fundMethod")!!
 
-    private val _bankListFlow =
-        MutableStateFlow<ResultType<FundRequestBankListResponse>>(ResultType.Loading())
-    val bankListFlow: StateFlow<ResultType<FundRequestBankListResponse>> = _bankListFlow
+    private val _bankListFlow = resultStateFlow<FundRequestBankListResponse>()
+    val bankListFlow = _bankListFlow.asStateFlow()
 
     init {
         fetchBankList()

@@ -54,7 +54,12 @@ private fun BuildMoneyAndPaymentService() {
 
                         )
                     BuildIconAndIconTitle(
-                        title = "Wallet 2", icon = R.drawable.ic_launcher_money, color = color
+                        title = "Wallet 2",
+                        icon = R.drawable.ic_launcher_money,
+                        color = color,
+                        onClick = {
+                            navController.navigate(NavScreen.DmtSenderSearchScreen.route)
+                        }
                     )
                     BuildIconAndIconTitle(
                         title = "Wallet 3", icon = R.drawable.ic_launcher_money, color = color

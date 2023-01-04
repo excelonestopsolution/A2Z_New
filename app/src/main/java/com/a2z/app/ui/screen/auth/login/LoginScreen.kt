@@ -39,7 +39,7 @@ fun LoginScreen(
     LaunchedEffect(key1 = Unit, block = {
         if(viewModel.appPreference.user != null){
             navController.navigate(NavScreen.DashboardScreen.route){
-                popUpTo(NavScreen.LoginScreen.route){
+                popUpTo(NavScreen.DashboardScreen.route){
                     inclusive = true
                 }
             }

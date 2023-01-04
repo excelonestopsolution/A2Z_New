@@ -66,7 +66,7 @@ fun BaseResultComponent(
 
     BackPressHandler(onBack = {
         navController.navigate(NavScreen.DashboardScreen.route){
-            popUpTo(NavScreen.DashboardScreen.route) {
+            popUpTo(NavScreen.DashboardScreen.route){
                 inclusive = true
             }
         }

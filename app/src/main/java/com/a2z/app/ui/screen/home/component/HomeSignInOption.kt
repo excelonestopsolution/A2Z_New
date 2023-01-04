@@ -25,9 +25,7 @@ import com.a2z.app.ui.theme.RedColor
 @Composable
 fun HomeSignInOptionWidget(
     dashboardViewModel: DashboardViewModel,
-    viewModel: HomeViewModel = hiltViewModel(),
-
-    ) {
+    viewModel: HomeViewModel = hiltViewModel(), ) {
 
     val activity = LocalContext.current as Activity
     if (viewModel.singInDialogState.value) Dialog(onDismissRequest = {}) {
@@ -68,6 +66,7 @@ fun HomeSignInOptionWidget(
                 }
                 Divider()
                 TextButton(onClick = {
+                    viewModel.appPreference.user = null
                     viewModel.singInDialogState.value = false
                     dashboardViewModel.navigateTo(NavScreen.LoginScreen.route, true)
                 }) {

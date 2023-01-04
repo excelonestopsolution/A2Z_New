@@ -8,6 +8,7 @@ import com.a2z.app.data.repository.MatmRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultShareFlow
 import com.mosambee.lib.Currency
 import com.mosambee.lib.MosCallback
 import com.mosambee.lib.ResultData
@@ -42,9 +43,7 @@ class MatmViewModel @Inject constructor(
     val formInput = MatmInput(useMobileValidation)
     private val isFormValid = mutableStateOf(false)
 
-    private val mPosAmountLimitResponse
-    = MutableSharedFlow<ResultType<MaPosAmountLimitResponse>>()
-
+    private val mPosAmountLimitResponse = resultShareFlow<MaPosAmountLimitResponse>()
     val mPosLimit = mutableStateOf<MaPosAmountLimitResponse?>(null)
 
     init {

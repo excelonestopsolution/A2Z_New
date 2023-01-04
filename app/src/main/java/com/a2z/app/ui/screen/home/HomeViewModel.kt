@@ -11,10 +11,10 @@ import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +23,8 @@ class HomeViewModel @Inject constructor(
     private val repository: AppRepository,
     val appPreference: AppPreference
 ) : BaseViewModel() {
+
+    val handleBackPressState = mutableStateOf(true)
 
     val exitDialogState = mutableStateOf(false)
 
@@ -34,9 +36,8 @@ class HomeViewModel @Inject constructor(
 
     val homeScreenState = MutableSharedFlow<HomeScreenState>()
 
-    val balanceFlow = MutableStateFlow<ResultType<BalanceResponse>>(
-        ResultType.Loading()
-    )
+    val balanceResponseFlow = resultStateFlow<BalanceResponse>()
+
 
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
 
@@ -59,9 +60,16 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchWalletBalance() {
-        callApiForShareFlow (
-            flow =balanceFlow,
-            showExceptionDialog = false)
+        callApiForShareFlow(
+            flow = balanceResponseFlow,
+            handleException = false,
+            beforeEmit = {
+                if (it is ResultType.Failure) {
+                    homeScreenState.emit(HomeScreenState.OnHomeApiFailure(it.exception))
+                }
+            }
+
+        )
         { repository.fetchWalletBalance() }
     }
 
@@ -80,7 +88,7 @@ class HomeViewModel @Inject constructor(
                     isSliderVisible.value = true
                 }
             }
-        }, showExceptionDialog = false) { repository.fetchBanner() }
+        }, handleException = false) { repository.fetchBanner() }
     }
 
     val newsResponseState = mutableStateOf<NewsResponse?>(null)
@@ -91,7 +99,7 @@ class HomeViewModel @Inject constructor(
                 if (it.data.status == 1)
                     newsResponseState.value = it.data
                 else newsResponseState.value = null
-        }, showExceptionDialog = false) { repository.fetchNews() }
+        }, handleException = false) { repository.fetchNews() }
     }
 
     fun logout() {
@@ -99,14 +107,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _logoutSharedFlow.emit(ResultType.Loading())
             delay(1000)
-            _logoutSharedFlow.emit(ResultType.Success(AppResponse(1,"Logout successfully")))
+            _logoutSharedFlow.emit(ResultType.Success(AppResponse(1, "Logout successfully")))
         }
 
     }
-
-
 }
 
-sealed class HomeScreenState{
-    object OnLogoutComplete : HomeScreenState()
+sealed class HomeScreenState {
+    object OnLogoutComplete: HomeScreenState()
+    data class OnHomeApiFailure(val exception: Exception) : HomeScreenState()
 }
+

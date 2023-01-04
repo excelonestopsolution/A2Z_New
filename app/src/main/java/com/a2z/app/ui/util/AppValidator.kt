@@ -134,6 +134,11 @@ object AppValidator {
         "Enter 10 digits mobile number"
     )
 
+    fun accountNumberValidation(value: String) = Pair(
+        value.length in 6..20,
+        "Enter 6 to 20 digits account"
+    )
+
 
     fun aadhaarValidation(value: String) = Pair(
         value.length == 12,

@@ -7,11 +7,9 @@ import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.resource.ResultType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,7 +40,7 @@ open class AppViewModel @Inject constructor(
     }
 
     fun fetchWalletBalance() {
-        callApiForShareFlow(_balanceFlow) { repository.fetchWalletBalance() }
+        callApiForShareFlow(_balanceFlow, popUpScreen = false) { repository.fetchWalletBalance() }
     }
 
 }

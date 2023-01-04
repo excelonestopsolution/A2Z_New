@@ -12,7 +12,7 @@ class LedgerReportViewModel @Inject constructor(
 
 
     val param =  hashMapOf(
-        "fromdate" to "01-01-2022",
+        "fromdate" to "04-01-2022",
         "todate" to "01-01-2023",
     )
 

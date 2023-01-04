@@ -4,12 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import com.a2z.app.data.model.aeps.AepsBank
 import com.a2z.app.data.model.aeps.AepsBankListResponse
 import com.a2z.app.data.repository.AepsRepository
-import com.a2z.app.ui.screen.matm.MatmTransactionType
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultShareFlow
+import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,22 +20,21 @@ class AepsViewModel @Inject constructor(
     val transactionType = mutableStateOf(AepsTransactionType.CASH_WITHDRAWAL)
     var spinnerDialogState = mutableStateOf(false)
     var selectedBank = mutableStateOf<AepsBank?>(null)
+
     private val useMobileValidation = mutableStateOf(true)
-    val aepsInput = AepsInput(useMobileValidation)
+    val input = AepsInput(useMobileValidation)
     val isFormValid = mutableStateOf(false)
 
 
-    val aepsBankListResponse = MutableStateFlow<ResultType<AepsBankListResponse>>(
-        ResultType.Loading()
-    )
+    private val _bankListResponseFlow = resultStateFlow<AepsBankListResponse>()
+    val bankListResponseFlow = _bankListResponseFlow.asStateFlow()
 
-    var aepsBankList: List<AepsBank>? = null
-
+    var bankList: List<AepsBank>? = null
 
 
     init {
         fetchBankList()
-        aepsInput.isValidObs
+        input.isValidObs
     }
 
     private fun setFormValid(){
@@ -44,7 +43,7 @@ class AepsViewModel @Inject constructor(
                 transactionType.value == AepsTransactionType.AADHAAR_PAY
         useMobileValidation.value = amountValidation
 
-        isFormValid.value = aepsInput.isValidObs.value  && selectedBank.value != null
+        isFormValid.value = input.isValidObs.value  && selectedBank.value != null
 
     }
 
@@ -55,18 +54,18 @@ class AepsViewModel @Inject constructor(
 
 
     private fun fetchBankList() {
-        callApiForShareFlow(flow = aepsBankListResponse) {
+        callApiForShareFlow(flow = _bankListResponseFlow) {
             repository.fetchBankList()
         }
     }
 
     fun getAepsStringBankList(): ArrayList<String> {
-        return (aepsBankList?.map { it.bankName ?: "" }?.toList()
+        return (bankList?.map { it.bankName ?: "" }?.toList()
             ?: arrayListOf()) as ArrayList<String>
     }
 
     fun bankNameToAepsBank(bankName : String): AepsBank? {
-        val aepsBank = aepsBankList?.first { it.bankName == bankName }
+        val aepsBank = bankList?.first { it.bankName == bankName }
         return aepsBank
 
     }

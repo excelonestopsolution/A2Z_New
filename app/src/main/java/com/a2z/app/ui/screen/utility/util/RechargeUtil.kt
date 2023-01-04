@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.utility.util
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.ui.util.AppValidator
+import com.a2z.app.util.AppUtil
 
 class RechargeUtil(
     private val appPreference: AppPreference?=null,
@@ -71,9 +72,11 @@ class RechargeUtil(
     fun rechargeInputValidator(value: String) =
         AppValidator.rechargeInputValidation(value, inputStartWith(), getInputMinLength())
 
-    fun rechargeAmountValidator(value: String) =
-        AppValidator.rechargeAmountValidation(
+    fun rechargeAmountValidator(value: String): Pair<Boolean, String> {
+
+      return   AppValidator.rechargeAmountValidation(
             value, appPreference!!.user!!.userBalance,
             minAmount = getInputMinAmount()
         )
+    }
 }

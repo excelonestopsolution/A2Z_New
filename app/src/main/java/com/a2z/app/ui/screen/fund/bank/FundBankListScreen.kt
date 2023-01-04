@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.theme.LocalNavController
@@ -33,13 +34,15 @@ fun FundBankListScreen() {
 
         topBar = { NavTopBar(title = "Select Bank") },
         content = {
-            ObsComponent(flow = viewModel.bankListFlow) {
-                if (it.status == 1) BuildListComponent(it.banks, viewModel.notes) { item ->
-                    navController
-                        .navigate(NavScreen.FundRequestScreen.passData(
-                            viewModel.fundMethod,
-                            item
-                        ))
+            BaseContent(viewModel) {
+                ObsComponent(flow = viewModel.bankListFlow) {
+                    if (it.status == 1) BuildListComponent(it.banks, viewModel.notes) { item ->
+                        navController
+                            .navigate(NavScreen.FundRequestScreen.passData(
+                                viewModel.fundMethod,
+                                item
+                            ))
+                    }
                 }
             }
         }

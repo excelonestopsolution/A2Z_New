@@ -37,8 +37,8 @@ fun AepsScreen() {
         topBar = { NavTopBar(title = "Aeps Transaction") }
     ) {
         BaseContent(viewModels = arrayOf(viewModel)) {
-            ObsComponent(flow = viewModel.aepsBankListResponse) {
-                viewModel.aepsBankList = it.banks
+            ObsComponent(flow = viewModel.bankListResponseFlow) {
+                viewModel.bankList = it.banks
                 BuildMainContent()
             }
         }
@@ -50,7 +50,7 @@ fun AepsScreen() {
 fun BuildMainContent() {
 
     val viewModel: AepsViewModel = hiltViewModel()
-    val input = viewModel.aepsInput
+    val input = viewModel.input
     val context = LocalContext.current
 
     val pidLauncher = rememberLauncherForActivityResult(

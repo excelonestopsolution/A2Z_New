@@ -11,6 +11,7 @@ import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtilDI
+import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.security.AppSecurity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -27,7 +28,7 @@ class LoginOtpViewModel @Inject constructor(
     val formData = LoginOtpInput()
     var mobileNumber: String = ""
 
-    val verifyFlow = MutableSharedFlow<ResultType<AppResponse>>()
+    val verifyFlow = resultShareFlow<AppResponse>()
 
     init {
         viewModelScope.launch { subscribers() }

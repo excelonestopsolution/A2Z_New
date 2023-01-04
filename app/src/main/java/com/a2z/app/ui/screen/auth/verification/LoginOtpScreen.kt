@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
@@ -31,9 +32,10 @@ import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.collectLifeCycleFlow
 import com.a2z.app.ui.util.resource.BannerType
 
+@Preview()
 @Composable
 fun LoginOtpScreen(
-    mobileNumber: String,
+    mobileNumber: String = "7982607742",
 ) {
     val viewModel: LoginOtpViewModel = hiltViewModel()
     viewModel.mobileNumber = mobileNumber

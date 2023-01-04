@@ -31,4 +31,7 @@ interface RepoModule {
 
     @Binds
     fun provideMatmRepositoryImpl(repository: MatmRepositoryImpl): MatmRepository
+
+    @Binds
+    fun provideDMTRepositoryImpl(repository: DMTRepositoryImpl): DMTRepository
 }

@@ -13,9 +13,9 @@ import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
+import com.a2z.app.util.resultShareFlow
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -44,7 +44,7 @@ class FundRequestViewModel @Inject constructor(
     private var onlineMode: String = ""
 
     //api observers
-    private val requestResultState = MutableSharedFlow<ResultType<AppResponse>>()
+    private val _requestResultResponseFlow = resultShareFlow<AppResponse>()
 
 
     init {
@@ -65,7 +65,7 @@ class FundRequestViewModel @Inject constructor(
     }
 
     private suspend fun subscribers() {
-        requestResultState.collect {
+        _requestResultResponseFlow.collect {
             when (it) {
                 is ResultType.Failure -> {
                     dialogState.value = StatusDialogType.None
@@ -118,7 +118,7 @@ class FundRequestViewModel @Inject constructor(
         val remarkBody = remark.toRequestBody("multipart/form-data".toMediaTypeOrNull())
 
 
-        callApiForShareFlow(flow = requestResultState) {
+        callApiForShareFlow(flow = _requestResultResponseFlow) {
             repository.submitRequest(
                 slipFile = fileSlipPart,
                 amount = amountBody,

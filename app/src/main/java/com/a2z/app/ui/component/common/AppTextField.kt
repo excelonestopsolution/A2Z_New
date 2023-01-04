@@ -61,8 +61,8 @@ fun AppTextField(
     textStyle: TextStyle = TextStyle.Default.copy(
         fontSize = 14.sp, fontWeight = FontWeight.SemiBold
     ),
-    labelTextStyle: TextStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal),
-    hintTextStyle: TextStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal),
+    labelTextStyle: TextStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium),
+    hintTextStyle: TextStyle = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Medium),
     downText: String? = null,
     interactionSource: MutableInteractionSource = remember {
         MutableInteractionSource()

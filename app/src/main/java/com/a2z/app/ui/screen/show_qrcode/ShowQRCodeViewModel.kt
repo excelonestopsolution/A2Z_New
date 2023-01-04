@@ -7,6 +7,7 @@ import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultStateFlow
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -22,7 +23,7 @@ class ShowQRCodeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val _qrCodeFlow = MutableStateFlow<ResultType<QRCodeResponse>>(ResultType.Loading())
+    private val _qrCodeFlow = resultStateFlow<QRCodeResponse>()
     val qrCodeObs = _qrCodeFlow.asStateFlow()
 
 

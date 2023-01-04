@@ -3,12 +3,10 @@ package com.a2z.app.ui.util
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
 import com.a2z.app.util.AppUtil
-import com.a2z.app.util.Exceptions
 import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -23,7 +21,7 @@ data class NavigateTo(
 
 data class ExceptionState(
     var exception: java.lang.Exception?,
-    val popUp : Boolean
+    val popUp: Boolean
 )
 
 
@@ -35,12 +33,9 @@ open class BaseViewModel : ViewModel() {
     val navigateToFlow = MutableSharedFlow<NavigateTo>()
     val navigateUpWithResultFlow = MutableSharedFlow<Map<String, Any>>()
 
-    fun showExceptionDialog(e: Exception,popUpOnException : Boolean = true) {
-        if (e is Exceptions.SessionExpiredException)
-            navigateTo(NavScreen.LoginScreen.route, true)
-        else viewModelScope.launch {
-            exceptionState.value = ExceptionState(e,popUpOnException)
-        }
+    fun showExceptionDialog(e: Exception, popUpScreen: Boolean = true) {
+        val exception = ExceptionState(e, popUpScreen)
+        viewModelScope.launch { exceptionState.value = exception }
     }
 
     fun gotoMainDashboard() {
@@ -114,11 +109,7 @@ open class BaseViewModel : ViewModel() {
             when (it) {
                 is ResultType.Failure -> {
                     dismissDialog()
-                    if (failure != null)
-                        failure(it.exception)
-                    else {
-
-                    }
+                    if (failure != null) failure(it.exception)
                 }
 
                 is ResultType.Loading -> {
@@ -133,6 +124,7 @@ open class BaseViewModel : ViewModel() {
             }
         }
     }
+
 
 
 }
