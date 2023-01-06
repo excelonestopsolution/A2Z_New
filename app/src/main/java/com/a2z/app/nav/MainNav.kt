@@ -10,6 +10,8 @@ import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
 import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
+import com.a2z.app.ui.screen.dmt.beneficiary.register.BeneficiaryRegisterScreen
+import com.a2z.app.ui.screen.dmt.sender.register.SenderRegisterScreen
 import com.a2z.app.ui.screen.dmt.sender.search.SearchSenderScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
@@ -24,7 +26,6 @@ import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
 import com.a2z.app.ui.screen.utility.operator.OperatorScreen
 import com.a2z.app.ui.screen.utility.recharge.RechargeScreen
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.util.AppUtil
 
 
 @Composable
@@ -108,11 +109,18 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.AepsScreen.route, content = { AepsScreen() })
         composable(route = NavScreen.MatmScreen.route, content = { MatmScreen() })
         composable(route = NavScreen.DmtSenderSearchScreen.route, content = {
-            SearchSenderScreen()
+            SearchSenderScreen(it)
         })
 
         composable(route = NavScreen.DmtBeneficiaryListInfoScreen.route, content = {
-            BeneficiaryListInfoScreen()
+            BeneficiaryListInfoScreen(it)
+        })
+        composable(route = NavScreen.DmtBeneficiaryRegisterScreen.route, content = {
+            BeneficiaryRegisterScreen()
+        })
+
+        composable(route = NavScreen.DmtSenderRegisterScreen.route, content = {
+            SenderRegisterScreen()
         })
 
 

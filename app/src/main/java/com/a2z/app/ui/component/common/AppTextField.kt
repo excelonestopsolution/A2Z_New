@@ -201,6 +201,7 @@ fun MobileTextField(
     value: String,
     onChange: (String) -> Unit,
     isOutline: Boolean = false,
+    readOnly: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
     downText: String? = "Enter 10 digits mobile number",
@@ -214,6 +215,7 @@ fun MobileTextField(
         leadingIcon = Icons.Default.PhoneAndroid,
         error = error,
         maxLength = 10,
+        readOnly = readOnly,
         isOutline = isOutline,
         topSpace = topSpace,
         downText = downText,
@@ -371,7 +373,8 @@ fun PinTextField(
     onChange: (String) -> Unit,
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
-    topSpace: Dp = MaterialTheme.spacing.small
+    topSpace: Dp = MaterialTheme.spacing.small,
+    trailingIcon: @Composable (()->Unit) ? = null
 ) {
 
     var passwordVisibility by rememberSaveable { mutableStateOf(true) }
@@ -445,6 +448,7 @@ fun DropDownTextField(
     value: String,
     paddingValues: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 5.dp),
     hint: String,
+    downText: String?=null,
     onClick: VoidCallback
 ) {
     val source = remember {
@@ -452,36 +456,47 @@ fun DropDownTextField(
     }
 
     if (source.collectIsPressedAsState().value) onClick()
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(paddingValues)
-    ) {
-        TextField(
-            value = value,
-            onValueChange = {},
-            textStyle = TextStyle.Default.copy(
-                fontWeight = FontWeight.SemiBold, fontSize = 16.sp
-            ),
-            placeholder = { Text(text = hint) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(4.dp),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
 
-                focusedIndicatorColor = Color.Transparent, //hide the indicator
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            trailingIcon = {
-                Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+    Column {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(paddingValues)
+        ) {
+            TextField(
+                value = value,
+                onValueChange = {},
+                textStyle = TextStyle.Default.copy(
+                    fontWeight = FontWeight.SemiBold, fontSize = 16.sp
+                ),
+                placeholder = { Text(text = hint) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(4.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),
 
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.None,
-            ),
-            readOnly = true,
-            interactionSource = source
+                    focusedIndicatorColor = Color.Transparent, //hide the indicator
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                trailingIcon = {
+                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
+
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.None,
+                ),
+                readOnly = true,
+                interactionSource = source
+            )
+
+        }
+        if(downText != null)   Text(
+            text = downText, style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500,
+                color = Color.Black.copy(alpha = 0.6f)
+            )
         )
     }
 }
@@ -539,6 +554,7 @@ fun SearchTextField(
             onValueChange = {
                 onQuery(it)
             },
+            singleLine = true,
             textStyle = TextStyle.Default,
 
 

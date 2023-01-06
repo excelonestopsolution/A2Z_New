@@ -1,17 +1,23 @@
 package com.a2z.app.ui.screen.dmt.beneficiary.info
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,31 +30,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
+import com.a2z.app.data.model.dmt.Beneficiary
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.EmptyListComponent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
-import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.SearchTextField
+import com.a2z.app.ui.dialog.ConfirmActionDialog
+import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.ui.util.extension.singleResult
 import com.a2z.app.util.AppConstant
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun BeneficiaryListInfoScreen() {
+fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
+    val viewModel: BeneficiaryListInfoViewModel = hiltViewModel()
+
     Scaffold(
         topBar = { NavTopBar(title = "Beneficiary List") },
         backgroundColor = BackgroundColor
     )
     {
-        val viewModel: BeneficiaryListInfoViewModel = hiltViewModel()
 
         BaseContent(viewModel) {
             ObsComponent(flow = viewModel.beneficiaryFlow) {
 
-                Column {
+                Column() {
                     HeaderComponent()
                     Card(
                         modifier = Modifier
@@ -56,101 +70,192 @@ fun BeneficiaryListInfoScreen() {
                             .weight(1f)
                             .padding(horizontal = 12.dp)
                             .padding(bottom = 8.dp)
+
                     ) {
 
-                        if (it.status == 22 && it.data != null && it.data!!.isNotEmpty()) {
-                            viewModel.mainBeneficiaryList = it.data!!
+                        if (viewModel.showBeneficiaryList.isNotEmpty())
+                            LazyColumn() {
+                                itemsIndexed(
+                                     viewModel.showBeneficiaryList,
 
-                            viewModel.showBeneficiaryList.addAll(it.data!!)
-                            LazyColumn {
-                                items(it.data!!) {
-
-                                    Column(
-
-                                    ) {
-
-                                        Row(
-                                            modifier = Modifier.padding(
-                                                vertical = 12.dp,
-                                                horizontal = 12.dp
-                                            )
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Verified,
-                                                contentDescription = null,
-                                                tint = if (it.bankVerified == 1) GreenColor else Color.Gray,
-                                                modifier = Modifier.size(20.dp)
-                                            )
-
-                                            Column() {
-                                                Text(
-                                                    text = it.name.orEmpty(),
-                                                    fontSize = 16.sp,
-                                                    fontWeight = FontWeight.Bold,
-                                                    color = if (it.bankVerified == 1) GreenColor else Color.Gray
-                                                )
-                                                Text(
-                                                    text = it.bankName.orEmpty(),
-                                                    fontSize = 14.sp,
-                                                    fontWeight = FontWeight.SemiBold,
-                                                    color = PrimaryColorDark
-                                                )
-                                                Text(
-                                                    text = "Account    : " + it.accountNumber.orEmpty(),
-                                                    fontSize = 14.sp,
-                                                    fontWeight = FontWeight.SemiBold,
-                                                    color = PrimaryColorDark
-                                                )
-                                                Text(
-                                                    text = "Ifsc Code : " + it.ifsc.orEmpty(),
-                                                    fontSize = 14.sp,
-                                                    fontWeight = FontWeight.SemiBold,
-                                                    color = PrimaryColorDark
-                                                )
-                                                if (!it.lastSuccessTime.isNullOrEmpty()) Text(
-                                                    text = "Last Success : " + it.lastSuccessTime.orEmpty(),
-                                                    fontSize = 14.sp,
-                                                    fontWeight = FontWeight.Normal,
-                                                    color = GreenColor
-                                                )
-                                            }
-                                            Spacer(modifier = Modifier.weight(1f))
-
-                                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                                Icon(
-                                                    imageVector = Icons.Default.Send,
-                                                    contentDescription = null,
-                                                    modifier = Modifier
-                                                        .clip(shape = CircleShape)
-                                                        .border(
-                                                            width = 1.dp,
-                                                            color = Color.DarkGray,
-                                                            shape = CircleShape
-                                                        )
-                                                        .rotate(-15f)
-                                                        .padding(8.dp)
-                                                )
-
-                                                Text(
-                                                    text = "Send",
-                                                    fontWeight = FontWeight.SemiBold
-                                                )
-                                            }
-
-                                        }
-
-                                        Divider()
-
-                                    }
+                                ){index,beneficiary->
+                                    BuildListItem(
+                                        beneficiary,
+                                        index,
+                                        onDelete = { viewModel.onDelete(it) },
+                                        onVerify = { viewModel.onVerify(it) }
+                                    )
                                 }
                             }
-                        }
+                        else EmptyListComponent()
                     }
-
                 }
+
+            }
+
+            ConfirmActionDialog(
+                state = viewModel.confirmDeleteDialogState,
+                title = "Confirm Delete ?",
+                description = "You are sure! to delete" +
+                        " ${viewModel.beneficiaryState.value?.accountNumber}. This action can't be undo.",
+                buttonText = "Delete"
+            ) {
+                viewModel.deleteBeneficiary()
+            }
+
+            ConfirmActionDialog(
+                state = viewModel.confirmVerifyDialogState,
+                title = "Confirm Verify ?",
+                description = "Confirm verification for account number" +
+                        " ${viewModel.beneficiaryState.value?.accountNumber}",
+                buttonText = "Verify"
+            ) {
+                viewModel.onVerificationConfirm()
+            }
+
+            OTPVerifyDialog(
+                state = viewModel.otpVerifyDialogState,
+                otpLength = 4
+            ) {
+                viewModel.deleteBeneficiaryOtp(it)
             }
         }
 
+
+    }
+
+    LaunchedEffect(key1 = Unit){
+        val isRegister = navBackStackEntry.singleResult<Boolean>("isRegistered")
+        if (isRegister == true) viewModel.fetchBeneficiary()
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun BuildListItem(
+    beneficiary: Beneficiary,
+    index : Int,
+    onDelete: (Beneficiary) -> Unit,
+    onVerify: (Beneficiary) -> Unit
+) {
+
+    val isVisible = remember {
+        mutableStateOf(false)
+    }
+
+    Column(modifier = Modifier
+        .background(color = if(index == 0) GreenColor.copy(0.4f) else Color.White)
+        .clickable {
+        isVisible.value = !isVisible.value
+    }) {
+
+        Row(
+            modifier = Modifier.padding(
+                vertical = 12.dp,
+                horizontal = 12.dp
+            )
+        ) {
+            Icon(
+                imageVector = Icons.Default.Verified,
+                contentDescription = null,
+                tint = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray,
+                modifier = Modifier.size(20.dp)
+            )
+
+            Column() {
+                Text(
+                    text = beneficiary.name.orEmpty(),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray
+                )
+                Text(
+                    text = beneficiary.bankName.orEmpty(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = PrimaryColorDark
+                )
+                Text(
+                    text = "Account    : " + beneficiary.accountNumber.orEmpty(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = PrimaryColorDark
+                )
+                Text(
+                    text = "Ifsc Code : " + beneficiary.ifsc.orEmpty(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = PrimaryColorDark
+                )
+                if (!beneficiary.lastSuccessTime.isNullOrEmpty()) Text(
+                    text = "Last Success : " + beneficiary.lastSuccessTime.orEmpty(),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = GreenColor
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Default.Send,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = Color.DarkGray,
+                            shape = CircleShape
+                        )
+                        .rotate(-15f)
+                        .padding(8.dp)
+                )
+
+                Text(
+                    text = "Send",
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+
+        }
+
+        AnimatedContent(targetState = isVisible.value) { target ->
+            if (target)
+                Column {
+
+                    val buttonPaddingValue = PaddingValues(vertical = 0.dp, horizontal = 12.dp)
+                    Divider()
+                    Row(Modifier.padding(vertical = 8.dp, horizontal = 12.dp)) {
+                        Button(
+                            onClick = { onDelete.invoke(beneficiary) },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = RedColor,
+                                contentColor = Color.White,
+
+                                ), contentPadding = buttonPaddingValue
+                        ) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(text = "Delete")
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Button(
+                            onClick = { onVerify.invoke(beneficiary) },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = GreenColor,
+                                contentColor = Color.White
+                            ), contentPadding = buttonPaddingValue
+                        ) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Verify")
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(text = if (beneficiary.bankVerified == 1) "Re-verified" else "Verified")
+                        }
+                    }
+                }
+        }
+
+        Divider()
 
     }
 }
@@ -189,7 +294,12 @@ private fun HeaderComponent() {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Card(
                         shape = CircleShape,
-                        backgroundColor = GreenColor
+                        backgroundColor = GreenColor,
+                         modifier = Modifier.clickable {
+                             viewModel.navigateTo(NavScreen.DmtBeneficiaryRegisterScreen.passArgs(
+                                 moneySender = viewModel.moneySender
+                             ))
+                         }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -216,11 +326,32 @@ private fun HeaderComponent() {
             SearchTextField(
                 paddingValues = PaddingValues(horizontal = 0.dp, vertical = 4.dp),
                 value = searchValue.value,
-                onQuery = {
+                onQuery = { query ->
+                    searchValue.value = query
+
+                    if (query.isEmpty()) {
+                        viewModel.showBeneficiaryList.clear()
+                        viewModel.showBeneficiaryList.addAll(
+                            viewModel.mainBeneficiaryList
+                        )
+                    } else {
+
+                        val filterList = viewModel.mainBeneficiaryList.filter {
+                            viewModel.filterListCondition(it, query)
+                        }
+                        viewModel.showBeneficiaryList.clear()
+                        viewModel.showBeneficiaryList.addAll(filterList)
+
+
+                    }
 
                 },
                 onClear = {
                     searchValue.value = ""
+                    viewModel.showBeneficiaryList.clear()
+                    viewModel.showBeneficiaryList.addAll(
+                        viewModel.mainBeneficiaryList
+                    )
                 })
         }
     }

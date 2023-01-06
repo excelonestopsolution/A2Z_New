@@ -61,7 +61,7 @@ class InputWrapper constructor(
     }
 }
 
-abstract class BaseInput(private vararg val makeValid: InputWrapper) {
+open class BaseInput(private vararg val makeValid: InputWrapper) {
 
     val isValidObs get() = mutableStateOf(allInputValid())
 

@@ -3,14 +3,15 @@ package com.a2z.app.nav
 import android.net.Uri
 import android.os.Parcelable
 import com.a2z.app.data.model.dmt.MoneySender
-import com.a2z.app.data.model.dmt.MoneySenderResponse
+import com.a2z.app.data.model.dmt.SenderAccountDetail
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
+import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.screen.utility.util.OperatorType
-import com.a2z.app.util.AppException
 import com.a2z.app.util.AppUtil
 import com.google.gson.Gson
 import java.io.Serializable
@@ -129,10 +130,39 @@ sealed class NavScreen(val route: String) {
     }
 
     //dmt screens
-    object DmtSenderSearchScreen : NavScreen("sender-search-screen")
+    object DmtSenderSearchScreen : NavScreen("sender-search-screen".params("dmtType")) {
+        fun passArgs(dmtType: DMTType): String {
+            return "sender-search-screen".args(
+                "dmtType" to dmtType.toEncodedString()
+            )
+        }
+    }
+
     object DmtBeneficiaryListInfoScreen :
-        NavScreen("beneficiary-list-screen".params("moneySender")) {
+        NavScreen("beneficiary-list-screen".params("moneySender", "dmtType","accountDetail")) {
+        fun passArgs(
+            moneySender: MoneySender,
+            dmtType: DMTType,
+            accountDetail: SenderAccountDetail
+        ) =
+            "beneficiary-list-screen".args(
+                "moneySender" to moneySender.toEncodedString(),
+                "dmtType" to dmtType.toEncodedString(),
+                "accountDetail" to accountDetail.toEncodedString()
+            )
+    }
+
+    object DmtBeneficiaryRegisterScreen :
+        NavScreen("beneficiary-register-screen".params("moneySender")) {
         fun passArgs(moneySender: MoneySender) =
-            "beneficiary-list-screen".args("moneySender" to moneySender.toEncodedString())
+            "beneficiary-register-screen".args("moneySender" to moneySender.toEncodedString())
+    }
+
+    object DmtSenderRegisterScreen :
+        NavScreen("beneficiary-sender-screen".params("senderRegistrationArgs")) {
+        fun passArgs(args: SenderRegistrationArgs) =
+            "beneficiary-sender-screen".args(
+                "senderRegistrationArgs" to args.toEncodedString()
+            )
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.FunCompose
@@ -39,7 +40,7 @@ fun HomeServiceWidget() {
 
 @Composable
 private fun BuildMoneyAndPaymentService() {
-    val navController  = LocalNavController.current
+    val navController = LocalNavController.current
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -51,6 +52,13 @@ private fun BuildMoneyAndPaymentService() {
                         title = "Wallet 1",
                         icon = R.drawable.ic_launcher_money,
                         color = color,
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.WALLET_1
+                                )
+                            )
+                        }
 
                         )
                     BuildIconAndIconTitle(
@@ -58,14 +66,36 @@ private fun BuildMoneyAndPaymentService() {
                         icon = R.drawable.ic_launcher_money,
                         color = color,
                         onClick = {
-                            navController.navigate(NavScreen.DmtSenderSearchScreen.route)
+                            navController.navigate(
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.WALLET_2
+                                )
+                            )
                         }
                     )
                     BuildIconAndIconTitle(
-                        title = "Wallet 3", icon = R.drawable.ic_launcher_money, color = color
+                        title = "Wallet 3",
+                        icon = R.drawable.ic_launcher_money,
+                        color = color,
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.WALLET_3
+                                )
+                            )
+                        }
                     )
                     BuildIconAndIconTitle(
-                        title = "DMT 1", icon = R.drawable.ic_launcher_money, color = color
+                        title = "DMT 1",
+                        icon = R.drawable.ic_launcher_money,
+                        color = color,
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.DMT_3
+                                )
+                            )
+                        }
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
@@ -90,9 +120,13 @@ private fun BuildMoneyAndPaymentService() {
                         icon = R.drawable.ic_launcher_matm,
                         padding = 12.dp,
                         color = color,
-                        onClick = {navController.navigate(NavScreen.MatmScreen.passArgs(
-                            isMPos = false
-                        ))}
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.MatmScreen.passArgs(
+                                    isMPos = false
+                                )
+                            )
+                        }
                     )
                     BuildIconAndIconTitle(
                         title = "M-POS",
@@ -100,9 +134,11 @@ private fun BuildMoneyAndPaymentService() {
                         padding = 12.dp,
                         color = color,
                         onClick = {
-                            navController.navigate(NavScreen.MatmScreen.passArgs(
-                                isMPos = true
-                            ))
+                            navController.navigate(
+                                NavScreen.MatmScreen.passArgs(
+                                    isMPos = true
+                                )
+                            )
                         }
                     )
                 }
@@ -125,26 +161,26 @@ private fun BuildRechargeAndUtilityService() {
                         icon = R.drawable.ic_launcher_electricity,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.ELECTRICITY)
+                            navigateToOperatorScreen(navController, OperatorType.ELECTRICITY)
                         })
                     BuildIconAndIconTitle(title = "Water",
                         icon = R.drawable.ic_launcher_water,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.WATER)
+                            navigateToOperatorScreen(navController, OperatorType.WATER)
                         })
                     BuildIconAndIconTitle(title = "Gas",
                         icon = R.drawable.ic_launcher_gas,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.GAS)
+                            navigateToOperatorScreen(navController, OperatorType.GAS)
                         })
                     BuildIconAndIconTitle(title = "Broadband",
                         icon = R.drawable.ic_launcher_broadband,
                         color = color,
                         onClick = {
 
-                            navigateToOperatorScreen(navController,OperatorType.BROADBAND)
+                            navigateToOperatorScreen(navController, OperatorType.BROADBAND)
                         })
 
                 }
@@ -154,25 +190,25 @@ private fun BuildRechargeAndUtilityService() {
                         icon = R.drawable.ic_launcher_mobile,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.PREPAID)
+                            navigateToOperatorScreen(navController, OperatorType.PREPAID)
                         })
                     BuildIconAndIconTitle(title = "Insurance",
                         icon = R.drawable.ic_launcher_insurence,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.INSURANCE)
+                            navigateToOperatorScreen(navController, OperatorType.INSURANCE)
                         })
                     BuildIconAndIconTitle(title = "Loan Repayment",
                         icon = R.drawable.ic_launcher_insurence,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.LOAN_REPAYMENT)
+                            navigateToOperatorScreen(navController, OperatorType.LOAN_REPAYMENT)
                         })
                     BuildIconAndIconTitle(title = "Postpaid",
                         icon = R.drawable.ic_launcher_mobile,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.POSTPAID)
+                            navigateToOperatorScreen(navController, OperatorType.POSTPAID)
                         })
 
                 }
@@ -182,13 +218,13 @@ private fun BuildRechargeAndUtilityService() {
                         icon = R.drawable.ic_launcher_dth,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.DTH)
+                            navigateToOperatorScreen(navController, OperatorType.DTH)
                         })
                     BuildIconAndIconTitle(title = "FasTag",
                         icon = R.drawable.ic_launcher_fastag,
                         color = color,
                         onClick = {
-                            navigateToOperatorScreen(navController,OperatorType.FAS_TAG)
+                            navigateToOperatorScreen(navController, OperatorType.FAS_TAG)
                         })
                     Spacer(modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.weight(1f))

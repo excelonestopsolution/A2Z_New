@@ -34,4 +34,7 @@ interface RepoModule {
 
     @Binds
     fun provideDMTRepositoryImpl(repository: DMTRepositoryImpl): DMTRepository
+
+    @Binds
+    fun provideDMT3RepositoryImpl(repository: DMT3RepositoryImpl): DMT3Repository
 }

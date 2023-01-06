@@ -34,6 +34,12 @@ object AppValidator {
         "Enter 6 - 10 characters user id"
     )
 
+
+    fun minThreeChar(value: String) = Pair(
+        value.length  >= 3,
+        "Enter min 3 characters"
+    )
+
     fun password(value: String) = Pair(
         validatePassword(value),
         "Enter valid password" +
@@ -46,6 +52,11 @@ object AppValidator {
     fun mpinValidation(value: String, length: Int = 6) = Pair(
         value.length == length,
         "Enter $length digits M-PIN"
+    )
+
+    fun pinCodeValidation(value: String) = Pair(
+        value.length == 6,
+        "Enter 6 digits Pin Code"
     )
 
     fun amountValidation(

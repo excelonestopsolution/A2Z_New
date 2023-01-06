@@ -4,6 +4,7 @@ import android.content.Context
 import com.a2z.app.data.NetworkClient
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.service.location.LocationService
+import com.a2z.app.util.ApiUtil
 import com.a2z.app.util.NetworkUtil
 import com.a2z.app.util.interceptor.HeaderInterceptor
 import com.a2z.app.util.interceptor.NetworkInterceptor
@@ -109,5 +110,10 @@ object AppModule {
         return LocationService(context)
     }
 
+    @Provides
+    @Singleton
+    fun provideContextInjectUtil(@ApplicationContext context: Context): ApiUtil{
+        return ApiUtil(context);
+    }
 
 }
