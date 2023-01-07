@@ -9,6 +9,7 @@ import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
+import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.screen.utility.util.OperatorType
@@ -163,6 +164,15 @@ sealed class NavScreen(val route: String) {
         fun passArgs(args: SenderRegistrationArgs) =
             "beneficiary-sender-screen".args(
                 "senderRegistrationArgs" to args.toEncodedString()
+            )
+    }
+
+
+    object DMTMoneyTransferScreen :
+        NavScreen("money-transfer-screen".params("moneyTransferArgs")) {
+        fun passArgs(args: MoneyTransferArgs) =
+            "money-transfer-screen".args(
+                "moneyTransferArgs" to args.toEncodedString()
             )
     }
 }

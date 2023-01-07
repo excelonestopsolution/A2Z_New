@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.a2z.app.ui.component.WalletBalanceComponent
 
 
@@ -40,10 +41,12 @@ fun AppFormUI(
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 5.dp)
                     ) {
-                        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
+                        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
                             if (it.title != null) {
-                                Text(text = it.title, style = MaterialTheme.typography.h6)
-                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(text = it.title, style = MaterialTheme.typography.h6.copy(
+                                    fontSize = 16.sp
+                                ))
+                                Spacer(modifier = Modifier.height(1.dp))
                             }
                             if (it.isVisible) it.contents(this)
                         }

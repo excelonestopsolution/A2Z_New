@@ -82,6 +82,7 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
                                     BuildListItem(
                                         beneficiary,
                                         index,
+                                        viewModel,
                                         onDelete = { viewModel.onDelete(it) },
                                         onVerify = { viewModel.onVerify(it) }
                                     )
@@ -135,6 +136,7 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
 private fun BuildListItem(
     beneficiary: Beneficiary,
     index : Int,
+    viewModel : BeneficiaryListInfoViewModel,
     onDelete: (Beneficiary) -> Unit,
     onVerify: (Beneficiary) -> Unit
 ) {
@@ -144,7 +146,7 @@ private fun BuildListItem(
     }
 
     Column(modifier = Modifier
-        .background(color = if(index == 0) GreenColor.copy(0.4f) else Color.White)
+        .background(color = if(index == 0 && viewModel.swipeState.value) GreenColor.copy(0.4f) else Color.White)
         .clickable {
         isVisible.value = !isVisible.value
     }) {
@@ -209,6 +211,9 @@ private fun BuildListItem(
                         )
                         .rotate(-15f)
                         .padding(8.dp)
+                        .clickable {
+                            viewModel.onSendClick(beneficiary)
+                        }
                 )
 
                 Text(

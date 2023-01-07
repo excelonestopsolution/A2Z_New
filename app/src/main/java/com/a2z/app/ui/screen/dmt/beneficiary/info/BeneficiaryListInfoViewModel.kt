@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.repository.DMTRepository
+import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
@@ -110,6 +112,9 @@ class BeneficiaryListInfoViewModel @Inject constructor(
                                 Collections.swap(showBeneficiaryList,0,index)
                                 swipeState.value = true
                             }
+                            else {
+                                swipeState.value = false
+                            }
 
                         }
 
@@ -173,6 +178,16 @@ class BeneficiaryListInfoViewModel @Inject constructor(
             flow = deleteBeneficiaryFlow,
             call = { repository.deleteBeneficiary(param) }
         )
+    }
+
+    fun onSendClick(beneficiary: Beneficiary) {
+        navigateTo(NavScreen.DMTMoneyTransferScreen.passArgs(
+            args = MoneyTransferArgs(
+                moneySender = moneySender,
+                beneficiary = beneficiary,
+                dmtType = dmtType
+            )
+        ))
     }
 
 }

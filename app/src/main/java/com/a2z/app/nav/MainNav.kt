@@ -13,6 +13,7 @@ import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
 import com.a2z.app.ui.screen.dmt.beneficiary.register.BeneficiaryRegisterScreen
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegisterScreen
 import com.a2z.app.ui.screen.dmt.sender.search.SearchSenderScreen
+import com.a2z.app.ui.screen.dmt.transfer.DMTMoneyTransferScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
@@ -121,6 +122,10 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
         composable(route = NavScreen.DmtSenderRegisterScreen.route, content = {
             SenderRegisterScreen()
+        })
+
+        composable(route = NavScreen.DMTMoneyTransferScreen.route, content = {
+            DMTMoneyTransferScreen()
         })
 
 
