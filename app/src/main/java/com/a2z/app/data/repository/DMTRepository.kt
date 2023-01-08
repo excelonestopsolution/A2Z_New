@@ -23,5 +23,5 @@ interface DMTRepository {
     suspend fun commissionCharge(data: FieldMapData): DmtCommissionResponse
     suspend fun bankDownCheck(data: FieldMapData): BankDownCheckResponse
     suspend fun bankDown(): BankDownResponse
-    suspend fun transfer(data: FieldMapData): AppResponse
+
 }

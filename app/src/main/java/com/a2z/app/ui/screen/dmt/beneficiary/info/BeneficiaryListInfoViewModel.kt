@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.repository.DMTRepository
+import com.a2z.app.data.repository.UpiRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
@@ -16,7 +17,6 @@ import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.AppUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BeneficiaryListInfoViewModel @Inject constructor(
     private val repository: DMTRepository,
+    private val upiRepository: UpiRepository,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
@@ -76,7 +77,10 @@ class BeneficiaryListInfoViewModel @Inject constructor(
 
         viewModelScope.launch {
             verificationFlow.getLatest {
-                if (it.status == 1) successDialog(it.message)
+                val beneName = if (dmtType == DMTType.UPI) it.upiBeneName else it.beneName
+                if (it.status == 1) successDialog(it.message +"\n"+beneName){
+                    fetchBeneficiary()
+                }
                 else alertDialog(it.message)
             }
 
@@ -93,9 +97,19 @@ class BeneficiaryListInfoViewModel @Inject constructor(
             "mobile_number" to moneySender.mobileNumber.orEmpty(),
             "mobile" to moneySender.mobileNumber.orEmpty()
         )
+
+        suspend fun beneficiaryListApiCall() = when (dmtType) {
+            DMTType.WALLET_1,
+            DMTType.WALLET_2,
+            DMTType.WALLET_3,
+            DMTType.DMT_3,
+            -> repository.beneficiaryList(param)
+            DMTType.UPI -> upiRepository.beneficiaryList(param)
+        }
+
         callApiForStateFlow(
             flow = _beneficiaryFlow,
-            call = { repository.beneficiaryList(param) },
+            call = { beneficiaryListApiCall() },
             beforeEmit = {
                 if (it is ResultType.Success)
                     if (it.data.status == 22) {
@@ -103,16 +117,15 @@ class BeneficiaryListInfoViewModel @Inject constructor(
                         showBeneficiaryList.addAll(it.data.data!!)
 
                         if (showBeneficiaryList.isNotEmpty()) {
-                            val beneficiary = showBeneficiaryList.find { item->
+                            val beneficiary = showBeneficiaryList.find { item ->
                                 item.bankName == senderAccountDetail.bankName
                                         && item.name == senderAccountDetail.name
                             }
-                            if(beneficiary!=null){
+                            if (beneficiary != null) {
                                 val index = showBeneficiaryList.indexOf(beneficiary)
-                                Collections.swap(showBeneficiaryList,0,index)
+                                Collections.swap(showBeneficiaryList, 0, index)
                                 swipeState.value = true
-                            }
-                            else {
+                            } else {
                                 swipeState.value = false
                             }
 
@@ -142,7 +155,16 @@ class BeneficiaryListInfoViewModel @Inject constructor(
         val param = hashMapOf(
             "bene_id" to beneficiaryState.value?.a2zBeneId.orEmpty(),
         )
-        callApiForShareFlow(
+        val paramUpi = hashMapOf(
+            "number" to beneficiaryState.value?.accountNumber.orEmpty(),
+            "type" to "VPA"
+        )
+
+        if (dmtType == DMTType.UPI) callApiForShareFlow(
+            flow = verificationFlow,
+            call = { upiRepository.accountValidation(paramUpi) }
+        )
+        else callApiForShareFlow(
             flow = verificationFlow,
             call = { repository.accountReValidation(param) }
         )
@@ -158,7 +180,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
     fun deleteBeneficiaryOtp(otp: String) {
 
         val param = hashMapOf(
-            "bene_id" to beneficiaryState.value?.a2zBeneId.orEmpty(),
+            "bene_id" to getBeneId(),
             "otp" to otp
         )
 
@@ -172,7 +194,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
 
     fun deleteBeneficiary() {
         val param = hashMapOf(
-            "bene_id" to beneficiaryState.value?.a2zBeneId.orEmpty()
+            "bene_id" to getBeneId()
         )
         callApiForShareFlow(
             flow = deleteBeneficiaryFlow,
@@ -181,13 +203,24 @@ class BeneficiaryListInfoViewModel @Inject constructor(
     }
 
     fun onSendClick(beneficiary: Beneficiary) {
-        navigateTo(NavScreen.DMTMoneyTransferScreen.passArgs(
-            args = MoneyTransferArgs(
-                moneySender = moneySender,
-                beneficiary = beneficiary,
-                dmtType = dmtType
+        navigateTo(
+            NavScreen.DMTMoneyTransferScreen.passArgs(
+                args = MoneyTransferArgs(
+                    moneySender = moneySender,
+                    beneficiary = beneficiary,
+                    dmtType = dmtType
+                )
             )
-        ))
+        )
+    }
+
+    private fun getBeneId() = when (dmtType) {
+        DMTType.UPI -> beneficiaryState.value?.id.orEmpty()
+        DMTType.DMT_3,
+        DMTType.WALLET_1,
+        DMTType.WALLET_2,
+        DMTType.WALLET_3 -> beneficiaryState.value?.a2zBeneId.orEmpty()
+
     }
 
 }

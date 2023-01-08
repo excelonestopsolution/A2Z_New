@@ -1,5 +1,6 @@
 package com.a2z.app.data.repository_impl
 
+import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.network.DMTService
 import com.a2z.app.data.repository.DMTRepository
 import com.a2z.app.util.FieldMapData
@@ -41,8 +42,6 @@ class DMTRepositoryImpl @Inject constructor(private val service: DMTService) :
 
     override suspend fun commissionCharge(data: FieldMapData) = service.commissionCharge(data)
     override suspend fun bankDownCheck(data: FieldMapData) = service.bankDownCheck(data)
-    override suspend fun transfer(data: FieldMapData) = service.transfer(data)
     override suspend fun bankDown() = service.bankDown()
-
 
 }

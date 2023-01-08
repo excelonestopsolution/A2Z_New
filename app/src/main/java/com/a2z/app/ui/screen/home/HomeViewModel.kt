@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.home
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
@@ -7,6 +8,8 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
+import com.a2z.app.data.model.dmt.BankDownBank
+import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
@@ -45,6 +48,7 @@ class HomeViewModel @Inject constructor(
         fetchWalletBalance()
         fetchBanners()
         fetchNews()
+        fetchBankDown()
         observeLogoutShareFlow()
     }
 
@@ -92,6 +96,7 @@ class HomeViewModel @Inject constructor(
     }
 
     val newsResponseState = mutableStateOf<NewsResponse?>(null)
+    val bankDownListState = mutableStateOf<BankDownResponse?>(null)
 
     fun fetchNews() {
         callApiForShareFlow(beforeEmit = {
@@ -102,6 +107,15 @@ class HomeViewModel @Inject constructor(
         }, handleException = false) { repository.fetchNews() }
     }
 
+    private fun fetchBankDown() {
+        callApiForShareFlow(beforeEmit = {
+            if (it is ResultType.Success)
+                if (it.data.status == 1) {
+                    bankDownListState.value = it.data
+                } else newsResponseState.value = null
+        }, handleException = false) { repository.fetchBankDown() }
+    }
+
     fun logout() {
 
         viewModelScope.launch {
@@ -109,12 +123,63 @@ class HomeViewModel @Inject constructor(
             delay(1000)
             _logoutSharedFlow.emit(ResultType.Success(AppResponse(1, "Logout successfully")))
         }
-
     }
+
+    private fun checkDMTAndAEPSKycPending(): Boolean {
+        return appPreference.user?.isAadhaarKyc == 0
+                || appPreference.user?.aepsKyc == 0
+                || appPreference.user?.isUserHasActiveSettlementAccount == 0
+                || appPreference.user?.isVideoKyc == 0
+    }
+
+    private fun checkDMTKycPending(): Boolean {
+        return appPreference.user?.isAadhaarKyc == 0
+                || appPreference.user?.isVideoKyc == 0
+    }
+
+    private fun kycInfo(): Triple<String, String, String>? {
+        when {
+            appPreference.user?.isAadhaarKyc == 0 -> {
+                return Triple(
+                    "Aadhaar Kyc Required!",
+                    "Aadhaar kyc is required, to enable DMT and AEPS Services",
+                    "AADHAAR_KYC"
+
+                )
+            }
+            appPreference.user?.isVideoKyc == 0 -> {
+                return Triple(
+                    "Upload documents First",
+                    "Please upload all required documents, to enable DMT and AEPS Services",
+                    "VIDEO_KYC"
+
+                )
+
+            }
+            appPreference.user?.isUserHasActiveSettlementAccount == 0 -> {
+                return Triple(
+                    "Add Bank First!",
+                    "Please add aeps settlement bank first, to enable AEPS",
+                    "SETTLEMENT"
+
+                )
+            }
+            appPreference.user?.aepsKyc == 0 -> {
+                return Triple(
+                    "Aeps Kyc Required!",
+                    "Aadhaar e-kyc is required, to enable AEPS Services",
+                    "AEPS_KYC"
+
+                )
+            }
+            else -> return null
+        }
+    }
+
 }
 
 sealed class HomeScreenState {
-    object OnLogoutComplete: HomeScreenState()
+    object OnLogoutComplete : HomeScreenState()
     data class OnHomeApiFailure(val exception: Exception) : HomeScreenState()
 }
 

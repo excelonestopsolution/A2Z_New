@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import com.a2z.app.data.model.dmt.MoneySender
 import com.a2z.app.data.model.dmt.SenderAccountDetail
+import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.provider.Operator
@@ -93,6 +94,11 @@ sealed class NavScreen(val route: String) {
 
     object RechargeTxnScreen : NavScreen("recharge-txn-screen".params("response")) {
         fun passArgs(response: RechargeTransactionResponse) = "recharge-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
+    object DMTTxnScreen : NavScreen("dmt-txn-screen".params("response")) {
+        fun passArgs(response: TransactionDetail) = "dmt-txn-screen".args(
             "response" to response.toEncodedString()
         )
     }

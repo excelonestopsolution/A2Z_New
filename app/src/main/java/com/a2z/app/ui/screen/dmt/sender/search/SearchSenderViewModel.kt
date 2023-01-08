@@ -10,6 +10,7 @@ import com.a2z.app.data.model.dmt.SenderAccountDetail
 import com.a2z.app.data.model.dmt.SenderAccountDetailResponse
 import com.a2z.app.data.repository.DMT3Repository
 import com.a2z.app.data.repository.DMTRepository
+import com.a2z.app.data.repository.UpiRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationType
@@ -30,6 +31,7 @@ import javax.inject.Inject
 class SearchSenderViewModel @Inject constructor(
     private val repository: DMTRepository,
     private val dmt3Repository: DMT3Repository,
+    private val upiRepository: UpiRepository,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
@@ -150,7 +152,7 @@ class SearchSenderViewModel @Inject constructor(
                     DMTType.WALLET_2 -> repository.searchMobileNumberWalletTwo(param)
                     DMTType.WALLET_3 -> repository.searchMobileNumberWalletThree(param)
                     DMTType.DMT_3 -> dmt3Repository.searchMobileNumberDmtThree(param)
-                    DMTType.UPI -> throw Exception("DMT type not supported!")
+                    DMTType.UPI ->  upiRepository.searchSender(param).body()!!
                 }
             }
         )
@@ -174,8 +176,8 @@ class SearchSenderViewModel @Inject constructor(
         }
     }
 
-    fun onWalletSelect(dmtType: DMTType) {
-        this.dmtType = dmtType
+    fun onWalletSelect(dmtType: DMTType?= null) {
+        dmtType?.let { this.dmtType = it }
         searchType.value = SenderSearchType.MOBILE
         input.number.setValue(senderAccountDetail.value?.mobileNumber.toString())
         senderBeneficiaries.value = listOf()

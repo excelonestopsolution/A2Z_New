@@ -22,7 +22,7 @@ fun BottomSheetComponent(
 
     rememberBottomSheetScaffoldState(
         bottomSheetState =
-        BottomSheetState(BottomSheetValue.Collapsed)
+        BottomSheetState(BottomSheetValue.Collapsed),
     )
     val coroutineScope = rememberCoroutineScope()
 

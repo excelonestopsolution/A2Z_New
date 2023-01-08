@@ -25,6 +25,7 @@ import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
+import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.GreenColor
@@ -59,8 +60,21 @@ fun SearchSenderScreen(navBackStackEntry: NavBackStackEntry) {
                     SearchSenderByComponent()
                     if (viewModel.senderBeneficiaries.value.isNotEmpty())
                         BuildAccountList(viewModel) {
+
                             viewModel.senderAccountDetail.value = it
-                            bottomToggle.invoke()
+
+                            when (viewModel.dmtType) {
+                                DMTType.WALLET_1,
+                                DMTType.WALLET_2,
+                                DMTType.WALLET_3 -> {
+
+                                    bottomToggle.invoke()
+                                }
+                                else -> {
+
+                                    viewModel.onWalletSelect()
+                                }
+                            }
                         }
 
                 }
@@ -176,8 +190,8 @@ private fun SearchSenderByComponent() {
                         if (viewModel.searchType.value == SenderSearchType.MOBILE) "Mobile" else "Account",
                 style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
+            if(viewModel.dmtType != DMTType.UPI) Spacer(modifier = Modifier.height(8.dp))
+            if(viewModel.dmtType != DMTType.UPI) Row {
                 SearchButton(searchType = SenderSearchType.MOBILE) {
                     viewModel.onSearchTypeClick(SenderSearchType.MOBILE)
                 }

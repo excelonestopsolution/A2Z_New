@@ -34,7 +34,66 @@ import com.a2z.app.util.VoidCallback
 fun HomeServiceWidget() {
     Column {
         BuildMoneyAndPaymentService()
+        BuildMoneyAEPService()
         BuildRechargeAndUtilityService()
+    }
+}
+
+@Composable
+private fun BuildMoneyAEPService() {
+    val navController = LocalNavController.current
+
+    ServiceCard {
+        val color = Color(0xFF044274)
+        Column {
+            BuildServiceTitle("AEPS & MATM Service")
+            Column(modifier = Modifier.padding(8.dp)) {
+
+                Row {
+                    BuildIconAndIconTitle(
+                        title = "AEPS 1",
+                        icon = R.drawable.ic_launcher_aeps2,
+                        padding = 14.dp,
+                        color = color,
+                        onClick = {
+                            navController.navigate(NavScreen.AepsScreen.route)
+                        }
+                    )
+                    BuildIconAndIconTitle(
+                        title = "AEPS 2",
+                        icon = R.drawable.ic_launcher_aeps2,
+                        padding = 14.dp,
+                        color = color
+                    )
+                    BuildIconAndIconTitle(
+                        title = "M-ATM",
+                        icon = R.drawable.ic_launcher_matm,
+                        padding = 12.dp,
+                        color = color,
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.MatmScreen.passArgs(
+                                    isMPos = false
+                                )
+                            )
+                        }
+                    )
+                    BuildIconAndIconTitle(
+                        title = "M-POS",
+                        icon = R.drawable.ic_launcher_matm,
+                        padding = 12.dp,
+                        color = color,
+                        onClick = {
+                            navController.navigate(
+                                NavScreen.MatmScreen.passArgs(
+                                    isMPos = true
+                                )
+                            )
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -46,7 +105,7 @@ private fun BuildMoneyAndPaymentService() {
         val color = Color(0xFF044274)
         Column {
             BuildServiceTitle("Money & Payment")
-            Column(modifier = Modifier.padding(12.dp)) {
+            Column(modifier = Modifier.padding(8.dp)) {
                 Row {
                     BuildIconAndIconTitle(
                         title = "Wallet 1",
@@ -100,51 +159,27 @@ private fun BuildMoneyAndPaymentService() {
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
+
                     BuildIconAndIconTitle(
-                        title = "AEPS 1",
-                        icon = R.drawable.ic_launcher_aeps2,
-                        padding = 14.dp,
-                        color = color,
-                        onClick = {
-                            navController.navigate(NavScreen.AepsScreen.route)
-                        }
-                    )
-                    BuildIconAndIconTitle(
-                        title = "AEPS 2",
-                        icon = R.drawable.ic_launcher_aeps2,
-                        padding = 14.dp,
-                        color = color
-                    )
-                    BuildIconAndIconTitle(
-                        title = "M-ATM",
-                        icon = R.drawable.ic_launcher_matm,
-                        padding = 12.dp,
+                        title = "UPI",
+                        icon = R.drawable.ic_launcher_money,
                         color = color,
                         onClick = {
                             navController.navigate(
-                                NavScreen.MatmScreen.passArgs(
-                                    isMPos = false
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.UPI
                                 )
                             )
                         }
                     )
-                    BuildIconAndIconTitle(
-                        title = "M-POS",
-                        icon = R.drawable.ic_launcher_matm,
-                        padding = 12.dp,
-                        color = color,
-                        onClick = {
-                            navController.navigate(
-                                NavScreen.MatmScreen.passArgs(
-                                    isMPos = true
-                                )
-                            )
-                        }
-                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))
+                }
                 }
             }
         }
-    }
+
 }
 
 
@@ -155,7 +190,7 @@ private fun BuildRechargeAndUtilityService() {
     ServiceCard {
         Column {
             BuildServiceTitle("Recharge & Utility")
-            Column(modifier = Modifier.padding(12.dp)) {
+            Column(modifier = Modifier.padding(8.dp)) {
                 Row {
                     BuildIconAndIconTitle(title = "Electricity",
                         icon = R.drawable.ic_launcher_electricity,
@@ -297,7 +332,8 @@ private fun BuildServiceTitle(title: String) {
 @Composable
 private fun ServiceCard(content: FunCompose) {
     Card(
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
+        elevation = 16.dp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 5.dp)

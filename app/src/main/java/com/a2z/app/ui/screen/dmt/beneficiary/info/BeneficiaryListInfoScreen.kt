@@ -40,6 +40,7 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.SearchTextField
 import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.dialog.OTPVerifyDialog
+import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
@@ -151,6 +152,9 @@ private fun BuildListItem(
         isVisible.value = !isVisible.value
     }) {
 
+        val dmtType = viewModel.dmtType
+        val isUpi = dmtType == DMTType.UPI
+
         Row(
             modifier = Modifier.padding(
                 vertical = 12.dp,
@@ -160,31 +164,36 @@ private fun BuildListItem(
             Icon(
                 imageVector = Icons.Default.Verified,
                 contentDescription = null,
-                tint = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray,
+                tint = if (beneficiary.bankVerified == 1
+                    || beneficiary.upiBankVerified == 1) GreenColor else Color.Gray,
                 modifier = Modifier.size(20.dp)
             )
 
-            Column() {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = beneficiary.name.orEmpty(),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray
+                    color = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) GreenColor else Color.Gray
                 )
-                Text(
+              if(!isUpi)  Text(
                     text = beneficiary.bankName.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PrimaryColorDark
                 )
+
+                val accountTitle = if(isUpi) "" else "Account    : "
                 Text(
-                    text = "Account    : " + beneficiary.accountNumber.orEmpty(),
+                    text = accountTitle + beneficiary.accountNumber.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PrimaryColorDark
                 )
-                Text(
-                    text = "Ifsc Code : " + beneficiary.ifsc.orEmpty(),
+                val ifscTitle = if(isUpi)  "Provider  : " else "Ifsc Code : "
+                val ifscValue = if(isUpi) beneficiary.bankName else beneficiary.ifsc
+               if(ifscValue.toString().isNotEmpty()) Text(
+                    text = ifscTitle + ifscValue.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PrimaryColorDark
@@ -196,7 +205,7 @@ private fun BuildListItem(
                     color = GreenColor
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
+
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
@@ -254,7 +263,7 @@ private fun BuildListItem(
                         ) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "Verify")
                             Spacer(modifier = Modifier.width(5.dp))
-                            Text(text = if (beneficiary.bankVerified == 1) "Re-verified" else "Verified")
+                            Text(text = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) "Re-verified" else "Verified")
                         }
                     }
                 }
@@ -315,8 +324,10 @@ private fun HeaderComponent() {
 
                     }
                     Spacer(modifier = Modifier.height(5.dp))
+                    val addNewText= if(viewModel.dmtType == DMTType.UPI)
+                        "Add New\nID" else "Add New\nBeneficiary"
                     Text(
-                        text = "Add New\nBeneficiary",
+                        text = addNewText,
                         textAlign = TextAlign.Center,
                         fontSize = 14.sp,
                         color = Color.DarkGray

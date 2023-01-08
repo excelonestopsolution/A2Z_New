@@ -99,6 +99,7 @@ class BeneficiaryRegisterViewModel @Inject constructor(
 
     fun onBankSelect(bankName: String) {
         selectedBank.value = bankList.find { it.bankName == bankName }
+        input.ifscCode.setValue(selectedBank.value?.ifsc)
     }
 
     fun customValidation(): Boolean {

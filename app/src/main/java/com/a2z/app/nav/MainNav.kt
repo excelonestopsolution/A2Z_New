@@ -18,6 +18,7 @@ import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
+import com.a2z.app.ui.screen.result.DMTResultScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.result.RechargeResultScreen
 import com.a2z.app.ui.screen.show_qrcode.ShowQRCodeScreen
@@ -79,6 +80,12 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
             route = NavScreen.RechargeTxnScreen.route,
             content = {
                 RechargeResultScreen(it)
+            }
+        )
+        composable(
+            route = NavScreen.DMTTxnScreen.route,
+            content = {
+                DMTResultScreen(it)
             }
         )
 

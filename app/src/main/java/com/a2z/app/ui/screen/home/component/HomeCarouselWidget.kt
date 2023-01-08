@@ -51,7 +51,7 @@ fun HomeCarouselWidget(
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 5.dp)
+                .padding(bottom = 5.dp, top = 8.dp)
         ) { page ->
             Card(modifier = Modifier
                 .height(156.dp)
@@ -76,7 +76,7 @@ fun HomeCarouselWidget(
                 }
                 .fillMaxWidth()
                 .padding(12.dp, 0.dp, 12.dp, 8.dp),
-                shape = MaterialTheme.shapes.large,
+                shape = MaterialTheme.shapes.medium,
                 elevation = 16.dp
 
             ) {
@@ -91,7 +91,7 @@ fun HomeCarouselWidget(
         HorizontalPagerIndicator(
             pagerState = pagerState, modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(16.dp)
+                .padding(5.dp)
         )
     }
 }

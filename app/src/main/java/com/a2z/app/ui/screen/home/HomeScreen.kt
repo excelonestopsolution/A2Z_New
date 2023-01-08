@@ -1,10 +1,13 @@
 package com.a2z.app.ui.screen.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.NotificationImportant
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,8 +34,7 @@ import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
-import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.theme.*
 import com.a2z.app.util.Exceptions
 import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
@@ -86,14 +88,13 @@ fun HomeScreen(
                 when (it) {
                     is HomeScreenState.OnHomeApiFailure -> {
                         activity.showToast(it.exception.message.toString())
-                        if(it.exception is Exceptions.SessionExpiredException){
+                        if (it.exception is Exceptions.SessionExpiredException) {
                             navController.navigate(NavScreen.LoginScreen.route) {
                                 popUpTo(NavScreen.LoginScreen.route) {
                                     inclusive = true
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             viewModel.handleBackPressState.value = false
                         }
                     }
@@ -108,7 +109,6 @@ fun HomeScreen(
             }
         }
     }
-
 
 
 }
@@ -136,8 +136,9 @@ private fun HomeScreenMainContent(
         ) {
             items(1) {
                 HomeWalletWidget()
-                BuildNews(viewModel)
                 HomeCarouselWidget()
+                BuildBankDown(viewModel)
+                BuildNews(viewModel)
                 HomeServiceWidget()
             }
 
@@ -163,39 +164,95 @@ private fun HomeScreenMainContent(
 }
 
 @Composable
-private fun BuildNews(homeViewModel: HomeViewModel) {
-    if (homeViewModel.newsResponseState.value != null) Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        shape = MaterialTheme.shapes.large
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.NotificationImportant,
-                contentDescription = null,
-                tint = MaterialTheme.colors.primaryVariant,
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
+private fun BuildBankDown(homeViewModel: HomeViewModel) {
+    val bankDownResponse = homeViewModel.bankDownListState.value
+    if (bankDownResponse?.bankString != null &&
+                bankDownResponse.bankString.trim().isNotEmpty()
+    ) Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .padding(top = 5.dp),
+            shape = MaterialTheme.shapes.medium,
+            elevation = 16.dp
+            ) {
 
-            Text(
-                text = homeViewModel.newsResponseState.value!!.retailerNews,
-                style = TextStyle(
-                    fontSize = 14.sp, fontWeight = FontWeight.Normal,
-                    color = Color.Black.copy(alpha = 0.7f),
-                    textAlign = TextAlign.Start,
-                    lineHeight = 24.sp,
-                ),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+            Column (modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.End){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AccountBalance,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.primaryVariant,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = bankDownResponse.bankString,
+                        style = TextStyle(
+                            fontSize = 16.sp, fontWeight = FontWeight.Normal,
+                            color = RedColor,
+                            textAlign = TextAlign.Start,
+                            lineHeight = 24.sp,
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+
+                }
+                Text(text = "View all", fontWeight = FontWeight.SemiBold, color =
+                MaterialTheme.colors.primary.copy(alpha = 0.8f), modifier = Modifier.clickable {  })
+            }
 
 
         }
-    }
+}
+
+@Composable
+private fun BuildNews(homeViewModel: HomeViewModel) {
+    if (homeViewModel.newsResponseState.value != null)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, color = RedColor),
+            elevation = 16.dp
+        ) {
+
+
+            Row(
+                modifier = Modifier.padding(horizontal = 4.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.NotificationImportant,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.primaryVariant,
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = homeViewModel.newsResponseState.value!!.retailerNews,
+                    style = TextStyle(
+                        fontSize = 16.sp, fontWeight = FontWeight.Normal,
+                        color = PrimaryColorDark.copy(alpha = 0.8f),
+                        textAlign = TextAlign.Start,
+                        lineHeight = 24.sp,
+                    ),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+
+            }
+
+
+        }
     else Spacer(modifier = Modifier.height(8.dp))
 }

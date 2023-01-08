@@ -36,7 +36,7 @@ fun AppFormUI(
         Box(modifier = Modifier.weight(1f)) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 cardContents.forEach {
-                    Card(
+                 if(it.isVisible)   Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 5.dp)

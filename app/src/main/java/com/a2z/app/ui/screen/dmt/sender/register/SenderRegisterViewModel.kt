@@ -39,15 +39,7 @@ class SenderRegisterViewModel @Inject constructor(
     private var senderState = args.state
     private val senderRegistrationType = mutableStateOf(args.registrationType)
 
-    private val otpValidation: MutableState<Boolean>
-        get() {
-            val result = when (senderRegistrationType.value) {
-                SenderRegistrationType.NEW_REGISTER -> false
-                SenderRegistrationType.VERIFY_SENDER -> true
-                SenderRegistrationType.VERIFY_AND_UPDATE -> true
-            }
-            return mutableStateOf(result)
-        }
+    private val otpValidation = mutableStateOf(false)
 
     val input = SenderRegisterInput(otpValidation)
 
@@ -60,6 +52,7 @@ class SenderRegisterViewModel @Inject constructor(
     init {
         input.mobileNumber.setValue(args.moneySender?.mobileNumber)
         if (senderRegistrationType.value == SenderRegistrationType.VERIFY_AND_UPDATE) {
+            otpValidation.value = true
             if (moneySender.firstName.notNullOrEmpty())
                 input.firstName.setValue(moneySender.firstName)
             if (moneySender.lastName.notNullOrEmpty())
@@ -71,9 +64,12 @@ class SenderRegisterViewModel @Inject constructor(
                 if (it.status == 12) {
                     senderState = it.state.orEmpty()
                     successDialog(it.message) {
+                        otpValidation.value = true
                         senderRegistrationType.value = SenderRegistrationType.VERIFY_SENDER
                     }
-                } else alertDialog(it.message)
+                } else {
+                    alertDialog(it.message)
+                }
             }
         }
 

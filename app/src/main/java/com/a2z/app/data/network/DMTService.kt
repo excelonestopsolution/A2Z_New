@@ -91,8 +91,6 @@ interface DMTService {
     @GET("a2z/plus/wallet/bank-down")
     suspend fun bankDown(): BankDownResponse
 
-    @POST("a2z/plus/wallet/transaction")
-    @FormUrlEncoded
-    suspend fun transfer(@FieldMap data: FieldMapData): AppResponse
+
 
 }

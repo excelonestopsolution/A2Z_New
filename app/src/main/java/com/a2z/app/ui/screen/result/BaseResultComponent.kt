@@ -36,11 +36,13 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
+import com.a2z.app.data.model.dmt.DmtTransactionDetail
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.AppNetworkImage
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.*
+import com.a2z.app.util.AppConstant
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.showToast
 import com.a2z.app.util.storage.StorageHelper
@@ -57,6 +59,7 @@ fun BaseResultComponent(
     amount: String,
     serviceIconRes: Int? = null,
     serviceIconNet: String? = null,
+    dmtInfo: ArrayList<DmtTransactionDetail>? = null,
     titleValues: List<Pair<String, String>>,
 ) {
 
@@ -97,6 +100,7 @@ fun BaseResultComponent(
                                 serviceName = serviceName,
                                 providerName = providerName,
                                 amount = amount,
+                                dmtInfo =dmtInfo,
                                 serviceIconRes = serviceIconRes,
                                 serviceIconNet = serviceIconNet,
                                 titleValues = titleValues
@@ -156,7 +160,8 @@ private fun BuildContent(
     amount: String,
     serviceIconRes: Int?,
     serviceIconNet: String?,
-    titleValues: List<Pair<String, String>>
+    titleValues: List<Pair<String, String>>,
+    dmtInfo : ArrayList<DmtTransactionDetail>? = null
 
 ) {
 
@@ -330,6 +335,8 @@ private fun BuildContent(
 
             Divider(Modifier.padding(vertical = 16.dp))
 
+            if(dmtInfo!=null) BuildDmtTransactionDetail(dmtInfo)
+
             BuildPaymentAmount(amount)
             Divider(Modifier.padding(vertical = 16.dp))
 
@@ -357,6 +364,84 @@ private fun BuildContent(
         }
     }
 
+
+}
+
+@Composable
+private fun BuildDmtTransactionDetail(dmtInfo: java.util.ArrayList<DmtTransactionDetail>) {
+   Column {
+
+
+       Row {
+           Text(
+               text = "Txn Id", modifier = Modifier.weight(0.8f),
+               textAlign = TextAlign.Start,
+               fontSize = 14.sp,
+               fontWeight = FontWeight.SemiBold
+           )
+           Text(
+               text = "Amount",
+               modifier = Modifier.weight(0.8f),
+               textAlign = TextAlign.Center,
+               fontSize = 14.sp,
+               fontWeight = FontWeight.SemiBold
+           )
+           Text(
+               text = "Bank Ref",
+               modifier = Modifier.weight(1.2f),
+               textAlign = TextAlign.Center,
+               fontSize = 14.sp,
+               fontWeight = FontWeight.SemiBold
+           )
+           Text(
+               text = "Status",
+               modifier = Modifier.weight(0.8f),
+               textAlign = TextAlign.End,
+               fontSize = 14.sp,
+               fontWeight = FontWeight.SemiBold
+           )
+       }
+
+       dmtInfo.forEach {
+           Spacer(modifier = Modifier.height(5.dp))
+           Row {
+               Text(
+                   text = it.txnId.toString(), modifier = Modifier.weight(0.8f),
+                   textAlign = TextAlign.Start,
+                   fontSize = 14.sp,
+                   fontWeight = FontWeight.Normal,
+                   color = MaterialTheme.colors.primary
+               )
+               Text(
+                   text = AppConstant.RUPEE_SYMBOL + it.amount.toString(),
+                   modifier = Modifier.weight(0.8f),
+                   textAlign = TextAlign.Center,
+                   fontSize = 14.sp,
+                   fontWeight = FontWeight.Normal,
+                   color = MaterialTheme.colors.primary
+               )
+               Text(
+                   text = it.bankRef.toString(),
+                   modifier = Modifier.weight(1.2f),
+                   textAlign = TextAlign.Center,
+                   fontSize = 14.sp,
+                   fontWeight = FontWeight.Normal,
+                   color = MaterialTheme.colors.primary
+               )
+               Text(
+                   text = it.statusDesc.toString(),
+                   modifier = Modifier.weight(0.8f),
+                   textAlign = TextAlign.End,
+                   fontSize = 14.sp,
+                   fontWeight = FontWeight.Normal,
+                   color = MaterialTheme.colors.primary
+               )
+           }
+           
+       }
+
+       Divider(Modifier.padding(vertical = 16.dp))
+   }
 
 }
 

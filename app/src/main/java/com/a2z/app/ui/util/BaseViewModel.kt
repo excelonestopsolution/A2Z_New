@@ -63,6 +63,9 @@ open class BaseViewModel : ViewModel() {
     fun failureDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Failure(message, callback)
     }
+    fun pendingDialog(message: String, callback: VoidCallback = {}) {
+        dialogState.value = StatusDialogType.Pending(message, callback)
+    }
 
     fun alertDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Alert(message, callback)

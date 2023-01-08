@@ -12,8 +12,8 @@ class LedgerReportViewModel @Inject constructor(
 
 
     val param =  hashMapOf(
-        "fromdate" to "04-01-2022",
-        "todate" to "01-01-2023",
+        "fromdate" to "01-01-2022",
+        "todate" to "08-01-2023",
     )
 
     val fetchLedgerReport = repository.ledgerReport(param)

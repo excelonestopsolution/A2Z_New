@@ -137,7 +137,7 @@ fun AppTextField(
                 keyboardOptions = keyboardOptions,
                 singleLine = true,
                 readOnly = readOnly,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
 
             )
         } else {
@@ -158,7 +158,7 @@ fun AppTextField(
                 keyboardOptions = keyboardOptions,
                 singleLine = true,
                 readOnly = readOnly,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
 
             )
         }

@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,13 +24,21 @@ import com.a2z.app.ui.util.InputWrapper
 fun MPinBottomSheetComponent(onDone: (String) -> Unit) {
     val manager = LocalFocusManager.current
     val keyboard = keyboardAsState()
+    val focusRequest = remember {
+        FocusRequester()
+    }
     val input = remember {
         MPinInput()
     }
 
+
+
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .focusRequester(focusRequest)
     ) {
         Text(
             text = "Enter M-PIN",
