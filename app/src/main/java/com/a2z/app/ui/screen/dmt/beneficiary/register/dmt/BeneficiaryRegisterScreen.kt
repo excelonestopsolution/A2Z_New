@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.dmt.beneficiary.register
+package com.a2z.app.ui.screen.dmt.beneficiary.register.dmt
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,6 @@ import com.a2z.app.ui.dialog.SpinnerSearchDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.PrimaryColorDark
-import com.a2z.app.ui.util.BaseInput
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

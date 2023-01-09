@@ -1,6 +1,5 @@
 package com.a2z.app.ui.screen.home
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
@@ -8,7 +7,6 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
-import com.a2z.app.data.model.dmt.BankDownBank
 import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
@@ -96,7 +94,7 @@ class HomeViewModel @Inject constructor(
     }
 
     val newsResponseState = mutableStateOf<NewsResponse?>(null)
-    val bankDownListState = mutableStateOf<BankDownResponse?>(null)
+    val bankDownResponseState = mutableStateOf<BankDownResponse?>(null)
 
     fun fetchNews() {
         callApiForShareFlow(beforeEmit = {
@@ -111,7 +109,7 @@ class HomeViewModel @Inject constructor(
         callApiForShareFlow(beforeEmit = {
             if (it is ResultType.Success)
                 if (it.data.status == 1) {
-                    bankDownListState.value = it.data
+                    bankDownResponseState.value = it.data
                 } else newsResponseState.value = null
         }, handleException = false) { repository.fetchBankDown() }
     }
@@ -125,7 +123,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun checkDMTAndAEPSKycPending(): Boolean {
+    fun checkDMTAndAEPSKycPending(): Boolean {
         return appPreference.user?.isAadhaarKyc == 0
                 || appPreference.user?.aepsKyc == 0
                 || appPreference.user?.isUserHasActiveSettlementAccount == 0
@@ -137,7 +135,7 @@ class HomeViewModel @Inject constructor(
                 || appPreference.user?.isVideoKyc == 0
     }
 
-    private fun kycInfo(): Triple<String, String, String>? {
+    fun kycInfo(): Triple<String, String, String>? {
         when {
             appPreference.user?.isAadhaarKyc == 0 -> {
                 return Triple(

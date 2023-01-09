@@ -97,6 +97,7 @@ sealed class NavScreen(val route: String) {
             "response" to response.toEncodedString()
         )
     }
+
     object DMTTxnScreen : NavScreen("dmt-txn-screen".params("response")) {
         fun passArgs(response: TransactionDetail) = "dmt-txn-screen".args(
             "response" to response.toEncodedString()
@@ -146,7 +147,7 @@ sealed class NavScreen(val route: String) {
     }
 
     object DmtBeneficiaryListInfoScreen :
-        NavScreen("beneficiary-list-screen".params("moneySender", "dmtType","accountDetail")) {
+        NavScreen("beneficiary-list-screen".params("moneySender", "dmtType", "accountDetail")) {
         fun passArgs(
             moneySender: MoneySender,
             dmtType: DMTType,
@@ -165,6 +166,13 @@ sealed class NavScreen(val route: String) {
             "beneficiary-register-screen".args("moneySender" to moneySender.toEncodedString())
     }
 
+    object UpiBeneficiaryRegisterScreen :
+        NavScreen("upi-beneficiary-register-screen".params("moneySender")) {
+        fun passArgs(moneySender: MoneySender) =
+            "upi-beneficiary-register-screen".args("moneySender" to moneySender.toEncodedString())
+    }
+
+
     object DmtSenderRegisterScreen :
         NavScreen("beneficiary-sender-screen".params("senderRegistrationArgs")) {
         fun passArgs(args: SenderRegistrationArgs) =
@@ -181,4 +189,7 @@ sealed class NavScreen(val route: String) {
                 "moneyTransferArgs" to args.toEncodedString()
             )
     }
+
+
+    object QRScanScreen : NavScreen("qr-scan-screen")
 }

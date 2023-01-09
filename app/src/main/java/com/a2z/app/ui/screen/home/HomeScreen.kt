@@ -1,6 +1,10 @@
 package com.a2z.app.ui.screen.home
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,12 +12,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
-import androidx.compose.material.icons.filled.NotificationImportant
+import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
@@ -32,10 +41,12 @@ import com.a2z.app.service.LocalAuthResultType
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.ObsComponent
+import com.a2z.app.ui.dialog.BankDownDialog
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
 import com.a2z.app.ui.theme.*
 import com.a2z.app.util.Exceptions
+import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
 
@@ -136,9 +147,9 @@ private fun HomeScreenMainContent(
         ) {
             items(1) {
                 HomeWalletWidget()
-                HomeCarouselWidget()
-                BuildBankDown(viewModel)
-                BuildNews(viewModel)
+                if (false) HomeCarouselWidget()
+
+                BuildAlertComponent(viewModel)
                 HomeServiceWidget()
             }
 
@@ -164,95 +175,128 @@ private fun HomeScreenMainContent(
 }
 
 @Composable
-private fun BuildBankDown(homeViewModel: HomeViewModel) {
-    val bankDownResponse = homeViewModel.bankDownListState.value
-    if (bankDownResponse?.bankString != null &&
-                bankDownResponse.bankString.trim().isNotEmpty()
-    ) Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp)
-                .padding(top = 5.dp),
-            shape = MaterialTheme.shapes.medium,
-            elevation = 16.dp
-            ) {
+private fun BuildAlertComponent(homeViewModel: HomeViewModel) {
 
-            Column (modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.End){
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AccountBalance,
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.primaryVariant,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Text(
-                        text = bankDownResponse.bankString,
-                        style = TextStyle(
-                            fontSize = 16.sp, fontWeight = FontWeight.Normal,
-                            color = RedColor,
-                            textAlign = TextAlign.Start,
-                            lineHeight = 24.sp,
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+    val bankDown = homeViewModel.bankDownResponseState.value
+    val news = homeViewModel.newsResponseState.value
+    val kyc = homeViewModel.checkDMTAndAEPSKycPending()
 
 
-                }
-                Text(text = "View all", fontWeight = FontWeight.SemiBold, color =
-                MaterialTheme.colors.primary.copy(alpha = 0.8f), modifier = Modifier.clickable {  })
+    val isBankDown = bankDown != null && bankDown.status == 1
+    val isNews = news != null && news.status == 1
+
+    val bankDialogState = remember {
+        mutableStateOf(false)
+    }
+    if (isBankDown) BankDownDialog(dialogState = bankDialogState, bankList = bankDown?.bankList)
+
+
+    val show = isBankDown || isNews || kyc
+
+    if (show) Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
+            .padding(top = 5.dp),
+        shape = MaterialTheme.shapes.medium,
+        elevation = 16.dp
+    ) {
+
+        Column(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Alert & Info",
+                fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = RedColor
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+
+            val kycInfo = homeViewModel.kycInfo()
+
+            if(kyc && kycInfo!=null) BuildAlertItem(
+                message = kycInfo.second,
+                icon = Icons.Default.Fingerprint,
+                color = Color.DarkGray) {
+
             }
 
+            if (isNews) BuildAlertItem(
+                message = news!!.retailerNews.toString(),
+                icon = Icons.Default.Message,
+                color = PrimaryColorDark
+            ) {
+
+            }
+
+            if (isBankDown) BuildAlertItem(
+                message = bankDown!!.bankString.toString(),
+                icon = Icons.Default.AccountBalance,
+                color = RedColor,
+                blink = true
+            ) {
+                bankDialogState.value = true
+            }
 
         }
+
+    }
 }
 
 @Composable
-private fun BuildNews(homeViewModel: HomeViewModel) {
-    if (homeViewModel.newsResponseState.value != null)
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            shape = MaterialTheme.shapes.medium,
-            border = BorderStroke(1.dp, color = RedColor),
-            elevation = 16.dp
-        ) {
+private fun BuildAlertItem(
+    message: String,
+    icon: ImageVector,
+    color: Color,
+    blink: Boolean = false,
+    onClick: VoidCallback
+
+) {
 
 
-            Row(
-                modifier = Modifier.padding(horizontal = 4.dp, vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.NotificationImportant,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.primaryVariant,
-                    modifier = Modifier.size(32.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = homeViewModel.newsResponseState.value!!.retailerNews,
-                    style = TextStyle(
-                        fontSize = 16.sp, fontWeight = FontWeight.Normal,
-                        color = PrimaryColorDark.copy(alpha = 0.8f),
-                        textAlign = TextAlign.Start,
-                        lineHeight = 24.sp,
-                    ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+    val transition = rememberInfiniteTransition()
+    val colorState = if (blink) transition.animateColor(
+        initialValue = color,
+        targetValue = PrimaryColorDark,
+        animationSpec = infiniteRepeatable(
+            repeatMode = RepeatMode.Restart,
+            animation = tween(1000)
+        )
+    ) else null
 
 
-            }
+    Row(
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .clip(shape = MaterialTheme.shapes.medium)
+            .clickable { onClick.invoke() }
+            .background(color = color.copy(0.1f))
+            .padding(8.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(28.dp)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Text(
+            text = message,
+            style = TextStyle(
+                fontSize = 16.sp, fontWeight = FontWeight.W400,
+                color = if (blink) colorState!!.value else color,
+                textAlign = TextAlign.Start,
+                lineHeight = 24.sp,
+            ),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
 
 
-        }
-    else Spacer(modifier = Modifier.height(8.dp))
+    }
+
+
 }

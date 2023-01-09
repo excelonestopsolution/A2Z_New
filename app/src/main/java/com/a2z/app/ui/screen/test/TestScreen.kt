@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.PinTextField
+import com.a2z.app.ui.screen.dmt.beneficiary.register.upi.UpiBeneficiaryRegisterScreen
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.AppUtil
@@ -24,14 +25,7 @@ import kotlinx.coroutines.delay
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TestScreen() {
-
-    rememberScaffoldState()
-
-    Scaffold {
-
-
-
-    }
+    UpiBeneficiaryRegisterScreen()
 }
 
 

@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.dmt.beneficiary.register
+package com.a2z.app.ui.screen.dmt.beneficiary.register.dmt
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -9,14 +9,12 @@ import com.a2z.app.data.model.dmt.Bank
 import com.a2z.app.data.model.dmt.BankListResponse
 import com.a2z.app.data.model.dmt.MoneySender
 import com.a2z.app.data.repository.DMTRepository
-import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.*
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.AppUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel

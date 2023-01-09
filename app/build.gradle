@@ -87,6 +87,7 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-pager:0.10.0"
     implementation "com.google.accompanist:accompanist-pager-indicators:0.10.0"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.28.0"
 
     // hilt
     implementation "com.google.dagger:hilt-android:2.42"
@@ -119,7 +120,8 @@ dependencies {
     // Swipe refresh
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.13-rc'
 
-    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     //matm
     implementation files('libs/matm.aar')

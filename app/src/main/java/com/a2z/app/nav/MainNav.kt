@@ -5,12 +5,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.a2z.app.InitialRouteType
 import com.a2z.app.MainViewModel
+import com.a2z.app.ui.component.AppQRScanScreen
 import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
 import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
-import com.a2z.app.ui.screen.dmt.beneficiary.register.BeneficiaryRegisterScreen
+import com.a2z.app.ui.screen.dmt.beneficiary.register.dmt.BeneficiaryRegisterScreen
+import com.a2z.app.ui.screen.dmt.beneficiary.register.upi.UpiBeneficiaryRegisterScreen
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegisterScreen
 import com.a2z.app.ui.screen.dmt.sender.search.SearchSenderScreen
 import com.a2z.app.ui.screen.dmt.transfer.DMTMoneyTransferScreen
@@ -38,6 +40,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         InitialRouteType.DASHBOARD_PAGE -> NavScreen.DashboardScreen.route
         InitialRouteType.DEVICE_LOCK_PAGE -> NavScreen.DeviceLockScreen.route
     }
+
 
 
     NavHost(
@@ -127,6 +130,10 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
             BeneficiaryRegisterScreen()
         })
 
+        composable(route = NavScreen.UpiBeneficiaryRegisterScreen.route, content = {
+            UpiBeneficiaryRegisterScreen()
+        })
+
         composable(route = NavScreen.DmtSenderRegisterScreen.route, content = {
             SenderRegisterScreen()
         })
@@ -134,6 +141,13 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.DMTMoneyTransferScreen.route, content = {
             DMTMoneyTransferScreen()
         })
+
+
+
+        composable(route = NavScreen.QRScanScreen.route, content = {
+            AppQRScanScreen()
+        })
+
 
 
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })

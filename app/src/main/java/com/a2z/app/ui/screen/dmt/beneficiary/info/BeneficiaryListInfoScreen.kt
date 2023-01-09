@@ -77,9 +77,9 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
                         if (viewModel.showBeneficiaryList.isNotEmpty())
                             LazyColumn() {
                                 itemsIndexed(
-                                     viewModel.showBeneficiaryList,
+                                    viewModel.showBeneficiaryList,
 
-                                ){index,beneficiary->
+                                    ) { index, beneficiary ->
                                     BuildListItem(
                                         beneficiary,
                                         index,
@@ -126,7 +126,7 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
 
     }
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         val isRegister = navBackStackEntry.singleResult<Boolean>("isRegistered")
         if (isRegister == true) viewModel.fetchBeneficiary()
     }
@@ -136,8 +136,8 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
 @Composable
 private fun BuildListItem(
     beneficiary: Beneficiary,
-    index : Int,
-    viewModel : BeneficiaryListInfoViewModel,
+    index: Int,
+    viewModel: BeneficiaryListInfoViewModel,
     onDelete: (Beneficiary) -> Unit,
     onVerify: (Beneficiary) -> Unit
 ) {
@@ -147,10 +147,10 @@ private fun BuildListItem(
     }
 
     Column(modifier = Modifier
-        .background(color = if(index == 0 && viewModel.swipeState.value) GreenColor.copy(0.4f) else Color.White)
+        .background(color = if (index == 0 && viewModel.swipeState.value) GreenColor.copy(0.4f) else Color.White)
         .clickable {
-        isVisible.value = !isVisible.value
-    }) {
+            isVisible.value = !isVisible.value
+        }) {
 
         val dmtType = viewModel.dmtType
         val isUpi = dmtType == DMTType.UPI
@@ -165,7 +165,8 @@ private fun BuildListItem(
                 imageVector = Icons.Default.Verified,
                 contentDescription = null,
                 tint = if (beneficiary.bankVerified == 1
-                    || beneficiary.upiBankVerified == 1) GreenColor else Color.Gray,
+                    || beneficiary.upiBankVerified == 1
+                ) GreenColor else Color.Gray,
                 modifier = Modifier.size(20.dp)
             )
 
@@ -176,23 +177,23 @@ private fun BuildListItem(
                     fontWeight = FontWeight.Bold,
                     color = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) GreenColor else Color.Gray
                 )
-              if(!isUpi)  Text(
+                if (!isUpi) Text(
                     text = beneficiary.bankName.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PrimaryColorDark
                 )
 
-                val accountTitle = if(isUpi) "" else "Account    : "
+                val accountTitle = if (isUpi) "" else "Account    : "
                 Text(
                     text = accountTitle + beneficiary.accountNumber.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = PrimaryColorDark
                 )
-                val ifscTitle = if(isUpi)  "Provider  : " else "Ifsc Code : "
-                val ifscValue = if(isUpi) beneficiary.bankName else beneficiary.ifsc
-               if(ifscValue.toString().isNotEmpty()) Text(
+                val ifscTitle = if (isUpi) "Provider  : " else "Ifsc Code : "
+                val ifscValue = if (isUpi) beneficiary.bankName else beneficiary.ifsc
+                if (ifscValue.toString().isNotEmpty()) Text(
                     text = ifscTitle + ifscValue.orEmpty(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -309,11 +310,18 @@ private fun HeaderComponent() {
                     Card(
                         shape = CircleShape,
                         backgroundColor = GreenColor,
-                         modifier = Modifier.clickable {
-                             viewModel.navigateTo(NavScreen.DmtBeneficiaryRegisterScreen.passArgs(
-                                 moneySender = viewModel.moneySender
-                             ))
-                         }
+                        modifier = Modifier.clickable {
+                            if (viewModel.dmtType == DMTType.UPI) viewModel.navigateTo(
+                                NavScreen.UpiBeneficiaryRegisterScreen.passArgs(
+                                    moneySender = viewModel.moneySender
+                                )
+                            )
+                            else viewModel.navigateTo(
+                                NavScreen.DmtBeneficiaryRegisterScreen.passArgs(
+                                    moneySender = viewModel.moneySender
+                                )
+                            )
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -324,7 +332,7 @@ private fun HeaderComponent() {
 
                     }
                     Spacer(modifier = Modifier.height(5.dp))
-                    val addNewText= if(viewModel.dmtType == DMTType.UPI)
+                    val addNewText = if (viewModel.dmtType == DMTType.UPI)
                         "Add New\nID" else "Add New\nBeneficiary"
                     Text(
                         text = addNewText,
