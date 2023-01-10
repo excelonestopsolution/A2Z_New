@@ -53,19 +53,28 @@ fun DMTMoneyTransferScreen() {
     val viewModel: DMTMoneyTransferViewModel = hiltViewModel()
 
 
+    val dmtTitleValue = listOf(
+        "Name" to viewModel.beneficiary.name.orEmpty(),
+        "A/C Number" to viewModel.beneficiary.accountNumber.orEmpty(),
+        "Bank Name" to viewModel.beneficiary.bankName.orEmpty(),
+        "Ifsc Code" to viewModel.beneficiary.ifsc.orEmpty(),
+        "DMT Type" to DMTUtil.dmtTypeToTitle(viewModel.dmtType),
+    )
+
+
+    val upiTitleValue = listOf(
+        "Name" to viewModel.beneficiary.name.orEmpty(),
+        "Upi Id" to viewModel.beneficiary.accountNumber.orEmpty(),
+        "Provider" to viewModel.beneficiary.bankName.orEmpty(),
+        "DMT Type" to DMTUtil.dmtTypeToTitle(viewModel.dmtType),
+    )
+
+
     BaseConfirmDialog(
         title = "Transaction Confirmation ?",
         state = viewModel.confirmDialogState,
         amount = viewModel.input.amount.getValue(),
-        titleValues = listOf(
-
-            "Name" to viewModel.beneficiary.name.orEmpty(),
-            "A/C Number" to viewModel.beneficiary.accountNumber.orEmpty(),
-            "Bank Name" to viewModel.beneficiary.bankName.orEmpty(),
-            "Ifsc Code" to viewModel.beneficiary.ifsc.orEmpty(),
-            "DMT Type" to DMTUtil.dmtTypeToTitle(viewModel.dmtType),
-
-            )
+        titleValues = if(viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
     ) {
         viewModel.proceedTransaction()
     }

@@ -7,7 +7,9 @@ import com.a2z.app.data.model.dmt.SenderAccountDetail
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
+import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.provider.Operator
+import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
 import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
@@ -98,8 +100,25 @@ sealed class NavScreen(val route: String) {
         )
     }
 
+    object BillPaymentTxnScreen : NavScreen("bill-payment-txn-screen".params("response")) {
+        fun passArgs(response: BillPaymentResponse) = "bill-payment-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
+
     object DMTTxnScreen : NavScreen("dmt-txn-screen".params("response")) {
         fun passArgs(response: TransactionDetail) = "dmt-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
+
+    object UPITxnScreen : NavScreen("upi-txn-screen".params("response")) {
+        fun passArgs(response: TransactionDetail) = "upi-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
+    object MATMTxnScreen : NavScreen("matm-txn-screen".params("response")) {
+        fun passArgs(response: MatmTransactionResponse) = "matm-txn-screen".args(
             "response" to response.toEncodedString()
         )
     }

@@ -21,6 +21,7 @@ import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
+import com.a2z.app.util.AppUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,10 @@ class RechargeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     appPreference: AppPreference
 ) : BaseViewModel() {
+
+    init {
+        AppUtil.logger("user balance : "+appPreference.user?.userBalance.toString())
+    }
 
     val operator: Operator = savedStateHandle.safeParcelable("operator")!!
     private var operatorType: OperatorType = savedStateHandle.safeSerializable("operatorType")!!

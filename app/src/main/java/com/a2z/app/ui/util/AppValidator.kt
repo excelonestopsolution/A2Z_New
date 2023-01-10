@@ -40,6 +40,11 @@ object AppValidator {
         "Enter min 3 characters"
     )
 
+    fun upiId(value: String) = Pair(
+        value.length  >= 3 && value.contains("@"),
+        "Enter valid upi id"
+    )
+
     fun password(value: String) = Pair(
         validatePassword(value),
         "Enter valid password" +

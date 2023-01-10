@@ -1,9 +1,6 @@
-package com.a2z.app.ui.screen.report.component
+package com.a2z.app.ui.screen.report.ledger
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,19 +8,17 @@ import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterStart
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.data.model.report.LedgerReport
 import com.a2z.app.ui.screen.report.ReportUtil
+import com.a2z.app.ui.screen.report.component.ReportLFComponent
 import com.a2z.app.util.AppConstant
 
 
@@ -142,10 +137,15 @@ fun BuildItemVisibleContent(report: LedgerReport) {
 @Composable
 fun BuildLedgerActionButton(report: LedgerReport, isExpanded: MutableState<Boolean>) {
 
+    val viewModel: LedgerReportViewModel = hiltViewModel()
+
     Box(modifier = Modifier.fillMaxWidth()) {
         if (report.isPrint && !isExpanded.value) {
             IconButton(
-                onClick = { /*TODO*/ }, modifier = Modifier.align(Center),
+                onClick = {
+                    viewModel.onPrint(report)
+                },
+                modifier = Modifier.align(Center),
             ) {
                 Icon(
                     imageVector = Icons.Default.Print,
@@ -158,7 +158,9 @@ fun BuildLedgerActionButton(report: LedgerReport, isExpanded: MutableState<Boole
 
         if (report.isCheckStatus && isExpanded.value) {
             val align: Alignment = if (report.isComplain) CenterStart else Alignment.Center
-            OutlinedButton(onClick = { }, modifier = Modifier.align(align)) {
+            OutlinedButton(onClick = {
+                viewModel.onCheckStatus(report)
+            }, modifier = Modifier.align(align)) {
                 Icon(imageVector = Icons.Default.Refresh, contentDescription = "Check Status")
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(text = "Check Status")
@@ -169,7 +171,9 @@ fun BuildLedgerActionButton(report: LedgerReport, isExpanded: MutableState<Boole
 
         if (report.isComplain && isExpanded.value) {
             val align = if (report.isCheckStatus) Alignment.CenterEnd else Alignment.Center
-            OutlinedButton(onClick = { }, modifier = Modifier.align(align)) {
+            OutlinedButton(onClick = {
+                viewModel.onComplain(report)
+            }, modifier = Modifier.align(align)) {
                 Icon(imageVector = Icons.Default.Message, contentDescription = "Make Complain")
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(text = "Make Complain")

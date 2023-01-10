@@ -2,17 +2,16 @@ package com.a2z.app.ui.screen.result
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
-import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.util.AppConstant
 import com.google.gson.Gson
 
 
 @Composable
-fun RechargeResultScreen(it: NavBackStackEntry) {
+fun BillPaymentResultScreen(it: NavBackStackEntry) {
 
     val arg = it.arguments?.getString("response")
-    val response = Gson().fromJson (arg!!,RechargeTransactionResponse::class.java)
-
+    val response = Gson().fromJson (arg!!,BillPaymentResponse::class.java)
 
     BaseResultComponent(
         statusId = response.status,
@@ -26,9 +25,10 @@ fun RechargeResultScreen(it: NavBackStackEntry) {
         titleValues = arrayOf(listOf(
             "Order Id" to response.recordId.toString(),
             "Operator Ref" to response.operatorRef.toString(),
+            "Biller Name" to response.billName.toString(),
             response.numberTitle.toString() to response.number.toString()
         )),
-        backPressHandle = response.isTransaction
+        backPressHandle = response.isTransaction,
     )
 }
 

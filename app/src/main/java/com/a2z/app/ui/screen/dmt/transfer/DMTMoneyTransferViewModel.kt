@@ -137,7 +137,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
                         it.status == 1 || it.status == 2 || it.status == 3 ||
                         it.status == 34 || it.status == 37
                     ) {
-                        navigateTo(NavScreen.DMTTxnScreen.passArgs(it))
+                        navigateTo(NavScreen.UPITxnScreen.passArgs(it))
                     } else alertDialog(it.message.toString())
                 },
                 failure = {

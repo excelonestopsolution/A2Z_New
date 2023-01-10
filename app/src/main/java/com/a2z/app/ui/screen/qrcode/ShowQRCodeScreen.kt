@@ -1,13 +1,6 @@
-package com.a2z.app.ui.screen.show_qrcode
+package com.a2z.app.ui.screen.qrcode
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.net.Uri
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.ScrollView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,15 +9,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.app.QRCodeResponse
@@ -38,7 +27,6 @@ import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.VoidCallback
-import com.a2z.app.util.storage.StorageHelper
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

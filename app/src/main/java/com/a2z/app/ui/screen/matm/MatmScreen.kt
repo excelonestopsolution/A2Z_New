@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.MainActivity
+import com.a2z.app.data.model.matm.MatmInitiate
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
@@ -39,12 +40,10 @@ private fun rememberInitializeMATM(): MosCallback {
     val secondaryColor = "#D81B60"
 
     return remember {
-        derivedStateOf {
-            val mosCallback = MosCallback(context)
-            mosCallback.setInternalUi(activity, false)
-            mosCallback.initializeSignatureView(frameLayout, primaryColor, secondaryColor)
-            mosCallback
-        }.value
+        val mosCallback = MosCallback(context)
+        mosCallback.setInternalUi(activity, false)
+        mosCallback.initializeSignatureView(frameLayout, primaryColor, secondaryColor)
+        mosCallback
     }
 }
 
@@ -68,24 +67,27 @@ fun MatmScreen() {
 fun BuildMainContent() {
 
     val viewModel: MatmViewModel = hiltViewModel()
-    val mosCallback = rememberInitializeMATM()
     val input = viewModel.formInput
-    val navController = LocalNavController.current
     val context = LocalContext.current
+
+    viewModel.mosCallback = rememberInitializeMATM()
 
     AppFormUI(
         showWalletCard = false,
         button = {
             BluetoothServiceComponent(onResult = {
                 context.showToast(it.toString())
-               // if (it) viewModel.transaction(mosCallback)
+                if (it) viewModel.initTransaction()
+
             }) { action ->
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp),
                     enabled = input.isValidObs.value,
-                    onClick = { action.invoke() },
+                    onClick = {
+                        action.invoke()
+                    },
                 ) { Text(text = "Proceed") }
             }
         },

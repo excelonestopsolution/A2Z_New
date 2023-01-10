@@ -53,7 +53,7 @@ data class TransactionDetail(
     @SerializedName("total_amount") var totalAmount: String? = null,
     @SerializedName("available_balance") var availableBalance: String? = null,
     @SerializedName("disclaimer") var declaimers: List<String>? = null,
-
+    var isTransaction : Boolean = true
     ) : Parcelable
 
 @Keep

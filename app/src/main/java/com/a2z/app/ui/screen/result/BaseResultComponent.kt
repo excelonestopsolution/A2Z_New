@@ -54,13 +54,16 @@ fun BaseResultComponent(
     message: String,
     status: String,
     dateTime: String,
-    serviceName: String,
-    providerName: String,
+    amountTopText: String,
+    amountBelowText: String,
     amount: String,
+    availableBalance: String?=null,
+    isPaymentAmount: Boolean = true,
     serviceIconRes: Int? = null,
     serviceIconNet: String? = null,
     dmtInfo: ArrayList<DmtTransactionDetail>? = null,
-    titleValues: List<Pair<String, String>>,
+    vararg  titleValues: List<Pair<String, String>>,
+    backPressHandle : Boolean = true
 ) {
 
     val context = LocalContext.current
@@ -73,7 +76,7 @@ fun BaseResultComponent(
                 inclusive = true
             }
         }
-    }) {
+    }, enabled = backPressHandle) {
         Scaffold(
             backgroundColor = BackgroundColor
         ) { _ ->
@@ -97,10 +100,12 @@ fun BaseResultComponent(
                                 message = message,
                                 status = status,
                                 dateTime = dateTime,
-                                serviceName = serviceName,
-                                providerName = providerName,
+                                serviceName = amountTopText,
+                                providerName = amountBelowText,
                                 amount = amount,
+                                availableBalance = availableBalance,
                                 dmtInfo =dmtInfo,
+                                isPaymentAmount =isPaymentAmount,
                                 serviceIconRes = serviceIconRes,
                                 serviceIconNet = serviceIconNet,
                                 titleValues = titleValues
@@ -143,7 +148,7 @@ fun BaseResultComponent(
 
 
 private fun getStatusValue(statusId: Int) = when (statusId) {
-    1 -> Pair(GreenColor, R.drawable.icon_sucess)
+    1,24 -> Pair(GreenColor, R.drawable.icon_sucess)
     2 -> Pair(RedColor, R.drawable.icon_failed)
     3 -> Pair(YellowColor, R.drawable.icon_pending)
     else -> Pair(PrimaryColorDark, R.drawable.icon_pending)
@@ -158,9 +163,11 @@ private fun BuildContent(
     serviceName: String,
     providerName: String,
     amount: String,
+    availableBalance: String?,
     serviceIconRes: Int?,
     serviceIconNet: String?,
-    titleValues: List<Pair<String, String>>,
+    isPaymentAmount: Boolean = true,
+    vararg  titleValues: List<Pair<String, String>>,
     dmtInfo : ArrayList<DmtTransactionDetail>? = null
 
 ) {
@@ -180,10 +187,12 @@ private fun BuildContent(
         Text(
             status, style = TextStyle(
                 color = color,
-                fontWeight = FontWeight.Bold, fontSize = 16.sp
+                fontWeight = FontWeight.Bold, fontSize = 16.sp,
+                textAlign = TextAlign.Center
             )
         )
-        Text(message, textAlign = TextAlign.Center, fontSize = 12.sp, color = Color.Gray)
+        Text(message, textAlign = TextAlign.Center, fontSize = 12.sp,
+            color = Color.Gray,)
         Text(
             dateTime, style = TextStyle(
                 fontSize = 12.sp, color = Color.Gray
@@ -260,7 +269,8 @@ private fun BuildContent(
             if (serviceIconRes != null)
                 Image(
                     painter = painterResource(id = serviceIconRes),
-                    contentDescription = null
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(PrimaryColor)
                 )
         }
     }
@@ -296,6 +306,24 @@ private fun BuildContent(
     }
 
 
+    @Composable
+    fun BuildAvailableAmount(amount: String) {
+
+        Row {
+            Text(
+                "Available Balance", style = MaterialTheme.typography.subtitle1.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                "₹ $amount",
+                style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
+            )
+        }
+    }
+
+
 
     Box(
         modifier = Modifier.padding(
@@ -326,18 +354,26 @@ private fun BuildContent(
             Divider(Modifier.padding(vertical = 16.dp))
 
             titleValues.forEach {
-                if (it.second.isNotEmpty() && it.second != "null")
-                    BuildTitleValue(
-                        title = it.first,
-                        value = it.second
-                    )
+
+                it.forEach {
+                    if (it.second.isNotEmpty() && it.second != "null" && it.second.toLowerCase()
+                    != "na"  && it.second.toLowerCase() != "n/a")
+                        BuildTitleValue(
+                            title = it.first,
+                            value = it.second
+                        )
+                }
+
+                Divider(Modifier.padding(vertical = 16.dp))
             }
 
-            Divider(Modifier.padding(vertical = 16.dp))
+
 
             if(dmtInfo!=null) BuildDmtTransactionDetail(dmtInfo)
 
-            BuildPaymentAmount(amount)
+            if(isPaymentAmount)BuildPaymentAmount(amount)
+            if(availableBalance!= null)BuildAvailableAmount(availableBalance)
+
             Divider(Modifier.padding(vertical = 16.dp))
 
             BuildTitleValue(

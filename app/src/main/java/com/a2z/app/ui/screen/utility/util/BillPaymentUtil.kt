@@ -71,7 +71,7 @@ class BillPaymentUtil(
         if (maxAmount == 0.0) maxAmount = 10000.0
         return AppValidator.rechargeAmountValidation(
             inputAmount = value,
-            userBalance = appPreference.user?.userBalance ?: "0",
+            userBalance = (appPreference.user?.userBalance ?: "0").replace(",",""),
             minAmount = minAmount,
             maxAmount = maxAmount
         )

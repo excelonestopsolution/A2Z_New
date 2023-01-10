@@ -14,9 +14,14 @@ data class RechargeTransactionResponse(
     @SerializedName("payid") val payId: String?,
     @SerializedName("operator_ref") val operatorRef: String?,
     @SerializedName("txnTime") val dateTime: String?,
-    @SerializedName("operator") val operatorName: String?,
+    @SerializedName("operator") val providerName: String?,
     @SerializedName("amount") val amount: String?,
     @SerializedName("recordId") val recordId: String?,
-    var mobileNumber: String? = null
 
-) : Parcelable
+    var providerIcon : Int? = null,
+    var serviceName : String? = null,
+    var number : String? = null,
+    var numberTitle : String? = null,
+    var isTransaction : Boolean = true
+
+    ) : Parcelable

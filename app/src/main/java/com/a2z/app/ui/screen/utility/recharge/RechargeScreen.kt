@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,10 +29,12 @@ import com.a2z.app.ui.component.common.AppFormUI
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.AppViewModel
+import com.a2z.app.ui.screen.utility.util.UtilityUtil
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
+import com.a2z.app.util.AppConstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -42,17 +45,12 @@ fun RechargeScreen(
     val navController = LocalNavController.current
 
     val viewModel: RechargeViewModel = hiltViewModel()
-    val appViewModel: AppViewModel = hiltViewModel()
-
 
     BaseContent(viewModel) {
         Scaffold(
             topBar = {
-                AppTopBar(
-                    title = viewModel.util.getOperatorTitle("Recharge"),
-                    onBackPress = {
-                        navController.navigateUp()
-                    })
+                NavTopBar(
+                    title = viewModel.util.getOperatorTitle("Recharge"))
             },
             backgroundColor = BackgroundColor
         ) {
@@ -105,12 +103,22 @@ private fun proceedToRecharge(
                     when (status) {
                         1, 2, 3, 34 -> {
                             viewModel.dialogState.value = StatusDialogType.None
-                            val response = it.data.apply {
-                                this.mobileNumber = viewModel.input.numberInputWrapper.getValue()
-                            }
+                            val response = it.data
                             navController
                                 .navigate(NavScreen.RechargeTxnScreen.passArgs(
-                                    response
+                                    response.apply {
+                                        val numberTitle = if(
+                                            viewModel.operator.dealerName ==null
+                                            || viewModel.operator.dealerName.toLowerCase() == "null"
+                                            || viewModel.operator.dealerName.toLowerCase() == "nul"
+                                            || viewModel.operator.dealerName.isEmpty()
+                                        ) "Number" else viewModel.operator.dealerName
+                                        this.providerIcon = viewModel.util.getIconFromOperatorType()
+                                        this.serviceName = viewModel.util.getOperatorTitle()
+                                        this.number = viewModel.input.numberInputWrapper.getValue()
+                                        this.numberTitle = numberTitle
+
+                                    }
                                 ))
                         }
                         else -> viewModel.dialogState.value =

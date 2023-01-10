@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,10 +16,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.a2z.app.data.model.report.LedgerReport
 import com.a2z.app.ui.component.AppLazyList
-import com.a2z.app.ui.component.AppTopBar
-import com.a2z.app.ui.screen.report.component.BuildExpandableContent
-import com.a2z.app.ui.screen.report.component.BuildItemVisibleContent
-import com.a2z.app.ui.screen.report.component.BuildLedgerActionButton
+import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.theme.BackgroundColor
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -30,13 +29,16 @@ fun LedgerReportScreen() {
 
     Scaffold(
         backgroundColor = BackgroundColor,
-        topBar = { AppTopBar(title = "Ledger Report") }
+        topBar = { NavTopBar(title = "Ledger Report") }
     ) { _ ->
 
-
-
         val pagingData =viewModel.fetchLedgerReport.collectAsLazyPagingItems()
-        AppLazyList<LedgerReport>(pagingData){
+
+        val rememberPagingData = remember { pagingData }
+
+        BaseContent(viewModel) {
+
+            AppLazyList<LedgerReport>(rememberPagingData){
                 val isExpanded = rememberSaveable { mutableStateOf(false) }
                 Card(modifier = Modifier
                     .clickable {
@@ -53,17 +55,8 @@ fun LedgerReportScreen() {
                     }
                 }
 
+            }
         }
-
-
-
-
-
-
-
-
-
-
     }
 }
 

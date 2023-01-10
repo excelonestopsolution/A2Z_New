@@ -20,10 +20,9 @@ import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
-import com.a2z.app.ui.screen.result.DMTResultScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
-import com.a2z.app.ui.screen.result.RechargeResultScreen
-import com.a2z.app.ui.screen.show_qrcode.ShowQRCodeScreen
+import com.a2z.app.ui.screen.qrcode.ShowQRCodeScreen
+import com.a2z.app.ui.screen.result.*
 import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
@@ -86,9 +85,29 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
             }
         )
         composable(
+            route = NavScreen.BillPaymentTxnScreen.route,
+            content = {
+                BillPaymentResultScreen(it)
+            }
+        )
+        composable(
             route = NavScreen.DMTTxnScreen.route,
             content = {
                 DMTResultScreen(it)
+            }
+        )
+
+        composable(
+            route = NavScreen.UPITxnScreen.route,
+            content = {
+                UPIResultScreen(it)
+            }
+        )
+
+        composable(
+            route = NavScreen.MATMTxnScreen.route,
+            content = {
+                MatmResultScreen(it)
             }
         )
 
@@ -131,7 +150,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         })
 
         composable(route = NavScreen.UpiBeneficiaryRegisterScreen.route, content = {
-            UpiBeneficiaryRegisterScreen()
+            UpiBeneficiaryRegisterScreen(it)
         })
 
         composable(route = NavScreen.DmtSenderRegisterScreen.route, content = {

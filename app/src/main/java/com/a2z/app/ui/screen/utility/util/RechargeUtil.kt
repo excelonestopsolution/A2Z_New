@@ -75,7 +75,7 @@ class RechargeUtil(
     fun rechargeAmountValidator(value: String): Pair<Boolean, String> {
 
       return   AppValidator.rechargeAmountValidation(
-            value, appPreference!!.user!!.userBalance,
+            value, appPreference!!.user!!.userBalance.replace(",",""),
             minAmount = getInputMinAmount()
         )
     }

@@ -8,23 +8,22 @@ import com.google.gson.Gson
 
 
 @Composable
-fun DMTResultScreen(it: NavBackStackEntry) {
+fun UPIResultScreen(it: NavBackStackEntry) {
 
     val arg = it.arguments?.getString("response")
-    val response = Gson().fromJson(arg!!, TransactionDetail::class.java)
+    val response = Gson().fromJson (arg!!,TransactionDetail::class.java)
 
 
-    val dmtTitleValue = listOf(
+    val upiTitleValue1 = listOf(
         "Name" to response.name.toString(),
-        "Account No." to response.number.toString(),
-        "Bank Name" to response.bankName.toString(),
-        "IFSc Code" to response.ifsc.toString(),
-        "Txn Type" to response.txnType.toString()
-
+        "Upi Id" to response.number.toString(),
+        "Sender Name" to response.senderName.toString(),
+        "Sender Number" to response.senderNumber.toString(),
     )
-
-    val paymentAmount = if (response.serviceName.equals("dmt one")) response.totalAmount
-    else response.amount
+    val upiTitleValue2 = listOf(
+        "Txn Id" to response.reportId.toString(),
+        "Bank Ref" to response.bankRef.toString(),
+    )
 
     BaseResultComponent(
         statusId = response.status ?: 0,
@@ -32,11 +31,10 @@ fun DMTResultScreen(it: NavBackStackEntry) {
         status = response.statusDesc ?: "NA",
         dateTime = response.txnTime ?: "NA",
         amountTopText = response.serviceName ?: "NA",
-        amountBelowText = "Money Transfer",
-        amount = paymentAmount ?: "0.0",
+        amountBelowText = "UPI Payment",
+        amount = response.amount ?: "0.0",
         serviceIconRes = R.drawable.ic_launcher_money,
-        dmtInfo = response.dmtDetails,
-        titleValues = arrayOf(dmtTitleValue),
+        titleValues = arrayOf(upiTitleValue1,upiTitleValue2),
         backPressHandle = response.isTransaction
     )
 }

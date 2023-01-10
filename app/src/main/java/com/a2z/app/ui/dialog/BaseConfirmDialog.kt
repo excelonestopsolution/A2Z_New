@@ -62,6 +62,7 @@ fun BaseConfirmDialog(
                 )
 
                 titleValues.forEach {
+                    if(it.second.isNotEmpty())
                     BuildTitleValue(title = it.first, value = it.second)
                 }
 

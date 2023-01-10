@@ -53,9 +53,7 @@ fun BillPaymentScreen() {
     BaseContent(viewModel) {
         Scaffold(
             topBar = {
-                AppTopBar(title = util.getOperatorTitle("Payment"), onBackPress = {
-                    navController.navigateUp()
-                })
+               NavTopBar(title = util.getOperatorTitle("Payment"))
             }, backgroundColor = BackgroundColor
         ) {
             it.calculateBottomPadding()

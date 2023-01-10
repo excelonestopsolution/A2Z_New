@@ -43,23 +43,6 @@ fun NavTopBar(
 }
 
 @Composable
-fun AppTopBar(
-    title: String,
-    onBackPress: VoidCallback? = null,
-) {
-    TopAppBar(
-        title = {
-            Text(
-                title
-            )
-        },
-        navigationIcon = onBackPress?.let {
-            { NavigationIcon(onBackPress) }
-        }
-    )
-}
-
-@Composable
 private fun NavigationIcon(onBackPress: VoidCallback) {
     IconButton(onClick = onBackPress) {
         Icon(

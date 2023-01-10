@@ -220,10 +220,9 @@ private fun BuildListItem(
                             shape = CircleShape
                         )
                         .rotate(-15f)
-                        .padding(8.dp)
                         .clickable {
                             viewModel.onSendClick(beneficiary)
-                        }
+                        }.padding(8.dp)
                 )
 
                 Text(
@@ -290,16 +289,16 @@ private fun HeaderComponent() {
 
                             )
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "Mob   : ${viewModel.moneySender.mobileNumber}",
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Normal,
                         color = Color.DarkGray,
                         fontSize = 14.sp
                     )
                     Text(
                         text = "Limit : ${AppConstant.RUPEE_SYMBOL} ${viewModel.moneySender.usedLimit}",
-                        fontWeight = FontWeight.SemiBold,
+                        fontWeight = FontWeight.Normal,
                         color = Color.DarkGray,
                         fontSize = 14.sp
                     )

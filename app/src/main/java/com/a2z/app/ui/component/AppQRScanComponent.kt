@@ -8,14 +8,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.util.AppUtil
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AppQRScanScreen() {
-    var scanFlag by remember { mutableStateOf(true) }
+    var scanFlag by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val navController = LocalNavController.current
+
     val scanViewState = remember {
         CompoundBarcodeView(context).apply {
             val capture = CaptureManager(context as Activity, this)
@@ -23,15 +27,15 @@ fun AppQRScanScreen() {
             this.setStatusText("")
             capture.decode()
             this.decodeContinuous { result ->
-                if(scanFlag){
-                    return@decodeContinuous
-                }
+                if(scanFlag){ return@decodeContinuous }
                 scanFlag = true
                 result.text?.let { barCodeOrQr->
-                    //Do something
-
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        "qrcode",
+                        barCodeOrQr
+                    )
+                    navController.navigateUp()
                 }
-                scanFlag = false
             }
         }
     }

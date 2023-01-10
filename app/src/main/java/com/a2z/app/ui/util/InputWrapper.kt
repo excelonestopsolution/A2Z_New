@@ -54,6 +54,11 @@ class InputWrapper constructor(
         return (value is FormErrorType.Success)
     }
 
+    fun validateInput(): Boolean {
+        val value = error.value
+        return (value is FormErrorType.Success)
+    }
+
     @Composable
     fun formValue(): String {
         val value by remember { input }

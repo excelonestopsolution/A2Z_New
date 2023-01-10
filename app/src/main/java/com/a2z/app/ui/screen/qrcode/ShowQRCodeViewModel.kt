@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.show_qrcode
+package com.a2z.app.ui.screen.qrcode
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -6,13 +6,11 @@ import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.resultStateFlow
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 

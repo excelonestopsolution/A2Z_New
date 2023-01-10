@@ -11,6 +11,7 @@ import com.a2z.app.data.model.utility.BillFetchInfoResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.data.repository.UtilityRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.utility.util.BillPaymentAction
 import com.a2z.app.ui.screen.utility.util.BillPaymentUtil
 import com.a2z.app.ui.screen.utility.util.OperatorType
@@ -68,7 +69,7 @@ class BillPaymentViewModel @Inject constructor(
                 util.useEmailValidation.value = false
                 billInfo.value = info
                 isAmountReadyOnly.value = it.isAmountEditable == 0
-                input.amountInputWrapper.setValue("1")
+                input.amountInputWrapper.setValue(it.info?.billAmount)
 
                 successBanner("Bill Fetch Result", message)
 
@@ -83,7 +84,14 @@ class BillPaymentViewModel @Inject constructor(
         ) {
             val status: Int = it.status
             if (status == 1 || status == 3 || status == 24 || status == 34) {
-                successDialog(it.message) { gotoMainDashboard() }
+                navigateTo(NavScreen.BillPaymentTxnScreen.passArgs(
+                    response = it.apply {
+                        this.numberTitle = operator.dealerName
+                        this.number = input.numberInputWrapper.getValue()
+                        this.serviceName = util.getOperatorTitle()
+                        this.providerIcon = util.getIconFromOperatorType()
+                    }
+                ))
             } else alertDialog(it.message) { gotoMainDashboard() }
         }
     }
@@ -98,9 +106,7 @@ class BillPaymentViewModel @Inject constructor(
     )
 
     init {
-        //todo remove in live
-        input.numberInputWrapper.setValue("320226015829")
-        input.mobileInputWrapper.setValue("7982607742")
+
     }
 
     val isAmountReadyOnly = mutableStateOf(true)

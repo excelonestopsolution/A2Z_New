@@ -25,7 +25,8 @@ import kotlinx.coroutines.delay
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TestScreen() {
-    UpiBeneficiaryRegisterScreen()
+
+
 }
 
 

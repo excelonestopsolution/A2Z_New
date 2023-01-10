@@ -55,12 +55,9 @@ fun OperatorScreen(
 
 @Composable
 private fun appBar() = @Composable {
-    val navController = LocalNavController.current
     val viewModel: OperatorViewModel = hiltViewModel()
     val util = viewModel.util
-    AppTopBar(
-        title = util.getOperatorTitle("Providers"),
-        onBackPress = { navController.navigateUp() })
+    NavTopBar(title = util.getOperatorTitle("Providers"))
 }
 
 @Composable

@@ -21,7 +21,9 @@ data class BillPaymentResponse(
     @SerializedName("amount") val amount : String?,
     @SerializedName("type") val type : String?,
     @SerializedName("recordId") val recordId : String?,
-    var operatorIcon  : String?,
+    var providerIcon  : Int?,
     var number : String?,
     var numberTitle : String?,
+    var serviceName : String?,
+    var isTransaction : Boolean = true
 ) : Parcelable

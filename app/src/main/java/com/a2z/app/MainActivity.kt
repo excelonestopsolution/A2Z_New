@@ -67,9 +67,9 @@ class MainActivity : FragmentActivity() {
                     ) {
 
                         var initialRouteType = InitialRouteType.LOGIN_PAGE
-                        if (!LocalAuth.checkForBiometrics(this))
+                        /*if (!LocalAuth.checkForBiometrics(this))
                             initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
-
+*/
                         MainNav(viewModel, initialRouteType)
                     }
                 }
