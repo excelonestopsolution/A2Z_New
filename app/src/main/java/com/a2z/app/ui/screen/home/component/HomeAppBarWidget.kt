@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -61,7 +62,7 @@ fun HomeAppBarWidget(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                //BuildActionIcon(Icons.Default.QrCode)
+                BuildActionIcon(Icons.Default.QrCode)
                 Spacer(modifier = Modifier.width(8.dp))
                 BuildActionIcon(Icons.Default.Notifications)
 

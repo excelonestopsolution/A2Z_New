@@ -1,4 +1,4 @@
-package com.a2z.app.ui.component
+package com.a2z.app.ui.component.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import com.a2z.app.R
 fun AppNetworkImage(
     url: String,
     placeholderRes: Int = R.drawable.baseline_image_24,
-    contentScale: ContentScale = ContentScale.FillBounds,
+    contentScale: ContentScale = ContentScale.Crop,
     shape: Shape = RoundedCornerShape(5.dp),
     size: Int = 52,
     border: Boolean = false
@@ -46,7 +46,7 @@ fun AppNetworkImage(
        Image(
            painter = mPainter,
            contentDescription = null,
-           modifier = Modifier.size(size.dp)
+           modifier = Modifier.size(size.dp).clip(shape)
        )
 
 
@@ -58,7 +58,6 @@ fun AppNetworkImage(
                modifier = Modifier
                    .padding(8.dp)
                    .size(size.dp)
-
                    .clip(shape = shape)
                    .background(color = Color.Blue.copy(alpha = 0.8f)),
                contentAlignment = Alignment.Center

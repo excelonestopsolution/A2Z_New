@@ -15,30 +15,6 @@ import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-/*@Composable
-fun <T> ObsComponent(
-    flow: SharedFlow<ResultType<T>>,
-    popUpScreen : Boolean = true,
-    onFailure: @Composable ((Exception) -> Unit?)? = null,
-    onLoading: @Composable (() -> Unit?)? = null,
-    onSuccess: @Composable (T) -> Unit,
-) {
-    when (val result = flow.collectAsState(ResultType.Loading()).value) {
-
-        is ResultType.Failure -> {
-            if (onFailure != null) onFailure(result.exception)
-            val exceptionState = remember {
-                mutableStateOf<ExceptionState?>(ExceptionState(result.exception,popUpScreen))
-            }
-            DialogExceptionComponent(exceptionState = exceptionState)
-        }
-        is ResultType.Loading -> {
-            if (onLoading != null) onLoading()
-            else AppProgress()
-        }
-        is ResultType.Success -> onSuccess(result.data)
-    }
-}*/
 
 @Composable
 fun <T> ObsComponent(

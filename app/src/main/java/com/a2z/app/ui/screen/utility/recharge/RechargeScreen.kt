@@ -16,25 +16,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.common.AmountTextField
-import com.a2z.app.ui.component.common.AppFormCard
-import com.a2z.app.ui.component.common.AppFormUI
-import com.a2z.app.ui.component.common.AppTextField
+import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.dialog.BaseConfirmDialog
-import com.a2z.app.ui.screen.AppViewModel
-import com.a2z.app.ui.screen.utility.util.UtilityUtil
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
-import com.a2z.app.util.AppConstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

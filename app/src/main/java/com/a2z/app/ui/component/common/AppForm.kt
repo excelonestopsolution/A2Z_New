@@ -44,9 +44,9 @@ fun AppFormUI(
                         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
                             if (it.title != null) {
                                 Text(text = it.title, style = MaterialTheme.typography.h6.copy(
-                                    fontSize = 16.sp
+                                    fontSize = 18.sp
                                 ))
-                                Spacer(modifier = Modifier.height(1.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
                             }
                             if (it.isVisible) it.contents(this)
                         }

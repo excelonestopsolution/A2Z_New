@@ -2,6 +2,8 @@ package com.a2z.app.data.repository
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
+import com.a2z.app.util.FieldMapData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -20,4 +22,12 @@ interface FundRepository {
         bankName: RequestBody?,
         remark: RequestBody,
     ) : AppResponse
+
+    //r2r
+
+    suspend fun searchR2RRetailer(
+        searchType : String,
+        searchInput : String,
+    ) : R2RSearchRetailerResponse
+
 }

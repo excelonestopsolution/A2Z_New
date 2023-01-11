@@ -1,5 +1,6 @@
 package com.a2z.app.data.repository
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
@@ -14,4 +15,6 @@ interface TransactionRepository {
     suspend fun wallet3Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun dmt3Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun upiTransaction(data : FieldMapData) : TransactionDetail
+    suspend fun r2rTransfer(data : FieldMapData) : AppResponse
+    suspend fun settlementTransfer(data : FieldMapData) : AppResponse
 }

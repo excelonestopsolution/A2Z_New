@@ -2,6 +2,8 @@ package com.a2z.app.data.network
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
+import com.a2z.app.util.FieldMapData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -27,5 +29,15 @@ interface FundService {
         @Part("bankName") bankName: RequestBody?,
         @Part("remark") remark: RequestBody
     ): AppResponse
+
+    //r2r
+
+    @GET("get-retailer-detail")
+    suspend fun searchR2RRetailer(
+        @Query("SEARCH_TYPE") searchType: String,
+        @Query("INPUT") searchInput: String
+    ) : R2RSearchRetailerResponse
+
+
 
 }

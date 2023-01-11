@@ -6,9 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBalanceWallet
-import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +42,7 @@ fun HomeWalletWidget() {
         mutableStateOf(IntSize(0, 0))
     }
     val navController = LocalNavController.current
-   Card (modifier = Modifier.padding(horizontal = 12.dp).padding(top = 12.dp),
+   Card (modifier = Modifier.padding(horizontal = 12.dp).padding(top = 12.dp, bottom = 5.dp),
    shape = MaterialTheme.shapes.medium, elevation = 16.dp){
        Box() {
            BaseContent(appViewModel) {
@@ -164,16 +162,16 @@ fun HomeWalletWidget() {
                            Spacer(modifier = Modifier.weight(1f))
 
                            Row(modifier = Modifier.clickable {
-                               navController.navigate(NavScreen.ShowQRScreen.route)
+                               navController.navigate(NavScreen.R2RTransferScreen.route)
                            }) {
                                Icon(
-                                   imageVector = Icons.Default.QrCode,
+                                   imageVector = Icons.Default.SendToMobile,
                                    contentDescription = null,
                                    tint = Color.White
                                )
                                Spacer(modifier = Modifier.width(8.dp))
                                Text(
-                                   text = "Show QR", color = Color.White.copy(alpha = 0.9f),
+                                   text = "R2R Transfer", color = Color.White.copy(alpha = 0.9f),
                                    style = TextStyle(fontWeight = FontWeight.SemiBold)
                                )
                            }

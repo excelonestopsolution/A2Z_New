@@ -139,7 +139,7 @@ fun AppTextField(
                 readOnly = readOnly,
                 interactionSource = interactionSource,
 
-            )
+                )
         } else {
             TextField(
                 value = value,
@@ -160,7 +160,7 @@ fun AppTextField(
                 readOnly = readOnly,
                 interactionSource = interactionSource,
 
-            )
+                )
         }
     }
 
@@ -236,7 +236,8 @@ fun AadhaarTextField(
     trailingIcon: @Composable () -> Unit = {}
 ) {
 
-    AppTextField(value = value,
+    AppTextField(
+        value = value,
         label = "Aadhaar Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
@@ -251,9 +252,6 @@ fun AadhaarTextField(
 
     )
 }
-
-
-
 
 
 @Composable
@@ -330,7 +328,8 @@ fun PasswordTextField(
     onChange: (String) -> Unit,
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
-    topSpace: Dp = MaterialTheme.spacing.medium
+    topSpace: Dp = MaterialTheme.spacing.medium,
+    label: String = "Password",
 ) {
 
     var passwordVisibility by rememberSaveable { mutableStateOf(true) }
@@ -350,7 +349,7 @@ fun PasswordTextField(
     AppTextField(
         value = value,
         hint = "********",
-        label = "Password",
+        label = label,
         onChange = onChange,
         keyboardType = KeyboardType.Password,
         leadingIcon = Icons.Default.Lock,
@@ -369,12 +368,14 @@ fun PasswordTextField(
 fun PinTextField(
     value: String,
     mpin: Boolean = false,
+    readOnly: Boolean = false,
     maxLength: Int = 6,
     onChange: (String) -> Unit,
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
-    trailingIcon: @Composable (()->Unit) ? = null
+    label: String? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
 
     var passwordVisibility by rememberSaveable { mutableStateOf(true) }
@@ -391,10 +392,13 @@ fun PinTextField(
         }
     }
 
+    var mLabel = label ?: if (mpin) "M-PIN" else "OTP"
+
     AppTextField(
         value = value,
         hint = "******",
-        label = if (mpin) "M-PIN" else "OTP",
+        label = mLabel,
+        readOnly = readOnly,
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.Password,
@@ -405,7 +409,6 @@ fun PinTextField(
         visualTransformation = if (passwordVisibility) PasswordVisualTransformation()
         else VisualTransformation.None,
         topSpace = topSpace
-
     )
 }
 
@@ -448,7 +451,7 @@ fun DropDownTextField(
     value: String,
     paddingValues: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 5.dp),
     hint: String,
-    downText: String?=null,
+    downText: String? = null,
     onClick: VoidCallback
 ) {
     val source = remember {
@@ -491,7 +494,7 @@ fun DropDownTextField(
             )
 
         }
-        if(downText != null)   Text(
+        if (downText != null) Text(
             text = downText, style = TextStyle(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W500,
@@ -511,14 +514,14 @@ fun FileTextField(
     onTrailingClick: VoidCallback = {},
     onClick: VoidCallback,
 
-) {
+    ) {
 
 
     val source = remember {
         MutableInteractionSource()
     }
     if (source.collectIsPressedAsState().value) {
-       onClick.invoke()
+        onClick.invoke()
     }
     AppTextField(
         value = value,
@@ -529,7 +532,7 @@ fun FileTextField(
         leadingIcon = Icons.Default.FileUpload,
         error = error,
         trailingIcon = {
-            if(value.isNotEmpty())  IconButton(onClick = onTrailingClick) {
+            if (value.isNotEmpty()) IconButton(onClick = onTrailingClick) {
                 Icon(imageVector = Icons.Default.Image, contentDescription = null)
             }
         }

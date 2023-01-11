@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.dmt.DmtTransactionDetail
 import com.a2z.app.nav.NavScreen
-import com.a2z.app.ui.component.AppNetworkImage
+import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.*

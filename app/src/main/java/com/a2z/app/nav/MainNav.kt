@@ -7,6 +7,8 @@ import com.a2z.app.InitialRouteType
 import com.a2z.app.MainViewModel
 import com.a2z.app.ui.component.AppQRScanScreen
 import com.a2z.app.ui.screen.aeps.AepsScreen
+import com.a2z.app.ui.screen.auth.change.password.ChangePasswordScreen
+import com.a2z.app.ui.screen.auth.change.pin.ChangePinScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
@@ -22,7 +24,11 @@ import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.qrcode.ShowQRCodeScreen
+import com.a2z.app.ui.screen.r2r.R2RTransferScreen
 import com.a2z.app.ui.screen.result.*
+import com.a2z.app.ui.screen.settlement.add_bank.SettlementAddBankScreen
+import com.a2z.app.ui.screen.settlement.bank_list.SettlementBankScreen
+import com.a2z.app.ui.screen.settlement.transfer.SettlementTransferScreen
 import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
@@ -44,7 +50,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = startDestination,
+        startDestination = NavScreen.SettlementBankScreen.route,
         route = "main-root"
     ) {
 
@@ -165,6 +171,34 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
         composable(route = NavScreen.QRScanScreen.route, content = {
             AppQRScanScreen()
+        })
+
+
+        composable(route = NavScreen.R2RTransferScreen.route, content = {
+            R2RTransferScreen()
+        })
+
+
+        composable(route = NavScreen.ChangePasswordScreen.route, content = {
+            ChangePasswordScreen()
+        })
+
+
+        composable(route = NavScreen.ChangePinScreen.route, content = {
+            ChangePinScreen()
+        })
+
+
+        composable(route = NavScreen.SettlementBankScreen.route, content = {
+            SettlementBankScreen(it)
+        })
+
+        composable(route = NavScreen.SettlementBankAddScreen.route, content = {
+            SettlementAddBankScreen()
+        })
+
+        composable(route = NavScreen.SettlementTransferScreen.route, content = {
+            SettlementTransferScreen()
         })
 
 

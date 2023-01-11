@@ -36,12 +36,12 @@ object AppValidator {
 
 
     fun minThreeChar(value: String) = Pair(
-        value.length  >= 3,
+        value.length >= 3,
         "Enter min 3 characters"
     )
 
     fun upiId(value: String) = Pair(
-        value.length  >= 3 && value.contains("@"),
+        value.length >= 3 && value.contains("@"),
         "Enter valid upi id"
     )
 
@@ -51,17 +51,33 @@ object AppValidator {
                 ""
     )
 
+    fun confirmPassword(value: String, newPassword: String) = Pair(
+        value == newPassword,
+        "Confirm password doesn't matched!"
+    )
+
     fun empty(value: String) = Pair(
-        value.isNotEmpty(), "Field is required*")
+        value.isNotEmpty(), "Field is required*"
+    )
 
     fun mpinValidation(value: String, length: Int = 6) = Pair(
         value.length == length,
         "Enter $length digits M-PIN"
     )
 
+    fun confirmMpin(value: String, newMpin: String, length: Int = 6) = Pair(
+        value.length == length && value == newMpin,
+        "Confirm M-PIN doesn't matched!"
+    )
+
     fun pinCodeValidation(value: String) = Pair(
         value.length == 6,
         "Enter 6 digits Pin Code"
+    )
+
+    fun ifscCode(value: String) = Pair(
+        value.length == 11,
+        "Enter 11 digits Ifsc Code"
     )
 
     fun amountValidation(
@@ -153,6 +169,11 @@ object AppValidator {
     fun accountNumberValidation(value: String) = Pair(
         value.length in 6..20,
         "Enter 6 to 20 digits account"
+    )
+
+    fun confirmAccountNumber(value: String, accountNumber: String) = Pair(
+        value == accountNumber,
+        "Confirm account doesn't matched!"
     )
 
 

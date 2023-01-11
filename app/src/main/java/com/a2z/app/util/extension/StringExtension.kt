@@ -35,3 +35,8 @@ fun String?.notNullOrEmpty(): Boolean {
     if (this == null) return false
     return this.isNotEmpty()
 }
+
+fun String?.notAvailable() : String{
+    return if(this == null || this.isEmpty()) "Not Available";
+    else this
+}

@@ -1,5 +1,6 @@
 package com.a2z.app.data.network
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
@@ -39,4 +40,15 @@ interface TransactionService {
     @FormUrlEncoded
     suspend fun upiTransaction(@FieldMap data: FieldMapData): TransactionDetail
 
+    @POST("fund-transfer_r2r")
+    @FormUrlEncoded
+    suspend fun r2rTransfer(
+        @FieldMap data : FieldMapData
+    ) : AppResponse
+
+    @POST("a2z-settlement-request")
+    @FormUrlEncoded
+    suspend fun settlementTransfer(
+        @FieldMap data : FieldMapData
+    ) : AppResponse
 }

@@ -125,7 +125,7 @@ fun DMTMoneyTransferScreen() {
                    AppFormCard(
                        isVisible = viewModel.dmtType != DMTType.UPI,
                        title = "Transaction Type") {
-                        BuildTransactionType(viewModel)
+                       BuildTransactionType(viewModel)
                     } ,
                     AppFormCard(
                         title = "Transaction Amount",

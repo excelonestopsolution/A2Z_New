@@ -9,6 +9,7 @@ import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.provider.Operator
+import com.a2z.app.data.model.settlement.SettlementAddedBank
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
@@ -117,6 +118,7 @@ sealed class NavScreen(val route: String) {
             "response" to response.toEncodedString()
         )
     }
+
     object MATMTxnScreen : NavScreen("matm-txn-screen".params("response")) {
         fun passArgs(response: MatmTransactionResponse) = "matm-txn-screen".args(
             "response" to response.toEncodedString()
@@ -210,5 +212,17 @@ sealed class NavScreen(val route: String) {
     }
 
 
+    object R2RTransferScreen : NavScreen("r2r-transfer-screen")
+
+
     object QRScanScreen : NavScreen("qr-scan-screen")
+    object ChangePasswordScreen : NavScreen("change-password-screen")
+    object ChangePinScreen : NavScreen("change-pin-screen")
+    object SettlementBankScreen : NavScreen("settlement-bank-screen")
+    object SettlementBankAddScreen : NavScreen("settlement-bank-add-screen")
+    object SettlementTransferScreen : NavScreen("settlement-transfer-screen".params("bank")) {
+        fun passArgs(bank: SettlementAddedBank) = "settlement-transfer-screen".args(
+            "bank" to bank.toEncodedString()
+        )
+    }
 }

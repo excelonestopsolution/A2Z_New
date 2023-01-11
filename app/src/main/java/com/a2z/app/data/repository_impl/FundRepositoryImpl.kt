@@ -1,8 +1,11 @@
 package com.a2z.app.data.repository_impl
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
 import com.a2z.app.data.network.FundService
 import com.a2z.app.data.repository.FundRepository
+import com.a2z.app.util.FieldMapData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -39,6 +42,13 @@ class FundRepositoryImpl @Inject constructor(
         bankId = bankId,
         bankName = bankName,
         remark = remark,
-        )
+    )
+
+    override suspend fun searchR2RRetailer(
+        searchType: String,
+        searchInput: String
+    ): R2RSearchRetailerResponse {
+        return service.searchR2RRetailer(searchType, searchInput)
+    }
 
 }

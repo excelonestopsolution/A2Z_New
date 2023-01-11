@@ -1,12 +1,12 @@
 package com.a2z.app.ui.screen.dashboard
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -20,17 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.a2z.app.R
+import com.a2z.app.data.local.AppPreference
+import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.util.VoidCallback
 
 @Composable
-fun ColumnScope.DashboardDrawerWidget() {
-    Box(modifier = Modifier.weight(1f).background(color = MaterialTheme.colors.primary.copy(alpha = 0.050f))) {
+fun ColumnScope.DashboardDrawerWidget(appPreference: AppPreference) {
+    Box(
+        modifier = Modifier
+            .weight(1f)
+            .background(color = MaterialTheme.colors.primary.copy(alpha = 0.050f))
+    ) {
         Column(Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
 
-            BuildNavLogo()
+            BuildNavLogo(appPreference)
 
             Spacer(
                 modifier = Modifier
@@ -53,11 +57,14 @@ fun ColumnScope.DashboardDrawerWidget() {
 
 @Composable
 private fun BuildSingleMenu(painter: ImageVector, title: String, onClick: VoidCallback) {
-    Card(modifier = Modifier
-        .padding(horizontal = 8.dp, vertical = 5.dp)
-        .fillMaxWidth()
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 5.dp)
+            .fillMaxWidth()
     ) {
-        Row (modifier = Modifier.clickable { onClick() }.padding(12.dp)){
+        Row(modifier = Modifier
+            .clickable { onClick() }
+            .padding(12.dp)) {
             Icon(imageVector = painter, contentDescription = null)
             Spacer(modifier = Modifier.width(12.dp))
             Text(text = title, style = MaterialTheme.typography.h6)
@@ -67,7 +74,7 @@ private fun BuildSingleMenu(painter: ImageVector, title: String, onClick: VoidCa
 
 
 @Composable
-private fun BuildNavLogo() {
+private fun BuildNavLogo(appPreference: AppPreference) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,13 +88,14 @@ private fun BuildNavLogo() {
         contentAlignment = Alignment.Center
 
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.app_logo),
-            contentDescription = null,
-            modifier = Modifier
-                .height(80.dp)
-                .padding(8.dp)
-                .clip(MaterialTheme.shapes.large)
-        )
+
+        Row {
+            AppNetworkImage(
+                url = appPreference.user?.profilePicture.toString(),
+                shape = CircleShape, size = 90
+            )
+        }
+
+
     }
 }
