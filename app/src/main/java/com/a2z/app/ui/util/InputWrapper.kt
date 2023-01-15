@@ -15,8 +15,13 @@ class InputWrapper constructor(
         error.value = makeValid()
     }
 
+    val readOnly = mutableStateOf(false)
+
     fun getValue() = input.value
 
+    fun setValidation(value : Boolean){
+        useValidation.value = value
+    }
 
     fun validate(): FormFieldError {
         if (!useValidation.value) return FormErrorType.Success
@@ -40,6 +45,10 @@ class InputWrapper constructor(
     fun formError(): FormFieldError {
         val value by remember { error }
         return value
+    }
+
+    fun clearFormError(){
+        error.value = FormErrorType.Initial
     }
 
     @Composable

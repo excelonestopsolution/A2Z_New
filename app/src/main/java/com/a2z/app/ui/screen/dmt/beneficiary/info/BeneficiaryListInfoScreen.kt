@@ -147,7 +147,7 @@ private fun BuildListItem(
     }
 
     Column(modifier = Modifier
-        .background(color = if (index == 0 && viewModel.swipeState.value) GreenColor.copy(0.4f) else Color.White)
+        .background(color = if (index == 0 && viewModel.swipeState.value) PrimaryColorDark.copy(0.1f) else Color.White)
         .clickable {
             isVisible.value = !isVisible.value
         }) {

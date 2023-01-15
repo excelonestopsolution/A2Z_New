@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.a2z.app.InitialRouteType
 import com.a2z.app.MainViewModel
+import com.a2z.app.ui.screen.kyc.document.DocumentKycScreen
 import com.a2z.app.ui.component.AppQRScanScreen
 import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.change.password.ChangePasswordScreen
@@ -31,6 +32,10 @@ import com.a2z.app.ui.screen.settlement.bank_list.SettlementBankScreen
 import com.a2z.app.ui.screen.settlement.transfer.SettlementTransferScreen
 import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
+import com.a2z.app.ui.screen.util.agreement.UserAgreementScreen
+import com.a2z.app.ui.screen.util.commission.MyCommissionScreen
+import com.a2z.app.ui.screen.util.device_order.DeviceOrderTabScreen
+import com.a2z.app.ui.screen.util.scheme_detail.SchemeDetailScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
 import com.a2z.app.ui.screen.utility.operator.OperatorScreen
 import com.a2z.app.ui.screen.utility.recharge.RechargeScreen
@@ -50,7 +55,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = NavScreen.SettlementBankScreen.route,
+        startDestination = NavScreen.LoginScreen.route,
         route = "main-root"
     ) {
 
@@ -203,6 +208,11 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
 
 
+        composable(route = NavScreen.DocumentKycScreen.route, content = { DocumentKycScreen() })
+        composable(route = NavScreen.CommissionScreen.route, content = { MyCommissionScreen() })
+        composable(route = NavScreen.SchemeDetailScreen.route, content = { SchemeDetailScreen() })
+        composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
+        composable(route = NavScreen.UserAgreementScreen.route, content = { UserAgreementScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

@@ -5,8 +5,12 @@ import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
+import com.a2z.app.data.model.report.CommissionSchemeListResponse
+import com.a2z.app.util.FieldMapData
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.QueryMap
 
 interface AppService {
 
@@ -24,6 +28,12 @@ interface AppService {
 
     @GET("a2z/plus/wallet/bank-down")
     suspend fun fetchBankDown(): BankDownResponse
+
+    @GET("user/scheme/list")
+    suspend fun schemeList() : CommissionSchemeListResponse
+
+    @GET("user/scheme")
+    suspend fun schemeDetail(@QueryMap data : FieldMapData) : CommissionSchemeDetailResponse
 
 
 }

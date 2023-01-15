@@ -75,6 +75,11 @@ object AppValidator {
         "Enter 6 digits Pin Code"
     )
 
+    fun pan(value: String) = Pair(
+        value.length == 10,
+        "Enter valid 10 chars pan number"
+    )
+
     fun ifscCode(value: String) = Pair(
         value.length == 11,
         "Enter 11 digits Ifsc Code"

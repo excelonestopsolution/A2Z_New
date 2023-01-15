@@ -23,6 +23,7 @@ import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.component.permission.PermissionComponent
+import com.a2z.app.ui.dialog.ImageDialog
 import com.a2z.app.ui.screen.util.permission.AppPermissionList
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.BackgroundColor

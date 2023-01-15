@@ -42,7 +42,7 @@ open class BaseViewModel : ViewModel() {
         viewModelScope.launch { dashboardState.emit(true) }
     }
 
-    private fun dismissDialog() {
+    fun dismissDialog() {
         dialogState.value = StatusDialogType.None
     }
 
@@ -70,6 +70,7 @@ open class BaseViewModel : ViewModel() {
     fun alertDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Alert(message, callback)
     }
+
 
 
     fun setBanner(withNewType: BannerType = BannerType.None) {

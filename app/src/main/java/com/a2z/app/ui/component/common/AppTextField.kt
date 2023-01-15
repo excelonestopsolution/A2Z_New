@@ -205,11 +205,12 @@ fun MobileTextField(
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
     downText: String? = "Enter 10 digits mobile number",
+    label: String? = null,
     trailingIcon: @Composable () -> Unit = {}
 ) {
 
     AppTextField(value = value,
-        label = "Mobile Number",
+        label =label ?: "Mobile Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.PhoneAndroid,
@@ -233,12 +234,15 @@ fun AadhaarTextField(
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
     downText: String? = "Enter 12 digits aadhaar number",
+    label : String? = null,
+    readOnly : Boolean = false,
     trailingIcon: @Composable () -> Unit = {}
 ) {
 
     AppTextField(
         value = value,
-        label = "Aadhaar Number",
+        readOnly = readOnly,
+        label = label ?:  "Aadhaar Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.Input,
@@ -261,12 +265,15 @@ fun EmailTextField(
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
-    downText: String? = null
+    label : String? = null,
+    downText: String? = null,
+    readOnly: Boolean= false
 ) {
 
     AppTextField(
         value = value,
-        label = "Email Id",
+        readOnly = readOnly,
+        label =label ?: "Email Id",
         onChange = onChange,
         keyboardType = KeyboardType.Email,
         leadingIcon = Icons.Default.Email,

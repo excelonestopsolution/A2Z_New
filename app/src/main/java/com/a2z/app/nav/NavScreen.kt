@@ -9,6 +9,7 @@ import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.provider.Operator
+import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.settlement.SettlementAddedBank
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
@@ -225,4 +226,16 @@ sealed class NavScreen(val route: String) {
             "bank" to bank.toEncodedString()
         )
     }
+
+
+    object DocumentKycScreen : NavScreen("document-kyc-screen")
+    object CommissionScreen : NavScreen("commission-screen")
+    object SchemeDetailScreen : NavScreen("scheme-detail-screen".params("data")){
+        fun passArgs(data : CommissionSchemeDetailResponse) = "scheme-detail-screen".args(
+            "data" to data.toEncodedString()
+        )
+    }
+
+    object  DeviceOrderScreen : NavScreen("device-order-screen")
+    object  UserAgreementScreen : NavScreen("user-agreement-screen")
 }

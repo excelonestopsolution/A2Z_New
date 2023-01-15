@@ -42,10 +42,12 @@ object ApiModule {
     @Singleton
     fun providerReportService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): ReportService =
         client.create(ReportService::class.java)
+
     @Provides
     @Singleton
     fun providerAepsService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): AepsService =
         client.create(AepsService::class.java)
+
     @Provides
     @Singleton
     fun providerMatmService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): MatmService =
@@ -66,6 +68,17 @@ object ApiModule {
     @Singleton
     fun providerUpiService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): UpiService =
         client.create(UpiService::class.java)
+
+    @Provides
+    @Singleton
+    fun providerKycService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): KycService =
+        client.create(KycService::class.java)
+
+
+    @Provides
+    @Singleton
+    fun providerAgreementService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): AgreementService =
+        client.create(AgreementService::class.java)
 
 
 }

@@ -40,4 +40,10 @@ interface RepoModule {
 
     @Binds
     fun provideUpiRepositoryImpl(repository: UpiRepositoryIml): UpiRepository
+
+
+    @Binds
+    fun provideKycRepositoryImpl(repository: KycRepositoryImpl): KycRepository
+    @Binds
+    fun provideAgreementRepositoryImpl(repository: AgreementRepositoryImpl): AgreementRepository
 }

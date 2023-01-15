@@ -5,8 +5,11 @@ import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
+import com.a2z.app.data.model.report.CommissionSchemeListResponse
 import com.a2z.app.data.network.AppService
 import com.a2z.app.data.repository.AppRepository
+import com.a2z.app.util.FieldMapData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,5 +34,13 @@ class AppRepositoryImpl @Inject constructor(private val appService: AppService) 
 
     override suspend fun fetchQRCode(): QRCodeResponse {
         return appService.fetchQRCode()
+    }
+
+    override suspend fun schemeList(): CommissionSchemeListResponse {
+        return appService.schemeList()
+    }
+
+    override suspend fun schemeDetail(data: FieldMapData): CommissionSchemeDetailResponse {
+        return appService.schemeDetail(data)
     }
 }

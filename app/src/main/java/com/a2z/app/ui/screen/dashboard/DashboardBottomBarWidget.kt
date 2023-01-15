@@ -10,12 +10,15 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.a2z.app.ui.theme.PrimaryColorDark
 
 
 private sealed class DashboardBottomBarItem(
@@ -36,12 +39,18 @@ private val dashboardBottomBarList = listOf(
 
 @Composable
 fun DashboardBottomBarWidget(navController: NavHostController? = null) {
-    BottomNavigation() {
+    BottomNavigation(
+        backgroundColor = Color.White,
+        elevation = 16.dp,
+        contentColor = PrimaryColorDark,
+
+    ) {
         val navBackStackEntry = navController?.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.value?.destination
 
         dashboardBottomBarList.forEach { screen ->
-           val isSelected = currentDestination?.hierarchy?.any{it.route == screen.route} ?: false
+            val isSelected =
+                currentDestination?.hierarchy?.any { it.route == screen.route } ?: false
             BottomNavigationItem(
                 selected = isSelected,
                 onClick = {
@@ -56,7 +65,6 @@ fun DashboardBottomBarWidget(navController: NavHostController? = null) {
                 label = { Text(text = screen.title, fontWeight = FontWeight.Bold) },
                 icon = { Icon(imageVector = screen.icon, contentDescription = null) })
         }
-
 
 
     }
