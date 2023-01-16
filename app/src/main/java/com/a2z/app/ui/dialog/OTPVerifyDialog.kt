@@ -34,11 +34,13 @@ fun OTPVerifyDialog(
     onAction: (String) -> Unit
 ) {
 
-    if (state.value) Dialog(onDismissRequest = {
-        state.value = false
-    }, properties = DialogProperties(
-        dismissOnClickOutside = false
-    )) {
+    if (state.value) Dialog(
+        onDismissRequest = {
+            state.value = false
+        }, properties = DialogProperties(
+            dismissOnClickOutside = false
+        )
+    ) {
         val otp = remember {
             mutableStateOf("")
         }
@@ -59,9 +61,11 @@ fun OTPVerifyDialog(
                 color = PrimaryColorDark.copy(alpha = 0.7f)
             )
 
-            PinTextField(value = otp.value, onChange = {
-                otp.value = it
-            })
+            PinTextField(value = otp.value,
+                maxLength = otpLength,
+                onChange = {
+                    otp.value = it
+                })
 
             Button(
                 onClick = {

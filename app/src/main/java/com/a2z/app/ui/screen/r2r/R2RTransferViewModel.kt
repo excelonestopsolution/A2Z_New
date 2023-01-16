@@ -141,7 +141,7 @@ data class R2RTransferInput(
     val amountValidation: MutableState<Boolean>,
     val number: InputWrapper = InputWrapper {
         if (numberValidationLength.value == 10)
-            AppValidator.mobileValidation(it)
+            AppValidator.mobile(it)
         else AppValidator.empty(it)
     },
     val amount: InputWrapper = InputWrapper(amountValidation) {

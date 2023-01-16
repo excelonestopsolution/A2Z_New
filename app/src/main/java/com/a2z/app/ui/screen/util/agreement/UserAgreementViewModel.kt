@@ -2,7 +2,6 @@ package com.a2z.app.ui.screen.util.agreement
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
-import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import androidx.compose.runtime.mutableStateOf
@@ -18,7 +17,6 @@ import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
-import com.a2z.app.util.extension.showToast
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -192,8 +190,8 @@ class UserAgreementViewModel @Inject constructor(
 
     data class FormInput(
         val name: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
-        val email: InputWrapper = InputWrapper { AppValidator.emailValidation(it) },
-        val mobile: InputWrapper = InputWrapper { AppValidator.mobileValidation(it) },
+        val email: InputWrapper = InputWrapper { AppValidator.email(it) },
+        val mobile: InputWrapper = InputWrapper { AppValidator.mobile(it) },
     ) : BaseInput(name, email, mobile)
 
 }

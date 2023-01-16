@@ -9,7 +9,7 @@ data class AepsInput(
 
     val useAmountValidation : MutableState<Boolean>,
     val aadhaarInputWrapper: InputWrapper = InputWrapper { AppValidator.aadhaarValidation(it) },
-    val mobileInputWrapper: InputWrapper = InputWrapper { AppValidator.mobileValidation(it) },
+    val mobileInputWrapper: InputWrapper = InputWrapper { AppValidator.mobile(it) },
     val amountInputWrapper: InputWrapper = InputWrapper (useAmountValidation){
         AppValidator.amountValidation(
             it,

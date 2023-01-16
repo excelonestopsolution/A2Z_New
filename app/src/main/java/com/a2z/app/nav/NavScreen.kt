@@ -238,4 +238,5 @@ sealed class NavScreen(val route: String) {
 
     object  DeviceOrderScreen : NavScreen("device-order-screen")
     object  UserAgreementScreen : NavScreen("user-agreement-screen")
+    object  UserRegistrationScreen : NavScreen("user-registration-screen")
 }

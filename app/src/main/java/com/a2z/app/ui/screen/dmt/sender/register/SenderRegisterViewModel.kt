@@ -233,7 +233,7 @@ enum class SenderRegistrationType {
 
 data class SenderRegisterInput(
     val otpValidation: MutableState<Boolean>,
-    val mobileNumber: InputWrapper = InputWrapper { AppValidator.mobileValidation(it) },
+    val mobileNumber: InputWrapper = InputWrapper { AppValidator.mobile(it) },
     val firstName: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
     val lastName: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
     val pinCode: InputWrapper = InputWrapper { AppValidator.pinCodeValidation(it) },

@@ -192,7 +192,7 @@ data class SenderSearchInput(
     val numberValidationLength: MutableState<Int>,
     val number: InputWrapper = InputWrapper {
         if (numberValidationLength.value == 10)
-            AppValidator.mobileValidation(it)
+            AppValidator.mobile(it)
         else AppValidator.accountNumberValidation(it)
     }
 ) : BaseInput(number)

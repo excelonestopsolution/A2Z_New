@@ -166,7 +166,7 @@ object AppValidator {
     )
 
 
-    fun mobileValidation(value: String) = Pair(
+    fun mobile(value: String) = Pair(
         value.length == 10,
         "Enter 10 digits mobile number"
     )
@@ -188,7 +188,7 @@ object AppValidator {
     )
 
 
-    fun emailValidation(value: String) = Pair(
+    fun email(value: String) = Pair(
         validateEmail(value),
         "Enter valid email id"
     )

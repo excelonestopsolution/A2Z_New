@@ -8,7 +8,7 @@ import com.a2z.app.ui.util.InputWrapper
 data class MatmInput(
 
     val useAmountValidation : MutableState<Boolean>,
-    val mobileInputWrapper: InputWrapper = InputWrapper { AppValidator.mobileValidation(it) },
+    val mobileInputWrapper: InputWrapper = InputWrapper { AppValidator.mobile(it) },
     val amountInputWrapper: InputWrapper = InputWrapper (useAmountValidation){
         AppValidator.amountValidation(
             it,

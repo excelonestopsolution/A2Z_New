@@ -17,12 +17,12 @@ data class BillPaymentInput(
 
     val numberInputWrapper: InputWrapper = InputWrapper { inputValidator(it) },
     val mobileInputWrapper: InputWrapper = InputWrapper(useMobileValidation) {
-        AppValidator.mobileValidation(it)
+        AppValidator.mobile(it)
     },
     val amountInputWrapper: InputWrapper = InputWrapper(useAmountValidation)
     { amountValidator(it) },
     val emailInputWrapper: InputWrapper = InputWrapper(useEmailValidation) {
-        AppValidator.emailValidation(it)
+        AppValidator.email(it)
     },
     val dobInputWrapper: InputWrapper = InputWrapper(useDobValidation) {
         AppValidator.dobValidation(it)

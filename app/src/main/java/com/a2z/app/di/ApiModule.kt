@@ -81,4 +81,10 @@ object ApiModule {
         client.create(AgreementService::class.java)
 
 
+    @Provides
+    @Singleton
+    fun providerRegistrationService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): RegistrationService =
+        client.create(RegistrationService::class.java)
+
+
 }

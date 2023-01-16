@@ -46,4 +46,6 @@ interface RepoModule {
     fun provideKycRepositoryImpl(repository: KycRepositoryImpl): KycRepository
     @Binds
     fun provideAgreementRepositoryImpl(repository: AgreementRepositoryImpl): AgreementRepository
+    @Binds
+    fun provideRegistrationRepositoryImpl(repository: RegistrationRepositoryImpl): RegistrationRepository
 }

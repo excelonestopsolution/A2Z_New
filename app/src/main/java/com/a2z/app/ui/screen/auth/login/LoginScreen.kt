@@ -37,9 +37,9 @@ fun LoginScreen(
     val navController = LocalNavController.current
 
     LaunchedEffect(key1 = Unit, block = {
-        if(viewModel.appPreference.user != null){
-            navController.navigate(NavScreen.DashboardScreen.route){
-                popUpTo(NavScreen.DashboardScreen.route){
+        if (viewModel.appPreference.user != null) {
+            navController.navigate(NavScreen.DashboardScreen.route) {
+                popUpTo(NavScreen.DashboardScreen.route) {
                     inclusive = true
                 }
             }
@@ -47,7 +47,7 @@ fun LoginScreen(
     })
 
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
         if (shouldNavigate == true) viewModel.login()
     }
@@ -154,6 +154,11 @@ private fun BoxScope.BuildFormWidget(
                 }
             }
 
+            Spacer(modifier = Modifier.height(32.dp))
+
+            TextButton(onClick = { viewModel.navigateTo(NavScreen.UserRegistrationScreen.route) }) {
+                Text(text = "Sign Up")
+            }
 
         }
     }

@@ -8,7 +8,6 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.matm.MatmServiceInformation
 import com.a2z.app.data.model.matm.MatmServiceInformationfoResponse
 import com.a2z.app.data.repository.MatmRepository
-import com.a2z.app.ui.screen.kyc.document.DocumentKycType
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
@@ -309,8 +308,8 @@ data class MATMDeviceOtpInput(
 data class MATMDeviceOrderInput(
     val courierAddressValidation: MutableState<Boolean>,
     val name: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
-    val mobile: InputWrapper = InputWrapper { AppValidator.mobileValidation(it) },
-    val email: InputWrapper = InputWrapper { AppValidator.emailValidation(it) },
+    val mobile: InputWrapper = InputWrapper { AppValidator.mobile(it) },
+    val email: InputWrapper = InputWrapper { AppValidator.email(it) },
     val shopName: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
     val shopAddress: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },
     val landmark: InputWrapper = InputWrapper { AppValidator.minThreeChar(it) },

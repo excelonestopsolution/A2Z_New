@@ -11,6 +11,7 @@ import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.change.password.ChangePasswordScreen
 import com.a2z.app.ui.screen.auth.change.pin.ChangePinScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
+import com.a2z.app.ui.screen.auth.registration.UserRegistrationScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
 import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
@@ -213,6 +214,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.SchemeDetailScreen.route, content = { SchemeDetailScreen() })
         composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
         composable(route = NavScreen.UserAgreementScreen.route, content = { UserAgreementScreen() })
+        composable(route = NavScreen.UserRegistrationScreen.route, content = { UserRegistrationScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }
