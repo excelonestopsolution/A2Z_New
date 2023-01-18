@@ -2,9 +2,11 @@ package com.a2z.app.ui.component.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +23,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.a2z.app.R
+import com.a2z.app.ui.theme.RedColor
 
 @Composable
 fun AppNetworkImage(
@@ -59,6 +62,7 @@ fun AppNetworkImage(
                    .padding(8.dp)
                    .size(size.dp)
                    .clip(shape = shape)
+
                    .background(color = Color.Blue.copy(alpha = 0.8f)),
                contentAlignment = Alignment.Center
 
@@ -78,7 +82,8 @@ fun AppNetworkImage(
                modifier = Modifier
                    .padding(8.dp)
                    .size(size.dp)
-                   .clip(shape),
+                   .clip(shape)
+                   .border(width = 1.dp,shape= CircleShape,color = Color.White),
                contentScale = contentScale,
            )
        }

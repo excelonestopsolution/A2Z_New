@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.DatabaseUtils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -14,6 +15,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.a2z.app.BuildConfig.DEBUG
 import java.io.*
 import java.text.SimpleDateFormat
@@ -27,10 +29,22 @@ object FileUtil {
     fun isLocalStorageDocument(uri: Uri): Boolean {
         return AUTHORITY.equals(uri.authority)
     }
-    fun File?.toBitmap(): Bitmap? {
-        if (this == null) return null
+    fun File?.toBitmap(context: Context): Bitmap? {
+
+        val uri = this?.toUri() ?: return null
+        return if (Build.VERSION.SDK_INT < 28) {
+            MediaStore.Images
+                .Media.getBitmap(context.contentResolver, uri)
+
+        } else {
+            val source = ImageDecoder
+                .createSource(context.contentResolver, uri)
+            ImageDecoder.decodeBitmap(source)
+        }
+
+       /* if (this == null) return null
         val filePath = this.path
-        return BitmapFactory.decodeFile(filePath);
+        return BitmapFactory.decodeFile(filePath);*/
     }
 
     fun toUri(context: Context, file: File): Uri? {
@@ -70,7 +84,7 @@ object FileUtil {
                     ", Host: " + uri.host +
                     ", Segments: " + uri.pathSegments.toString()
         )
-        val isKitKat: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+            val isKitKat = true
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {

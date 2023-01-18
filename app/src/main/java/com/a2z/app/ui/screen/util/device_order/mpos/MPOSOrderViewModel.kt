@@ -44,6 +44,7 @@ class MPOSOrderViewModel @Inject constructor(
 
     init {
         fetchDeviceOrderInfo()
+        fetchDocTypeList()
         viewModelScope.launch {
             _docTypeListResultFlow.getLatest {
                 if (it.status == 1) {
@@ -59,7 +60,7 @@ class MPOSOrderViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uploadResultFlow.getLatest {
-                if (it.status == 1)successDialog(it.message){
+                if (it.status == 1) successDialog(it.message) {
                     fetchDeviceOrderInfo()
                 } else {
                     failureDialog(it.message)
@@ -72,20 +73,20 @@ class MPOSOrderViewModel @Inject constructor(
 
         callApiForStateFlow(
             flow = deviceInfoResultFlow,
-            call = { repository.fetchOrderInfo() },
+            call = {
+
+                repository.fetchOrderInfo()
+            },
         )
     }
 
-    fun fetchDocTypeList() {
+    private fun fetchDocTypeList() {
         if (docTypeListState.value == null)
             callApiForShareFlow(
                 flow = _docTypeListResultFlow,
                 call = {
                     repository.getDocTypeList()
                 },
-                beforeEmit = {
-
-                }
             )
     }
 
@@ -144,7 +145,7 @@ class MPOSOrderViewModel @Inject constructor(
 
 
         callApiForShareFlow(
-            flow =_uploadResultFlow,
+            flow = _uploadResultFlow,
             call = {
                 repository.uploadDetail(
                     shopInsideFilePart = shopInsideFilePart,
@@ -155,7 +156,7 @@ class MPOSOrderViewModel @Inject constructor(
                     businessLegalityTypeBodyPart = businessLegalityTypeBodyPart,
                     latitudeBodyPart = latitudeBodyPart,
                     longitudeBodyPart = longitudeBodyPart,
-                    )
+                )
             }
         )
 

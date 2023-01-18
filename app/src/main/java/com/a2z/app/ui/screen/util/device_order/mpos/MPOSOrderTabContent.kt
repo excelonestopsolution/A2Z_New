@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.matm.MatmServiceInformation
@@ -105,6 +106,7 @@ private fun MPOSFormContent(data: MatmServiceInformation) {
 
     val viewModel: MPOSOrderViewModel = hiltViewModel()
 
+   
 
     fun getFileStatus(value: String?): Int {
         if (value == null) return 0
@@ -215,9 +217,6 @@ private fun MPOSFormContent(data: MatmServiceInformation) {
 @Composable
 private fun ProofTypeDropDownContent(viewModel: MPOSOrderViewModel) {
 
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.fetchDocTypeList()
-    })
 
     if (viewModel.docTypeListState.value != null) {
 
@@ -302,9 +301,9 @@ private fun BuildUpload(title: String, docType: MPOSDocumentType) {
 
         PickCameraAndGalleryImage(
             onResult = {
-                val file = FileUtil.getFile(context, it)
-                viewModel.onPickFile(docType, file)
-                imageUri.value = it
+
+                viewModel.onPickFile(docType, it)
+                imageUri.value = it?.toUri()
             },
             content = { capture ->
                 PermissionComponent(

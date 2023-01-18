@@ -30,14 +30,13 @@ class FundRequestViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    var selectedFile: File? = null
+    var selectedFile = mutableStateOf<File?>(null)
     var fundRequestBank: FundRequestBank? = null
     private var fundMethod: FundMethod? = null
     val input = FundRequestInput()
     private var paymentMode: Pair<String, String> = Pair("", "")
 
     val isImageDialogOpen = mutableStateOf(false)
-    val selectedFileUri = mutableStateOf<Uri?>(null)
 
     private var requestTo: String = "1"
     private var remark: String = ""
@@ -102,7 +101,7 @@ class FundRequestViewModel @Inject constructor(
 
     fun makeFundRequest() {
 
-        val fileSlipPart = getMultipartFormData(selectedFile, "d_picture")
+        val fileSlipPart = getMultipartFormData(selectedFile.value, "d_picture")
         val amountBody =
             input.amountInput.getValue().toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val requestToBody = requestTo.toRequestBody("multipart/form-data".toMediaTypeOrNull())

@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.auth.verification
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.repository.AuthRepository
@@ -29,9 +30,20 @@ class LoginOtpViewModel @Inject constructor(
     var mobileNumber: String = ""
 
     val verifyFlow = resultShareFlow<AppResponse>()
+   private val _resendOtpResultFlow = resultShareFlow<AppResponse>()
+    val timerState = mutableStateOf(true)
 
     init {
         viewModelScope.launch { subscribers() }
+
+        viewModelScope.launch {
+            _resendOtpResultFlow.getLatest {
+                if(it.status ==1){
+                    successBanner("Resend Otp",it.message)
+                }
+                else failureBanner("Resend Otp",it.message)
+            }
+        }
     }
 
     private suspend fun subscribers() {
@@ -52,7 +64,24 @@ class LoginOtpViewModel @Inject constructor(
         authRepository.verifyLoginOtp(
             "mobileNumber" to (AppSecurity.encrypt(mobileNumber) ?: ""),
             "otp" to (AppSecurity.encrypt(formData.otpWrapper.input.value) ?: ""),
-            "imei" to appUtilDI.appUniqueIdentifier()
+            "imei" to appUtilDI.appUniqueIdentifier(),
+            "latitude" to "12.312312",
+            "longitude" to "12.68687"
+        )
+    }
+
+    var resendCount = 0
+    fun onResendOtp() {
+        resendCount +=1
+        val params = hashMapOf(
+            "count" to resendCount.toString(),
+            "mobileNumber" to AppSecurity.encrypt(mobileNumber).orEmpty(),
+            "type" to AppSecurity.encrypt("NEW_DEVICE_OTP").orEmpty(),
+        )
+
+        callApiForShareFlow(
+            flow = _resendOtpResultFlow,
+            call = { authRepository.verifyLoginResendOtp(params) }
         )
     }
 

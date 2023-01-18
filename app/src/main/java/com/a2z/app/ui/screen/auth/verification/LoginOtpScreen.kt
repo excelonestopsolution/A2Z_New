@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.auth.verification
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -25,6 +26,7 @@ import com.a2z.app.R
 import com.a2z.app.ui.component.AppButton
 import com.a2z.app.ui.component.AppCard
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.CounterOtpTextField
 import com.a2z.app.ui.component.common.PinTextField
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
@@ -101,20 +103,23 @@ fun BoxScope.BuildCardForm(viewModel: LoginOtpViewModel = hiltViewModel()) {
                 )
             )
             Spacer(modifier = Modifier.height(24.dp))
-            PinTextField(
+            CounterOtpTextField(
                 value = remember { otpIW.input }.value,
                 onChange = { otpIW.onChange(it) },
-                error = remember { otpIW.error }.value
+                error = remember { otpIW.error }.value,
+                onResend = {viewModel.onResendOtp()},
+                timerState = viewModel.timerState
+
             )
-            Spacer(modifier = Modifier.height(24.dp))
-            AppButton(
-                text = "Verify Device",
-                isEnable = formData.isValidObs.value,
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Button(
+                enabled = formData.isValidObs.value,
+                onClick ={viewModel.verifyOtp()},
+                modifier = Modifier.height(48.dp),
                 shape = CircularShape
             ) {
-                if (viewModel.bannerState.value is BannerType.Success)
-                    return@AppButton
-                viewModel.verifyOtp()
+                Text(text = "   Verify Device   ")
             }
         }
     }

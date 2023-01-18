@@ -104,10 +104,7 @@ fun CounterOtpTextField(
                     AppUtil.logger("progressTest : $progress")
 
                     Box(contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(
-                            progress = progress.toFloat(),
-
-                            )
+                        CircularProgressIndicator(progress = progress.toFloat(), modifier = Modifier.size(32.dp))
                         Text(text = counter.toString())
                     }
                 }

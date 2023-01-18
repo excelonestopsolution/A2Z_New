@@ -1,12 +1,9 @@
 package com.a2z.app.ui.screen.dashboard
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -17,7 +14,9 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +26,7 @@ import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.VoidCallback
 
@@ -42,9 +42,73 @@ fun ColumnScope.DashboardDrawerWidget(appPreference: AppPreference) {
     ) {
         Column(Modifier.scrollable(rememberScrollState(), Orientation.Vertical)) {
 
-            Spacer(modifier = Modifier.height(8.dp))
-            BuildNavLogo(appPreference)
-            Spacer(modifier = Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .height(136.dp)
+                    .fillMaxWidth()
+            ) {
+                Card(
+                    modifier = Modifier.fillMaxSize(),
+                    backgroundColor = PrimaryColorDark
+
+                ) {
+
+                    Canvas(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(MaterialTheme.shapes.medium),
+                        onDraw = {
+                            val path = Path().apply {
+                                this.lineTo(0f, 0f)
+                                this.lineTo(0f, 176.dp.toPx())
+                                this.lineTo(300.dp.toPx(), 176.dp.toPx())
+                                this.lineTo(0f, 0f)
+
+                            }
+
+                            this.drawPath(path, PrimaryColor)
+                        })
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Box(modifier = Modifier.align(Alignment.BottomStart)) {
+                            AppNetworkImage(
+                                url = appPreference.user?.profilePicture.toString(),
+                                shape = CircleShape, size = 70,
+                                border = true
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(16.dp)
+                                .background(color = Color.Black.copy(alpha = 0.3f))
+                                .padding(16.dp),
+                        ) {
+                            Text(
+                                text = appPreference.user?.name.toString(),
+                                style = MaterialTheme.typography.subtitle1.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
+                            )
+                            Text(
+                                text = appPreference.user?.roleTitle.toString(),
+                                style = MaterialTheme.typography.subtitle2.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White.copy(alpha = 0.7f)
+                                )
+                            )
+                        }
+                    }
+
+
+                }
+
+            }
+
 
             BuildSingleMenu(
                 "Change Password",

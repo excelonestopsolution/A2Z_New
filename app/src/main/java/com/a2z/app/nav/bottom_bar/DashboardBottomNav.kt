@@ -24,5 +24,6 @@ fun DashboardBottomNav(navController: NavHostController,
         composable("bottom-ledger-page") {
             LedgerReportScreen()
         }
+
     }
 }

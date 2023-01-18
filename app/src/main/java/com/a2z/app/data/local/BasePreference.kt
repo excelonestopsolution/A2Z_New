@@ -13,6 +13,8 @@ open class BasePreference(context: Context) {
         const val PASSWORD = "password"
         const val LOGIN_ID = "login_id"
         const val LOGIN_CHECK = "login_check"
+        const val LATITUDE = "latitude"
+        const val LONGITUDE = "longitude"
     }
 
     private var sharedPreferences: SharedPreferences? = null

@@ -10,6 +10,8 @@ import com.a2z.app.ui.component.AppQRScanScreen
 import com.a2z.app.ui.screen.aeps.AepsScreen
 import com.a2z.app.ui.screen.auth.change.password.ChangePasswordScreen
 import com.a2z.app.ui.screen.auth.change.pin.ChangePinScreen
+import com.a2z.app.ui.screen.auth.forget.login_id.ForgotLoginIdScreen
+import com.a2z.app.ui.screen.auth.forget.password.ForgotPasswordScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.registration.UserRegistrationScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
@@ -215,6 +217,8 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
         composable(route = NavScreen.UserAgreementScreen.route, content = { UserAgreementScreen() })
         composable(route = NavScreen.UserRegistrationScreen.route, content = { UserRegistrationScreen() })
+        composable(route = NavScreen.ForgotPasswordScreen.route, content = { ForgotPasswordScreen() })
+        composable(route = NavScreen.ForgotLoginIdScreen.route, content = { ForgotLoginIdScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

@@ -99,10 +99,8 @@ fun FundRequestScreen() {
 
                             PickCameraAndGalleryImage(
                                 onResult = {
-                                    viewModel.selectedFileUri.value = it
-                                    val file = FileUtil.getFile(context, it)
-                                    viewModel.selectedFile = file
-                                    uploadSlipInput.setValue(file?.name.toString())
+                                    viewModel.selectedFile.value = it
+                                    uploadSlipInput.setValue(it?.name.toString())
                                 },
                                 content = { capture ->
                                     PermissionComponent(
@@ -135,7 +133,7 @@ fun FundRequestScreen() {
                     )
                 ))
 
-            ImageDialog(viewModel.isImageDialogOpen, viewModel.selectedFileUri)
+            ImageDialog(viewModel.isImageDialogOpen, viewModel.selectedFile)
 
 
         }

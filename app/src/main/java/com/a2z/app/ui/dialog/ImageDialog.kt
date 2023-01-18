@@ -17,13 +17,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.util.BitmapUtil
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.showToast
-
+import java.io.File
 
 
 @Composable
@@ -82,7 +83,7 @@ fun ImageNetworkDialog(
 @Composable
 fun ImageDialog(
     imageDialogOpen: MutableState<Boolean>,
-    selectFile: MutableState<Uri?>,
+    selectFile: MutableState<File?>,
     onConfirmClick: VoidCallback? = null,
 ) {
     if (imageDialogOpen.value) Dialog(onDismissRequest = {
@@ -91,7 +92,7 @@ fun ImageDialog(
 
         val context = LocalContext.current.applicationContext
 
-        val bitmap = BitmapUtil.uriToBitMap(selectFile.value, context) ?: return@Dialog
+        val bitmap = BitmapUtil.uriToBitMap(selectFile.value?.toUri(), context) ?: return@Dialog
 
         Column(
             modifier = Modifier

@@ -22,11 +22,16 @@ class AppPreference @Inject constructor(context: Context) : BasePreference(conte
         set(value) = saveString(LOGIN_ID, value)
         get() = getString(LOGIN_ID)
 
-    var loginCheck : Boolean
+    var loginCheck: Boolean
         set(value) = saveBoolean(LOGIN_CHECK, value)
         get() = getBoolean(LOGIN_CHECK)
 
-
+    var latitude: String
+        set(value) = saveString(LATITUDE, value)
+        get() = getString(LATITUDE)
+    var longitude: String
+        set(value) = saveString(LONGITUDE, value)
+        get() = getString(LONGITUDE)
 
 
 }

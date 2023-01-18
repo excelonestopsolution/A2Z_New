@@ -94,6 +94,12 @@ fun HomeAppBarWidget(
                     .height(48.dp), contentAlignment = Alignment.Center
             )
             {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(MaterialTheme.shapes.small)
+                        .background(Color.Black.copy(0.2f))
+                )
                 Image(
                     painter = painterResource(id = R.drawable.app_logo),
                     contentDescription = null,
@@ -103,12 +109,7 @@ fun HomeAppBarWidget(
                         .clip(MaterialTheme.shapes.small),
                     contentScale = ContentScale.FillBounds
                 )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.small)
-                        .background(Color.Black.copy(0.2f))
-                )
+
             }
             Spacer(modifier = Modifier.weight(1f))
 

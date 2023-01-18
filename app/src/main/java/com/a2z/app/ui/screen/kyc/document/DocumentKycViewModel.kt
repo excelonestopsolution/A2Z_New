@@ -27,12 +27,11 @@ class DocumentKycViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val documentKycDetailResultFlow = resultStateFlow<DocumentKycResponse>()
-    val selectedUri = mutableStateOf<Uri?>(null)
-    private var selectedFile: File? = null
+    var selectedFile = mutableStateOf<File?>(null)
     private var selectDocType: DocumentKycType? = null
     var previewDialogState = mutableStateOf(false)
     var showImageState = mutableStateOf(false)
-    var selectedUriState = mutableStateOf("")
+    var selectedUrlState = mutableStateOf("")
 
     lateinit var docs: DocumentKycDetail
 
@@ -108,9 +107,8 @@ class DocumentKycViewModel @Inject constructor(
         return result
     }
 
-    fun onPickFile(docType: DocumentKycType, uri: Uri?, file: File?) {
-        this.selectedUri.value = uri
-        this.selectedFile = file
+    fun onPickFile(docType: DocumentKycType, file: File?) {
+        this.selectedFile.value= file
         this.selectDocType = docType
         this.previewDialogState.value = true
     }
@@ -146,7 +144,7 @@ class DocumentKycViewModel @Inject constructor(
             null -> ""
         }
         return if (partParamName.isNotEmpty())
-            getMultipartFormData(selectedFile, partParamName)
+            getMultipartFormData(selectedFile.value, partParamName)
         else null
 
 

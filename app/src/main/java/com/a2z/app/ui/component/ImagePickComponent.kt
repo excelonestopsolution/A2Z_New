@@ -1,6 +1,5 @@
 package com.a2z.app.ui.component
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,64 +17,86 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.component.permission.CheckCameraStoragePermission
+import com.a2z.app.ui.component.permission.LocationComponent
+import com.a2z.app.ui.component.permission.PermissionComponent
+import com.a2z.app.ui.screen.AppViewModel
+import com.a2z.app.ui.screen.util.permission.AppPermissionList
+import com.a2z.app.ui.screen.util.permission.PermissionType
+import com.a2z.app.ui.theme.LocalLocationService
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.ImagePickerUtil
+import com.a2z.app.util.AppUtil
+import com.a2z.app.util.BitmapUtil.addWatermark
+import com.a2z.app.util.BitmapUtil.getResizedBitmap
+import com.a2z.app.util.BitmapUtil.toFile
+import com.a2z.app.util.FileUtil.toBitmap
 import com.a2z.app.util.VoidCallback
+import java.io.File
 
-@Composable
-fun PickCameraImage(
-    content: @Composable (capture: () -> Unit) -> Unit,
-    onResult: (Uri?) -> Unit
-) {
-    val (fileUri, cameraLauncher) = ImagePickerUtil.pickCameraImage { uri ->
-        onResult(uri)
-    }
-    content { cameraLauncher.launch(fileUri) }
-}
-
-@Composable
-fun PickGalleryImage(
-    content: @Composable (capture: () -> Unit) -> Unit,
-    onResult: (Uri?) -> Unit
-) {
-
-    val galleryLauncher = ImagePickerUtil.pickGalleryImage {
-        onResult.invoke(it)
-    }
-
-    content { galleryLauncher.launch("image/*") }
-}
 
 @Composable
 fun PickCameraAndGalleryImage(
     content: @Composable (capture: () -> Unit) -> Unit,
-    onResult: (Uri?) -> Unit
+    onResult: (File?) -> Unit
 ) {
+    val context = LocalContext.current
+    val viewModel: AppViewModel = hiltViewModel()
+    val appPreference = viewModel.appPreference
+    val locationService = LocalLocationService.current
 
-    val (fileUri, cameraLauncher) = ImagePickerUtil.pickCameraImage { uri ->
-        onResult(uri)
+    val (uri, cameraLauncher) = ImagePickerUtil.pickCameraImage { file ->
+        val bitmap = file.toBitmap(context)
+        val resizeBitmap = bitmap?.getResizedBitmap()
+
+        val (address1, address2, address3) =
+            locationService.getAddress(appPreference.latitude, appPreference.longitude)
+
+        val watermarkBitmap = resizeBitmap?.addWatermark(address1, address2, address3)
+        val resizeFile = watermarkBitmap.toFile(context)
+        onResult.invoke(resizeFile)
     }
-    val galleryLauncher = ImagePickerUtil.pickGalleryImage {
-        onResult.invoke(it)
+    val galleryLauncher = ImagePickerUtil.pickGalleryImage { file ->
+        val bitmap = file.toBitmap(context)
+        val resizeBitmap = bitmap?.getResizedBitmap()
+
+        val (address1, address2, address3) =
+            locationService.getAddress(appPreference.latitude, appPreference.longitude)
+
+        val watermarkBitmap = resizeBitmap?.addWatermark(address1, address2, address3)
+        val resizeFile = watermarkBitmap.toFile(context)
+        onResult.invoke(resizeFile)
     }
     val isDialogOpen = remember { mutableStateOf(false) }
-    content(capture = {
-        isDialogOpen.value = true
-    })
+
     ImagePickerDialog(
         isDialogOpen = isDialogOpen,
         galleryPicker = {
             galleryLauncher.launch("image/*")
         },
         cameraPicker = {
-            cameraLauncher.launch(fileUri)
+            cameraLauncher.launch(uri)
         }
     )
 
+    CheckCameraStoragePermission { action1 ->
+        LocationComponent(
+            onLocation = { isDialogOpen.value = true },
+            content = { action2 ->
+                content {
+                    if (action1.invoke()) action2.invoke()
+                }
+            }
+        )
+    }
 
 }
 

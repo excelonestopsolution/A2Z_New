@@ -18,7 +18,9 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.theme.PrimaryColorLight
 
 
 private sealed class DashboardBottomBarItem(
@@ -28,7 +30,7 @@ private sealed class DashboardBottomBarItem(
 ) {
     object Dashboard : DashboardBottomBarItem("bottom-home-page", Icons.Default.Home, "Dashboard")
     object Ledger :
-        DashboardBottomBarItem("bottom-ledger-page", Icons.Default.Receipt, "Ledger Report")
+        DashboardBottomBarItem("bottom-ledger-page", Icons.Default.Receipt, "Ledger")
 }
 
 
@@ -40,9 +42,9 @@ private val dashboardBottomBarList = listOf(
 @Composable
 fun DashboardBottomBarWidget(navController: NavHostController? = null) {
     BottomNavigation(
-        backgroundColor = Color.White,
+        backgroundColor = PrimaryColorLight,
         elevation = 16.dp,
-        contentColor = PrimaryColorDark,
+        contentColor = Color.White,
 
     ) {
         val navBackStackEntry = navController?.currentBackStackEntryAsState()

@@ -1,13 +1,19 @@
 package com.a2z.app.ui.screen.home.component
 
+import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,12 +26,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.ui.component.BankDownComponent
+import com.a2z.app.ui.dialog.BankDownDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.screen.utility.util.OperatorType
+import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.theme.PrimaryColor
+import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.util.FunCompose
 import com.a2z.app.util.VoidCallback
 
@@ -119,7 +133,7 @@ private fun BuildMoneyAndPaymentService() {
                             )
                         }
 
-                        )
+                    )
                     BuildIconAndIconTitle(
                         title = "Wallet 2",
                         icon = R.drawable.ic_launcher_money,
@@ -176,9 +190,13 @@ private fun BuildMoneyAndPaymentService() {
                     Spacer(modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.weight(1f))
                 }
-                }
+
+                val viewModel: HomeViewModel = hiltViewModel()
+                BankDownComponent(viewModel.bankDownResponseState)
+
             }
         }
+    }
 
 }
 
@@ -332,7 +350,7 @@ private fun BuildServiceTitle(title: String) {
 @Composable
 private fun ServiceCard(content: FunCompose) {
     Card(
-        shape = MaterialTheme.shapes.medium,
+        shape = MaterialTheme.shapes.small,
         elevation = 16.dp,
         modifier = Modifier
             .fillMaxWidth()

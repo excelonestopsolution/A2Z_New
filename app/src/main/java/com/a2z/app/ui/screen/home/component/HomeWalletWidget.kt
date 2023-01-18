@@ -43,14 +43,14 @@ fun HomeWalletWidget() {
     }
     val navController = LocalNavController.current
    Card (modifier = Modifier.padding(horizontal = 12.dp).padding(top = 12.dp, bottom = 5.dp),
-   shape = MaterialTheme.shapes.medium, elevation = 16.dp){
+   shape = MaterialTheme.shapes.small, elevation = 16.dp){
        Box() {
            BaseContent(appViewModel) {
                Box(
 
                    modifier = Modifier
                        .fillMaxWidth()
-                       .clip(MaterialTheme.shapes.medium)
+                       .clip(MaterialTheme.shapes.small)
                        .onSizeChanged { size.value = it }
                        .background(
                            brush = Brush.linearGradient(

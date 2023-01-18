@@ -19,13 +19,15 @@ import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.PasswordTextField
-import com.a2z.app.ui.component.permission.LocationPermissionComponent
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.singleResult
+import com.a2z.app.util.ToggleBottomSheet
 
 @Composable
 fun LoginScreen(
@@ -53,26 +55,38 @@ fun LoginScreen(
     }
 
     BaseContent(viewModel) {
-        Scaffold { padding ->
-            padding.calculateBottomPadding()
+        BottomSheetComponent(sheetContent = {
+            LoginForgotComponent(
+                onLoginId = {
+                    it.invoke()
+                    navController.navigate(NavScreen.ForgotLoginIdScreen.route)
+                },
+                onPassword = {
+                    it.invoke()
+                    navController.navigate(NavScreen.ForgotPasswordScreen.route)
+                }
+            )
+        }) { toggle ->
+            Scaffold { padding ->
+                padding.calculateBottomPadding()
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding.calculateBottomPadding())
-            ) {
-                AuthBackgroundDraw()
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding.calculateBottomPadding())
+                ) {
+                    AuthBackgroundDraw()
 
-                BuildFormWidget()
+                    BuildFormWidget(toggle)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun BoxScope.BuildFormWidget(
-    viewModel: LoginViewModel = hiltViewModel()
-) {
+private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
+    val viewModel: LoginViewModel = hiltViewModel()
     Card(
         modifier = Modifier
             .align(Alignment.Center)
@@ -131,10 +145,10 @@ private fun BoxScope.BuildFormWidget(
                     viewModel.loginCheckState.value = it
                 })
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
 
-            LocationPermissionComponent {
+            LocationComponent {
                 AppButton(
                     text = "     Login     ",
                     icon = {
@@ -150,14 +164,19 @@ private fun BoxScope.BuildFormWidget(
                 ) {
                     val enable = it.invoke()
                     if (enable) viewModel.login()
-
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            TextButton(onClick = { viewModel.navigateTo(NavScreen.UserRegistrationScreen.route) }) {
-                Text(text = "Sign Up")
+            Row {
+                TextButton(onClick = { viewModel.navigateTo(NavScreen.UserRegistrationScreen.route) }) {
+                    Text(text = "Sign Up")
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(onClick = { toggle.invoke() }) {
+                    Text(text = "Forgot ?")
+                }
             }
 
         }
