@@ -1,6 +1,6 @@
 package com.a2z.app.data.repository_impl
 
-import com.a2z.app.data.model.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.data.network.RegistrationService
 import com.a2z.app.data.repository.RegistrationRepository
 import com.a2z.app.util.FieldMapData

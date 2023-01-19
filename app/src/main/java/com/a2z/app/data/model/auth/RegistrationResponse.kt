@@ -1,4 +1,4 @@
-package com.a2z.app.data.model
+package com.a2z.app.data.model.auth
 
 import android.os.Parcelable
 import androidx.annotation.Keep

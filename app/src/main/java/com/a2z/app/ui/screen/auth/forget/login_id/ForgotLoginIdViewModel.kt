@@ -3,7 +3,6 @@ package com.a2z.app.ui.screen.auth.forget.login_id
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
-import com.a2z.app.data.model.auth.ForgotPassword
 import com.a2z.app.data.repository.AuthRepository
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
@@ -11,7 +10,6 @@ import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.util.resultShareFlow
-import com.a2z.app.util.security.AppSecurity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

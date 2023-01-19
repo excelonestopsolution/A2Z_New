@@ -229,6 +229,8 @@ sealed class NavScreen(val route: String) {
 
 
     object DocumentKycScreen : NavScreen("document-kyc-screen")
+    object AEPSKycScreen : NavScreen("aeps-kyc-screen")
+    object AadhaarKycScreen : NavScreen("aadhaar-kyc-screen")
     object CommissionScreen : NavScreen("commission-screen")
     object SchemeDetailScreen : NavScreen("scheme-detail-screen".params("data")){
         fun passArgs(data : CommissionSchemeDetailResponse) = "scheme-detail-screen".args(
@@ -241,4 +243,7 @@ sealed class NavScreen(val route: String) {
     object  UserRegistrationScreen : NavScreen("user-registration-screen")
     object  ForgotPasswordScreen : NavScreen("forgot-password-screen")
     object  ForgotLoginIdScreen : NavScreen("forgot-login-id-screen")
+    object  ComplaintScreen : NavScreen("complaint-screen")
+    object  MATMRequestReportScreen : NavScreen("matm-request-report-screen")
+    object  AEPSReportScreen : NavScreen("aeps-report-screen")
 }

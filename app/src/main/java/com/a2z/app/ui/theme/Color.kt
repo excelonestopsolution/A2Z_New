@@ -8,6 +8,7 @@ val PrimaryColorDark = Color(0xFF01335A)
 val SecondaryColor = Color(0xFF4CA650)
 
 val BackgroundColor = Color(0xFFE8F4FD)
+val BackgroundColor2 = Color(0xFFCFE3F3)
 val SubTextColor = Color(0xFF858585)
 val GreenColor = Color(0xFF4CAF50)
 val RedColor = Color(0xFFC91305)

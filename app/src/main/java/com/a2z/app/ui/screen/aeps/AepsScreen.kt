@@ -73,7 +73,6 @@ fun BuildMainContent() {
                 closeAction.invoke()
                 try {
                     pidLauncher.launch(AepsUtil.pidIntent(it.packageName))
-
                 } catch (e: Exception) {
                     viewModel.bannerState.value = BannerType.Failure("RD Service", "not found!")
                 }
@@ -175,9 +174,6 @@ fun BuildMainContent() {
     }
 
 
-    // Declaring Coroutine scope
-
-    // Creating a Bottom Sheet
 
 }
 

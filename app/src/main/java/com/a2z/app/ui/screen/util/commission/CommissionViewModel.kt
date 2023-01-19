@@ -1,9 +1,7 @@
 package com.a2z.app.ui.screen.util.commission
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.report.CommissionScheme
-import com.a2z.app.data.model.report.CommissionSchemeDetail
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.report.CommissionSchemeListResponse
 import com.a2z.app.data.repository.AppRepository

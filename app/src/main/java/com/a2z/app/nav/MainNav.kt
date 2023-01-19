@@ -25,10 +25,14 @@ import com.a2z.app.ui.screen.dmt.transfer.DMTMoneyTransferScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
+import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
+import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.qrcode.ShowQRCodeScreen
 import com.a2z.app.ui.screen.r2r.R2RTransferScreen
+import com.a2z.app.ui.screen.report.aeps.AEPSReportScreen
+import com.a2z.app.ui.screen.report.matm.MATMReportScreen
 import com.a2z.app.ui.screen.result.*
 import com.a2z.app.ui.screen.settlement.add_bank.SettlementAddBankScreen
 import com.a2z.app.ui.screen.settlement.bank_list.SettlementBankScreen
@@ -37,6 +41,7 @@ import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
 import com.a2z.app.ui.screen.util.agreement.UserAgreementScreen
 import com.a2z.app.ui.screen.util.commission.MyCommissionScreen
+import com.a2z.app.ui.screen.util.complaint.ComplaintScreen
 import com.a2z.app.ui.screen.util.device_order.DeviceOrderTabScreen
 import com.a2z.app.ui.screen.util.scheme_detail.SchemeDetailScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
@@ -212,6 +217,8 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
 
 
         composable(route = NavScreen.DocumentKycScreen.route, content = { DocumentKycScreen() })
+        composable(route = NavScreen.AEPSKycScreen.route, content = { AEPSKycScreen() })
+        composable(route = NavScreen.AadhaarKycScreen.route, content = { AadhaarKycScreen() })
         composable(route = NavScreen.CommissionScreen.route, content = { MyCommissionScreen() })
         composable(route = NavScreen.SchemeDetailScreen.route, content = { SchemeDetailScreen() })
         composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
@@ -219,6 +226,9 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.UserRegistrationScreen.route, content = { UserRegistrationScreen() })
         composable(route = NavScreen.ForgotPasswordScreen.route, content = { ForgotPasswordScreen() })
         composable(route = NavScreen.ForgotLoginIdScreen.route, content = { ForgotLoginIdScreen() })
+        composable(route = NavScreen.ComplaintScreen.route, content = { ComplaintScreen() })
+        composable(route = NavScreen.MATMRequestReportScreen.route, content = { MATMReportScreen() })
+        composable(route = NavScreen.AEPSReportScreen.route, content = { AEPSReportScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

@@ -3,7 +3,6 @@ package com.a2z.app.ui.screen.auth.login
 import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.a2z.app.BuildConfig
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.repository.AuthRepository
@@ -14,14 +13,12 @@ import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.BannerType
-import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtil.Empty
 import com.a2z.app.util.AppUtilDI
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.security.AppSecurity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

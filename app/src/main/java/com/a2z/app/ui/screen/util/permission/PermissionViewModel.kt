@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.a2z.app.R
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.ui.util.extension.safeSerializable
+import com.google.gson.annotations.SerializedName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -117,6 +118,7 @@ object AppPermissionList {
 data class AppPermission(
     val permission: String, val title: String, var isAccepted: Boolean?
 )
+
 
 enum class PermissionType {
     Location,

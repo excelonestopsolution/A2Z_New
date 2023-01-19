@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,15 +18,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.ui.component.permission.LocationComponent
+import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.CircularShape
+import com.a2z.app.ui.theme.LocalLocationService
 
 @Composable
 fun HomeLocationServiceDialog() {
     val locationDialogState = remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
+
+    val locationService = LocalLocationService.current
+    val viewModel: AppViewModel = hiltViewModel()
+    val appPreference = viewModel.appPreference
+
+
+    LaunchedEffect(key1 = Unit, block = {
+        val result = locationService.isEnable()
+        val latitude = appPreference.latitude
+        val longitude = appPreference.longitude
+        if (latitude.isEmpty() || longitude.isEmpty()) {
+            if (!result)
+                locationDialogState.value = true
+            else locationService.getCurrentLocation()
+        }
+    })
 
     LocationComponent() {
         if (locationDialogState.value) Dialog(onDismissRequest = {

@@ -127,6 +127,14 @@ fun ColumnScope.DashboardDrawerWidget(appPreference: AppPreference) {
                 navController.navigate(NavScreen.DocumentKycScreen.route)
             }
 
+            BuildSingleMenu("Aadhaar Kyc", Icons.Default.CloudUpload) {
+                navController.navigate(NavScreen.AadhaarKycScreen.route)
+            }
+
+            BuildSingleMenu("AEPS Kyc", Icons.Default.CloudUpload) {
+                navController.navigate(NavScreen.AEPSKycScreen.route)
+            }
+
             BuildSingleMenu("My Commission", Icons.Default.Money) {
                 navController.navigate(NavScreen.CommissionScreen.route)
             }

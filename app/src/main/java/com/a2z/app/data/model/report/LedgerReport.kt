@@ -1,7 +1,12 @@
 package com.a2z.app.data.model.report
 
+import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Keep
+@Parcelize
 data class LedgerReportResponse(
 
     @SerializedName("status") var status: Int? = null,
@@ -10,9 +15,10 @@ data class LedgerReportResponse(
     @SerializedName("next_page") var nextPage: Int? = null,
     @SerializedName("prev_page") var prevPage: Int? = null,
 
-    )
+    ) : Parcelable
 
-
+@Keep
+@Parcelize
 data class LedgerReport(
 
     @SerializedName("id") var id: Int? = null,
@@ -45,4 +51,4 @@ data class LedgerReport(
     @SerializedName("is_complain") var isComplain: Boolean,
     var isExpanded: Boolean = false
 
-)
+) : Parcelable

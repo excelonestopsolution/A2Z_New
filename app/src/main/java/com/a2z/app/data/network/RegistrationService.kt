@@ -1,9 +1,8 @@
 package com.a2z.app.data.network
 
 
-import com.a2z.app.data.model.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.util.FieldMapData
-import retrofit2.Response
 import retrofit2.http.*
 
 interface RegistrationService {
@@ -21,7 +20,7 @@ interface RegistrationService {
         @Field("requestId") requestId: String,
         @Field("otp") otp: String,
         @Field("is_self") isSelf: String,
-    ):RegistrationResponse
+    ): RegistrationResponse
 
 
     @FormUrlEncoded
@@ -91,6 +90,6 @@ interface RegistrationService {
     @GET("user/incomplete/registration")
     suspend fun fetchInCompletedUserList(
         @QueryMap data: FieldMapData
-    ):RegistrationResponse
+    ): RegistrationResponse
 
 }

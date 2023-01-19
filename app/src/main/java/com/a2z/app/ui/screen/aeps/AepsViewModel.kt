@@ -6,7 +6,6 @@ import com.a2z.app.data.model.aeps.AepsBankListResponse
 import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.asStateFlow

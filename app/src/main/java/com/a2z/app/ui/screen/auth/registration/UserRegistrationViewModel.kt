@@ -2,7 +2,7 @@ package com.a2z.app.ui.screen.auth.registration
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.a2z.app.data.model.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.data.repository.RegistrationRepository
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput

@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.settlement.SettlementAddedBank
-import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.AppValidator

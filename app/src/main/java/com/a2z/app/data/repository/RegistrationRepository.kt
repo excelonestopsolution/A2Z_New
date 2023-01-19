@@ -1,8 +1,7 @@
 package com.a2z.app.data.repository
 
-import com.a2z.app.data.model.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.util.FieldMapData
-import retrofit2.http.*
 
 interface RegistrationRepository {
 

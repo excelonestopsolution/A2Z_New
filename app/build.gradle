@@ -7,6 +7,7 @@ plugins {
 }
 
 android {
+
     namespace 'com.a2z.app'
     compileSdk 33
 
@@ -24,8 +25,12 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

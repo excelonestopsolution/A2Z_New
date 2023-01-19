@@ -5,10 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
-import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
-import com.a2z.app.data.model.report.CommissionSchemeListResponse
-import com.a2z.app.data.model.report.ComplainTypeListResponse
-import com.a2z.app.data.model.report.LedgerReport
+import com.a2z.app.data.model.report.*
 import com.a2z.app.data.network.ReportService
 import com.a2z.app.data.repository.ReportRepository
 import com.a2z.app.ui.screen.report.ledger.LedgerPagingSource
@@ -47,6 +44,7 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun schemeList(): CommissionSchemeListResponse = service.schemeList()
 
     override suspend fun schemeDetail(data: FieldMapData) = service.schemeDetail(data)
-
+    override suspend fun matmRequestReport(data: FieldMapData) = service.matmRequestReport(data)
+    override suspend fun aepsRequestReport(data: FieldMapData) = service.aepsRequestReport(data)
 
 }

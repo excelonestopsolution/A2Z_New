@@ -1,6 +1,5 @@
 package com.a2z.app.ui.screen.kyc.document
 
-import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse

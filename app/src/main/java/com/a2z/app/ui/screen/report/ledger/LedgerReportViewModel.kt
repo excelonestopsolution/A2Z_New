@@ -1,9 +1,7 @@
 package com.a2z.app.ui.screen.report.ledger
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.R
-import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.LedgerReport
 import com.a2z.app.data.model.utility.BillPaymentResponse

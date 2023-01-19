@@ -1,10 +1,7 @@
 package com.a2z.app.ui.screen.utility.operator
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.provider.OperatorResponse
 import com.a2z.app.data.repository.UtilityRepository
@@ -15,12 +12,8 @@ import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
