@@ -22,6 +22,7 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.bottomsheet.BottomSheetAepsDevice
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.SpinnerSearchDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.util.resource.BannerType
@@ -45,7 +46,6 @@ fun AepsScreen() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BuildMainContent() {
 
@@ -56,22 +56,20 @@ fun BuildMainContent() {
     val pidLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
-            if (it.resultCode == Activity.RESULT_OK || it.data != null) {
-
-            } else viewModel.bannerState.value = BannerType.Failure(
-                "Capture Failed",
-                "Please check device is connected!"
-            )
-
+            val result = AepsUtil.biometricResult(it)
+            if (result.first != null) {
+                viewModel.onBiometricResult(result.first.toString())
+            } else viewModel.alertDialog(result.second.toString())
         }
     )
 
 
     BottomSheetComponent(
-        sheetContent = {closeAction->
+        sheetContent = { closeAction ->
             BottomSheetAepsDevice {
                 closeAction.invoke()
                 try {
+                    viewModel.biometricDevice = it
                     pidLauncher.launch(AepsUtil.pidIntent(it.packageName))
                 } catch (e: Exception) {
                     viewModel.bannerState.value = BannerType.Failure("RD Service", "not found!")
@@ -162,6 +160,19 @@ fun BuildMainContent() {
     )
 
 
+    BaseConfirmDialog(
+        state = viewModel.showConfirmDialogState,
+        amount = input.amountInputWrapper.getValue(),
+        titleValues = listOf(
+            "Aadhaar Number" to input.aadhaarInputWrapper.getValue(),
+            "Transaction Type" to viewModel.transactionTypeText,
+            "Bank Name" to viewModel.selectedBank.value?.bankName.toString()
+        )
+    ) {
+        viewModel.onConfirmTransaction()
+    }
+
+
 
 
     SpinnerSearchDialog(
@@ -172,7 +183,6 @@ fun BuildMainContent() {
     ) { state ->
         viewModel.onBankChange(state)
     }
-
 
 
 }

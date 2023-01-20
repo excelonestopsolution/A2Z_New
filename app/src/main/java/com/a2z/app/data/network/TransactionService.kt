@@ -1,6 +1,7 @@
 package com.a2z.app.data.network
 
 import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
@@ -51,4 +52,10 @@ interface TransactionService {
     suspend fun settlementTransfer(
         @FieldMap data : FieldMapData
     ) : AppResponse
+
+    @POST("a2z-settlement-request")
+    @FormUrlEncoded
+    suspend fun aepsTransaction(
+        @FieldMap data : FieldMapData
+    ) : AepsTransaction
 }

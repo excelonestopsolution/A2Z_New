@@ -32,7 +32,7 @@ fun DashboardScreen(
                 DashboardBottomBarWidget(homeBottomNavController)
         },
         drawerShape = MaterialTheme.shapes.small,
-        drawerContent = { DashboardDrawerWidget(viewModel.appPreference) },
+        drawerContent = { DashboardDrawerWidget(viewModel) },
 
     ) {
         Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {

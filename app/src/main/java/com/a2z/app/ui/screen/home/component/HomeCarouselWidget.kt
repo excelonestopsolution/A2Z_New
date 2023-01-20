@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.home.component
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -17,6 +19,7 @@ import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.a2z.app.ui.screen.home.HomeViewModel
+import com.a2z.app.ui.theme.BackgroundColor2
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,25 +58,7 @@ fun HomeCarouselWidget(
         ) { page ->
             Card(modifier = Modifier
                 .height(156.dp)
-                .graphicsLayer {
-                    val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
 
-                    lerp(
-                        start = 0.85f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    ).also { scale ->
-                        scaleX = scale
-                        scaleY = scale
-
-                    }
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-
-                }
                 .fillMaxWidth()
                 .padding(12.dp, 0.dp, 12.dp, 8.dp),
                 shape = MaterialTheme.shapes.medium,
@@ -85,6 +70,9 @@ fun HomeCarouselWidget(
                     contentDescription = "Image",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.fillMaxSize()
+                        .background(BackgroundColor2)
+                        .padding(5.dp)
+                        .clip(MaterialTheme.shapes.small)
                 )
             }
         }

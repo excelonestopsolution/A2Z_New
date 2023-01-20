@@ -48,7 +48,10 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch { subscribers() }
 
+
     }
+
+
 
     private suspend fun subscribers() {
         loginFlow.getLatest(
@@ -68,7 +71,8 @@ class LoginViewModel @Inject constructor(
 
                 navigateTo(
                     route = NavScreen.DashboardScreen.passArgs(true),
-                    popUpAll = true)
+                    popUpAll = true
+                )
             }
             700 -> {
                 val mobile = input.userIdWrapper.getValue()
