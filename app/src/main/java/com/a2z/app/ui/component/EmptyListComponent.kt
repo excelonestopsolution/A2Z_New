@@ -18,7 +18,13 @@ import com.a2z.app.R
 @Composable
 fun EmptyListComponent() {
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(12.dp)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp)
+    ) {
         Image(
             painter = painterResource(id = R.drawable.empty_list),
             contentDescription = "Empty List",

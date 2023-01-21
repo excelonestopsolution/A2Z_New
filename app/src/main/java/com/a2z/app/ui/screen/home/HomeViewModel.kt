@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     val appPreference: AppPreference
 ) : BaseViewModel() {
 
-    val handleBackPressState = mutableStateOf(true)
+    var exitFromApp = false
 
     val exitDialogState = mutableStateOf(false)
 

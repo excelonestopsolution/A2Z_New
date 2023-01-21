@@ -2,6 +2,7 @@ package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.fund.PaymentReturnDetailResponse
 import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
 import com.a2z.app.data.network.FundService
 import com.a2z.app.data.repository.FundRepository
@@ -49,6 +50,10 @@ class FundRepositoryImpl @Inject constructor(
         searchInput: String
     ): R2RSearchRetailerResponse {
         return service.searchR2RRetailer(searchType, searchInput)
+    }
+
+    override suspend fun fetchParentPaymentReturnDetail(): PaymentReturnDetailResponse {
+        return service.fetchParentPaymentReturnDetail()
     }
 
 }

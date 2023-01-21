@@ -1,10 +1,12 @@
 package com.a2z.app.ui.component.bottomsheet
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.component.keyboardAsState
@@ -31,7 +33,10 @@ fun BottomSheetComponent(
     val keyboard = keyboardAsState().value
 
 
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true
+    )
 
     BackPressHandler(
         onBack = {
@@ -60,7 +65,13 @@ fun BottomSheetComponent(
                         }
                     }
                 }
-            }
+            },
+            sheetShape = RoundedCornerShape(
+                bottomStart = 0.dp,
+                bottomEnd = 0.dp,
+                topStart = 4.dp,
+                topEnd = 4.dp,
+            ),
 
         )
     }

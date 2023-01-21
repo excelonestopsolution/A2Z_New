@@ -16,9 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.a2z.app.ui.screen.report.ReportUtil
 import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.AppConstant
@@ -149,7 +151,7 @@ private fun BuildItemVisibleContent(
         Column(Modifier.weight(1f)) {
             if (leftSideDate.orEmpty().isNotEmpty()) Text(
                 text = leftSideDate.toString(),
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2.copy(color = Color.Gray)
             )
             if (leftSideId.orEmpty().isNotEmpty()) Text(
                 text = leftSideId.toString(),
@@ -189,7 +191,9 @@ private fun BuildItemVisibleContent(
         Column(Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             if (rightStatus.orEmpty().isNotEmpty()) Text(
                 text = rightStatus.toString(),
-                color = ReportUtil.getColorFromId(statusId)
+                color = ReportUtil.getColorFromId(statusId),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
 
             )
             Text(

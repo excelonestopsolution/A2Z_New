@@ -24,6 +24,7 @@ import com.a2z.app.ui.screen.dmt.sender.search.SearchSenderScreen
 import com.a2z.app.ui.screen.dmt.transfer.DMTMoneyTransferScreen
 import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
+import com.a2z.app.ui.screen.fund.payment_return.ParentPaymentReturnScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
 import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
@@ -133,6 +134,10 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(
             route = NavScreen.FundMethodScreen.route,
             content = { FundMethodScreen() }
+        )
+        composable(
+            route = NavScreen.ParentPaymentReturnScreen.route,
+            content = { ParentPaymentReturnScreen() }
         )
 
         composable(

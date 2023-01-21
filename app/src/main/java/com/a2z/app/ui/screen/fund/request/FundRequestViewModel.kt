@@ -7,6 +7,7 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.repository.FundRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodType
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
@@ -51,9 +52,11 @@ class FundRequestViewModel @Inject constructor(
         val arg1 = savedStateHandle.get<String>("fundMethod")
         val arg2 = savedStateHandle.get<String>("fundRequestBank")
 
-        fundMethod = Gson().fromJson(arg1,FundMethod::class.java)
-        fundRequestBank = Gson().fromJson(arg2,FundRequestBank::class.java)
+        fundMethod = Gson().fromJson(arg1, FundMethod::class.java)
+        fundRequestBank = Gson().fromJson(arg2, FundRequestBank::class.java)
 
+        input.bankRefInput.useValidation.value = fundRequestBank != null
+        input.slipUploadInput.useValidation.value = fundRequestBank != null
 
         paymentMode = setupPaymentMode()
         input.paymentModeInput.setValue(paymentMode.first)
@@ -63,16 +66,12 @@ class FundRequestViewModel @Inject constructor(
     }
 
     private suspend fun subscribers() {
-        _requestResultResponseFlow.collect {
-            when (it) {
-                is ResultType.Failure -> {
-                    dialogState.value = StatusDialogType.None
-                    showExceptionDialog(it.exception)
-                }
-                is ResultType.Loading -> dialogState.value = StatusDialogType.Progress()
-                is ResultType.Success -> dialogState.value =
-                    StatusDialogType.Success(it.data.message)
+
+        _requestResultResponseFlow.getLatest {
+            if(it.status ==1) successDialog(it.message){
+                navigateTo(NavScreen.DashboardScreen.route,true)
             }
+            else alertDialog(it.message)
         }
     }
 
@@ -111,8 +110,10 @@ class FundRequestViewModel @Inject constructor(
         val refNumberBody =
             input.bankRefInput.getValue().toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val onlineModeBody = onlineMode.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val bankIdBody = fundRequestBank?.id?.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val bankNameBody = fundRequestBank?.bankName?.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val bankIdBody =
+            fundRequestBank?.id?.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val bankNameBody =
+            fundRequestBank?.bankName?.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val remarkBody = remark.toRequestBody("multipart/form-data".toMediaTypeOrNull())
 
 

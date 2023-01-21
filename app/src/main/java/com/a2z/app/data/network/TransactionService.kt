@@ -58,4 +58,10 @@ interface TransactionService {
     suspend fun aepsTransaction(
         @FieldMap data : FieldMapData
     ) : AepsTransaction
+
+    @POST("parent/payment-return")
+    @FormUrlEncoded
+    suspend fun parentPaymentFundReturn(
+        @FieldMap data : FieldMapData
+    ) : AppResponse
 }

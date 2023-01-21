@@ -87,10 +87,10 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 drawable = com.a2z.app.R.drawable.fund_icon,
                 menuList = listOf(
                     Pair("New Parent Request") {
-                        navController.navigate(NavScreen.MATMRequestReportScreen.route)
+                        navController.navigate(NavScreen.FundRequestScreen.route)
                     },
                     Pair("Return Parent Payment") {
-                        navController.navigate(NavScreen.AEPSReportScreen.route)
+                        navController.navigate(NavScreen.ParentPaymentReturnScreen.route)
                     },
                 )
             )

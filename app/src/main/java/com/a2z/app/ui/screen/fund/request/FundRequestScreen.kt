@@ -65,9 +65,11 @@ fun FundRequestScreen() {
                     ) { viewModel.makeFundRequest() }
                 }, cardContents = listOf(
 
-                    AppFormCard {
-                        if (viewModel.fundRequestBank != null)
-                            BuildTopSection(bank = viewModel.fundRequestBank!!)
+                    AppFormCard(
+                        isVisible = viewModel.fundRequestBank != null
+                    ) {
+
+                        BuildTopSection(bank = viewModel.fundRequestBank!!)
                     },
 
                     AppFormCard(
@@ -90,7 +92,7 @@ fun FundRequestScreen() {
                                 error = amountInput.formError(),
                                 onChange = { amountInput.onChange(it) }
                             )
-                            AppTextField(
+                            if (viewModel.fundRequestBank != null) AppTextField(
                                 value = bankRefInput.formValue(),
                                 label = viewModel.getRefPlaceholder() ?: "Bank Ref",
                                 error = bankRefInput.formError(),

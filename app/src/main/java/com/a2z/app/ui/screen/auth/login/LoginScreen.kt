@@ -148,7 +148,12 @@ private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
             Spacer(modifier = Modifier.height(24.dp))
 
 
-            LocationComponent {
+            LocationComponent(
+                onLocation = {
+                    viewModel.login()
+                }
+            ) {
+
                 AppButton(
                     text = "     Login     ",
                     icon = {
@@ -162,8 +167,7 @@ private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
                     shape = CircularShape,
                     modifier = Modifier.height(45.dp)
                 ) {
-                    val enable = it.invoke()
-                    if (enable) viewModel.login()
+                    it.invoke()
                 }
             }
 

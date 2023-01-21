@@ -25,14 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
-import com.a2z.app.ui.component.TitleValueVertically
+import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
-import com.a2z.app.ui.component.keyboardAsState
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.dmt.util.DMTUtil
@@ -74,43 +71,43 @@ fun DMTMoneyTransferScreen() {
         title = "Transaction Confirmation ?",
         state = viewModel.confirmDialogState,
         amount = viewModel.input.amount.getValue(),
-        titleValues = if(viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
+        titleValues = if (viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
     ) {
-        viewModel.proceedTransaction()
+        viewModel.mpinDialogVisibleState.value = true
     }
 
-    BottomSheetComponent(
-        sheetContent = { actionClose ->
-            MPinBottomSheetComponent { mpin ->
-                actionClose.invoke()
-                viewModel.mpin = mpin
-                when (viewModel.mpinType) {
-                    MoneyTransferMPinType.COMMISSION -> {
-                        viewModel.fetchCharge()
-                    }
-                    MoneyTransferMPinType.TRANSFER -> {
-                        manager.clearFocus()
-                        viewModel.confirmDialogState.value = true
-                    }
+    MpinInputComponent(
+        visibleState = viewModel.mpinDialogVisibleState,
+        amount = if (viewModel.mpinType.value == MoneyTransferMPinType.TRANSFER)
+            viewModel.input.amount.getValue() else null,
+        onSubmit = { mpin ->
+            viewModel.mpin = mpin
+            when (viewModel.mpinType.value) {
+                MoneyTransferMPinType.COMMISSION -> {
+                    viewModel.fetchCharge()
+                }
+                MoneyTransferMPinType.TRANSFER -> {
+                    manager.clearFocus()
+                    viewModel.proceedTransaction()
+
                 }
             }
-        }
+        })
 
-    ) { toggleAction ->
-        Scaffold(
-            backgroundColor = BackgroundColor,
-            topBar = { NavTopBar(title = "Money Transfer") }
-        ) {
+    Scaffold(
+        backgroundColor = BackgroundColor,
+        topBar = { NavTopBar(title = "Money Transfer") }
+    ) {
 
-            BaseContent(viewModel) {
-                AppFormUI(
-                    button = {
+        BaseContent(viewModel) {
+            AppFormUI(
+                button = {
 
                     Button(
                         onClick = {
-                            viewModel.mpinType = MoneyTransferMPinType.TRANSFER
+                            viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
                             manager.clearFocus()
-                            toggleAction.invoke()
+                            viewModel.confirmDialogState.value = true
                         },
                         enabled = viewModel.input.isValidObs.value,
                         modifier = Modifier
@@ -122,11 +119,12 @@ fun DMTMoneyTransferScreen() {
 
                 }, cardContents = listOf(
                     AppFormCard { BuildTopSection(viewModel) },
-                   AppFormCard(
-                       isVisible = viewModel.dmtType != DMTType.UPI,
-                       title = "Transaction Type") {
-                       BuildTransactionType(viewModel)
-                    } ,
+                    AppFormCard(
+                        isVisible = viewModel.dmtType != DMTType.UPI,
+                        title = "Transaction Type"
+                    ) {
+                        BuildTransactionType(viewModel)
+                    },
                     AppFormCard(
                         title = "Transaction Amount",
                         contents = {
@@ -173,10 +171,10 @@ fun DMTMoneyTransferScreen() {
                                         else {
                                             if (viewModel.chargeState.value == null) {
                                                 if (!keyboard.value) manager.clearFocus()
-                                                viewModel.mpinType =
+                                                viewModel.mpinType.value =
                                                     MoneyTransferMPinType.COMMISSION
                                                 manager.clearFocus()
-                                                toggleAction.invoke()
+                                                viewModel.mpinDialogVisibleState.value = true
                                             } else {
                                                 viewModel.chargeState.value = null
                                             }
@@ -257,10 +255,10 @@ fun DMTMoneyTransferScreen() {
                     )
                 ))
 
-            }
-
         }
+
     }
+
 }
 
 @Composable
@@ -332,19 +330,19 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                val ifscTitle = if(viewModel.dmtType == DMTType.UPI)
-                   "Provider  : "  else "IFSC   : "
-                val ifscValue = if(viewModel.dmtType == DMTType.UPI)
+                val ifscTitle = if (viewModel.dmtType == DMTType.UPI)
+                    "Provider  : " else "IFSC   : "
+                val ifscValue = if (viewModel.dmtType == DMTType.UPI)
                     beneficiary.bankName else beneficiary.ifsc
 
-              if(ifscValue.orEmpty().trim().isNotEmpty())  Text(
-                    (ifscTitle+ ifscValue), style = TextStyle(
+                if (ifscValue.orEmpty().trim().isNotEmpty()) Text(
+                    (ifscTitle + ifscValue), style = TextStyle(
                         fontSize = 14.sp,
                         color = primaryColor.copy(alpha = 0.8f),
                         fontWeight = FontWeight.SemiBold
                     )
                 )
-                if(viewModel.dmtType != DMTType.UPI)  Text(
+                if (viewModel.dmtType != DMTType.UPI) Text(
                     ("Name : " + beneficiary.name), style = TextStyle(
                         fontSize = 14.sp,
                         color = primaryColor.copy(alpha = 0.8f),
@@ -354,7 +352,7 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
             }
         }
 
-       if(viewModel.dmtType != DMTType.UPI) Column {
+        if (viewModel.dmtType != DMTType.UPI) Column {
             Spacer(modifier = Modifier.height(8.dp))
 
             val accountTitle = if (viewModel.dmtType == DMTType.UPI) "UPI ID" else "Account Number"
@@ -372,7 +370,7 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
                     )
                 }
         }
-        else BuildBlinkText(if(viewModel.dmtType == DMTType.UPI) "Selected upi id is not verified!" else "Selected bank is not verified!")
+        else BuildBlinkText(if (viewModel.dmtType == DMTType.UPI) "Selected upi id is not verified!" else "Selected bank is not verified!")
     }
 
 }

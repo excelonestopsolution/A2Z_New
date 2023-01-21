@@ -1,6 +1,7 @@
 package com.a2z.app.ui.component
 
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -21,6 +22,7 @@ fun NavTopBar(
     title: String,
     useDefaultBack: Boolean = true,
     onBackPress: VoidCallback? = null,
+    actions : (@Composable ()->Unit)? = null
 ) {
 
     val navController = LocalNavController.current
@@ -37,7 +39,8 @@ fun NavTopBar(
                         navController.navigateUp()
                     }
                 })
-        }
+        },
+        actions = {actions?.invoke()}
 
     )
 }

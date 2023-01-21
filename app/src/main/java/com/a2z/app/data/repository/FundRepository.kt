@@ -2,6 +2,7 @@ package com.a2z.app.data.repository
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.fund.PaymentReturnDetailResponse
 import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
 import com.a2z.app.util.FieldMapData
 import okhttp3.MultipartBody
@@ -30,4 +31,6 @@ interface FundRepository {
         searchInput : String,
     ) : R2RSearchRetailerResponse
 
+
+    suspend fun fetchParentPaymentReturnDetail() : PaymentReturnDetailResponse
 }

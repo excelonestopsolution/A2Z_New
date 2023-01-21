@@ -17,20 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class ReportRepositoryImpl @Inject constructor(private val service: ReportService) :
     ReportRepository {
-    override fun ledgerReport(data: HashMap<String, String>): Flow<PagingData<LedgerReport>> {
-
-        return Pager(
-            config = PagingConfig(
-                initialLoadSize = 1,
-                pageSize = 30,
-            ),
-            pagingSourceFactory = {
-                LedgerPagingSource(
-                    service,
-                    data
-                )
-            }
-        ).flow
+    override suspend fun ledgerReport(data: HashMap<String, String>): LedgerReportResponse {
+        return service.ledgerReport(data)
     }
 
     override suspend fun checkStatus(data: FieldMapData) = service.checkStatus(data)

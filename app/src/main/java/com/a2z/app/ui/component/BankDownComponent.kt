@@ -3,6 +3,7 @@ package com.a2z.app.ui.component
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -75,7 +76,10 @@ fun BankDownComponent(
                     Modifier.size(16.dp), tint = PrimaryColor
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "Show All", fontSize = 12.sp, color = PrimaryColor)
+                Text(text = "Show All", fontSize = 12.sp, color = PrimaryColor,
+                modifier = Modifier.clickable {
+                    bankDialogState.value = true
+                })
             }
         }
 

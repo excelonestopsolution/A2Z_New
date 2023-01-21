@@ -142,6 +142,9 @@ sealed class NavScreen(val route: String) {
 
     }
 
+    object ParentPaymentReturnScreen : NavScreen("parent-payment-return-screen")
+
+
     object PermissionScreen : NavScreen("permission-screen".params("permissionType")) {
         fun passData(permissionType: PermissionType): String {
             val gson = Gson()

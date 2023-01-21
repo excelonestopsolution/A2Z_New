@@ -1,11 +1,14 @@
 package com.a2z.app.ui.screen.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -14,6 +17,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import com.a2z.app.BuildConfig
+import com.a2z.app.MainActivity
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.service.LocalAuth
 import com.a2z.app.service.LocalAuthResultType
@@ -22,10 +26,12 @@ import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
-import com.a2z.app.ui.theme.*
+import com.a2z.app.ui.theme.BackgroundColor2
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.Exceptions
 import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 var useLocalAuth = true
@@ -41,10 +47,23 @@ fun HomeScreen(
     if (isFromLogin) useLocalAuth = false
     val context = LocalContext.current
 
+    val scope = rememberCoroutineScope()
 
     BackPressHandler(onBack = {
-        viewModel.exitDialogState.value = true
-    }, enabled = viewModel.handleBackPressState.value) {
+
+        if (dashboardViewModel.scaffoldState?.drawerState?.isOpen == true) {
+            scope.launch {
+                dashboardViewModel.scaffoldState?.drawerState?.close()
+            }
+
+        } else {
+            if (viewModel.exitFromApp) {
+                viewModel.exitFromApp = false
+                (context as MainActivity).finishAffinity()
+            } else viewModel.exitDialogState.value = true
+        }
+
+    }, enabled = true) {
 
         BaseContent(dashboardViewModel, viewModel) {
             if (dashboardViewModel.bottomSheetVisibilityState.value) {
@@ -57,7 +76,7 @@ fun HomeScreen(
                     viewModel.fetchNews()
                 }
             ) {
-                viewModel.handleBackPressState.value = true
+                viewModel.exitFromApp = false
                 dashboardViewModel.bottomSheetVisibilityState.value = true
                 HomeScreenMainContent(dashboardViewModel)
             }
@@ -83,7 +102,7 @@ fun HomeScreen(
                                 }
                             }
                         } else {
-                            viewModel.handleBackPressState.value = false
+                            viewModel.exitFromApp = true
                         }
                     }
                     is HomeScreenState.OnLogoutComplete -> {

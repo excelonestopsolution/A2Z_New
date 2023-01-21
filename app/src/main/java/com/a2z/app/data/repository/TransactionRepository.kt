@@ -19,4 +19,5 @@ interface TransactionRepository {
     suspend fun r2rTransfer(data : FieldMapData) : AppResponse
     suspend fun settlementTransfer(data : FieldMapData) : AppResponse
     suspend fun aepsTransaction(data : FieldMapData) : AepsTransaction
+    suspend fun parentPaymentFundReturn(data : FieldMapData) : AppResponse
 }

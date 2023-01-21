@@ -1,4 +1,4 @@
-package com.a2z.app.ui.component
+package com.a2z.app.ui.component.common
 
 import android.widget.DatePicker
 import androidx.compose.runtime.Composable
@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.extension.isValidateDate
-import com.a2z.app.util.extension.showToast
 
 @Composable
 fun DatePickerDialog(

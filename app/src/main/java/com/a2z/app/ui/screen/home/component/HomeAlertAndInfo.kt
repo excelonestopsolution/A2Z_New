@@ -1,23 +1,27 @@
 package com.a2z.app.ui.screen.home.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.ui.util.rememberStateOf
 
 @Composable
 fun BuildAlertComponent(homeViewModel: HomeViewModel) {
@@ -27,6 +31,29 @@ fun BuildAlertComponent(homeViewModel: HomeViewModel) {
     val kyc = homeViewModel.checkDMTAndAEPSKycPending()
 
     val isNews = news != null && news.status == 1
+
+    val newsDialogState = rememberStateOf(false)
+
+    if (newsDialogState.value) Dialog(onDismissRequest = { newsDialogState.value = false }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.small)
+                .background(Color.White)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "NEWS",
+                style = MaterialTheme.typography.h6.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+            Text(text = news?.retailerNews.toString())
+        }
+    }
 
 
     Column(
@@ -69,7 +96,10 @@ fun BuildAlertComponent(homeViewModel: HomeViewModel) {
         if (isNews) Card(
             shape = MaterialTheme.shapes.small,
             elevation = 8.dp,
-            backgroundColor = Color.White
+            backgroundColor = Color.White,
+            modifier = Modifier.clickable {
+                newsDialogState.value = true
+            }
         ) {
             Row(
                 modifier = Modifier

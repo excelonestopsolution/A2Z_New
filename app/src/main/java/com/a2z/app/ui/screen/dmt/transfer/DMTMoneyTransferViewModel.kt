@@ -37,7 +37,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
     val beneficiary = args.beneficiary
     val dmtType = args.dmtType
 
-    var mpinType = MoneyTransferMPinType.COMMISSION
+    var mpinType = mutableStateOf(MoneyTransferMPinType.COMMISSION)
 
     val input = MoneyTransferInput()
 
@@ -50,6 +50,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
 
     val chargeState = mutableStateOf<DmtCommissionResponse?>(null)
     val confirmDialogState = mutableStateOf(false)
+    val mpinDialogVisibleState = mutableStateOf(false)
     private val _walletTransactionResultFlow = resultShareFlow<TransactionDetailResponse>()
     private val _upiTransactionResultFlow = resultShareFlow<TransactionDetail>()
 
