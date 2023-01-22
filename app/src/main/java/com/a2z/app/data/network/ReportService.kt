@@ -42,5 +42,13 @@ interface ReportService {
     suspend fun aepsRequestReport(@QueryMap data : FieldMapData) : AepsReportResponse
 
 
+    @GET("fund-report")
+    suspend fun fundReport(@QueryMap data : FieldMapData) : FundReportResponse
+
+
+    @GET("get-direct-fund-transfer")
+    suspend fun dtReport(@QueryMap data : FieldMapData) : DTReportResponse
+
+
 
 }

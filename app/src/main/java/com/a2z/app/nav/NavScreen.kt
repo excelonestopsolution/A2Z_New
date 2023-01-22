@@ -249,4 +249,6 @@ sealed class NavScreen(val route: String) {
     object  ComplaintScreen : NavScreen("complaint-screen")
     object  MATMRequestReportScreen : NavScreen("matm-request-report-screen")
     object  AEPSReportScreen : NavScreen("aeps-report-screen")
+    object  FundReportScreen : NavScreen("fund-report-screen")
+    object  DTReportScreen : NavScreen("dt-report-screen")
 }

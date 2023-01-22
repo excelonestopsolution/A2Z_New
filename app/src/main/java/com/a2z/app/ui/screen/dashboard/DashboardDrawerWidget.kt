@@ -109,10 +109,10 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     },
 
                     Pair("Fund Report") {
-
+                        navController.navigate(NavScreen.FundReportScreen.route)
                     },
                     Pair("DT Report") {
-
+                        navController.navigate(NavScreen.DTReportScreen.route)
                     },
                 )
             )
@@ -276,7 +276,7 @@ private fun BuildExpandMenu(
                 if (drawable != null) Image(
                     painter = painterResource(id = drawable),
                     contentDescription = null,
-                    Modifier.size(24.dp)
+                    Modifier.size(32.dp)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -364,7 +364,7 @@ private fun BuildSingleItemMenu(
                 if (drawable != null) Image(
                     painter = painterResource(id = drawable),
                     contentDescription = null,
-                    Modifier.size(24.dp)
+                    Modifier.size(32.dp)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 typealias VoidCallback = () -> Unit
+typealias ExceptionCallback = (Exception) -> Unit
 typealias ToggleBottomSheet = () -> Unit
 typealias  Callback<T> = (T) -> Unit
 typealias FunCompose = @Composable () -> Unit

@@ -1,30 +1,27 @@
 package com.a2z.app.ui.screen.report.ledger
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
 import com.a2z.app.R
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.ComplainType
 import com.a2z.app.data.model.report.ComplainTypeListResponse
 import com.a2z.app.data.model.report.LedgerReport
+import com.a2z.app.data.model.report.LedgerReportResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.data.repository.ReportRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.BaseViewModel
+import com.a2z.app.ui.util.PagingState
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.ui.util.rememberStateOf
-import com.a2z.app.util.AppConstant
-import com.a2z.app.util.DateUtil
+import com.a2z.app.ui.util.extension.callApiForStateFlow
+import com.a2z.app.util.*
 import com.a2z.app.util.extension.insertDateSeparator
-import com.a2z.app.util.resultShareFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,9 +31,10 @@ class LedgerReportViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    val searchInput = mutableStateOf(SearchInput())
+    var searchInput by mutableStateOf(SearchInput())
 
-    private lateinit var pagingSource: LedgerPagingSource
+
+    var pagingState by mutableStateOf<PagingState<LedgerReport>>(PagingState())
 
     private val _downloadReportResultFlow = resultShareFlow<TransactionDetailResponse>()
     private val _complainTypeListResultFlow = resultShareFlow<ComplainTypeListResponse>()
@@ -44,40 +42,16 @@ class LedgerReportViewModel @Inject constructor(
     private val _complainResultFlow = resultShareFlow<AppResponse>()
 
     val complaintDialogVisibleState = mutableStateOf(value = false)
-    val fetchLedgerReport = Pager(
-        config = PagingConfig(
-            initialLoadSize = 1,
-            pageSize = 30,
-        ),
-        pagingSourceFactory = {
-            LedgerPagingSource(
-                repository,
-                searchInput.value.run {
-                    hashMapOf(
-                        "todate" to this.endDate.insertDateSeparator(),
-                        "fromdate" to this.startDate.insertDateSeparator(),
-                        "searchType" to this.criteria,
-                        "number" to this.input,
-                        "status_id" to this.status,
-                        "product" to this.product,
-                        "isRefresh" to if (this.isRefresh) "1" else "0"
-                    )
-                }
-            ).also {
-                pagingSource = it
-            }
-        }
-    ).flow
-
-    fun invalidateDataSource() {
-        pagingSource.invalidate()
-        pagingSource.keyReuseSupported
-
-    }
 
     val complaintTypeListState = mutableListOf<ComplainType>()
 
+    private val _reportPagingFlow = resultStateFlow<LedgerReportResponse>()
+
+
     init {
+
+        fetchReport()
+
         viewModelScope.launch {
             _downloadReportResultFlow.getLatest {
                 if (it.status == 1 && it.data != null) {
@@ -163,10 +137,44 @@ class LedgerReportViewModel @Inject constructor(
 
         viewModelScope.launch {
             _complainResultFlow.getLatest {
-                if(it.status == 1) successDialog(it.message)
+                if (it.status == 1) successDialog(it.message)
                 else alertDialog(it.message)
             }
         }
+
+        _reportPagingFlow.getLatest(
+            progress = {
+                pagingState = pagingState.loadingState()
+                Unit
+            },
+            success = {
+                pagingState = pagingState.successState(it.reports!!, it.nextPage)
+            },
+            failure = {
+                pagingState = pagingState.failureState(it)
+                Unit
+            }
+        )
+
+    }
+
+
+    fun fetchReport() {
+        val param = searchInput.run {
+            hashMapOf(
+                "todate" to this.endDate.insertDateSeparator(),
+                "fromdate" to this.startDate.insertDateSeparator(),
+                "searchType" to this.criteria,
+                "number" to this.input,
+                "status_id" to this.status,
+                "product" to this.product,
+                "page" to pagingState.page.toString(),
+            )
+        }
+        callApiForShareFlow(
+            flow = _reportPagingFlow,
+            call = { repository.ledgerReport(param) }
+        )
     }
 
 
@@ -216,6 +224,5 @@ class LedgerReportViewModel @Inject constructor(
         val product: String = "",
         val criteria: String = "",
         val input: String = "",
-        var isRefresh: Boolean = false
     )
 }

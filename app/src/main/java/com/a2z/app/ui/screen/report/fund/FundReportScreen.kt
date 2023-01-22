@@ -1,9 +1,11 @@
-package com.a2z.app.ui.screen.report.ledger
+package com.a2z.app.ui.screen.report.fund
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,20 +15,17 @@ import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
-import com.a2z.app.ui.screen.report.filter.LedgerReportFilterComponent
+import com.a2z.app.ui.screen.report.filter.ReportDateFilterComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.util.VoidCallback
 
-
 @Composable
-fun LedgerReportScreen() {
-    val viewModel: LedgerReportViewModel = hiltViewModel()
+fun FundReportScreen() {
+    val viewModel: FundReportViewModel = hiltViewModel()
     BottomSheetComponent(sheetContent = { closeAction ->
-        LedgerReportFilterComponent { searchInput ->
+        ReportDateFilterComponent { startDate,endDate ->
             closeAction.invoke()
-            viewModel.searchInput = searchInput
-            viewModel.pagingState.refresh()
-            viewModel.fetchReport()
+            viewModel.onSearch(startDate,endDate)
         }
     }) { toggleAction ->
         MainContent(viewModel) {
@@ -34,24 +33,18 @@ fun LedgerReportScreen() {
         }
     }
 
-    ComplaintDialog(
-        complaintTypes = viewModel.complaintTypeListState,
-        dialogState = viewModel.complaintDialogVisibleState
-    ) { complainTypeId, remark ->
-        viewModel.onComplainSubmit(complainTypeId, remark)
-    }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun MainContent(
-    viewModel: LedgerReportViewModel,
+    viewModel: FundReportViewModel,
     filterAction: VoidCallback
 ) {
 
 
     Scaffold(backgroundColor = BackgroundColor, topBar = {
-        NavTopBar(title = "Ledger Report", actions = {
+        NavTopBar(title = "Fund Report", actions = {
             ReportNavActionButton {
                 filterAction.invoke()
             }
@@ -68,36 +61,24 @@ private fun MainContent(
                         viewModel.fetchReport()
                     }
 
-                    BaseReportItem(statusId = it.statusId,
-                        leftSideDate = it.txnTime,
+                    BaseReportItem(statusId = it.status_id,
+                        leftSideDate = it.created_at,
                         leftSideId = it.id.toString(),
-                        centerHeading1 = it.number,
-                        centerHeading2 = it.serviceName,
-                        centerHeading3 = it.senderNumber,
-                        rightAmount = it.amount,
-                        rightStatus = it.statusDesc,
-                        isPrint = it.isPrint,
-                        isComplaint = it.isComplain,
-                        isCheckStatus = it.isCheckStatus,
+                        centerHeading1 = it.request_for,
+                        centerHeading2 = it.payment_mode,
+                        centerHeading3 = it.account_number,
+                        rightAmount = it.wallet_amount,
+                        rightStatus = it.status,
                         expandListItems = listOf(
-                            "Mobile Number" to it.senderNumber,
-                            "Bank Name" to it.bankName,
-                            "IFSC Code" to it.ifsc,
-                            "Beneficiary Name" to it.beneName,
-                            "Reference Id" to it.operatorId,
-                            "Transaction Type" to it.txnType,
-                            "Opening Balance" to it.opBalance,
-                            "Txn Amount" to it.amount,
-                            "Credit Amount" to it.credit,
-                            "Debit Amount" to it.debit,
-                            "TDS Amount" to it.tds,
-                            "GST Amount" to it.gst,
-                            "Closing Balance" to it.clBalance,
-                            "Provider" to it.providerName,
-                            "Remark" to it.remark,
+                            "Approval Remark" to it.approval_remark,
+                            "Request Remark" to it.request_remark,
+                            "Update Remark" to it.update_remark,
+                            "Branch Name" to it.branch_name,
+                            "Deposit Date" to it.deposit_date,
+                            "Bank Ref" to it.bank_ref,
+                            "Bank Name" to it.bank_name,
+                            "Username" to it.username,
                         ),
-                        onPrint = { viewModel.onPrint(it) },
-                        onComplaint = { viewModel.onComplain(it) }
                     )
                 }
                 item {
@@ -128,5 +109,3 @@ private fun MainContent(
         }
     }
 }
-
-

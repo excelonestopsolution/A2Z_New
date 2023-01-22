@@ -34,5 +34,8 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun schemeDetail(data: FieldMapData) = service.schemeDetail(data)
     override suspend fun matmRequestReport(data: FieldMapData) = service.matmRequestReport(data)
     override suspend fun aepsRequestReport(data: FieldMapData) = service.aepsRequestReport(data)
+    override suspend fun fundReport(data: FieldMapData) = service.fundReport(data)
+
+    override suspend fun dtReport(data: FieldMapData) = service.dtReport(data)
 
 }

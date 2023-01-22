@@ -44,8 +44,7 @@ fun HomeLocationServiceDialog() {
         val latitude = appPreference.latitude
         val longitude = appPreference.longitude
         if (latitude.isEmpty() || longitude.isEmpty()) {
-            if (!result)
-                locationDialogState.value = true
+            if (!result) locationDialogState.value = true
             else locationService.getCurrentLocation()
         }
     })

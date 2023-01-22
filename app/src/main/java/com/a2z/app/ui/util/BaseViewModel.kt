@@ -7,9 +7,11 @@ import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
 import com.a2z.app.util.AppUtil
+import com.a2z.app.util.ExceptionCallback
 import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -63,6 +65,7 @@ open class BaseViewModel : ViewModel() {
     fun failureDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Failure(message, callback)
     }
+
     fun pendingDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Pending(message, callback)
     }
@@ -70,7 +73,6 @@ open class BaseViewModel : ViewModel() {
     fun alertDialog(message: String, callback: VoidCallback = {}) {
         dialogState.value = StatusDialogType.Alert(message, callback)
     }
-
 
 
     fun setBanner(withNewType: BannerType = BannerType.None) {
@@ -104,31 +106,61 @@ open class BaseViewModel : ViewModel() {
     }
 
 
-    suspend fun <T> SharedFlow<ResultType<T>>.getLatest(
-        failure: ((Exception) -> Unit?)? = null,
-        progress: (() -> Unit?)? = null,
+    fun <T> SharedFlow<ResultType<T>>.getLatest(
+        failure: ExceptionCallback? = null,
+        progress: VoidCallback? = null,
         success: suspend (T) -> Unit,
     ) {
-        this.collectLatest {
-            when (it) {
-                is ResultType.Failure -> {
-                    dismissDialog()
-                    if (failure != null) failure(it.exception)
-                }
 
-                is ResultType.Loading -> {
-                    if (progress != null) progress.invoke()
-                    else progressDialog()
-                }
+        viewModelScope.launch {
+            this@getLatest.collectLatest {
+                when (it) {
+                    is ResultType.Failure -> {
+                        dismissDialog()
+                        if (failure != null) failure(it.exception)
+                    }
 
-                is ResultType.Success -> {
-                    dismissDialog()
-                    success(it.data)
+                    is ResultType.Loading -> {
+                        if (progress != null) progress.invoke()
+                        else progressDialog()
+                    }
+
+                    is ResultType.Success -> {
+                        dismissDialog()
+                        success(it.data)
+                    }
                 }
             }
         }
     }
 
+    fun <T> StateFlow<ResultType<T>>.getLatest(
+        failure: ExceptionCallback? = null,
+        progress: VoidCallback? = null,
+        success: suspend (T) -> Unit,
+    ) {
+
+        viewModelScope.launch {
+            this@getLatest.collectLatest {
+                when (it) {
+                    is ResultType.Failure -> {
+                        dismissDialog()
+                        if (failure != null) failure(it.exception)
+                    }
+
+                    is ResultType.Loading -> {
+                        if (progress != null) progress.invoke()
+                        else progressDialog()
+                    }
+
+                    is ResultType.Success -> {
+                        dismissDialog()
+                        success(it.data)
+                    }
+                }
+            }
+        }
+    }
 
 
 }

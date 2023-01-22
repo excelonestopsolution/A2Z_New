@@ -20,4 +20,6 @@ interface ReportRepository {
     suspend fun schemeDetail(data : FieldMapData) : CommissionSchemeDetailResponse
     suspend fun matmRequestReport(data : FieldMapData) : MatmReportResponse
     suspend fun aepsRequestReport(data : FieldMapData) : AepsReportResponse
+    suspend fun fundReport(data : FieldMapData) : FundReportResponse
+    suspend fun dtReport(data : FieldMapData) : DTReportResponse
 }
