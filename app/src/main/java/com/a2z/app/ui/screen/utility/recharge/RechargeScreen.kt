@@ -23,7 +23,9 @@ import androidx.navigation.NavHostController
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
+import com.a2z.app.ui.screen.home.component.HomeLocationServiceDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
@@ -39,11 +41,14 @@ fun RechargeScreen(
 
     val viewModel: RechargeViewModel = hiltViewModel()
 
+    HomeLocationServiceDialog()
+
     BaseContent(viewModel) {
         Scaffold(
             topBar = {
                 NavTopBar(
-                    title = viewModel.util.getOperatorTitle("Recharge"))
+                    title = viewModel.util.getOperatorTitle("Recharge")
+                )
             },
             backgroundColor = BackgroundColor
         ) {
@@ -100,8 +105,8 @@ private fun proceedToRecharge(
                             navController
                                 .navigate(NavScreen.RechargeTxnScreen.passArgs(
                                     response.apply {
-                                        val numberTitle = if(
-                                            viewModel.operator.dealerName ==null
+                                        val numberTitle = if (
+                                            viewModel.operator.dealerName == null
                                             || viewModel.operator.dealerName.toLowerCase() == "null"
                                             || viewModel.operator.dealerName.toLowerCase() == "nul"
                                             || viewModel.operator.dealerName.isEmpty()
@@ -246,15 +251,20 @@ private fun FormCard(viewModel: RechargeViewModel) {
 @Composable
 private fun FormButton(viewModel: RechargeViewModel) {
 
-    AppButton(
-        text = "Proceed To Recharge",
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        isEnable = viewModel.input.isValidObs.value
+    LocationComponent(
+        onLocation = {
+            viewModel.confirmDialogState.value = true
+        }
     ) {
-        viewModel.confirmDialogState.value = true
-
+        AppButton(
+            text = "Proceed To Recharge",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            isEnable = viewModel.input.isValidObs.value
+        ) {
+            it.invoke()
+        }
     }
 }
 

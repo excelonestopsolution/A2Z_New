@@ -2,6 +2,7 @@ package com.a2z.app.nav
 
 import android.net.Uri
 import android.os.Parcelable
+import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.MoneySender
 import com.a2z.app.data.model.dmt.SenderAccountDetail
 import com.a2z.app.data.model.dmt.TransactionDetail
@@ -13,6 +14,7 @@ import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.settlement.SettlementAddedBank
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.ui.screen.aeps.AepsType
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
 import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
@@ -119,8 +121,9 @@ sealed class NavScreen(val route: String) {
             "response" to response.toEncodedString()
         )
     }
+
     object AEPSTxnScreen : NavScreen("aeps-txn-screen".params("response")) {
-        fun passArgs(response: TransactionDetail) = "aeps-txn-screen".args(
+        fun passArgs(response: AepsTransaction) = "aeps-txn-screen".args(
             "response" to response.toEncodedString()
         )
     }
@@ -162,7 +165,11 @@ sealed class NavScreen(val route: String) {
 
     object ShowQRScreen : NavScreen("show-qr-screen")
     object TestScreen : NavScreen("test-screen")
-    object AepsScreen : NavScreen("aeps-screen")
+    object AepsScreen : NavScreen("aeps-screen".params("aeps_type")) {
+        fun passArgs(aepsType: AepsType) =
+            "aeps-screen".args("aeps_type" to aepsType.toEncodedString())
+    }
+
     object MatmScreen : NavScreen("matm-screen".params("isMPos")) {
         fun passArgs(isMPos: Boolean) = "matm-screen".args("isMPos" to isMPos.toString())
     }
@@ -240,20 +247,20 @@ sealed class NavScreen(val route: String) {
     object AEPSKycScreen : NavScreen("aeps-kyc-screen")
     object AadhaarKycScreen : NavScreen("aadhaar-kyc-screen")
     object CommissionScreen : NavScreen("commission-screen")
-    object SchemeDetailScreen : NavScreen("scheme-detail-screen".params("data")){
-        fun passArgs(data : CommissionSchemeDetailResponse) = "scheme-detail-screen".args(
+    object SchemeDetailScreen : NavScreen("scheme-detail-screen".params("data")) {
+        fun passArgs(data: CommissionSchemeDetailResponse) = "scheme-detail-screen".args(
             "data" to data.toEncodedString()
         )
     }
 
-    object  DeviceOrderScreen : NavScreen("device-order-screen")
-    object  UserAgreementScreen : NavScreen("user-agreement-screen")
-    object  UserRegistrationScreen : NavScreen("user-registration-screen")
-    object  ForgotPasswordScreen : NavScreen("forgot-password-screen")
-    object  ForgotLoginIdScreen : NavScreen("forgot-login-id-screen")
-    object  ComplaintScreen : NavScreen("complaint-screen")
-    object  MATMRequestReportScreen : NavScreen("matm-request-report-screen")
-    object  AEPSReportScreen : NavScreen("aeps-report-screen")
-    object  FundReportScreen : NavScreen("fund-report-screen")
-    object  DTReportScreen : NavScreen("dt-report-screen")
+    object DeviceOrderScreen : NavScreen("device-order-screen")
+    object UserAgreementScreen : NavScreen("user-agreement-screen")
+    object UserRegistrationScreen : NavScreen("user-registration-screen")
+    object ForgotPasswordScreen : NavScreen("forgot-password-screen")
+    object ForgotLoginIdScreen : NavScreen("forgot-login-id-screen")
+    object ComplaintScreen : NavScreen("complaint-screen")
+    object MATMRequestReportScreen : NavScreen("matm-request-report-screen")
+    object AEPSReportScreen : NavScreen("aeps-report-screen")
+    object FundReportScreen : NavScreen("fund-report-screen")
+    object DTReportScreen : NavScreen("dt-report-screen")
 }

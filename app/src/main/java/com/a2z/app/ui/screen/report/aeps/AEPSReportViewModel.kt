@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.report.aeps
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.*
 import com.a2z.app.data.repository.ReportRepository
@@ -67,7 +68,30 @@ class AEPSReportViewModel @Inject constructor(
             if (it.status == 1) {
                 navigateTo(
                     NavScreen.AEPSTxnScreen.passArgs(
-                        response = it.data.apply { this!!.isTransaction = false }!!
+                        response = it.data!!.run {
+                            AepsTransaction(
+                                status = this.status ?: 3,
+                                message = this.message.toString(),
+                                record_id = this.reportId,
+                                status_desc = this.statusDesc,
+                                service_name = this.serviceName,
+                                order_id = this.reportId,
+                                transaction_type = this.txnType,
+                                aadhaar_number = this.number,
+                                available_amount = this.availableBalance,
+                                transaction_amount = this.amount,
+                                bank_ref = this.bankRef,
+                                txn_time = this.txnTime,
+                                bank_name = this.bankName,
+                                customer_number = this.senderNumber,
+                                shop_name = this.outletName,
+                                retailer_number = this.outletNumber,
+                                statement = this.miniStatement,
+                                pay_type = "",
+                                txn_id = "",
+                                isTransaction = false
+                            )
+                        }
                     )
                 )
             } else alertDialog(it.message.toString())

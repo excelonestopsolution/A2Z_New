@@ -8,7 +8,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,16 +21,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.a2z.app.R
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
+import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.theme.CircularShape
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.ShapeZeroRounded
+import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeAppBarWidget(
-    viewModel: DashboardViewModel? = null
-) {
+    dashboardViewModel: DashboardViewModel,
+    viewModel: HomeViewModel,
+
+    ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = ShapeZeroRounded,
@@ -51,7 +57,7 @@ fun HomeAppBarWidget(
 
 
                         scope.launch {
-                            viewModel?.scaffoldState?.let {
+                            dashboardViewModel.scaffoldState?.let {
                                 if (it.drawerState.isOpen) {
                                     it.drawerState.close()
                                 } else it.drawerState.open()
@@ -113,20 +119,27 @@ fun HomeAppBarWidget(
             }
             Spacer(modifier = Modifier.weight(1f))
 
-            BuildActionIcon(Icons.Default.QrCode)
+
+            val navController = LocalNavController.current
+            BuildActionIcon(Icons.Default.QrCode){
+                navController.navigate(NavScreen.ShowQRScreen.route)
+            }
             Spacer(modifier = Modifier.width(8.dp))
-            BuildActionIcon(Icons.Default.Notifications)
+            BuildActionIcon(Icons.Default.Logout){
+                viewModel.exitDialogState.value = true
+            }
 
         }
     }
 }
 
 @Composable
-private fun BuildActionIcon(icon: ImageVector) {
+private fun BuildActionIcon(icon: ImageVector,callback : VoidCallback) {
     Box(
         modifier = Modifier
             .clip(MaterialTheme.shapes.small)
             .background(Color.White.copy(alpha = 0.10f))
+            .clickable { callback.invoke() }
     ) {
         Icon(
             imageVector = icon,

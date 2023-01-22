@@ -88,8 +88,8 @@ class LoginViewModel @Inject constructor(
         if (bannerState.value is BannerType.Success) return
         val password = AppSecurity.encrypt(input.passwordWrapper.input.value) ?: ""
         val mobile = AppSecurity.encrypt(input.userIdWrapper.input.value) ?: ""
-        val latitude = "0.12312"
-        val longitude = "0.123123"
+        val latitude = appPreference.latitude
+        val longitude = appPreference.longitude
         callApiForShareFlow(loginFlow) {
             authRepository.login(
                 "case" to "FIRST",

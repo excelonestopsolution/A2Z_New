@@ -1,19 +1,11 @@
 package com.a2z.app.ui.screen.home.component
 
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBalance
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,20 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BankDownComponent
-import com.a2z.app.ui.dialog.BankDownDialog
+import com.a2z.app.ui.screen.aeps.AepsType
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.screen.utility.util.OperatorType
-import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.ui.theme.PrimaryColor
-import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.util.FunCompose
 import com.a2z.app.util.VoidCallback
 
@@ -49,7 +37,8 @@ fun HomeServiceWidget() {
     Column {
         BuildMoneyAndPaymentService()
         BuildMoneyAEPService()
-        BuildRechargeAndUtilityService()
+        BuildRechargeService()
+        BuildUtilityService()
     }
 }
 
@@ -70,14 +59,21 @@ private fun BuildMoneyAEPService() {
                         padding = 14.dp,
                         color = color,
                         onClick = {
-                            navController.navigate(NavScreen.AepsScreen.route)
+                            navController.navigate(NavScreen.AepsScreen.passArgs(
+                                aepsType = AepsType.AEPS_1
+                            ))
                         }
                     )
                     BuildIconAndIconTitle(
-                        title = "AEPS 2",
+                        title = "AEPS 3",
                         icon = R.drawable.ic_launcher_aeps2,
                         padding = 14.dp,
-                        color = color
+                        color = color,
+                        onClick = {
+                            navController.navigate(NavScreen.AepsScreen.passArgs(
+                                aepsType = AepsType.AEPS_3
+                            ))
+                        }
                     )
                     BuildIconAndIconTitle(
                         title = "M-ATM",
@@ -202,7 +198,46 @@ private fun BuildMoneyAndPaymentService() {
 
 
 @Composable
-private fun BuildRechargeAndUtilityService() {
+private fun BuildRechargeService() {
+    val navController = LocalNavController.current
+    val color = Color(0xFF044274)
+    ServiceCard {
+        Column {
+            BuildServiceTitle("Recharge")
+            Column(modifier = Modifier.padding(8.dp)) {
+
+                Row {
+                    BuildIconAndIconTitle(title = "Prepaid",
+                        icon = R.drawable.ic_launcher_mobile,
+                        color = color,
+                        onClick = {
+                            navigateToOperatorScreen(navController, OperatorType.PREPAID)
+                        })
+                    BuildIconAndIconTitle(title = "DTH",
+                        icon = R.drawable.ic_launcher_dth,
+                        color = color,
+                        onClick = {
+                            navigateToOperatorScreen(navController, OperatorType.DTH)
+                        })
+                    BuildIconAndIconTitle(title = "FasTag",
+                        icon = R.drawable.ic_launcher_fastag,
+                        color = color,
+                        onClick = {
+                            navigateToOperatorScreen(navController, OperatorType.FAS_TAG)
+                        })
+                    Spacer(modifier = Modifier.weight(1f))
+
+
+                }
+
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun BuildUtilityService() {
     val navController = LocalNavController.current
     val color = Color(0xFF044274)
     ServiceCard {
@@ -239,12 +274,7 @@ private fun BuildRechargeAndUtilityService() {
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    BuildIconAndIconTitle(title = "Prepaid",
-                        icon = R.drawable.ic_launcher_mobile,
-                        color = color,
-                        onClick = {
-                            navigateToOperatorScreen(navController, OperatorType.PREPAID)
-                        })
+
                     BuildIconAndIconTitle(title = "Insurance",
                         icon = R.drawable.ic_launcher_insurence,
                         color = color,
@@ -263,23 +293,6 @@ private fun BuildRechargeAndUtilityService() {
                         onClick = {
                             navigateToOperatorScreen(navController, OperatorType.POSTPAID)
                         })
-
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Row {
-                    BuildIconAndIconTitle(title = "DTH",
-                        icon = R.drawable.ic_launcher_dth,
-                        color = color,
-                        onClick = {
-                            navigateToOperatorScreen(navController, OperatorType.DTH)
-                        })
-                    BuildIconAndIconTitle(title = "FasTag",
-                        icon = R.drawable.ic_launcher_fastag,
-                        color = color,
-                        onClick = {
-                            navigateToOperatorScreen(navController, OperatorType.FAS_TAG)
-                        })
-                    Spacer(modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.weight(1f))
 
                 }

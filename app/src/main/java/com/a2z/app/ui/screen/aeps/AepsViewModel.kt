@@ -1,8 +1,7 @@
 package com.a2z.app.ui.screen.aeps
 
-import android.content.Intent
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.aeps.AepsBank
@@ -14,11 +13,11 @@ import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
+import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -29,8 +28,11 @@ import javax.inject.Inject
 class AepsViewModel @Inject constructor(
     private val repository: AepsRepository,
     private val appPreference: AppPreference,
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
+
+    private val aepsType: AepsType = savedStateHandle.safeSerializable("aeps_type")!!
 
     lateinit var biometricDevice: RDService
     val transactionType = mutableStateOf(AepsTransactionType.CASH_WITHDRAWAL)
@@ -59,6 +61,11 @@ class AepsViewModel @Inject constructor(
     private var checkStatusCountTotal = 0
     private var checkStatusCount = 0
 
+    val title = when (aepsType) {
+        AepsType.AEPS_1 -> "AEPS - 1"
+        AepsType.AEPS_3 -> "AEPS - 3"
+    }
+
     init {
         fetchBankList()
         viewModelScope.launch {
@@ -74,47 +81,27 @@ class AepsViewModel @Inject constructor(
                             navigateTo(NavScreen.DashboardScreen.route, true)
                         }
                     }
-                    is ResultType.Loading -> {
-                        transactionProgressDialog()
-                    }
-                    is ResultType.Success -> {
-                        transactionResult(it.data)
-                    }
+                    is ResultType.Loading -> transactionProgressDialog()
+                    is ResultType.Success -> transactionResult(it.data)
+
                 }
             }
 
             _tableCheckStatusResultFlow.collectLatest {
                 when (it) {
-                    is ResultType.Failure -> {
-                        dismissDialog()
-                        //navigate with initial response
-                    }
+                    is ResultType.Failure -> navigateToResultScreen()
                     is ResultType.Loading -> {}
                     is ResultType.Success -> {
                         when (it.data.status) {
-                            1, 2 -> {
-                                dismissDialog()
-                                //navigate with initial response
-
-                            }
+                            1, 2 -> navigateToResultScreen(it.data)
                             11, 33 -> {
                                 if (checkStatusCount < 6) {
-                                    if (checkStatusCountTotal < 22) {
+                                    if (checkStatusCountTotal < 22)
                                         checkStatusForTransaction()
-                                    } else {
-                                        dismissDialog()
-                                        //navigate with initial response
-                                    }
-                                } else {
-                                    checkStatusForTransactionFromBank()
-                                }
+                                    else navigateToResultScreen()
+                                } else checkStatusForTransactionFromBank()
                             }
-                            else -> {
-
-                                dismissDialog()
-                                //navigate with initial response
-
-                            }
+                            else -> navigateToResultScreen()
                         }
                     }
                 }
@@ -122,15 +109,12 @@ class AepsViewModel @Inject constructor(
 
             _bankCheckStatusResultFlow.collectLatest {
                 when (it) {
-                    is ResultType.Failure -> {
-                        //navigate with old response
-                    }
+                    is ResultType.Failure -> navigateToResultScreen()
                     is ResultType.Loading -> {}
                     is ResultType.Success -> {
-                        if (it.data.status == 503) {
-                            dismissDialog()
-                            //navigate with old response
-                        } else checkStatusForTransaction()
+                        if (it.data.status == 503)
+                            navigateToResultScreen()
+                        else checkStatusForTransaction()
                     }
                 }
             }
@@ -143,10 +127,9 @@ class AepsViewModel @Inject constructor(
         val payId = transactionResponse.pay_type
 
         if (status == 3 && payId == "58") checkStatusForTransaction()
-        else if (status == 3 || status == 2 || status == 1) {
-            dismissDialog()
-            //navigate
-        } else {
+        else if (status == 3 || status == 2 || status == 1)
+            navigateToResultScreen()
+        else {
             dismissDialog()
             alertDialog(transactionResponse.message)
         }
@@ -179,6 +162,16 @@ class AepsViewModel @Inject constructor(
 
     }
 
+    private fun navigateToResultScreen(data: AepsTransaction? = null) {
+        dismissDialog()
+        val mData = data ?: transactionResponse
+        navigateTo(
+            NavScreen.AEPSTxnScreen.passArgs(
+                response = mData
+            )
+        )
+
+    }
 
     private fun setFormValid() {
 
@@ -206,9 +199,8 @@ class AepsViewModel @Inject constructor(
             ?: arrayListOf()) as ArrayList<String>
     }
 
-    fun bankNameToAepsBank(bankName: String): AepsBank? {
-        val aepsBank = bankList?.first { it.bankName == bankName }
-        return aepsBank
+    private fun bankNameToAepsBank(bankName: String): AepsBank? {
+        return bankList?.first { it.bankName == bankName }
 
     }
 
@@ -255,13 +247,24 @@ class AepsViewModel @Inject constructor(
             "longitude" to appPreference.longitude,
         )
 
+        val call = suspend {
+            when (aepsType) {
+                AepsType.AEPS_1 -> transactionRepository.aepsTransaction(param)
+                AepsType.AEPS_3 -> transactionRepository.aeps3Transaction(param)
+            }
+        }
+
         callApiForShareFlow(
             flow = _transactionResultFlow,
-            call = { transactionRepository.aepsTransaction(param) }
+            call = call
         )
     }
 }
 
 enum class AepsTransactionType {
     CASH_WITHDRAWAL, BALANCE_ENQUIRY, MINI_STATEMENT, AADHAAR_PAY
+}
+
+enum class AepsType {
+    AEPS_1, AEPS_3
 }

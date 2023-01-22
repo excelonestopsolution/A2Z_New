@@ -30,6 +30,7 @@ import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.dmt.util.DMTUtil
@@ -103,18 +104,24 @@ fun DMTMoneyTransferScreen() {
             AppFormUI(
                 button = {
 
-                    Button(
-                        onClick = {
+                    LocationComponent (
+                        onLocation = {
                             viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
                             manager.clearFocus()
                             viewModel.confirmDialogState.value = true
-                        },
-                        enabled = viewModel.input.isValidObs.value,
-                        modifier = Modifier
-                            .height(60.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(text = "Proceed Transaction")
+                        }
+                            ){
+                        Button(
+                            onClick = {
+                              it.invoke()
+                            },
+                            enabled = viewModel.input.isValidObs.value,
+                            modifier = Modifier
+                                .height(60.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(text = "Proceed Transaction")
+                        }
                     }
 
                 }, cardContents = listOf(

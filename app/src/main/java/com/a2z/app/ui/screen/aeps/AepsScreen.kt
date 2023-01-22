@@ -22,6 +22,7 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.bottomsheet.BottomSheetAepsDevice
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.SpinnerSearchDialog
 import com.a2z.app.ui.theme.BackgroundColor
@@ -35,7 +36,7 @@ fun AepsScreen() {
     val viewModel: AepsViewModel = hiltViewModel()
     Scaffold(
         backgroundColor = BackgroundColor,
-        topBar = { NavTopBar(title = "Aeps Transaction") }
+        topBar = { NavTopBar(title = viewModel.title) }
     ) {
         BaseContent(viewModels = arrayOf(viewModel)) {
             ObsComponent(flow = viewModel.bankListResponseFlow) {
@@ -76,19 +77,25 @@ fun BuildMainContent() {
                 }
             }
         },
-        mainContent = {
+        mainContent = { toggle ->
             AppFormUI(
                 showWalletCard = false,
                 button = {
-                    Button(
-                        onClick = {
-                            it.invoke()
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .height(60.dp),
-                        enabled = input.isValidObs.value && viewModel.selectedBank.value != null
+                    LocationComponent(
+                        onLocation = {
+                            toggle.invoke()
+                        }
                     ) {
-                        Text(text = "Proceed")
+                        Button(
+                            onClick = {
+                                it.invoke()
+                            }, modifier = Modifier
+                                .fillMaxWidth()
+                                .height(60.dp),
+                            enabled = input.isValidObs.value && viewModel.selectedBank.value != null
+                        ) {
+                            Text(text = "Proceed")
+                        }
                     }
                 },
                 cardContents = listOf(

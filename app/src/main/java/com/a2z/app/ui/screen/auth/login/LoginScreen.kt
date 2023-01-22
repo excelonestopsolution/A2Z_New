@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.service.LocalAuth
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
@@ -37,9 +39,10 @@ fun LoginScreen(
 ) {
 
     val navController = LocalNavController.current
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit, block = {
-        if (viewModel.appPreference.user != null) {
+        if (viewModel.appPreference.user != null && LocalAuth.checkForBiometrics(context)) {
             navController.navigate(NavScreen.DashboardScreen.route) {
                 popUpTo(NavScreen.DashboardScreen.route) {
                     inclusive = true

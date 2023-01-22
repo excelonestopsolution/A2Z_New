@@ -59,6 +59,13 @@ interface TransactionService {
         @FieldMap data : FieldMapData
     ) : AepsTransaction
 
+
+  @POST("aeps/three-new")
+    @FormUrlEncoded
+    suspend fun aeps3Transaction(
+        @FieldMap data : FieldMapData
+    ) : AepsTransaction
+
     @POST("parent/payment-return")
     @FormUrlEncoded
     suspend fun parentPaymentFundReturn(

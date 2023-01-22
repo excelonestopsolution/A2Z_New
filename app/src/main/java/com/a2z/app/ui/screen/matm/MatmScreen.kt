@@ -23,6 +23,7 @@ import com.a2z.app.data.model.matm.MatmInitiate
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.spacing
@@ -80,15 +81,22 @@ fun BuildMainContent() {
                 if (it) viewModel.initTransaction()
 
             }) { action ->
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
-                    enabled = input.isValidObs.value,
-                    onClick = {
+
+                LocationComponent(
+                    onLocation = {
                         action.invoke()
-                    },
-                ) { Text(text = "Proceed") }
+                    }
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp),
+                        enabled = input.isValidObs.value,
+                        onClick = {
+                            it.invoke()
+                        },
+                    ) { Text(text = "Proceed") }
+                }
             }
         },
         cardContents = listOf(

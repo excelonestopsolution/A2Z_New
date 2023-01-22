@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.res.painterResource
@@ -34,7 +35,7 @@ fun ShowQRCodeScreen() {
 
     val viewModel: ShowQRCodeViewModel = hiltViewModel()
     Scaffold(
-        backgroundColor = BackgroundColor,
+        backgroundColor = Color.White,
         topBar = { NavTopBar(title = "A2Z Accepted Payment") }
     ) {
 
@@ -68,7 +69,8 @@ private fun BuildContentForScreenShot(
         Text(
             text = "Scan QR Code to make payment to",
             style = MaterialTheme.typography.subtitle1,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -141,8 +143,9 @@ private fun BuildContentForScreenShot(
 
 
 
-        Text(text = "Scan and Pay using any UPI app", textAlign = TextAlign.Center)
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Scan and Pay using any UPI app", textAlign = TextAlign.Center,
+        modifier = Modifier.padding(vertical = 16.dp))
+
         BuildUpiAppList()
     }
 }

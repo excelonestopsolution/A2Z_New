@@ -124,27 +124,22 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 }
             )
 
-            BuildSingleItemMenu(
-                text = "User Agreement",
-                drawable = com.a2z.app.R.drawable.agreement_icon,
-                callback = {
-                    navController.navigate(NavScreen.UserAgreementScreen.route)
-                }
-            )
-            BuildSingleItemMenu(
-                text = "Commission Scheme",
-                drawable = com.a2z.app.R.drawable.commission_icon,
-                callback = {
-                    navController.navigate(NavScreen.CommissionScreen.route)
-                }
-            )
 
-            BuildSingleItemMenu(
-                text = "Device Request",
-                drawable = com.a2z.app.R.drawable.ic_launcher_matm,
-                callback = {
-                    navController.navigate(NavScreen.DeviceOrderScreen.route)
-                }
+            BuildExpandMenu(
+                menuHeading = "More...",
+                vector = Icons.Default.ReadMore,
+                menuList = listOf(
+                    Pair("User Agreement") {
+                        navController.navigate(NavScreen.UserAgreementScreen.route)
+                    },
+
+                    Pair("Commission Scheme") {
+                        navController.navigate(NavScreen.CommissionScreen.route)
+                    },
+                    Pair("M-ATM Device") {
+                        navController.navigate(NavScreen.DeviceOrderScreen.route)
+                    },
+                )
             )
 
 
@@ -272,11 +267,16 @@ private fun BuildExpandMenu(
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
-                if (vector != null) Icon(imageVector = vector, contentDescription = null)
+                if (vector != null) Icon(
+                    imageVector = vector, contentDescription = null,
+                    Modifier.size(32.dp)
+                )
                 if (drawable != null) Image(
                     painter = painterResource(id = drawable),
                     contentDescription = null,
-                    Modifier.size(32.dp)
+                    Modifier
+                        .size(32.dp)
+                        .clip(MaterialTheme.shapes.small)
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))

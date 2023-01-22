@@ -16,8 +16,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
+import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.SpinnerSearchDialog
+import com.a2z.app.ui.screen.home.component.HomeLocationServiceDialog
 import com.a2z.app.ui.screen.utility.util.BillPaymentAction
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
@@ -29,6 +31,8 @@ fun BillPaymentScreen() {
     val navController = LocalNavController.current
     val viewModel: BillPaymentViewModel = hiltViewModel()
     val util = viewModel.util
+
+    HomeLocationServiceDialog()
 
     BaseConfirmDialog(
         title = "Confirm Bill Payment",
@@ -45,15 +49,16 @@ fun BillPaymentScreen() {
     SpinnerSearchDialog(
         title = "Select BBPS Provider",
         state = viewModel.spinnerDialogState,
-        list = arrayListOf("BBPS Provider 1","BBPS Provider 2"),
-        initialSelectedValue = viewModel.selectedState.value) { state ->
-        viewModel.selectedState.value  = state
+        list = arrayListOf("BBPS Provider 1", "BBPS Provider 2"),
+        initialSelectedValue = viewModel.selectedState.value
+    ) { state ->
+        viewModel.selectedState.value = state
     }
 
     BaseContent(viewModel) {
         Scaffold(
             topBar = {
-               NavTopBar(title = util.getOperatorTitle("Payment"))
+                NavTopBar(title = util.getOperatorTitle("Payment"))
             }, backgroundColor = BackgroundColor
         ) {
             it.calculateBottomPadding()
@@ -65,7 +70,6 @@ fun BillPaymentScreen() {
         }
     }
 }
-
 
 
 @Composable
@@ -154,7 +158,7 @@ private fun FetchFormCard() {
             downText = util.getAmountFieldDownText(),
             readOnly = viewModel.isAmountReadyOnly.value,
             isOutline = true
-            )
+        )
     if (viewModel.util.actionType == BillPaymentAction.PROCEED_TO_PAYMENT)
         Column {
             Spacer(modifier = Modifier.height(12.dp))
@@ -162,7 +166,7 @@ private fun FetchFormCard() {
 
                 value = viewModel.selectedState.value,
                 hint = "selected type",
-                paddingValues = PaddingValues( horizontal = 0.dp),
+                paddingValues = PaddingValues(horizontal = 0.dp),
             ) {
                 viewModel.spinnerDialogState.value = true
             }
@@ -202,15 +206,21 @@ fun BuildInfoComponent() {
 @Composable
 private fun FormButton() {
     val viewModel: BillPaymentViewModel = hiltViewModel()
-    AppButton(
-        text = viewModel.util.buttonText,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp),
-        isEnable = viewModel.input.isValidObs.value
-    ) {
 
-        viewModel.onButtonClick()
+    LocationComponent(
+        onLocation = {
+            viewModel.onButtonClick()
+        }
+    ) {
+        AppButton(
+            text = viewModel.util.buttonText,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp),
+            isEnable = viewModel.input.isValidObs.value
+        ) {
+            it.invoke()
+        }
     }
 }
 

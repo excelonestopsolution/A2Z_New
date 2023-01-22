@@ -20,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.*
 
-@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TestScreen() {
@@ -31,71 +30,6 @@ fun TestScreen() {
         backgroundColor = BackgroundColor
     ) {
 
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-
-
-            val visible = remember { mutableStateOf(false) }
-
-            val enterTransition = remember {
-                expandVertically(
-                    expandFrom = Alignment.Top,
-                    animationSpec = tween(500)
-                ) + fadeIn(
-                    initialAlpha = 0.3f,
-                    animationSpec = tween(500)
-                )
-            }
-            val exitTransition = remember {
-                shrinkVertically(
-                    shrinkTowards = Alignment.Top,
-                    animationSpec = tween(500)
-                ) + fadeOut(
-                    animationSpec = tween(500)
-                )
-            }
-
-
-            val transition = updateTransition(targetState = visible.value, label = "")
-
-            val arrowRotationDegree by transition.animateFloat(
-                transitionSpec = { tween(durationMillis = 200) },
-                label = "Label",
-                targetValueByState = { if (it) 180f else 0f })
-
-            Card(modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .clickable {
-                    visible.value = !visible.value
-                }) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowDownward, contentDescription = null,
-                            modifier = Modifier.rotate(arrowRotationDegree)
-                        )
-                        Text(text = "Title")
-                    }
-
-                    AnimatedVisibility(
-                        visible = visible.value,
-                        initiallyVisible = false,
-                        enter = enterTransition,
-                        exit = exitTransition
-                    ) {
-                        Text(
-                            "Hellaksdfjalskjfklsa jfkasldfas" +
-                                    "sdl;afjalskfdjkdsla fjkasjfd klsadjfklas fdasf" +
-                                    "asdflkasjfklasjdlfjaskdlf jklasdjf " +
-                                    "aslfdjasklfjsadk fkasdjfkas dfjksadj fksadj" +
-                                    "asdfljaskldfj sdfjkasldjf kasdjfkas df" +
-                                    "alsdjfla;sjdfksdj fkdsjkf jdsakf sdakfj"
-                        )
-                    }
-                }
-            }
-
-        }
     }
 }
 

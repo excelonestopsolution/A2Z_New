@@ -132,7 +132,7 @@ private fun HomeScreenMainContent(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        HomeAppBarWidget(dashboardViewModel)
+        HomeAppBarWidget(dashboardViewModel,viewModel)
         Spacer(modifier = Modifier.height(2.dp))
         LazyColumn(
             modifier = Modifier
