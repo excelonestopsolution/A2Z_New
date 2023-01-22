@@ -40,9 +40,9 @@ fun AEPSReportScreen() {
             }) {_->
 
             BaseContent(viewModel) {
-                ObsComponent(flow = viewModel.reportResultFlow) {
-                    if (it.status == 1 && it.data!!.isNotEmpty()) LazyColumn {
-                        items(it.data) {
+                ObsComponent(flow = viewModel.reportResultFlow) {response->
+                    if (response.status == 1 && response.data!!.isNotEmpty()) LazyColumn {
+                        items(response.data) {
                             BaseReportItem(
                                 statusId = it.status_id,
                                 leftSideDate = it.created_at,
@@ -69,6 +69,8 @@ fun AEPSReportScreen() {
                                     "Total Balance" to it.total_balance,
                                     "Message" to it.fail_msg,
                                 ),
+                                onCheckStatus = {viewModel.onCheckStatus(it)},
+                                onPrint = {viewModel.onPrint(it)}
                             )
                         }
                     }

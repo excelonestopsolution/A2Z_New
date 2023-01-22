@@ -2,6 +2,7 @@ package com.a2z.app.data.network
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsBankListResponse
+import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
 import com.a2z.app.data.model.settlement.SettlementBankListResponse
 import com.a2z.app.util.FieldMapData
@@ -26,6 +27,16 @@ interface AepsService {
     @POST("aeps/add-bank-details")
     @FormUrlEncoded
     suspend fun addSettlementBank(@FieldMap data: FieldMapData): AppResponse
+
+
+    @POST("aeps/three/table-check-status")
+    @FormUrlEncoded
+    suspend fun tableCheckStatus(@FieldMap data: FieldMapData): AepsTransaction
+
+
+    @POST("aeps/three/checkstatus")
+    @FormUrlEncoded
+    suspend fun bankCheckStatus(@FieldMap data: FieldMapData): AepsTransaction
 
 
 }

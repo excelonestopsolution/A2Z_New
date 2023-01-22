@@ -125,6 +125,12 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
                 UPIResultScreen(it)
             }
         )
+        composable(
+            route = NavScreen.AEPSTxnScreen.route,
+            content = {
+                AEPSResultScreen(it)
+            }
+        )
 
         composable(
             route = NavScreen.MATMTxnScreen.route,

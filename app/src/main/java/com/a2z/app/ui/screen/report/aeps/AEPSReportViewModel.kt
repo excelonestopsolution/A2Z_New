@@ -3,8 +3,10 @@ package com.a2z.app.ui.screen.report.aeps
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.*
 import com.a2z.app.data.repository.ReportRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
@@ -29,6 +31,9 @@ class AEPSReportViewModel @Inject constructor(
     private val _complainTypeListResultFlow = resultShareFlow<ComplainTypeListResponse>()
     private var complainTransactionId = ""
     private val _complainResultFlow = resultShareFlow<AppResponse>()
+    private val _checkStatusResultFlow = resultShareFlow<AppResponse>()
+    private val _printDetailResultFlow = resultShareFlow<TransactionDetailResponse>()
+
 
     init {
         fetchReport()
@@ -44,23 +49,46 @@ class AEPSReportViewModel @Inject constructor(
 
         viewModelScope.launch {
             _complainResultFlow.getLatest {
-                if(it.status == 1) successDialog(it.message)
-                else alertDialog(it.message)
+                when (it.status) {
+                    1 -> successDialog(it.message)
+                    2 -> failureDialog(it.message)
+                    3 -> pendingDialog(it.message)
+                    else -> alertDialog(it.message)
+                }
             }
+        }
+
+        _checkStatusResultFlow.getLatest {
+            if (it.status == 1) successDialog(it.message)
+            else failureDialog(it.message)
+        }
+
+        _printDetailResultFlow.getLatest {
+            if (it.status == 1) {
+                navigateTo(
+                    NavScreen.AEPSTxnScreen.passArgs(
+                        response = it.data.apply { this!!.isTransaction = false }!!
+                    )
+                )
+            } else alertDialog(it.message.toString())
         }
     }
 
     fun fetchReport() {
         callApiForStateFlow(
             flow = reportResultFlow,
-            call = { repository.aepsRequestReport(hashMapOf(
-                "fromdate" to searchInput.startDate.insertDateSeparator(),
-                "todate" to searchInput.endDate.insertDateSeparator(),
-                "search" to searchInput.input,
-                "search_type" to searchInput.searchType,
-                "status_id" to searchInput.status,
-                "txn_type" to searchInput.txnType,
-            )) }
+            call = {
+                repository.aepsRequestReport(
+                    hashMapOf(
+                        "fromdate" to searchInput.startDate.insertDateSeparator(),
+                        "todate" to searchInput.endDate.insertDateSeparator(),
+                        "search" to searchInput.input,
+                        "search_type" to searchInput.searchType,
+                        "status_id" to searchInput.status,
+                        "txn_type" to searchInput.txnType,
+                    )
+                )
+            }
         )
     }
 
@@ -79,7 +107,6 @@ class AEPSReportViewModel @Inject constructor(
         }
     }
 
-
     fun onComplaint(it: AepsReport) {
         complainTransactionId = it.order_id.toString()
         callApiForShareFlow(_complainTypeListResultFlow) {
@@ -89,6 +116,16 @@ class AEPSReportViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun onCheckStatus(report: AepsReport) {
+        val param = hashMapOf("id" to report.id.toString())
+        callApiForShareFlow(_checkStatusResultFlow) { repository.aepsCheckStatus(param) }
+    }
+
+    fun onPrint(it: AepsReport) {
+        val url = "aeps/report/slip/new/${it.id.toString()}"
+        callApiForShareFlow(_printDetailResultFlow) { repository.aepsPrintDetail(url) }
     }
 
     data class SearchInput(

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.a2z.app.R
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
+import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.report.ComplainType
 import com.a2z.app.data.model.report.ComplainTypeListResponse
 import com.a2z.app.data.model.report.LedgerReport
@@ -40,6 +41,7 @@ class LedgerReportViewModel @Inject constructor(
     private val _complainTypeListResultFlow = resultShareFlow<ComplainTypeListResponse>()
     private var complainTransactionId = ""
     private val _complainResultFlow = resultShareFlow<AppResponse>()
+    private val _checkStatusResultFlow = resultShareFlow<AppResponse>()
 
     val complaintDialogVisibleState = mutableStateOf(value = false)
 
@@ -116,9 +118,43 @@ class LedgerReportViewModel @Inject constructor(
                             )
                         }
                         "AEPS" -> {
-
+                            navigateTo(
+                                NavScreen.AEPSTxnScreen.passArgs(
+                                    response = it.data.apply { this!!.isTransaction = false }!!
+                                )
+                            )
                         }
                         "MATM" -> {
+
+                            val mData = it.data!!.run {
+                                MatmTransactionResponse(
+                                    status = this.status,
+                                    statusDesc =this.statusDesc,
+                                    message = this.message,
+                                    serviceName = this.serviceName,
+                                    customerNumber =this.senderNumber,
+                                    txnId = "",
+                                    orderId = this.reportId,
+                                    recordId = this.reportId,
+                                    transactionType = this.txnType,
+                                    cardNumber = this.number,
+                                    cardType = this.cardType,
+                                    creditDebitCardType = this.bankName,
+                                    availableAmount = this.availableBalance,
+                                    transactionAmount = this.amount,
+                                    transactionMode = "",
+                                    bankRef = this.bankRef,
+                                    txnTime =this.txnTime,
+                                    shopName =this.outletName,
+                                    retailerNumber = this.outletNumber,
+                                    retailerName = "",
+                                    outletAddress =this.outletAddress,
+                                    isTransaction = false
+                                )
+                            }
+                            NavScreen.MATMTxnScreen.passArgs(
+                                response = mData
+                            )
 
                         }
                     }
@@ -156,6 +192,15 @@ class LedgerReportViewModel @Inject constructor(
             }
         )
 
+        _checkStatusResultFlow.getLatest {
+            when (it.status) {
+                1 -> successDialog(it.message)
+                2 -> failureDialog(it.message)
+                3 -> pendingDialog(it.message)
+                else -> alertDialog(it.message)
+            }
+        }
+
     }
 
 
@@ -163,7 +208,7 @@ class LedgerReportViewModel @Inject constructor(
         val param = searchInput.run {
             hashMapOf(
                 "todate" to this.endDate.insertDateSeparator(),
-                "fromdate" to this.startDate.insertDateSeparator(),
+                "fromdate" to "01-01-2021",
                 "searchType" to this.criteria,
                 "number" to this.input,
                 "status_id" to this.status,
@@ -187,8 +232,8 @@ class LedgerReportViewModel @Inject constructor(
     }
 
     fun onCheckStatus(report: LedgerReport) {
-
-
+        val param = hashMapOf("id" to report.id.toString())
+        callApiForShareFlow(_checkStatusResultFlow) { repository.checkStatus(param) }
     }
 
     fun onComplain(report: LedgerReport) {

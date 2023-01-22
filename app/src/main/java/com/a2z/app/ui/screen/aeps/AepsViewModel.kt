@@ -1,6 +1,8 @@
 package com.a2z.app.ui.screen.aeps
 
+import android.content.Intent
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.aeps.AepsBank
@@ -9,12 +11,17 @@ import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.aeps.RDService
 import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.data.repository.TransactionRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
+import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +29,7 @@ import javax.inject.Inject
 class AepsViewModel @Inject constructor(
     private val repository: AepsRepository,
     private val appPreference: AppPreference,
-    private val transactionRepository : TransactionRepository
+    private val transactionRepository: TransactionRepository
 ) : BaseViewModel() {
 
     lateinit var biometricDevice: RDService
@@ -42,16 +49,136 @@ class AepsViewModel @Inject constructor(
     var pidData = ""
     val showConfirmDialogState = mutableStateOf(false)
 
+    lateinit var transactionResponse: AepsTransaction
+
     private val _transactionResultFlow = resultShareFlow<AepsTransaction>()
+    private val _tableCheckStatusResultFlow = resultShareFlow<AepsTransaction>()
+    private val _bankCheckStatusResultFlow = resultShareFlow<AepsTransaction>()
+
+
+    private var checkStatusCountTotal = 0
+    private var checkStatusCount = 0
 
     init {
         fetchBankList()
         viewModelScope.launch {
-            _transactionResultFlow.getLatest {
+            _transactionResultFlow.collectLatest {
+                when (it) {
+                    is ResultType.Failure -> {
+                        if (transactionType.value == AepsTransactionType.MINI_STATEMENT ||
+                            transactionType.value == AepsTransactionType.BALANCE_ENQUIRY
+                        ) {
+                            failureDialog("Something went wrong! please try again.")
+                        } else pendingDialog("Transaction in pending! please check aeps report") {
+                            dismissDialog()
+                            navigateTo(NavScreen.DashboardScreen.route, true)
+                        }
+                    }
+                    is ResultType.Loading -> {
+                        transactionProgressDialog()
+                    }
+                    is ResultType.Success -> {
+                        transactionResult(it.data)
+                    }
+                }
+            }
 
+            _tableCheckStatusResultFlow.collectLatest {
+                when (it) {
+                    is ResultType.Failure -> {
+                        dismissDialog()
+                        //navigate with initial response
+                    }
+                    is ResultType.Loading -> {}
+                    is ResultType.Success -> {
+                        when (it.data.status) {
+                            1, 2 -> {
+                                dismissDialog()
+                                //navigate with initial response
+
+                            }
+                            11, 33 -> {
+                                if (checkStatusCount < 6) {
+                                    if (checkStatusCountTotal < 22) {
+                                        checkStatusForTransaction()
+                                    } else {
+                                        dismissDialog()
+                                        //navigate with initial response
+                                    }
+                                } else {
+                                    checkStatusForTransactionFromBank()
+                                }
+                            }
+                            else -> {
+
+                                dismissDialog()
+                                //navigate with initial response
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            _bankCheckStatusResultFlow.collectLatest {
+                when (it) {
+                    is ResultType.Failure -> {
+                        //navigate with old response
+                    }
+                    is ResultType.Loading -> {}
+                    is ResultType.Success -> {
+                        if (it.data.status == 503) {
+                            dismissDialog()
+                            //navigate with old response
+                        } else checkStatusForTransaction()
+                    }
+                }
             }
         }
     }
+
+    private fun transactionResult(data: AepsTransaction) {
+        transactionResponse = data
+        val status = transactionResponse.status
+        val payId = transactionResponse.pay_type
+
+        if (status == 3 && payId == "58") checkStatusForTransaction()
+        else if (status == 3 || status == 2 || status == 1) {
+            dismissDialog()
+            //navigate
+        } else {
+            dismissDialog()
+            alertDialog(transactionResponse.message)
+        }
+    }
+
+
+    private fun checkStatusForTransaction() {
+
+        checkStatusCount += 1
+        checkStatusCountTotal += 1
+        val txnId = transactionResponse.txn_id.toString()
+        val param = hashMapOf("recordId" to txnId)
+
+        callApiForShareFlow(_tableCheckStatusResultFlow) {
+            delay(4000)
+            repository.tableCheckStatus(param)
+        }
+
+    }
+
+    private fun checkStatusForTransactionFromBank() {
+
+        checkStatusCount = 0
+        checkStatusCountTotal += 1
+
+        val txnId = transactionResponse.record_id.toString()
+        val param = hashMapOf("record_id" to txnId)
+
+        callApiForShareFlow(_bankCheckStatusResultFlow) { repository.bankCheckStatus(param) }
+
+    }
+
 
     private fun setFormValid() {
 
@@ -67,7 +194,6 @@ class AepsViewModel @Inject constructor(
         transactionType.value = type
         setFormValid()
     }
-
 
     private fun fetchBankList() {
         callApiForShareFlow(flow = _bankListResponseFlow) {
@@ -113,6 +239,9 @@ class AepsViewModel @Inject constructor(
 
     fun onConfirmTransaction() {
 
+        checkStatusCountTotal = 0
+        checkStatusCount = 0
+
         val param = hashMapOf(
             "customerNumber" to input.mobileInputWrapper.getValue(),
             "bankName" to selectedBank.value!!.bankInnNumber.toString(),
@@ -128,7 +257,7 @@ class AepsViewModel @Inject constructor(
 
         callApiForShareFlow(
             flow = _transactionResultFlow,
-            call = {transactionRepository.aepsTransaction(param)}
+            call = { transactionRepository.aepsTransaction(param) }
         )
     }
 }

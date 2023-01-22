@@ -2,6 +2,7 @@ package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsBankListResponse
+import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
 import com.a2z.app.data.model.settlement.SettlementBankListResponse
 import com.a2z.app.data.network.AepsService
@@ -27,6 +28,14 @@ class AepsRepositoryImpl @Inject constructor(private val service: AepsService) :
 
     override suspend fun addSettlementBank(data: FieldMapData): AppResponse {
         return service.addSettlementBank(data)
+    }
+
+    override suspend fun tableCheckStatus(data: FieldMapData): AepsTransaction {
+        return service.tableCheckStatus(data)
+    }
+
+    override suspend fun bankCheckStatus(data: FieldMapData): AepsTransaction {
+        return service.bankCheckStatus(data)
     }
 
 }

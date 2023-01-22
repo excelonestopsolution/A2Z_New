@@ -107,6 +107,7 @@ open class BaseViewModel : ViewModel() {
 
 
     fun <T> SharedFlow<ResultType<T>>.getLatest(
+        dismissDialog: Boolean = true,
         failure: ExceptionCallback? = null,
         progress: VoidCallback? = null,
         success: suspend (T) -> Unit,
@@ -126,7 +127,7 @@ open class BaseViewModel : ViewModel() {
                     }
 
                     is ResultType.Success -> {
-                        dismissDialog()
+                        if (dismissDialog) dismissDialog()
                         success(it.data)
                     }
                 }

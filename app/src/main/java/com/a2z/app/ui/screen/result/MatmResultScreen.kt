@@ -15,13 +15,13 @@ fun MatmResultScreen(it: NavBackStackEntry) {
 
 
     val upiTitleValue1 = listOf(
-        "Name" to response.txnId.toString(),
-        "Upi Id" to response.orderId.toString(),
-        "Sender Name" to response.bankRef.toString(),
-        "Sender Number" to response.cardNumber.toString(),
-        "Sender Number" to response.customerNumber.toString(),
-        "Sender Number" to response.cardType.toString(),
-        "Sender Number" to response.transactionMode.toString(),
+        "Txn Id" to response.txnId.toString(),
+        "Order Id" to response.orderId.toString(),
+        "Bank Ref" to response.bankRef.toString(),
+        "Card Number" to response.cardNumber.toString(),
+        "Mobile Number" to response.customerNumber.toString(),
+        "Card Type" to response.cardType.toString(),
+        "Transaction Mode" to response.transactionMode.toString(),
     )
 
     BaseResultComponent(
@@ -36,6 +36,7 @@ fun MatmResultScreen(it: NavBackStackEntry) {
         serviceIconRes = R.drawable.ic_launcher_matm,
         titleValues = arrayOf(upiTitleValue1),
         isPaymentAmount = false,
+        backPressHandle = response.isTransaction
     )
 }
 

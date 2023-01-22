@@ -97,7 +97,8 @@ private fun MainContent(
                             "Remark" to it.remark,
                         ),
                         onPrint = { viewModel.onPrint(it) },
-                        onComplaint = { viewModel.onComplain(it) }
+                        onComplaint = { viewModel.onComplain(it) },
+                        onCheckStatus = { viewModel.onCheckStatus(it) }
                     )
                 }
                 item {

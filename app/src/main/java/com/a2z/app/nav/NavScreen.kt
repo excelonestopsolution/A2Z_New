@@ -119,6 +119,11 @@ sealed class NavScreen(val route: String) {
             "response" to response.toEncodedString()
         )
     }
+    object AEPSTxnScreen : NavScreen("aeps-txn-screen".params("response")) {
+        fun passArgs(response: TransactionDetail) = "aeps-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
 
     object MATMTxnScreen : NavScreen("matm-txn-screen".params("response")) {
         fun passArgs(response: MatmTransactionResponse) = "matm-txn-screen".args(

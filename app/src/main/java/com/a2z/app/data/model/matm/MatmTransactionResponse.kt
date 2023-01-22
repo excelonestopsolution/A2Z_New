@@ -30,6 +30,7 @@ data class MatmTransactionResponse(
     @SerializedName("retailer_number") val retailerNumber: String? = null,
     @SerializedName("retailer_name") val retailerName: String? = null,
     @SerializedName("outlet_address") val outletAddress: String? = null,
+    var isTransaction : Boolean = true
 ) : Parcelable
 
 @Keep
