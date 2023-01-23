@@ -134,6 +134,7 @@ sealed class NavScreen(val route: String) {
         )
     }
 
+    object UpiPaymentScreen : NavScreen("upi-payment-screen")
     object FundMethodScreen : NavScreen("fund-method-screen")
     object FundBankListScreen : NavScreen("fund-bank-lists-screen".params("fundMethod")) {
         fun passData(fundMethod: FundMethod) =

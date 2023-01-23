@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.dmt.transfer
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.dmt.BankDownCheckResponse
 import com.a2z.app.data.model.dmt.DmtCommissionResponse
 import com.a2z.app.data.model.dmt.TransactionDetail
@@ -28,6 +29,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
     private val repository: DMTRepository,
     private val upiRepository: UpiRepository,
     private val transactionRepository: TransactionRepository,
+    private val appPreference: AppPreference,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
@@ -203,16 +205,16 @@ class DMTMoneyTransferViewModel @Inject constructor(
             "txn_pin" to mpin.orEmpty(),
             "a2z_bene_id" to beneficiary.a2zBeneId.orEmpty(),
             "beneficiary_id" to beneficiary.a2zBeneId.orEmpty(),//dmt3
-            "latitude" to "1231231",
-            "longitude" to "1231312",
+            "latitude" to appPreference.latitude,
+            "longitude" to appPreference.longitude,
         )
 
         val upiParam = hashMapOf(
             "amount" to input.amount.getValue(),
             "bene_id" to beneficiary.id.orEmpty(),
             "sender_number" to moneySender?.mobileNumber.orEmpty(),
-            "latitude" to "1231231",
-            "longitude" to "1231312",
+            "latitude" to appPreference.latitude,
+            "longitude" to appPreference.longitude,
             "txn_pin" to mpin.orEmpty(),
         )
 

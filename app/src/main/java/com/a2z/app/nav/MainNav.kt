@@ -26,6 +26,7 @@ import com.a2z.app.ui.screen.fund.bank.FundBankListScreen
 import com.a2z.app.ui.screen.fund.method.FundMethodScreen
 import com.a2z.app.ui.screen.fund.payment_return.ParentPaymentReturnScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
+import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
 import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
@@ -144,6 +145,10 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
             content = { FundMethodScreen() }
         )
         composable(
+            route = NavScreen.UpiPaymentScreen.route,
+            content = { UpiPaymentScreen() }
+        )
+        composable(
             route = NavScreen.ParentPaymentReturnScreen.route,
             content = { ParentPaymentReturnScreen() }
         )
@@ -236,11 +241,17 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.SchemeDetailScreen.route, content = { SchemeDetailScreen() })
         composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
         composable(route = NavScreen.UserAgreementScreen.route, content = { UserAgreementScreen() })
-        composable(route = NavScreen.UserRegistrationScreen.route, content = { UserRegistrationScreen() })
-        composable(route = NavScreen.ForgotPasswordScreen.route, content = { ForgotPasswordScreen() })
+        composable(
+            route = NavScreen.UserRegistrationScreen.route,
+            content = { UserRegistrationScreen() })
+        composable(
+            route = NavScreen.ForgotPasswordScreen.route,
+            content = { ForgotPasswordScreen() })
         composable(route = NavScreen.ForgotLoginIdScreen.route, content = { ForgotLoginIdScreen() })
         composable(route = NavScreen.ComplaintScreen.route, content = { ComplaintScreen() })
-        composable(route = NavScreen.MATMRequestReportScreen.route, content = { MATMReportScreen() })
+        composable(
+            route = NavScreen.MATMRequestReportScreen.route,
+            content = { MATMReportScreen() })
         composable(route = NavScreen.AEPSReportScreen.route, content = { AEPSReportScreen() })
         composable(route = NavScreen.FundReportScreen.route, content = { FundReportScreen() })
         composable(route = NavScreen.DTReportScreen.route, content = { DTReportScreen() })

@@ -1,39 +1,55 @@
 package com.a2z.app.ui.screen.qrcode
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.media.MediaScannerConnection
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.applyCanvas
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.ImageCaptureComponent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
+import com.a2z.app.ui.component.permission.CheckCameraStoragePermission
 import com.a2z.app.ui.component.permission.PermissionComponent
 import com.a2z.app.ui.screen.util.permission.AppPermissionList
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.util.BitmapUtil
+import com.a2z.app.util.BitmapUtil.toFile
+import com.a2z.app.util.FileUtil
 import com.a2z.app.util.VoidCallback
+import org.apache.xml.security.utils.I18n.translate
+import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ShowQRCodeScreen() {
 
+
     val viewModel: ShowQRCodeViewModel = hiltViewModel()
+
     Scaffold(
         backgroundColor = Color.White,
         topBar = { NavTopBar(title = "A2Z Accepted Payment") }
@@ -41,7 +57,13 @@ fun ShowQRCodeScreen() {
 
         BaseContent(viewModel) {
             ObsComponent(flow = viewModel.qrCodeObs) {
-                BuildContentForScreenShot(response = it) {
+                ImageCaptureComponent() {download,share->
+                    BuildContentForScreenShot(
+                        response = it,
+                        onDownload = {download.invoke()},
+                        onShare = {share.invoke()},
+
+                    )
                 }
             }
         }
@@ -53,7 +75,8 @@ fun ShowQRCodeScreen() {
 @Composable
 private fun BuildContentForScreenShot(
     response: QRCodeResponse,
-    downloadCallback: VoidCallback? = null,
+    onDownload: VoidCallback,
+    onShare: VoidCallback,
 
     ) {
     val viewModel: ShowQRCodeViewModel = hiltViewModel()
@@ -64,6 +87,7 @@ private fun BuildContentForScreenShot(
         modifier = Modifier
             .padding(12.dp)
             .fillMaxSize()
+
 
     ) {
         Text(
@@ -88,7 +112,7 @@ private fun BuildContentForScreenShot(
                     start = 16.dp,
                     end = 16.dp,
                     top = 16.dp,
-                    bottom =  0.dp
+                    bottom = 0.dp
                 )
             ) {
 
@@ -107,33 +131,29 @@ private fun BuildContentForScreenShot(
                 Divider(modifier = Modifier.padding(top = 8.dp))
 
                 Row {
-                    PermissionComponent(
-                        permissions = AppPermissionList.cameraStorages()
-                            .map { it.permission }) { granted ->
-                        TextButton(onClick = {
-                            val result = granted.invoke()
-                            if (!result) navController.navigate(
-                                NavScreen.PermissionScreen.passData(
-                                    permissionType = PermissionType.CameraAndStorage
-                                )
-                            )
-                            else {
-                                downloadCallback?.invoke()
-                            }
+                   CheckCameraStoragePermission {
 
+                       TextButton(onClick = {
+                           val result = it.invoke()
+                           if(result) onDownload.invoke()
+                       }) {
+                           Text(
+                               text = "Download",
+                               style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
+                           )
+                       }
+                   }
+                    Spacer(modifier = Modifier.weight(1f))
+                    CheckCameraStoragePermission {
+                        TextButton(onClick = {
+                            val result = it.invoke()
+                            if(result) onShare.invoke()
                         }) {
                             Text(
-                                text = "Download",
+                                text = "Share",
                                 style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
                             )
                         }
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(
-                            text = "Share",
-                            style = TextStyle.Default.copy(fontWeight = FontWeight.Bold)
-                        )
                     }
                 }
 
@@ -143,8 +163,10 @@ private fun BuildContentForScreenShot(
 
 
 
-        Text(text = "Scan and Pay using any UPI app", textAlign = TextAlign.Center,
-        modifier = Modifier.padding(vertical = 16.dp))
+        Text(
+            text = "Scan and Pay using any UPI app", textAlign = TextAlign.Center,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
 
         BuildUpiAppList()
     }

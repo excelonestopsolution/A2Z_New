@@ -14,7 +14,7 @@ data class MatmInput(
             it,
             minAmount = 100.0,
             maxAmount = 10000.0,
-
+            useMultipleOfTen = true
         )
     }
 

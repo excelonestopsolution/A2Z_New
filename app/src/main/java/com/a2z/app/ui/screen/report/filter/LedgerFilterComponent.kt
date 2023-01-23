@@ -1,10 +1,26 @@
 package com.a2z.app.ui.screen.report.filter
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.a2z.app.ui.component.common.AppDropDownMenu
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.DateTextField
+import com.a2z.app.ui.component.keyboardAsState
 import com.a2z.app.ui.screen.report.ledger.LedgerReportViewModel
 import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.DateUtil
@@ -111,8 +127,10 @@ private fun criteriaList(value: String?) = when (value) {
 }
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LedgerReportFilterComponent(
+fun LedgerFilterDialog(
+    showDialogState: MutableState<Boolean>,
     onFilter: (LedgerReportViewModel.SearchInput) -> Unit
 ) {
 
@@ -127,66 +145,96 @@ fun LedgerReportFilterComponent(
 
 
 
-    BaseReportFilterComponent(
-        onFilter = {
 
-            val mStatus = statusList.entries.find { it.key == statusState.value }?.value
-            val mProduct = productList.entries.find { it.key == productState.value }?.value
-            val mCriteria = criteriaList(mProduct).entries.find { it.key == criteriaState.value }?.value
-
-            onFilter(
-                LedgerReportViewModel.SearchInput(
-                    startDate = startDateState.value,
-                    endDate = endDateState.value,
-                    status = mStatus.orEmpty(),
-                    product = mProduct.orEmpty(),
-                    criteria = mCriteria.orEmpty(),
-                    input = inputState.value
+    if (showDialogState.value) Dialog(onDismissRequest = {
+        showDialogState.value = false
+    }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .background(
+                    Color.White,
+                    MaterialTheme.shapes.small
                 )
-            )
-        },
-        content = {
-            DateTextField(
-                label = "Start Date",
-                value = startDateState.value,
-                onChange = { startDateState.value = it },
-                onDateSelected = {
-                    startDateState.value = it.removeDateSeparator()
+        ) {
+            val manager = LocalFocusManager.current
+            val keyboard = keyboardAsState()
+            BaseReportFilterComponent(
+                onFilter = {
+
+                    manager.clearFocus()
+
+                    val mStatus = statusList.entries.find { it.key == statusState.value }?.value
+                    val mProduct = productList.entries.find { it.key == productState.value }?.value
+                    val mCriteria =
+                        criteriaList(mProduct).entries.find { it.key == criteriaState.value }?.value
+
+
+                    onFilter(
+                        LedgerReportViewModel.SearchInput(
+                            startDate = startDateState.value,
+                            endDate = endDateState.value,
+                            status = mStatus.orEmpty(),
+                            product = mProduct.orEmpty(),
+                            criteria = mCriteria.orEmpty(),
+                            input = inputState.value.trim()
+                        )
+                    )
+                    showDialogState.value = false
+                },
+                content = {
+                    DateTextField(
+
+                        label = "Start Date",
+                        value = startDateState.value,
+                        onChange = { startDateState.value = it },
+                        onDateSelected = {
+                            startDateState.value = it.removeDateSeparator()
+                        }
+                    )
+
+                    DateTextField(
+                        label = "End Date",
+                        value = endDateState.value,
+                        onChange = { endDateState.value = it },
+                        onDateSelected = {
+                            endDateState.value = it.removeDateSeparator()
+                        }
+                    )
+
+                    AppDropDownMenu(
+                        selectedState = statusState,
+                        label = "Select Status",
+                        list = statusList.map { it.key },
+
+                        )
+                    AppDropDownMenu(
+                        selectedState = productState,
+                        label = "Select Product",
+                        list = productList.map { it.key }
+                    )
+                    AppDropDownMenu(
+                        selectedState = criteriaState,
+                        label = "Select Criteria",
+                        list = criteriaList(productState.value).map { it.key }
+                    )
+
+                    if (criteriaState.value.isNotEmpty()) AppTextField(
+                        value = inputState.value,
+                        onChange = {
+                            if (it == "," || it == "-" || it == ".") {
+                            } else inputState.value = it
+                        },
+                        label = "Input Search Text",
+                        keyboardType = KeyboardType.Number,
+                    )
+
                 }
             )
-
-            DateTextField(
-                label = "End Date",
-                value = endDateState.value,
-                onChange = { endDateState.value = it },
-                onDateSelected = {
-                    endDateState.value = it.removeDateSeparator()
-                }
-            )
-
-            AppDropDownMenu(
-                selectedState = statusState,
-                label = "Select Status",
-                list = statusList.map { it.key },
-
-                )
-            AppDropDownMenu(
-                selectedState = productState,
-                label = "Select Product",
-                list = productList.map { it.key }
-            )
-            AppDropDownMenu(
-                selectedState = criteriaState,
-                label = "Select Criteria",
-                list = criteriaList(productState.value).map { it.key }
-            )
-
-            if (criteriaState.value.isNotEmpty()) AppTextField(
-                value = inputState.value,
-                onChange = { inputState.value = it },
-                label = "Input Search Text"
-            )
-
         }
-    )
+
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.a2z.app.ui.screen.report.aeps
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.text.input.KeyboardType
 import com.a2z.app.ui.component.common.AppDropDownMenu
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.DateTextField
@@ -13,7 +14,7 @@ import com.a2z.app.util.DateUtil.toFormat
 import com.a2z.app.util.extension.removeDateSeparator
 
 
-private val  transactionTypeList = linkedMapOf(
+private val transactionTypeList = linkedMapOf(
     "All" to "",
     "Balance Enquiry" to "BALANCE_INQUIRY",
     "Mini Statement" to "AEPS(MINI_STATEMENT)",
@@ -21,13 +22,13 @@ private val  transactionTypeList = linkedMapOf(
     "Aadhaar Pay" to "Wallet Update(Adhaar Pay)"
 )
 
-private val  inputModeList = linkedMapOf(
+private val inputModeList = linkedMapOf(
     "None" to "",
     "Mobile Number" to "MOB",
     "Aadhaar Number" to "AADHAAR",
 )
 
-private val  transactionStatusList = linkedMapOf(
+private val transactionStatusList = linkedMapOf(
     "All" to "",
     "Success" to "1",
     "Failure" to "2",
@@ -65,7 +66,7 @@ fun AepsReportFilterComponent(
                     status = mStatus.orEmpty(),
                     searchType = mInputMode.orEmpty(),
                     txnType = mTxnType.orEmpty(),
-                    input = inputState.value
+                    input = inputState.value.trim()
                 )
             )
         },
@@ -107,8 +108,12 @@ fun AepsReportFilterComponent(
 
             if (inputModeState.value.isNotEmpty()) AppTextField(
                 value = inputState.value,
-                onChange = { inputState.value = it },
-                label = "Input Search Text"
+                onChange = {
+                    if (it == "," || it == "-" || it == ".") {
+                    } else inputState.value = it
+                },
+                label = "Input Search Text",
+                keyboardType = KeyboardType.Number
             )
 
         }

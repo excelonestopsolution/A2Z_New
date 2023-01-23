@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.data.model.aeps.AepsTransaction
+import com.a2z.app.data.model.dmt.MiniStatement
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.google.gson.Gson
 
@@ -38,6 +39,8 @@ fun AEPSResultScreen(it: NavBackStackEntry) {
         serviceIconRes = R.drawable.ic_launcher_aeps2,
         titleValues = arrayOf(upiTitleValue1),
         isPaymentAmount = false,
+        iconSize = 42,
+        statement = response.statement,
         backPressHandle = response.isTransaction
     )
 }

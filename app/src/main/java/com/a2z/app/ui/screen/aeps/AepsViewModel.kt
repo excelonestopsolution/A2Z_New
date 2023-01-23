@@ -167,7 +167,10 @@ class AepsViewModel @Inject constructor(
         val mData = data ?: transactionResponse
         navigateTo(
             NavScreen.AEPSTxnScreen.passArgs(
-                response = mData
+                response = mData.apply {
+                    isTransaction = transactionType.value == AepsTransactionType.CASH_WITHDRAWAL ||
+                            transactionType.value == AepsTransactionType.AADHAAR_PAY
+                },
             )
         )
 

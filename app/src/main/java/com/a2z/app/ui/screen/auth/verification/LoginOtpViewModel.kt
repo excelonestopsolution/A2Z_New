@@ -2,6 +2,7 @@ package com.a2z.app.ui.screen.auth.verification
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.repository.AuthRepository
 import com.a2z.app.ui.util.AppValidator
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginOtpViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val appUtilDI: AppUtilDI
+    private val appUtilDI: AppUtilDI,
+    private val appPreference: AppPreference
 ) : BaseViewModel() {
 
     val formData = LoginOtpInput()
@@ -63,8 +65,8 @@ class LoginOtpViewModel @Inject constructor(
             "mobileNumber" to (AppSecurity.encrypt(mobileNumber) ?: ""),
             "otp" to (AppSecurity.encrypt(formData.otpWrapper.input.value) ?: ""),
             "imei" to appUtilDI.appUniqueIdentifier(),
-            "latitude" to "12.312312",
-            "longitude" to "12.68687"
+            "latitude" to appPreference.latitude,
+            "longitude" to appPreference.longitude
         )
     }
 

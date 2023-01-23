@@ -88,12 +88,18 @@ object AppValidator {
     fun amountValidation(
         inputAmount: String,
         minAmount: Double = 100.0,
-        maxAmount: Double = 1000000.0
+        maxAmount: Double = 1000000.0,
+        useMultipleOfTen : Boolean = false,
     ): Pair<Boolean, String> {
         val amount = inputAmount.toDoubleAmount()
-
         val message = "Enter Rs. $minAmount - Rs. $maxAmount"
         val condition = amount in minAmount..maxAmount
+
+        if(condition && useMultipleOfTen){
+            if(amount % 10.0 != 0.0){
+                return Pair(false,"Enter amount multiple of 10")
+            }
+        }
         return Pair(condition, message)
 
 

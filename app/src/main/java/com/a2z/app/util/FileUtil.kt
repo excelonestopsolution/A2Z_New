@@ -1,12 +1,10 @@
 package com.a2z.app.util
 
-import android.content.ContentUris
-import android.content.Context
+import android.content.*
 import android.database.Cursor
 import android.database.DatabaseUtils
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
+import android.graphics.*
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -29,6 +27,108 @@ object FileUtil {
     fun isLocalStorageDocument(uri: Uri): Boolean {
         return AUTHORITY.equals(uri.authority)
     }
+
+    @Throws(IOException::class)
+     fun saveImage(context: Context,bitmap: Bitmap, name: String) : Boolean {
+        val saved: Boolean
+        val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val resolver: ContentResolver = context.contentResolver
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/A2Z")
+            val imageUri =
+                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            resolver.openOutputStream(imageUri!!)
+        } else {
+            val imagesDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM
+            ).toString() + File.separator + "A2Z"
+            val file = File(imagesDir)
+            if (!file.exists()) {
+                file.mkdir()
+            }
+            val image = File(imagesDir, "$name.png")
+            FileOutputStream(image)
+        }
+        saved = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        fos!!.flush()
+        fos.close()
+
+        return saved
+    }
+
+    fun shareImage(uri: Uri, context: Context, isWhatsAppOnly: Boolean) {
+        val intent = Intent(Intent.ACTION_SEND)
+        val whatsAppPackageName = "com.whatsapp"
+        if (isWhatsAppOnly) intent.setPackage(whatsAppPackageName)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.type = "image/jpg"
+        context.startActivity(Intent.createChooser(intent, "A2Z Suvidhaa"))
+    }
+
+
+    fun savePdfToCacheDirectory(
+        context: Context,
+        bitmap: Bitmap,
+        fileName: String
+    ): Uri {
+
+
+        val cachePath = File(context.externalCacheDir, "document/")
+        cachePath.mkdirs()
+
+        val filePath = File(cachePath, fileName)
+
+        val document = PdfDocument()
+        val pageInfo = PdfDocument.PageInfo.Builder(bitmap.width, bitmap.height, 1).create()
+        val page = document.startPage(pageInfo)
+        val canvas = page.canvas
+        val paint = Paint()
+        paint.color = Color.parseColor("#ffffff")
+        canvas.drawPaint(paint)
+        val mBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.height, true)
+        paint.color = Color.BLUE
+        canvas.drawBitmap(mBitmap, 0f, 0f, null)
+        document.finishPage(page)
+
+        try {
+            document.writeTo(FileOutputStream(filePath))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        document.close()
+
+
+        return FileProvider.getUriForFile(context, context.applicationContext.packageName.toString() + ".provider", filePath)
+
+    }
+
+    fun viewImageFile(uri: Uri?, context: Context) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, "image/*")
+            context.startActivity(intent)
+        } catch (e: Exception) {
+
+        }
+    }
+    fun viewPdfFile(uri: Uri?, context: Context) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, "application/pdf")
+            context.startActivity(intent)
+        } catch (e: Exception) {
+
+        }
+    }
+
+
     fun File?.toBitmap(context: Context): Bitmap? {
 
         val uri = this?.toUri() ?: return null

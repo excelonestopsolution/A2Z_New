@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -37,6 +38,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.dmt.DmtTransactionDetail
+import com.a2z.app.data.model.dmt.MiniStatement
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.ui.component.BackPressHandler
@@ -57,13 +59,15 @@ fun BaseResultComponent(
     amountTopText: String,
     amountBelowText: String,
     amount: String,
-    availableBalance: String?=null,
+    availableBalance: String? = null,
     isPaymentAmount: Boolean = true,
     serviceIconRes: Int? = null,
     serviceIconNet: String? = null,
+    iconSize: Int = 60,
     dmtInfo: ArrayList<DmtTransactionDetail>? = null,
-    vararg  titleValues: List<Pair<String, String>>,
-    backPressHandle : Boolean = true
+    vararg titleValues: List<Pair<String, String>>,
+    statement: ArrayList<MiniStatement>? = null,
+    backPressHandle: Boolean = true
 ) {
 
     val context = LocalContext.current
@@ -71,8 +75,8 @@ fun BaseResultComponent(
     var scrollView: ScrollView? = null
 
     BackPressHandler(onBack = {
-        navController.navigate(NavScreen.DashboardScreen.route){
-            popUpTo(NavScreen.DashboardScreen.route){
+        navController.navigate(NavScreen.DashboardScreen.route) {
+            popUpTo(NavScreen.DashboardScreen.route) {
                 inclusive = true
             }
         }
@@ -104,16 +108,19 @@ fun BaseResultComponent(
                                 providerName = amountBelowText,
                                 amount = amount,
                                 availableBalance = availableBalance,
-                                dmtInfo =dmtInfo,
-                                isPaymentAmount =isPaymentAmount,
+                                dmtInfo = dmtInfo,
+                                isPaymentAmount = isPaymentAmount,
                                 serviceIconRes = serviceIconRes,
                                 serviceIconNet = serviceIconNet,
-                                titleValues = titleValues
+                                titleValues = titleValues,
+                                iconSize = iconSize,
+                                statement = statement
                             )
                         }
                     }
                     val spaceView = TextView(context).apply {
-                        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
+                        layoutParams =
+                            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
                     }
 
                     val linearLayout = LinearLayout(context).apply {
@@ -129,8 +136,8 @@ fun BaseResultComponent(
                         this.addView(spaceView)
                     }
 
-                    scrollView?.let {sv->
-                        if(sv.childCount ==0) sv.addView(linearLayout)
+                    scrollView?.let { sv ->
+                        if (sv.childCount == 0) sv.addView(linearLayout)
                     }
 
 
@@ -138,8 +145,8 @@ fun BaseResultComponent(
 
                 BuildShareButtons(
                     onShare = { saveAndShare(scrollView!!) },
-                    onWhatsapp = { saveAndShare(scrollView!!,true) },
-                    onDownload = {context.showToast("Work on Progress")})
+                    onWhatsapp = { saveAndShare(scrollView!!, true) },
+                    onDownload = { context.showToast("Work on Progress") })
 
             }
         }
@@ -148,7 +155,7 @@ fun BaseResultComponent(
 
 
 private fun getStatusValue(statusId: Int) = when (statusId) {
-    1,24 -> Pair(GreenColor, R.drawable.icon_sucess)
+    1, 24 -> Pair(GreenColor, R.drawable.icon_sucess)
     2 -> Pair(RedColor, R.drawable.icon_failed)
     3 -> Pair(YellowColor, R.drawable.icon_pending)
     else -> Pair(PrimaryColorDark, R.drawable.icon_pending)
@@ -167,10 +174,12 @@ private fun BuildContent(
     serviceIconRes: Int?,
     serviceIconNet: String?,
     isPaymentAmount: Boolean = true,
-    vararg  titleValues: List<Pair<String, String>>,
-    dmtInfo : ArrayList<DmtTransactionDetail>? = null
+    iconSize: Int,
+    vararg titleValues: List<Pair<String, String>>,
+    dmtInfo: ArrayList<DmtTransactionDetail>? = null,
+    statement: ArrayList<MiniStatement>? = null,
 
-) {
+    ) {
 
     val (color, statusIconRes) = getStatusValue(statusId)
 
@@ -191,8 +200,10 @@ private fun BuildContent(
                 textAlign = TextAlign.Center
             )
         )
-        Text(message, textAlign = TextAlign.Center, fontSize = 12.sp,
-            color = Color.Gray,)
+        Text(
+            message, textAlign = TextAlign.Center, fontSize = 12.sp,
+            color = Color.Gray,
+        )
         Text(
             dateTime, style = TextStyle(
                 fontSize = 12.sp, color = Color.Gray
@@ -224,8 +235,8 @@ private fun BuildContent(
     }
 
     @Composable
-    fun BuildAmountAndProviderInfo() {
-        Row {
+    fun BuildAmountAndProviderInfo(iconSize: Int) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
 
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -270,7 +281,9 @@ private fun BuildContent(
                 Image(
                     painter = painterResource(id = serviceIconRes),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(PrimaryColor)
+                    colorFilter = ColorFilter.tint(PrimaryColor),
+                    modifier = Modifier.size(iconSize.dp),
+                    contentScale = ContentScale.FillBounds
                 )
         }
     }
@@ -323,6 +336,62 @@ private fun BuildContent(
         }
     }
 
+    @Composable
+    fun BuildMiniStatement(statement: ArrayList<MiniStatement>) {
+
+        @Composable
+        fun RowScope.BuildStatementHeaderTitle(
+            value: String,
+            weight: Float = 1f,
+            textAlign: TextAlign = TextAlign.Center,
+            color : Color = Color.Black
+
+        ) {
+            Text(
+                text = value,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(weight),
+                textAlign = textAlign,
+                fontSize = 14.sp,
+                color = color
+            )
+        }
+
+
+        Row {
+            BuildStatementHeaderTitle(
+                value = "Txn Time",
+                weight = 0.7f, textAlign = TextAlign.Start,
+            )
+            BuildStatementHeaderTitle(value = "Narration", textAlign = TextAlign.Start)
+            BuildStatementHeaderTitle(
+                value = "Amount",
+                weight = 0.7f, textAlign = TextAlign.End
+            )
+        }
+
+       statement.forEach {
+           Divider(modifier =Modifier.padding(vertical = 4.dp))
+           Row {
+               BuildStatementHeaderTitle(
+                   value = it.txnTime.toString(),
+                   weight = 0.7f, textAlign = TextAlign.Start,
+                   color = PrimaryColor
+               )
+               BuildStatementHeaderTitle(
+                   value = it.narration.toString(),
+                   textAlign = TextAlign.Start,
+                   color = PrimaryColor
+               )
+               BuildStatementHeaderTitle(
+                   value = AppConstant.RUPEE_SYMBOL + it.amount +" "+it.txnType,
+                   weight = 0.7f, textAlign = TextAlign.End,
+                   color = if(it.txnType.toLowerCase() == "cr") GreenColor else RedColor
+               )
+           }
+       }
+    }
+
 
 
     Box(
@@ -349,7 +418,7 @@ private fun BuildContent(
             BuildHeaderSection()
             Divider(Modifier.padding(vertical = 16.dp))
 
-            BuildAmountAndProviderInfo()
+            BuildAmountAndProviderInfo(iconSize)
 
             Divider(Modifier.padding(vertical = 16.dp))
 
@@ -357,7 +426,8 @@ private fun BuildContent(
 
                 it.forEach {
                     if (it.second.isNotEmpty() && it.second != "null" && it.second.toLowerCase()
-                    != "na"  && it.second.toLowerCase() != "n/a")
+                        != "na" && it.second.toLowerCase() != "n/a"
+                    )
                         BuildTitleValue(
                             title = it.first,
                             value = it.second
@@ -369,12 +439,14 @@ private fun BuildContent(
 
 
 
-            if(dmtInfo!=null) BuildDmtTransactionDetail(dmtInfo)
+            if (dmtInfo != null) BuildDmtTransactionDetail(dmtInfo)
 
-            if(isPaymentAmount)BuildPaymentAmount(amount)
-            if(availableBalance!= null)BuildAvailableAmount(availableBalance)
+            if (isPaymentAmount) BuildPaymentAmount(amount)
+            if (availableBalance != null) BuildAvailableAmount(availableBalance)
 
             Divider(Modifier.padding(vertical = 16.dp))
+            if (statement != null) BuildMiniStatement(statement!!)
+            if (statement != null) Divider(Modifier.padding(vertical = 16.dp))
 
             BuildTitleValue(
                 title = "Shop Name",
@@ -405,79 +477,79 @@ private fun BuildContent(
 
 @Composable
 private fun BuildDmtTransactionDetail(dmtInfo: java.util.ArrayList<DmtTransactionDetail>) {
-   Column {
+    Column {
 
 
-       Row {
-           Text(
-               text = "Txn Id", modifier = Modifier.weight(0.8f),
-               textAlign = TextAlign.Start,
-               fontSize = 14.sp,
-               fontWeight = FontWeight.SemiBold
-           )
-           Text(
-               text = "Amount",
-               modifier = Modifier.weight(0.8f),
-               textAlign = TextAlign.Center,
-               fontSize = 14.sp,
-               fontWeight = FontWeight.SemiBold
-           )
-           Text(
-               text = "Bank Ref",
-               modifier = Modifier.weight(1.2f),
-               textAlign = TextAlign.Center,
-               fontSize = 14.sp,
-               fontWeight = FontWeight.SemiBold
-           )
-           Text(
-               text = "Status",
-               modifier = Modifier.weight(0.8f),
-               textAlign = TextAlign.End,
-               fontSize = 14.sp,
-               fontWeight = FontWeight.SemiBold
-           )
-       }
+        Row {
+            Text(
+                text = "Txn Id", modifier = Modifier.weight(0.8f),
+                textAlign = TextAlign.Start,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = "Amount",
+                modifier = Modifier.weight(0.8f),
+                textAlign = TextAlign.Center,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = "Bank Ref",
+                modifier = Modifier.weight(1.2f),
+                textAlign = TextAlign.Center,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = "Status",
+                modifier = Modifier.weight(0.8f),
+                textAlign = TextAlign.End,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
 
-       dmtInfo.forEach {
-           Spacer(modifier = Modifier.height(5.dp))
-           Row {
-               Text(
-                   text = it.txnId.toString(), modifier = Modifier.weight(0.8f),
-                   textAlign = TextAlign.Start,
-                   fontSize = 14.sp,
-                   fontWeight = FontWeight.Normal,
-                   color = MaterialTheme.colors.primary
-               )
-               Text(
-                   text = AppConstant.RUPEE_SYMBOL + it.amount.toString(),
-                   modifier = Modifier.weight(0.8f),
-                   textAlign = TextAlign.Center,
-                   fontSize = 14.sp,
-                   fontWeight = FontWeight.Normal,
-                   color = MaterialTheme.colors.primary
-               )
-               Text(
-                   text = it.bankRef.toString(),
-                   modifier = Modifier.weight(1.2f),
-                   textAlign = TextAlign.Center,
-                   fontSize = 14.sp,
-                   fontWeight = FontWeight.Normal,
-                   color = MaterialTheme.colors.primary
-               )
-               Text(
-                   text = it.statusDesc.toString(),
-                   modifier = Modifier.weight(0.8f),
-                   textAlign = TextAlign.End,
-                   fontSize = 14.sp,
-                   fontWeight = FontWeight.Normal,
-                   color = MaterialTheme.colors.primary
-               )
-           }
-           
-       }
+        dmtInfo.forEach {
+            Spacer(modifier = Modifier.height(5.dp))
+            Row {
+                Text(
+                    text = it.txnId.toString(), modifier = Modifier.weight(0.8f),
+                    textAlign = TextAlign.Start,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colors.primary
+                )
+                Text(
+                    text = AppConstant.RUPEE_SYMBOL + it.amount.toString(),
+                    modifier = Modifier.weight(0.8f),
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colors.primary
+                )
+                Text(
+                    text = it.bankRef.toString(),
+                    modifier = Modifier.weight(1.2f),
+                    textAlign = TextAlign.Center,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colors.primary
+                )
+                Text(
+                    text = it.statusDesc.toString(),
+                    modifier = Modifier.weight(0.8f),
+                    textAlign = TextAlign.End,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colors.primary
+                )
+            }
 
-       Divider(Modifier.padding(vertical = 16.dp))
-   }
+        }
+
+        Divider(Modifier.padding(vertical = 16.dp))
+    }
 
 }
 
@@ -490,9 +562,10 @@ private fun BoxScope.BuildShareButtons(
 ) {
 
     @Composable
-    fun ButtonComponent(callback: VoidCallback,
-                        icon: ImageVector, text: String,
-                        color : Color = PrimaryColor
+    fun ButtonComponent(
+        callback: VoidCallback,
+        icon: ImageVector, text: String,
+        color: Color = PrimaryColor
     ) {
         Button(
             onClick = callback, shape = CircleShape,
@@ -532,11 +605,14 @@ private fun BoxScope.BuildShareButtons(
         DownloadButton()
         Spacer(modifier = Modifier.height(8.dp))
         Row {
-            ButtonComponent(callback = onShare,
+            ButtonComponent(
+                callback = onShare,
                 icon = Icons.Default.Share,
-                text = "Share")
+                text = "Share"
+            )
             Spacer(modifier = Modifier.weight(1f))
-            ButtonComponent(callback = onWhatsapp,
+            ButtonComponent(
+                callback = onWhatsapp,
                 icon = Icons.Default.Whatsapp,
                 text = "Whatsapp",
                 color = GreenColor
@@ -548,7 +624,7 @@ private fun BoxScope.BuildShareButtons(
 
 }
 
-private fun saveAndShare(scrollView: ScrollView,whatsapp : Boolean = false) {
+private fun saveAndShare(scrollView: ScrollView, whatsapp: Boolean = false) {
     scrollView.setBackgroundColor(ContextCompat.getColor(scrollView.context, R.color.black))
     val bitmap: Bitmap? = StorageHelper.getBitmapFromView(scrollView = scrollView)
     scrollView.setBackgroundColor(

@@ -10,6 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class LedgerReportResponse(
 
     @SerializedName("status") var status: Int? = null,
+    @SerializedName("message") var message: String? = null,
     @SerializedName("reports") var reports: ArrayList<LedgerReport>? = null,
     @SerializedName("count") var count: Int? = null,
     @SerializedName("next_page") var nextPage: Int? = null,

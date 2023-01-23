@@ -8,12 +8,21 @@ import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.ui.theme.YellowColor
 
 object ReportUtil {
-    fun getColorFromId(statusId: Int?) : androidx.compose.ui.graphics.Color {
-        return  when (statusId) {
-            1,7,24-> GreenColor
-            2,6 -> RedColor
+    fun getColorFromId(statusId: Int?): androidx.compose.ui.graphics.Color {
+        return when (statusId) {
+            1, 7, 24 -> GreenColor
+            2, 6 -> RedColor
             3 -> YellowColor
             else -> PrimaryColorDark
+        }
+    }
+
+
+    fun getStatusId(statusId: String?): Int {
+        return when (statusId?.lowercase()) {
+            "success", "successful", "accepted", "credit" -> 1
+            "failed", "failure", "debited" -> 2
+            else -> 3
         }
     }
 }

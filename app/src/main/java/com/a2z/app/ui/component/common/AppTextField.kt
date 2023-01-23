@@ -209,7 +209,7 @@ fun MobileTextField(
 ) {
 
     AppTextField(value = value,
-        label =label ?: "Mobile Number",
+        label = label ?: "Mobile Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.PhoneAndroid,
@@ -233,15 +233,15 @@ fun AadhaarTextField(
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
     downText: String? = "Enter 12 digits aadhaar number",
-    label : String? = null,
-    readOnly : Boolean = false,
+    label: String? = null,
+    readOnly: Boolean = false,
     trailingIcon: @Composable () -> Unit = {}
 ) {
 
     AppTextField(
         value = value,
         readOnly = readOnly,
-        label = label ?:  "Aadhaar Number",
+        label = label ?: "Aadhaar Number",
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.Input,
@@ -264,15 +264,15 @@ fun EmailTextField(
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
-    label : String? = null,
+    label: String? = null,
     downText: String? = null,
-    readOnly: Boolean= false
+    readOnly: Boolean = false
 ) {
 
     AppTextField(
         value = value,
         readOnly = readOnly,
-        label =label ?: "Email Id",
+        label = label ?: "Email Id",
         onChange = onChange,
         keyboardType = KeyboardType.Email,
         leadingIcon = Icons.Default.Email,
@@ -290,13 +290,16 @@ fun EmailTextField(
 fun DateTextField(
     value: String,
     label: String,
+    readOnly: Boolean = true,
     onChange: (String) -> Unit,
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
     downText: String? = null,
-    onDateSelected: (String) -> Unit
-) {
+    onDateSelected: (String) -> Unit,
+
+
+    ) {
 
     val datePicker = rememberSaveable { mutableStateOf(false) }
     if (datePicker.value) DatePickerDialog(onCancelled = { datePicker.value = false },
@@ -307,12 +310,22 @@ fun DateTextField(
         })
 
 
+    val source = remember {
+        MutableInteractionSource()
+    }
+    if (source.collectIsPressedAsState().value) {
+        if (readOnly)
+            datePicker.value = true
+    }
+
     AppTextField(value = value,
         label = label,
+        readOnly = readOnly,
         onChange = onChange,
         keyboardType = KeyboardType.Number,
         leadingIcon = Icons.Default.CalendarToday,
         error = error,
+        interactionSource = source,
         maxLength = 8,
         isOutline = isOutline,
         topSpace = topSpace,

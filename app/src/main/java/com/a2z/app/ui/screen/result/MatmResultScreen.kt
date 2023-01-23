@@ -36,6 +36,7 @@ fun MatmResultScreen(it: NavBackStackEntry) {
         serviceIconRes = R.drawable.ic_launcher_matm,
         titleValues = arrayOf(upiTitleValue1),
         isPaymentAmount = false,
+        iconSize = 42,
         backPressHandle = response.isTransaction
     )
 }

@@ -46,7 +46,7 @@ class ParentPaymentReturnViewModel @Inject constructor(
                 }
             ) {
                 if (it.status == 1) successDialog(it.message) {
-                    navigateTo(NavScreen.DashboardScreen.route,true)
+                    navigateTo(NavScreen.DashboardScreen.route, true)
                 }
                 else alertDialog(it.message)
             }
@@ -57,8 +57,7 @@ class ParentPaymentReturnViewModel @Inject constructor(
         callApiForStateFlow(
             flow = detailResultFlow,
             call = { repository.fetchParentPaymentReturnDetail() },
-
-            )
+        )
     }
 
     fun onSubmit() {
@@ -73,7 +72,7 @@ class ParentPaymentReturnViewModel @Inject constructor(
             "encReceiverId" to encReceiverId,
         )
         callApiForShareFlow(
-            flow =_transactionResultFlow,
+            flow = _transactionResultFlow,
             call = { transactionRepository.parentPaymentFundReturn(param) }
         )
     }
@@ -81,9 +80,8 @@ class ParentPaymentReturnViewModel @Inject constructor(
     data class FormInput(
         val amount: InputWrapper = InputWrapper {
             AppValidator.amountValidation(
-                minAmount = 2.0,
-                maxAmount = 1000000.0,
-                inputAmount = it
+                it,
+                minAmount = 1.0
             )
         },
         val remark: InputWrapper = InputWrapper { AppValidator.empty(it) }

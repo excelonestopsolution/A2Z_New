@@ -11,6 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.component.keyboardAsState
 import com.a2z.app.ui.screen.AppViewModel
+import com.a2z.app.util.AppUtil
 import com.a2z.app.util.ToggleBottomSheet
 import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheetComponent(
-    sheetContent: @Composable (close : VoidCallback) -> Unit,
+    sheetContent: @Composable (close: VoidCallback) -> Unit,
     mainContent: @Composable (toggle: ToggleBottomSheet) -> Unit,
 ) {
 
@@ -35,7 +36,7 @@ fun BottomSheetComponent(
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = true
+        skipHalfExpanded = true,
     )
 
     BackPressHandler(
@@ -44,14 +45,17 @@ fun BottomSheetComponent(
                 sheetState.hide()
             }
 
-        }, enabled = sheetState.isVisible) {
+        }, enabled = sheetState.isVisible
+    ) {
+
 
         ModalBottomSheetLayout(
             sheetState = sheetState,
             sheetContent = {
-                sheetContent.invoke{
+                sheetContent.invoke {
                     coroutineScope.launch {
-                        if(sheetState.isVisible)sheetState.hide()
+                        if (!keyboard) manager.clearFocus()
+                        if (sheetState.isVisible) sheetState.hide()
                     }
                 }
             },
@@ -73,7 +77,7 @@ fun BottomSheetComponent(
                 topEnd = 4.dp,
             ),
 
-        )
+            )
     }
 
 

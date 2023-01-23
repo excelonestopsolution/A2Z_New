@@ -58,9 +58,9 @@ fun R2RTransferScreen() {
                 },
                 cardContents = listOf(
                     AppFormCard(
-                        title = "Search By",
+                        title = "Search Retailer Mobile",
                         contents = {
-                            BuildTransactionType(viewModel = viewModel)
+                           // BuildTransactionType(viewModel = viewModel)
 
                             AppTextField(
                                 keyboardType = KeyboardType.Number,

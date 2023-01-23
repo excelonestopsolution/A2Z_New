@@ -39,6 +39,7 @@ import com.a2z.app.util.VoidCallback
 fun SearchSenderScreen(navBackStackEntry: NavBackStackEntry) {
 
     val viewModel: SearchSenderViewModel = hiltViewModel()
+
     Scaffold(
         topBar = { NavTopBar(title = "Search Sender") },
         backgroundColor = BackgroundColor,

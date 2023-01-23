@@ -25,6 +25,7 @@ import com.a2z.app.util.*
 import com.a2z.app.util.extension.insertDateSeparator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,7 @@ class LedgerReportViewModel @Inject constructor(
     private val _checkStatusResultFlow = resultShareFlow<AppResponse>()
 
     val complaintDialogVisibleState = mutableStateOf(value = false)
+    val filterDialogVisibleState = mutableStateOf(value = false)
 
     val complaintTypeListState = mutableListOf<ComplainType>()
 
@@ -153,10 +155,10 @@ class LedgerReportViewModel @Inject constructor(
                             val mData = it.data!!.run {
                                 MatmTransactionResponse(
                                     status = this.status,
-                                    statusDesc =this.statusDesc,
+                                    statusDesc = this.statusDesc,
                                     message = this.message,
                                     serviceName = this.serviceName,
-                                    customerNumber =this.senderNumber,
+                                    customerNumber = this.senderNumber,
                                     txnId = "",
                                     orderId = this.reportId,
                                     recordId = this.reportId,
@@ -168,11 +170,11 @@ class LedgerReportViewModel @Inject constructor(
                                     transactionAmount = this.amount,
                                     transactionMode = "",
                                     bankRef = this.bankRef,
-                                    txnTime =this.txnTime,
-                                    shopName =this.outletName,
+                                    txnTime = this.txnTime,
+                                    shopName = this.outletName,
                                     retailerNumber = this.outletNumber,
                                     retailerName = "",
-                                    outletAddress =this.outletAddress,
+                                    outletAddress = this.outletAddress,
                                     isTransaction = false
                                 )
                             }
@@ -208,7 +210,9 @@ class LedgerReportViewModel @Inject constructor(
                 Unit
             },
             success = {
-                pagingState = pagingState.successState(it.reports!!, it.nextPage)
+                pagingState = if (it.status == 1)
+                    pagingState.successState(it.reports!!, it.nextPage)
+                else pagingState.failureState(Exception(it.message.toString()))
             },
             failure = {
                 pagingState = pagingState.failureState(it)
@@ -232,7 +236,7 @@ class LedgerReportViewModel @Inject constructor(
         val param = searchInput.run {
             hashMapOf(
                 "todate" to this.endDate.insertDateSeparator(),
-                "fromdate" to "01-01-2021",
+                "fromdate" to this.startDate.insertDateSeparator(),
                 "searchType" to this.criteria,
                 "number" to this.input,
                 "status_id" to this.status,
