@@ -3,6 +3,7 @@ package com.a2z.app.data.repository_impl
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.fund.PaymentGatewayInitiateResponse
 import com.a2z.app.data.model.fund.PaymentReturnDetailResponse
 import com.a2z.app.data.model.fund.UpiPaymentInitiateResponse
 import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
@@ -60,6 +61,10 @@ class FundRepositoryImpl @Inject constructor(
 
     override suspend fun initiateUpiPayment(data: FieldMapData): UpiPaymentInitiateResponse {
         return service.initiateUpiPayment(data)
+    }
+
+    override suspend fun initiatePaymentGatewayRequest(data: FieldMapData): PaymentGatewayInitiateResponse {
+        return service.initiatePaymentGatewayRequest(data)
     }
 
 }

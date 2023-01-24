@@ -155,8 +155,8 @@ fun BuildMainContent() {
                             if (viewModel.transactionType.value == AepsTransactionType.CASH_WITHDRAWAL
                                 || viewModel.transactionType.value == AepsTransactionType.AADHAAR_PAY
                             ) AmountTextField(
-                                value = input.amountInputWrapper.getValue(),
-                                onChange = { input.amountInputWrapper.setValue(it) },
+                                value = input.amountInputWrapper.formValue(),
+                                onChange = { input.amountInputWrapper.onChange(it) },
                                 error = input.amountInputWrapper.formError(),
                                 isOutline = true
                             )

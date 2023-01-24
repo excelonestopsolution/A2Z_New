@@ -3,6 +3,7 @@ package com.a2z.app.data.network
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.FundRequestBankListResponse
+import com.a2z.app.data.model.fund.PaymentGatewayInitiateResponse
 import com.a2z.app.data.model.fund.PaymentReturnDetailResponse
 import com.a2z.app.data.model.fund.UpiPaymentInitiateResponse
 import com.a2z.app.data.model.r2r.R2RSearchRetailerResponse
@@ -39,18 +40,21 @@ interface FundService {
     suspend fun searchR2RRetailer(
         @Query("SEARCH_TYPE") searchType: String,
         @Query("INPUT") searchInput: String
-    ) : R2RSearchRetailerResponse
-
+    ): R2RSearchRetailerResponse
 
 
     @GET("parent/payment-return")
-    suspend fun fetchParentPaymentReturnDetail() : PaymentReturnDetailResponse
+    suspend fun fetchParentPaymentReturnDetail(): PaymentReturnDetailResponse
 
 
     @FormUrlEncoded
     @POST("generate-qr-code")
-    suspend fun initiateUpiPayment(@FieldMap data : FieldMapData) : UpiPaymentInitiateResponse
+    suspend fun initiateUpiPayment(@FieldMap data: FieldMapData): UpiPaymentInitiateResponse
 
+
+    @FormUrlEncoded
+    @POST("pg/create-order")
+    suspend fun initiatePaymentGatewayRequest(@FieldMap data: FieldMapData): PaymentGatewayInitiateResponse
 
 
 }

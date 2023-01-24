@@ -42,12 +42,18 @@ fun FundMethodScreen() {
                     items(util.methodList.size) {
                         BuildItem(util.methodList[it], onClick = { item ->
                             when (item.type) {
-                                FundMethodType.UPI ->{
+                                FundMethodType.UPI -> {
                                     navController.navigate(NavScreen.UpiPaymentScreen.route)
                                 }
-                                FundMethodType.PAYMENT_GATEWAY -> {}
+                                FundMethodType.PAYMENT_GATEWAY -> {
+                                    navController.navigate(NavScreen.PaymentGatewayScreen.route)
+                                }
                                 else -> {
-                                    navController.navigate(NavScreen.FundBankListScreen.passData(item))
+                                    navController.navigate(
+                                        NavScreen.FundBankListScreen.passData(
+                                            item
+                                        )
+                                    )
                                 }
                             }
                         })

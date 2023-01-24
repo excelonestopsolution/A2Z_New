@@ -53,7 +53,7 @@ interface TransactionService {
         @FieldMap data : FieldMapData
     ) : AppResponse
 
-    @POST("a2z-settlement-request")
+    @POST("aeps/one-new")
     @FormUrlEncoded
     suspend fun aepsTransaction(
         @FieldMap data : FieldMapData

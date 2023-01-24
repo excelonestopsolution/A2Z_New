@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,14 +73,15 @@ class AepsViewModel @Inject constructor(
             _transactionResultFlow.collectLatest {
                 when (it) {
                     is ResultType.Failure -> {
-                        if (transactionType.value == AepsTransactionType.MINI_STATEMENT ||
-                            transactionType.value == AepsTransactionType.BALANCE_ENQUIRY
+                        if (transactionType.value == AepsTransactionType.MINI_STATEMENT
+                            || transactionType.value == AepsTransactionType.BALANCE_ENQUIRY
                         ) {
-                            failureDialog("Something went wrong! please try again.")
-                        } else pendingDialog("Transaction in pending! please check aeps report") {
-                            dismissDialog()
-                            navigateTo(NavScreen.DashboardScreen.route, true)
-                        }
+                            failureDialog("Something went wrong, please try again")
+                        } else
+                            pendingDialog("Transaction in pending, please check report for more details") {
+                                dismissDialog()
+                                navigateTo(NavScreen.DashboardScreen.route, true)
+                            }
                     }
                     is ResultType.Loading -> transactionProgressDialog()
                     is ResultType.Success -> transactionResult(it.data)
@@ -96,8 +98,7 @@ class AepsViewModel @Inject constructor(
                             1, 2 -> navigateToResultScreen(it.data)
                             11, 33 -> {
                                 if (checkStatusCount < 6) {
-                                    if (checkStatusCountTotal < 22)
-                                        checkStatusForTransaction()
+                                    if (checkStatusCountTotal < 22) checkStatusForTransaction()
                                     else navigateToResultScreen()
                                 } else checkStatusForTransactionFromBank()
                             }
@@ -112,8 +113,7 @@ class AepsViewModel @Inject constructor(
                     is ResultType.Failure -> navigateToResultScreen()
                     is ResultType.Loading -> {}
                     is ResultType.Success -> {
-                        if (it.data.status == 503)
-                            navigateToResultScreen()
+                        if (it.data.status == 503) navigateToResultScreen()
                         else checkStatusForTransaction()
                     }
                 }
@@ -127,8 +127,7 @@ class AepsViewModel @Inject constructor(
         val payId = transactionResponse.pay_type
 
         if (status == 3 && payId == "58") checkStatusForTransaction()
-        else if (status == 3 || status == 2 || status == 1)
-            navigateToResultScreen()
+        else if (status == 3 || status == 2 || status == 1) navigateToResultScreen()
         else {
             dismissDialog()
             alertDialog(transactionResponse.message)
@@ -168,18 +167,17 @@ class AepsViewModel @Inject constructor(
         navigateTo(
             NavScreen.AEPSTxnScreen.passArgs(
                 response = mData.apply {
-                    isTransaction = transactionType.value == AepsTransactionType.CASH_WITHDRAWAL ||
-                            transactionType.value == AepsTransactionType.AADHAAR_PAY
+                    isTransaction =
+                        transactionType.value == AepsTransactionType.CASH_WITHDRAWAL || transactionType.value == AepsTransactionType.AADHAAR_PAY
                 },
             )
         )
-
     }
 
     private fun setFormValid() {
 
-        val amountValidation = transactionType.value == AepsTransactionType.CASH_WITHDRAWAL ||
-                transactionType.value == AepsTransactionType.AADHAAR_PAY
+        val amountValidation =
+            transactionType.value == AepsTransactionType.CASH_WITHDRAWAL || transactionType.value == AepsTransactionType.AADHAAR_PAY
         useMobileValidation.value = amountValidation
 
         isFormValid.value = input.isValidObs.value && selectedBank.value != null
@@ -198,8 +196,7 @@ class AepsViewModel @Inject constructor(
     }
 
     fun getAepsStringBankList(): ArrayList<String> {
-        return (bankList?.map { it.bankName ?: "" }?.toList()
-            ?: arrayListOf()) as ArrayList<String>
+        return (bankList?.map { it.bankName ?: "" }?.toList() ?: arrayListOf()) as ArrayList<String>
     }
 
     private fun bankNameToAepsBank(bankName: String): AepsBank? {
@@ -232,8 +229,19 @@ class AepsViewModel @Inject constructor(
         showConfirmDialogState.value = true
     }
 
+    private val isCashTransaction: Boolean
+        get() = when (transactionType.value) {
+            AepsTransactionType.CASH_WITHDRAWAL -> true
+            AepsTransactionType.BALANCE_ENQUIRY -> false
+            AepsTransactionType.MINI_STATEMENT -> false
+            AepsTransactionType.AADHAAR_PAY -> true
+        }
+
     fun onConfirmTransaction() {
 
+
+        val amount = if (isCashTransaction) input.amountInputWrapper.getValue()
+        else "0"
         checkStatusCountTotal = 0
         checkStatusCount = 0
 
@@ -243,7 +251,7 @@ class AepsViewModel @Inject constructor(
             "selectedBankName" to selectedBank.value!!.bankName.toString(),
             "transactionType" to getTransactionTypeParam(),
             "txtPidData" to pidData,
-            "amount" to input.amountInputWrapper.getValue(),
+            "amount" to amount,
             "deviceName" to biometricDevice.deviceName,
             "aadhaarNumber" to input.aadhaarInputWrapper.getValue(),
             "latitude" to appPreference.latitude,
@@ -256,10 +264,8 @@ class AepsViewModel @Inject constructor(
                 AepsType.AEPS_3 -> transactionRepository.aeps3Transaction(param)
             }
         }
-
         callApiForShareFlow(
-            flow = _transactionResultFlow,
-            call = call
+            flow = _transactionResultFlow, call = call
         )
     }
 }
