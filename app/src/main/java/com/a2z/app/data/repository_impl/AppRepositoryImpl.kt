@@ -1,5 +1,6 @@
 package com.a2z.app.data.repository_impl
 
+import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
@@ -42,5 +43,9 @@ class AppRepositoryImpl @Inject constructor(private val appService: AppService) 
 
     override suspend fun schemeDetail(data: FieldMapData): CommissionSchemeDetailResponse {
         return appService.schemeDetail(data)
+    }
+
+    override suspend fun flightHotelRedirectUrl(): FlightHotelRedirectUrlResponse {
+        return appService.flightHotelRedirectUrl()
     }
 }

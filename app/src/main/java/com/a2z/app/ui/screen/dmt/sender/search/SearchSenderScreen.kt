@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -20,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.data.model.dmt.SenderAccountDetail
+import com.a2z.app.ui.component.BankDownComponent
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
@@ -30,6 +33,7 @@ import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.util.extension.singleResult
+import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.VoidCallback
 
@@ -55,10 +59,11 @@ fun SearchSenderScreen(navBackStackEntry: NavBackStackEntry) {
             BaseContent(viewModel) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
                         .padding(vertical = 8.dp, horizontal = 12.dp)
                 ) {
                     SearchSenderByComponent()
+
                     if (viewModel.senderBeneficiaries.value.isNotEmpty())
                         BuildAccountList(viewModel) {
 
@@ -185,55 +190,56 @@ private fun SearchSenderByComponent() {
     val viewModel: SearchSenderViewModel = hiltViewModel()
     Card {
 
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = "Search By " +
-                        if (viewModel.searchType.value == SenderSearchType.MOBILE) "Mobile" else "Account",
-                style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
-            )
-            if(viewModel.dmtType != DMTType.UPI) Spacer(modifier = Modifier.height(8.dp))
-            if(viewModel.dmtType != DMTType.UPI) Row {
-                SearchButton(searchType = SenderSearchType.MOBILE) {
-                    viewModel.onSearchTypeClick(SenderSearchType.MOBILE)
-                }
-                SearchButton(searchType = SenderSearchType.ACCOUNT) {
-                    viewModel.onSearchTypeClick(SenderSearchType.ACCOUNT)
-                }
-            }
+      Column {
+          Column(modifier = Modifier.padding(12.dp)) {
+              Text(
+                  text = "Search By " +
+                          if (viewModel.searchType.value == SenderSearchType.MOBILE) "Mobile" else "Account",
+                  style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
+              )
+              if (viewModel.dmtType != DMTType.UPI) Spacer(modifier = Modifier.height(8.dp))
+              if (viewModel.dmtType != DMTType.UPI) Row {
+                  SearchButton(searchType = SenderSearchType.MOBILE) {
+                      viewModel.onSearchTypeClick(SenderSearchType.MOBILE)
+                  }
+                  SearchButton(searchType = SenderSearchType.ACCOUNT) {
+                      viewModel.onSearchTypeClick(SenderSearchType.ACCOUNT)
+                  }
+              }
 
-            Spacer(modifier = Modifier.height(8.dp))
+              Spacer(modifier = Modifier.height(8.dp))
 
-            AppTextField(
-                keyboardType = KeyboardType.Number,
-                value = viewModel.input.number.getValue(),
-                label = viewModel.inputLabel,
-                isOutline = true,
-                maxLength = viewModel.numberValidationLength.value,
-                onChange = { viewModel.input.number.onChange(it) },
-                error = viewModel.input.number.formError(),
-                trailingIcon = {
-                    Button(
-                        enabled = viewModel.input.isValidObs.value,
-                        onClick = {
-                            viewModel.onSearchClick()
-                        },
-                        contentPadding = PaddingValues(
-                            horizontal = 12.dp
-                        ),
-                        shape = CircularShape,
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(end = 8.dp)
-                    ) {
-                        Text(text = "Search")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
-                    }
-                })
-
-        }
-
-
+              AppTextField(
+                  keyboardType = KeyboardType.Number,
+                  value = viewModel.input.number.getValue(),
+                  label = viewModel.inputLabel,
+                  isOutline = true,
+                  maxLength = viewModel.numberValidationLength.value,
+                  onChange = { viewModel.input.number.onChange(it) },
+                  error = viewModel.input.number.formError(),
+                  trailingIcon = {
+                      Button(
+                          enabled = viewModel.input.isValidObs.value,
+                          onClick = {
+                              viewModel.onSearchClick()
+                          },
+                          contentPadding = PaddingValues(
+                              horizontal = 12.dp
+                          ),
+                          shape = CircularShape,
+                          modifier = Modifier
+                              .wrapContentSize()
+                              .padding(end = 8.dp)
+                      ) {
+                          Text(text = "Search")
+                          Spacer(modifier = Modifier.width(4.dp))
+                          Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                      }
+                  })
+          }
+          val bankDownState = rememberStateOf<BankDownResponse?>(value = viewModel.bankDownResponse)
+          BankDownComponent(bankDownState)
+      }
     }
 
 }

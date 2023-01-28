@@ -261,7 +261,7 @@ private fun BuildListItem(
                                 contentColor = Color.White
                             ), contentPadding = buttonPaddingValue
                         ) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Verify")
+                            Icon(imageVector = Icons.Default.Verified, contentDescription = "Verify")
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(text = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) "Re-verified" else "Verified")
                         }

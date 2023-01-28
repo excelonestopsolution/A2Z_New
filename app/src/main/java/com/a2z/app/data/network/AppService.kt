@@ -1,5 +1,6 @@
 package com.a2z.app.data.network
 
+import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
@@ -30,10 +31,14 @@ interface AppService {
     suspend fun fetchBankDown(): BankDownResponse
 
     @GET("user/scheme/list")
-    suspend fun schemeList() : CommissionSchemeListResponse
+    suspend fun schemeList(): CommissionSchemeListResponse
 
     @GET("user/scheme")
-    suspend fun schemeDetail(@QueryMap data : FieldMapData) : CommissionSchemeDetailResponse
+    suspend fun schemeDetail(@QueryMap data: FieldMapData): CommissionSchemeDetailResponse
+
+
+    @GET("travel/flight-hotel")
+    suspend fun flightHotelRedirectUrl(): FlightHotelRedirectUrlResponse
 
 
 }

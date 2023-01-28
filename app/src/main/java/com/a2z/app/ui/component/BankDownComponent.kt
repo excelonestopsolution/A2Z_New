@@ -114,7 +114,7 @@ fun BankDownComponent(
                         view
                     }, modifier = Modifier
                         .width(this.maxWidth)
-                        .height(this.maxHeight)
+                        .wrapContentHeight()
                 )
             }
         }

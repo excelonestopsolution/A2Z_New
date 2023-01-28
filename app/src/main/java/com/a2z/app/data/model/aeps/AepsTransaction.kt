@@ -27,7 +27,8 @@ data class AepsTransaction(
     val retailer_number: String?,
     val pay_type: String?,
     val statement: ArrayList<MiniStatement>?,
-    var isTransaction: Boolean = true
+    var isTransaction: Boolean = true,
+    var isLedgerReport : Boolean = false
 ) : Parcelable
 
 @Keep

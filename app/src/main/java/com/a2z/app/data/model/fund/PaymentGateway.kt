@@ -20,5 +20,7 @@ data class PaymentGatewayInitiateResponse(
 data class PaymentGatewayInitiateData(
     val amount: String,
     @SerializedName("customer_mobile") val mobile: String,
-    @SerializedName("ackno") val ackNo: String
+    @SerializedName("ackno") val ackNo: String,
+    @SerializedName("key") val key: String,
+    @SerializedName("secretKey") val secretKey: String
 ) : Parcelable

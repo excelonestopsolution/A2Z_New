@@ -509,7 +509,8 @@ fun DropDownTextField(
                     imeAction = ImeAction.None,
                 ),
                 readOnly = true,
-                interactionSource = source
+                interactionSource = source,
+                singleLine = true,
             )
 
         }

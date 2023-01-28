@@ -41,7 +41,7 @@ fun RechargeScreen(
 
     val viewModel: RechargeViewModel = hiltViewModel()
 
-    HomeLocationServiceDialog()
+
 
     BaseContent(viewModel) {
         Scaffold(
@@ -73,6 +73,8 @@ fun RechargeScreen(
                 proceedToRecharge(scope, viewModel, navController)
             }
 
+
+            HomeLocationServiceDialog()
         }
 
     }
@@ -115,6 +117,7 @@ private fun proceedToRecharge(
                                         this.serviceName = viewModel.util.getOperatorTitle()
                                         this.number = viewModel.input.numberInputWrapper.getValue()
                                         this.numberTitle = numberTitle
+                                        this.isTransaction = true
 
                                     }
                                 ))

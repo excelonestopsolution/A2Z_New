@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.result
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.data.model.matm.MatmTransactionResponse
@@ -12,6 +13,10 @@ fun MatmResultScreen(it: NavBackStackEntry) {
 
     val arg = it.arguments?.getString("response")
     val response = Gson().fromJson (arg!!,MatmTransactionResponse::class.java)
+
+    val viewModel : TxnResultViewModel = hiltViewModel()
+    viewModel.recordId  = response.recordId.toString()
+    viewModel.receiptType = TxnResultPrintReceiptType.MATM
 
 
     val upiTitleValue1 = listOf(

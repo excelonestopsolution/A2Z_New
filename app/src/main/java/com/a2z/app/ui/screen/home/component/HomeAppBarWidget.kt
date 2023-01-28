@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.SettingsPower
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -125,7 +126,7 @@ fun HomeAppBarWidget(
                 navController.navigate(NavScreen.ShowQRScreen.route)
             }
             Spacer(modifier = Modifier.width(8.dp))
-            BuildActionIcon(Icons.Default.Logout){
+            BuildActionIcon(Icons.Default.SettingsPower){
                 viewModel.exitDialogState.value = true
             }
 

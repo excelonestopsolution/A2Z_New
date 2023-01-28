@@ -25,6 +25,12 @@ interface ReportService {
     @GET
     suspend fun aepsPrintDetail(@Url data: String): TransactionDetailResponse
 
+    @GET
+    suspend fun matmPrintDetail(@Url data: String): TransactionDetailResponse
+
+    @GET
+    suspend fun otherPrintDetail(@Url data: String): TransactionDetailResponse
+
 
     @POST("complain/store")
     @FormUrlEncoded

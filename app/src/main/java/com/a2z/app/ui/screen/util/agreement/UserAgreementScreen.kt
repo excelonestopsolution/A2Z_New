@@ -62,11 +62,11 @@ fun UserAgreementScreen() {
                     when (it.status) {
                         1 -> AgreementStatusContent(
                             viewModel,
-                            it.message,
+                            it.message.toString(),
                             it.data?.agreementUrl.toString()
                         )
                         3 -> AgreementFormContent(viewModel, it.data)
-                        else -> viewModel.failureDialog(it.message) {
+                        else -> viewModel.failureDialog(it.message.toString()) {
                             viewModel.navigateUpWithResult()
                         }
 

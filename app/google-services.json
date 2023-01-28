@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "952701394011",
+    "project_id": "a2z-compose",
+    "storage_bucket": "a2z-compose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952701394011:android:12bbb544237033a9e6337e",
+        "android_client_info": {
+          "package_name": "com.a2z.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952701394011-18riiudsd8ln57elu78qsn1tnhs3cqhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyp3cowNbAFRoH3gXGr_4V88mzLYoo-Tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952701394011-18riiudsd8ln57elu78qsn1tnhs3cqhq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

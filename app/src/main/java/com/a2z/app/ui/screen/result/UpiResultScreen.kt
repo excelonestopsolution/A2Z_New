@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.result
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.data.model.dmt.TransactionDetail
@@ -12,6 +13,8 @@ fun UPIResultScreen(it: NavBackStackEntry) {
 
     val arg = it.arguments?.getString("response")
     val response = Gson().fromJson (arg!!,TransactionDetail::class.java)
+    val viewModel : TxnResultViewModel = hiltViewModel()
+    viewModel.recordId  = response.reportId.toString()
 
 
     val upiTitleValue1 = listOf(

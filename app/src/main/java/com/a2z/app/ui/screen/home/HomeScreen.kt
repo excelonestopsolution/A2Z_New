@@ -1,5 +1,7 @@
 package com.a2z.app.ui.screen.home
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
@@ -23,11 +26,13 @@ import com.a2z.app.service.LocalAuth
 import com.a2z.app.service.LocalAuthResultType
 import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.*
 import com.a2z.app.ui.theme.BackgroundColor2
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.Exceptions
 import com.a2z.app.util.extension.showToast
 import kotlinx.coroutines.flow.collectLatest
@@ -117,6 +122,21 @@ fun HomeScreen(
         }
     }
 
+    CollectLatestWithScope(flow = viewModel.hotelFlightDirectUrlFlow, callback = {
+        when (it) {
+            is ResultType.Failure -> viewModel.alertDialog("Something went wrong!, please try again")
+            is ResultType.Loading -> viewModel.progressDialog()
+            is ResultType.Success -> {
+                if(it.data.status == 1){
+                    viewModel.dismissDialog()
+                    val i = Intent(Intent.ACTION_VIEW)
+                    i.data = Uri.parse(it.data.url.toString())
+                    context.startActivity(i)
+                }
+                else viewModel.failureDialog(it.data.message.toString())
+            }
+        }
+    })
 
 }
 

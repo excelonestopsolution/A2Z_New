@@ -15,13 +15,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.rememberNavController
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.MainNav
-import com.a2z.app.service.LocalAuth
 import com.a2z.app.service.location.LocationService
 import com.a2z.app.ui.theme.A2ZApp
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.util.AppUtil
 import com.a2z.app.util.extension.showToast
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.razorpay.PaymentResultListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,7 +34,9 @@ enum class InitialRouteType {
 }
 
 @AndroidEntryPoint
-class MainActivity : FragmentActivity() {
+class MainActivity : FragmentActivity(), PaymentResultListener {
+
+    private val TAG = MainActivity::class.java.simpleName
 
     @Inject
     lateinit var locationService: LocationService
@@ -78,6 +81,16 @@ class MainActivity : FragmentActivity() {
             }
 
         }
+    }
+
+    override fun onPaymentSuccess(p0: String?) {
+        showToast(p0.toString())
+    }
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+        showToast(p0.toString() + " : "+p1.toString())
+
+        AppUtil.logger("onPaymentError : code : $p0, message : $p1")
     }
 
 }

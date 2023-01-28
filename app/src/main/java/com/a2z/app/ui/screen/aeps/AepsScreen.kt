@@ -58,6 +58,7 @@ fun BuildMainContent() {
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             val result = AepsUtil.biometricResult(it)
+
             if (result.first != null) {
                 viewModel.onBiometricResult(result.first.toString())
             } else viewModel.alertDialog(result.second.toString())
@@ -186,7 +187,6 @@ fun BuildMainContent() {
         title = "Select Aeps Bank",
         state = viewModel.spinnerDialogState,
         list = viewModel.getAepsStringBankList(),
-        initialSelectedValue = viewModel.selectedBank.value?.bankName
     ) { state ->
         viewModel.onBankChange(state)
     }

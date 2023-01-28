@@ -3,9 +3,7 @@ package com.a2z.app.nav
 import android.net.Uri
 import android.os.Parcelable
 import com.a2z.app.data.model.aeps.AepsTransaction
-import com.a2z.app.data.model.dmt.MoneySender
-import com.a2z.app.data.model.dmt.SenderAccountDetail
-import com.a2z.app.data.model.dmt.TransactionDetail
+import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.matm.MatmTransactionResponse
@@ -177,10 +175,11 @@ sealed class NavScreen(val route: String) {
     }
 
     //dmt screens
-    object DmtSenderSearchScreen : NavScreen("sender-search-screen".params("dmtType")) {
-        fun passArgs(dmtType: DMTType): String {
+    object DmtSenderSearchScreen : NavScreen("sender-search-screen".params("dmtType","bankDown")) {
+        fun passArgs(dmtType: DMTType,bankDown : BankDownResponse): String {
             return "sender-search-screen".args(
-                "dmtType" to dmtType.toEncodedString()
+                "dmtType" to dmtType.toEncodedString(),
+                "bankDown" to bankDown.toEncodedString(),
             )
         }
     }
@@ -265,4 +264,5 @@ sealed class NavScreen(val route: String) {
     object AEPSReportScreen : NavScreen("aeps-report-screen")
     object FundReportScreen : NavScreen("fund-report-screen")
     object DTReportScreen : NavScreen("dt-report-screen")
+    object FlightHotelScreen : NavScreen("flight-hotel-screen")
 }

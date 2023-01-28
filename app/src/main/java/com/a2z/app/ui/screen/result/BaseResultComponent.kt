@@ -42,8 +42,12 @@ import com.a2z.app.data.model.dmt.MiniStatement
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.ui.component.BackPressHandler
+import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.*
+import com.a2z.app.ui.util.pdf.ReceiptDownloadUtil
+import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.showToast
@@ -74,6 +78,8 @@ fun BaseResultComponent(
     val navController = LocalNavController.current
     var scrollView: ScrollView? = null
 
+    val viewModel: TxnResultViewModel = hiltViewModel()
+
     BackPressHandler(onBack = {
         navController.navigate(NavScreen.DashboardScreen.route) {
             popUpTo(NavScreen.DashboardScreen.route) {
@@ -85,70 +91,91 @@ fun BaseResultComponent(
             backgroundColor = BackgroundColor
         ) { _ ->
 
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
+         BaseContent(viewModel) {
+             Box(
+                 modifier = Modifier
+                     .fillMaxSize()
+             ) {
 
-                AndroidView(factory = {
-                    val view = LayoutInflater.from(context)
-                        .inflate(R.layout.view_receipt, null, false)
-                    view
-                }, update = {
-                    scrollView = it.findViewById(R.id.scroll_view)
+                 AndroidView(factory = {
+                     val view = LayoutInflater.from(context)
+                         .inflate(R.layout.view_receipt, null, false)
+                     view
+                 }, update = {
+                     scrollView = it.findViewById(R.id.scroll_view)
 
-                    val mainView = ComposeView(context = context).apply {
-                        this.setContent {
-                            BuildContent(
-                                statusId = statusId,
-                                message = message,
-                                status = status,
-                                dateTime = dateTime,
-                                serviceName = amountTopText,
-                                providerName = amountBelowText,
-                                amount = amount,
-                                availableBalance = availableBalance,
-                                dmtInfo = dmtInfo,
-                                isPaymentAmount = isPaymentAmount,
-                                serviceIconRes = serviceIconRes,
-                                serviceIconNet = serviceIconNet,
-                                titleValues = titleValues,
-                                iconSize = iconSize,
-                                statement = statement
-                            )
-                        }
-                    }
-                    val spaceView = TextView(context).apply {
-                        layoutParams =
-                            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
-                    }
+                     val mainView = ComposeView(context = context).apply {
+                         this.setContent {
+                             BuildContent(
+                                 statusId = statusId,
+                                 message = message,
+                                 status = status,
+                                 dateTime = dateTime,
+                                 serviceName = amountTopText,
+                                 providerName = amountBelowText,
+                                 amount = amount,
+                                 availableBalance = availableBalance,
+                                 dmtInfo = dmtInfo,
+                                 isPaymentAmount = isPaymentAmount,
+                                 serviceIconRes = serviceIconRes,
+                                 serviceIconNet = serviceIconNet,
+                                 titleValues = titleValues,
+                                 iconSize = iconSize,
+                                 statement = statement
+                             )
+                         }
+                     }
+                     val spaceView = TextView(context).apply {
+                         layoutParams =
+                             ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
+                     }
 
-                    val linearLayout = LinearLayout(context).apply {
+                     val linearLayout = LinearLayout(context).apply {
 
-                        //layout params
-                        this.orientation = LinearLayout.VERTICAL
-                        this.layoutParams = LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
-                        //add views
-                        this.addView(mainView)
-                        this.addView(spaceView)
-                    }
+                         //layout params
+                         this.orientation = LinearLayout.VERTICAL
+                         this.layoutParams = LinearLayout.LayoutParams(
+                             ViewGroup.LayoutParams.MATCH_PARENT,
+                             ViewGroup.LayoutParams.WRAP_CONTENT
+                         )
+                         //add views
+                         this.addView(mainView)
+                         this.addView(spaceView)
+                     }
 
-                    scrollView?.let { sv ->
-                        if (sv.childCount == 0) sv.addView(linearLayout)
-                    }
+                     scrollView?.let { sv ->
+                         if (sv.childCount == 0) sv.addView(linearLayout)
+                     }
 
 
-                }, modifier = Modifier.padding(16.dp))
+                 }, modifier = Modifier.padding(16.dp))
 
-                BuildShareButtons(
-                    onShare = { saveAndShare(scrollView!!) },
-                    onWhatsapp = { saveAndShare(scrollView!!, true) },
-                    onDownload = { context.showToast("Work on Progress") })
 
-            }
+                 BuildShareButtons(
+                     onShare = { saveAndShare(scrollView!!) },
+                     onWhatsapp = { saveAndShare(scrollView!!, true) },
+                     onDownload = {
+                         viewModel.downloadReceiptData()
+                     })
+
+             }
+
+             CollectLatestWithScope(flow = viewModel.resultFlow, callback = {
+                 when (it) {
+                     is ResultType.Failure -> viewModel.failureDialog("Opps something went wrong")
+                     is ResultType.Loading -> viewModel.progressDialog("Downloading...")
+                     is ResultType.Success -> {
+                         viewModel.dismissDialog()
+                         ReceiptDownloadUtil.download(
+                             context = context,
+                             data = it.data,
+                             txnResultPrintReceiptType = viewModel.receiptType,
+                             commission = null
+                         )
+                     }
+                 }
+             })
+         }
         }
     }
 }
@@ -344,7 +371,7 @@ private fun BuildContent(
             value: String,
             weight: Float = 1f,
             textAlign: TextAlign = TextAlign.Center,
-            color : Color = Color.Black
+            color: Color = Color.Black
 
         ) {
             Text(
@@ -370,26 +397,26 @@ private fun BuildContent(
             )
         }
 
-       statement.forEach {
-           Divider(modifier =Modifier.padding(vertical = 4.dp))
-           Row {
-               BuildStatementHeaderTitle(
-                   value = it.txnTime.toString(),
-                   weight = 0.7f, textAlign = TextAlign.Start,
-                   color = PrimaryColor
-               )
-               BuildStatementHeaderTitle(
-                   value = it.narration.toString(),
-                   textAlign = TextAlign.Start,
-                   color = PrimaryColor
-               )
-               BuildStatementHeaderTitle(
-                   value = AppConstant.RUPEE_SYMBOL + it.amount +" "+it.txnType,
-                   weight = 0.7f, textAlign = TextAlign.End,
-                   color = if(it.txnType.toLowerCase() == "cr") GreenColor else RedColor
-               )
-           }
-       }
+        statement.forEach {
+            Divider(modifier = Modifier.padding(vertical = 4.dp))
+            Row {
+                BuildStatementHeaderTitle(
+                    value = it.txnTime.toString(),
+                    weight = 0.7f, textAlign = TextAlign.Start,
+                    color = PrimaryColor
+                )
+                BuildStatementHeaderTitle(
+                    value = it.narration.toString(),
+                    textAlign = TextAlign.Start,
+                    color = PrimaryColor
+                )
+                BuildStatementHeaderTitle(
+                    value = AppConstant.RUPEE_SYMBOL + it.amount + " " + it.txnType,
+                    weight = 0.7f, textAlign = TextAlign.End,
+                    color = if (it.txnType.toLowerCase() == "cr") GreenColor else RedColor
+                )
+            }
+        }
     }
 
 

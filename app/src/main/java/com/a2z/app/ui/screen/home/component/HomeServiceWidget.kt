@@ -1,5 +1,7 @@
 package com.a2z.app.ui.screen.home.component
 
+import android.content.Intent
+import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -18,9 +21,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.a2z.app.MainActivity
 import com.a2z.app.R
+import com.a2z.app.data.model.dmt.BankDownBank
+import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BankDownComponent
 import com.a2z.app.ui.screen.aeps.AepsType
@@ -59,9 +66,11 @@ private fun BuildMoneyAEPService() {
                         padding = 14.dp,
                         color = color,
                         onClick = {
-                            navController.navigate(NavScreen.AepsScreen.passArgs(
-                                aepsType = AepsType.AEPS_1
-                            ))
+                            navController.navigate(
+                                NavScreen.AepsScreen.passArgs(
+                                    aepsType = AepsType.AEPS_1
+                                )
+                            )
                         }
                     )
                     BuildIconAndIconTitle(
@@ -70,9 +79,11 @@ private fun BuildMoneyAEPService() {
                         padding = 14.dp,
                         color = color,
                         onClick = {
-                            navController.navigate(NavScreen.AepsScreen.passArgs(
-                                aepsType = AepsType.AEPS_3
-                            ))
+                            navController.navigate(
+                                NavScreen.AepsScreen.passArgs(
+                                    aepsType = AepsType.AEPS_3
+                                )
+                            )
                         }
                     )
                     BuildIconAndIconTitle(
@@ -110,6 +121,7 @@ private fun BuildMoneyAEPService() {
 @Composable
 private fun BuildMoneyAndPaymentService() {
     val navController = LocalNavController.current
+    val viewModel: HomeViewModel = hiltViewModel()
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -124,7 +136,12 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
-                                    dmtType = DMTType.WALLET_1
+                                    dmtType = DMTType.WALLET_1,
+                                    bankDown = viewModel.bankDownResponseState.value
+                                        ?: BankDownResponse(
+                                            status = 2,
+                                            message = ""
+                                        )
                                 )
                             )
                         }
@@ -137,7 +154,12 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
-                                    dmtType = DMTType.WALLET_2
+                                    dmtType = DMTType.WALLET_2,
+                                    bankDown = viewModel.bankDownResponseState.value
+                                        ?: BankDownResponse(
+                                            status = 2,
+                                            message = ""
+                                        )
                                 )
                             )
                         }
@@ -149,7 +171,12 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
-                                    dmtType = DMTType.WALLET_3
+                                    dmtType = DMTType.WALLET_3,
+                                    bankDown = viewModel.bankDownResponseState.value
+                                        ?: BankDownResponse(
+                                            status = 2,
+                                            message = ""
+                                        )
                                 )
                             )
                         }
@@ -161,7 +188,12 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
-                                    dmtType = DMTType.DMT_3
+                                    dmtType = DMTType.DMT_3,
+                                    bankDown = viewModel.bankDownResponseState.value
+                                        ?: BankDownResponse(
+                                            status = 2,
+                                            message = ""
+                                        )
                                 )
                             )
                         }
@@ -170,6 +202,7 @@ private fun BuildMoneyAndPaymentService() {
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
 
+
                     BuildIconAndIconTitle(
                         title = "UPI",
                         icon = R.drawable.ic_launcher_money,
@@ -177,12 +210,25 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
-                                    dmtType = DMTType.UPI
+                                    dmtType = DMTType.UPI,
+                                    bankDown = BankDownResponse(
+                                        status = 2,
+                                        message = "",
+                                    )
                                 )
                             )
                         }
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+
+                    BuildIconAndIconTitle(
+                        title = "Flight\nHotel",
+                        icon = R.drawable.flight_hotel,
+                        color = color,
+                        padding = 10.dp,
+                        onClick = {
+                            viewModel.flightHotelRedirectUrl()
+                        }
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.weight(1f))
                 }

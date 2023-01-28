@@ -101,7 +101,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 menuHeading = "All Reports",
                 drawable = com.a2z.app.R.drawable.icon_report,
                 menuList = listOf(
-                    Pair("M-ATM Request") {
+                    Pair("M-ATM / M-POS") {
                         navController.navigate(NavScreen.MATMRequestReportScreen.route)
                     },
                     Pair("AEPS Report") {

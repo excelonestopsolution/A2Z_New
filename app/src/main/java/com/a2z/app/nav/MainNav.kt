@@ -151,7 +151,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         )
         composable(
             route = NavScreen.PaymentGatewayScreen.route,
-            content = { PaymentGatewayScreen() }
+            content = { PaymentGatewayScreen(viewModel) }
         )
         composable(
             route = NavScreen.ParentPaymentReturnScreen.route,

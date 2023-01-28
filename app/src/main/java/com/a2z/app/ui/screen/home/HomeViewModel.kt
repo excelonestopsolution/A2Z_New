@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
@@ -12,6 +13,7 @@ import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -38,6 +40,7 @@ class HomeViewModel @Inject constructor(
     val homeScreenState = MutableSharedFlow<HomeScreenState>()
 
     val balanceResponseFlow = resultStateFlow<BalanceResponse>()
+    val hotelFlightDirectUrlFlow = resultShareFlow<FlightHotelRedirectUrlResponse>()
 
 
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
@@ -172,6 +175,11 @@ class HomeViewModel @Inject constructor(
             }
             else -> return null
         }
+    }
+
+    fun flightHotelRedirectUrl() {
+
+        callApiForShareFlow(hotelFlightDirectUrlFlow) { repository.flightHotelRedirectUrl() }
     }
 
 }

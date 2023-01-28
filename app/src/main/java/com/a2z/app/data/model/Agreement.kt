@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AgreementInitialInfoResponse(
     val status: Int,
-    val message: String,
+    val message: String?,
     val data: AgreementInitialInfo?
 ) : Parcelable
 

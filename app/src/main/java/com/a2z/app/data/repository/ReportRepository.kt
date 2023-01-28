@@ -22,6 +22,8 @@ interface ReportRepository {
     suspend fun matmRequestReport(data : FieldMapData) : MatmReportResponse
     suspend fun aepsRequestReport(data : FieldMapData) : AepsReportResponse
     suspend fun aepsPrintDetail(url : String) : TransactionDetailResponse
+    suspend fun matmPrintDetail(url : String) : TransactionDetailResponse
+    suspend fun otherPrintDetail(url : String) : TransactionDetailResponse
     suspend fun fundReport(data : FieldMapData) : FundReportResponse
     suspend fun dtReport(data : FieldMapData) : DTReportResponse
 }

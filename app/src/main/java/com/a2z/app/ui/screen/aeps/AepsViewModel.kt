@@ -79,7 +79,6 @@ class AepsViewModel @Inject constructor(
                             failureDialog("Something went wrong, please try again")
                         } else
                             pendingDialog("Transaction in pending, please check report for more details") {
-                                dismissDialog()
                                 navigateTo(NavScreen.DashboardScreen.route, true)
                             }
                     }
@@ -88,7 +87,9 @@ class AepsViewModel @Inject constructor(
 
                 }
             }
+        }
 
+        viewModelScope.launch {
             _tableCheckStatusResultFlow.collectLatest {
                 when (it) {
                     is ResultType.Failure -> navigateToResultScreen()
@@ -107,7 +108,8 @@ class AepsViewModel @Inject constructor(
                     }
                 }
             }
-
+        }
+        viewModelScope.launch {
             _bankCheckStatusResultFlow.collectLatest {
                 when (it) {
                     is ResultType.Failure -> navigateToResultScreen()
@@ -139,7 +141,7 @@ class AepsViewModel @Inject constructor(
 
         checkStatusCount += 1
         checkStatusCountTotal += 1
-        val txnId = transactionResponse.txn_id.toString()
+        val txnId = transactionResponse.record_id.toString()
         val param = hashMapOf("recordId" to txnId)
 
         callApiForShareFlow(_tableCheckStatusResultFlow) {
@@ -247,7 +249,7 @@ class AepsViewModel @Inject constructor(
 
         val param = hashMapOf(
             "customerNumber" to input.mobileInputWrapper.getValue(),
-            "bankName" to selectedBank.value!!.bankInnNumber.toString(),
+            "bankName" to selectedBank.value!!.bankInnNumber,
             "selectedBankName" to selectedBank.value!!.bankName.toString(),
             "transactionType" to getTransactionTypeParam(),
             "txtPidData" to pidData,

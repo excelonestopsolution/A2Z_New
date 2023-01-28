@@ -1,5 +1,7 @@
 package com.a2z.app.data.repository
 
+import com.a2z.app.data.model.AppResponse
+import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
@@ -21,6 +23,8 @@ interface AppRepository {
     suspend fun schemeList() : CommissionSchemeListResponse
 
     suspend fun schemeDetail(data : FieldMapData) : CommissionSchemeDetailResponse
+
+    suspend fun flightHotelRedirectUrl() : FlightHotelRedirectUrlResponse
 
 
 

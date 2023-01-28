@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.result
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.data.model.aeps.AepsTransaction
@@ -15,8 +16,19 @@ fun AEPSResultScreen(it: NavBackStackEntry) {
     val arg = it.arguments?.getString("response")
     val response = Gson().fromJson(arg!!, AepsTransaction::class.java)
 
-    val orderId = if (response.order_id.isNullOrEmpty()) response.txn_id.toString()
+    val orderId = if (response.order_id.isNullOrEmpty())
+        response.txn_id.toString()
     else response.order_id.toString()
+
+    val viewModel: TxnResultViewModel = hiltViewModel()
+    viewModel.recordId = response.record_id.toString()
+
+    if(response.isLedgerReport)
+        viewModel.receiptType = TxnResultPrintReceiptType.OTHER
+    else viewModel.receiptType = TxnResultPrintReceiptType.AEPS
+
+
+
 
     val upiTitleValue1 = listOf(
 

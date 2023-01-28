@@ -57,4 +57,13 @@ interface FundService {
     suspend fun initiatePaymentGatewayRequest(@FieldMap data: FieldMapData): PaymentGatewayInitiateResponse
 
 
+    @FormUrlEncoded
+    @POST()
+    suspend fun initiateRazorPay(
+        @Url url: String,
+        @Header("Authorization") authorization: String,
+        @FieldMap data: FieldMapData
+    ): AppResponse
+
+
 }

@@ -104,6 +104,7 @@ fun BuildMainContent() {
                 contents = {
 
                     MobileTextField(
+                        label = "Customer Mobile Number",
                         value = input.mobileInputWrapper.getValue(),
                         onChange = { input.mobileInputWrapper.setValue(it) },
                         error = input.mobileInputWrapper.formError()

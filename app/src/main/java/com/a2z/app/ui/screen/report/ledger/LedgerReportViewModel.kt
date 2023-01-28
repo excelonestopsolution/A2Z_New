@@ -144,7 +144,8 @@ class LedgerReportViewModel @Inject constructor(
                                             statement = this.miniStatement,
                                             pay_type = "",
                                             txn_id = this.reportId,
-                                            isTransaction = false
+                                            isTransaction = false,
+                                            isLedgerReport =  true
                                         )
                                     }
                                 )

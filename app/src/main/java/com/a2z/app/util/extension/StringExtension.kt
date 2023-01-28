@@ -40,3 +40,5 @@ fun String?.notAvailable() : String{
     return if(this == null || this.isEmpty()) "Not Available";
     else this
 }
+
+fun String.capitalizeWords(): String = split(" ").map { it.capitalize() }.joinToString(" ")

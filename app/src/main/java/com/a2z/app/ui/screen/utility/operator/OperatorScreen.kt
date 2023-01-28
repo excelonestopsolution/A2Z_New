@@ -47,8 +47,7 @@ fun OperatorScreen(
         SpinnerSearchDialog(
             title = "Select Electricity State",
             state = viewModel.spinnerDialogState,
-            list = viewModel.getStateList().map { it.second } as ArrayList<String>,
-            initialSelectedValue = viewModel.selectedState.value) { state ->
+            list = viewModel.getStateList().map { it.second } as ArrayList<String>) { state ->
             viewModel.onStateSelect(state)
         }
     }

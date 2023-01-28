@@ -69,32 +69,7 @@ fun DMTMoneyTransferScreen() {
     )
 
 
-    BaseConfirmDialog(
-        title = "Transaction Confirmation ?",
-        state = viewModel.confirmDialogState,
-        amount = viewModel.input.amount.getValue(),
-        titleValues = if (viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
-    ) {
-        viewModel.mpinDialogVisibleState.value = true
-    }
 
-    MpinInputComponent(
-        visibleState = viewModel.mpinDialogVisibleState,
-        amount = if (viewModel.mpinType.value == MoneyTransferMPinType.TRANSFER)
-            viewModel.input.amount.getValue() else null,
-        onSubmit = { mpin ->
-            viewModel.mpin = mpin
-            when (viewModel.mpinType.value) {
-                MoneyTransferMPinType.COMMISSION -> {
-                    viewModel.fetchCharge()
-                }
-                MoneyTransferMPinType.TRANSFER -> {
-                    manager.clearFocus()
-                    viewModel.proceedTransaction()
-
-                }
-            }
-        })
 
     Scaffold(
         backgroundColor = BackgroundColor,
@@ -263,6 +238,32 @@ fun DMTMoneyTransferScreen() {
                     )
                 ))
 
+            BaseConfirmDialog(
+                title = "Transaction Confirmation ?",
+                state = viewModel.confirmDialogState,
+                amount = viewModel.input.amount.getValue(),
+                titleValues = if (viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
+            ) {
+                viewModel.mpinDialogVisibleState.value = true
+            }
+
+            MpinInputComponent(
+                visibleState = viewModel.mpinDialogVisibleState,
+                amount = if (viewModel.mpinType.value == MoneyTransferMPinType.TRANSFER)
+                    viewModel.input.amount.getValue() else null,
+                onSubmit = { mpin ->
+                    viewModel.mpin = mpin
+                    when (viewModel.mpinType.value) {
+                        MoneyTransferMPinType.COMMISSION -> {
+                            viewModel.fetchCharge()
+                        }
+                        MoneyTransferMPinType.TRANSFER -> {
+                            manager.clearFocus()
+                            viewModel.proceedTransaction()
+
+                        }
+                    }
+                })
         }
 
     }

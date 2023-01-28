@@ -32,28 +32,6 @@ fun BillPaymentScreen() {
     val viewModel: BillPaymentViewModel = hiltViewModel()
     val util = viewModel.util
 
-    HomeLocationServiceDialog()
-
-    BaseConfirmDialog(
-        title = "Confirm Bill Payment",
-        state = viewModel.confirmDialogState,
-        amount = viewModel.input.amountInputWrapper.formValue(),
-        titleValues = listOf(
-            "BBPS Provider" to viewModel.selectedState.value,
-            "Operator" to viewModel.operator.operatorName.toString(),
-            "Number" to viewModel.input.numberInputWrapper.formValue(),
-            "Mobile" to viewModel.input.mobileInputWrapper.formValue()
-        )
-    ) { viewModel.makePayment() }
-
-    SpinnerSearchDialog(
-        title = "Select BBPS Provider",
-        state = viewModel.spinnerDialogState,
-        list = arrayListOf("BBPS Provider 1", "BBPS Provider 2"),
-        initialSelectedValue = viewModel.selectedState.value
-    ) { state ->
-        viewModel.selectedState.value = state
-    }
 
     BaseContent(viewModel) {
         Scaffold(
@@ -67,6 +45,30 @@ fun BillPaymentScreen() {
                 showWalletCard = viewModel.showCard(),
                 cardContents = listOf(AppFormCard { FetchFormCard() })
             )
+
+
+
+            HomeLocationServiceDialog()
+
+            BaseConfirmDialog(
+                title = "Confirm Bill Payment",
+                state = viewModel.confirmDialogState,
+                amount = viewModel.input.amountInputWrapper.formValue(),
+                titleValues = listOf(
+                    "BBPS Provider" to viewModel.selectedState.value,
+                    "Operator" to viewModel.operator.operatorName.toString(),
+                    "Number" to viewModel.input.numberInputWrapper.formValue(),
+                    "Mobile" to viewModel.input.mobileInputWrapper.formValue()
+                )
+            ) { viewModel.makePayment() }
+
+            SpinnerSearchDialog(
+                title = "Select BBPS Provider",
+                state = viewModel.spinnerDialogState,
+                list = arrayListOf("BBPS Provider 1", "BBPS Provider 2"),
+            ) { state ->
+                viewModel.selectedState.value = state
+            }
         }
     }
 }

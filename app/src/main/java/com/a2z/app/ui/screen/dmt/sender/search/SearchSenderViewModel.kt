@@ -4,10 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.a2z.app.data.model.dmt.MoneySender
-import com.a2z.app.data.model.dmt.MoneySenderResponse
-import com.a2z.app.data.model.dmt.SenderAccountDetail
-import com.a2z.app.data.model.dmt.SenderAccountDetailResponse
+import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.repository.DMT3Repository
 import com.a2z.app.data.repository.DMTRepository
 import com.a2z.app.data.repository.UpiRepository
@@ -20,6 +17,7 @@ import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
+import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.util.resultShareFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,6 +35,7 @@ class SearchSenderViewModel @Inject constructor(
 
 
     var dmtType: DMTType = savedStateHandle.safeSerializable("dmtType")!!
+    var bankDownResponse: BankDownResponse = savedStateHandle.safeParcelable("bankDown")!!
 
     val searchType = mutableStateOf(SenderSearchType.MOBILE)
 
