@@ -11,12 +11,15 @@ import com.a2z.app.data.model.AgreementInitialInfoResponse
 import com.a2z.app.data.model.AgreementStartResponse
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.repository.AgreementRepository
+import com.a2z.app.service.firebase.FBAppLog
+import com.a2z.app.service.firebase.FirebaseDatabase
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
+import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -104,7 +107,32 @@ class UserAgreementViewModel @Inject constructor(
 
         callApiForStateFlow(
             flow = initialAgreementDetailResultFlow,
-            call = { repository.fetchInitialAgreement() }
+            call = { repository.fetchInitialAgreement() },
+            beforeEmit = {
+
+                val apiName = "agreement"
+
+                val db = FirebaseDatabase()
+                if (it is ResultType.Success) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.data.toString(),
+                            apiName = apiName,
+                            isSuccess = true
+                        )
+                    )
+                } else if (it is ResultType.Failure) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.exception.message.toString(),
+                            apiName = apiName,
+                            isSuccess = false
+                        )
+                    )
+                }
+
+
+            }
         )
     }
 

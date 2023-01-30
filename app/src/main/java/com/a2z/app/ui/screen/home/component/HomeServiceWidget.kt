@@ -221,7 +221,7 @@ private fun BuildMoneyAndPaymentService() {
                     )
 
                     BuildIconAndIconTitle(
-                        title = "Flight\nHotel",
+                        title = "Flight Hotel",
                         icon = R.drawable.flight_hotel,
                         color = color,
                         padding = 10.dp,
@@ -229,7 +229,17 @@ private fun BuildMoneyAndPaymentService() {
                             viewModel.flightHotelRedirectUrl()
                         }
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    BuildIconAndIconTitle(
+                        title = "Pan Service",
+                        icon = R.drawable.pan_icon,
+                        color = color,
+                        padding = 10.dp,
+                        onClick = {
+                            if (viewModel.appPreference.user?.isPanCardActivated == 1)
+                                viewModel.panAutoLogin()
+                            else navController.navigate(NavScreen.PanServiceScreen.route)
+                        }
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 

@@ -38,6 +38,7 @@ import com.a2z.app.ui.screen.report.aeps.AEPSReportScreen
 import com.a2z.app.ui.screen.report.dt.DTReportScreen
 import com.a2z.app.ui.screen.report.fund.FundReportScreen
 import com.a2z.app.ui.screen.report.matm.MATMReportScreen
+import com.a2z.app.ui.screen.report.pg.PGReportScreen
 import com.a2z.app.ui.screen.result.*
 import com.a2z.app.ui.screen.settlement.add_bank.SettlementAddBankScreen
 import com.a2z.app.ui.screen.settlement.bank_list.SettlementBankScreen
@@ -48,6 +49,7 @@ import com.a2z.app.ui.screen.util.agreement.UserAgreementScreen
 import com.a2z.app.ui.screen.util.commission.MyCommissionScreen
 import com.a2z.app.ui.screen.util.complaint.ComplaintScreen
 import com.a2z.app.ui.screen.util.device_order.DeviceOrderTabScreen
+import com.a2z.app.ui.screen.util.pan_service.PanServiceScreen
 import com.a2z.app.ui.screen.util.scheme_detail.SchemeDetailScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
 import com.a2z.app.ui.screen.utility.operator.OperatorScreen
@@ -244,6 +246,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.AadhaarKycScreen.route, content = { AadhaarKycScreen() })
         composable(route = NavScreen.CommissionScreen.route, content = { MyCommissionScreen() })
         composable(route = NavScreen.SchemeDetailScreen.route, content = { SchemeDetailScreen() })
+        composable(route = NavScreen.PanServiceScreen.route, content = { PanServiceScreen() })
         composable(route = NavScreen.DeviceOrderScreen.route, content = { DeviceOrderTabScreen() })
         composable(route = NavScreen.UserAgreementScreen.route, content = { UserAgreementScreen() })
         composable(
@@ -260,6 +263,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.AEPSReportScreen.route, content = { AEPSReportScreen() })
         composable(route = NavScreen.FundReportScreen.route, content = { FundReportScreen() })
         composable(route = NavScreen.DTReportScreen.route, content = { DTReportScreen() })
+        composable(route = NavScreen.PGReportScreen.route, content = { PGReportScreen() })
         composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
     }
 }

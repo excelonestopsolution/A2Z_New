@@ -65,5 +65,8 @@ interface ReportService {
     @GET("get-direct-fund-transfer")
     suspend fun dtReport(@QueryMap data: FieldMapData): DTReportResponse
 
+    @GET("pg/report")
+    suspend fun pgReport(@QueryMap data: FieldMapData): PGReportResponse
+
 
 }

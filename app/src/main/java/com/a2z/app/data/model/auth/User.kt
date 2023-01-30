@@ -44,6 +44,7 @@ data class User(
     @SerializedName("popup") val popup: String,
     @SerializedName("is_aadhaar_kyc") val isAadhaarKyc: Int,
     @SerializedName("is_video_kyc") val isVideoKyc: Int,
+    @SerializedName("is_pan_card_activated") val isPanCardActivated: Int,
     @SerializedName("matm") val matm: String,
     @SerializedName("mpos") val mpos: String,
 

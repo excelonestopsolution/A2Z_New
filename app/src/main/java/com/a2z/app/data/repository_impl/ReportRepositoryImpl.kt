@@ -36,5 +36,6 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun fundReport(data: FieldMapData) = service.fundReport(data)
 
     override suspend fun dtReport(data: FieldMapData) = service.dtReport(data)
+    override suspend fun pgReport(data: FieldMapData) = service.pgReport(data)
 
 }

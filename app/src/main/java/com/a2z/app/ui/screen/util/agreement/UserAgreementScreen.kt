@@ -57,22 +57,22 @@ fun UserAgreementScreen() {
         topBar = { NavTopBar(title = "User Agreement") }) {
         BaseContent(viewModel) {
 
-            if (!viewModel.showWebViewContentState.value)
-                ObsComponent(flow = viewModel.initialAgreementDetailResultFlow) {
-                    when (it.status) {
-                        1 -> AgreementStatusContent(
-                            viewModel,
-                            it.message.toString(),
-                            it.data?.agreementUrl.toString()
-                        )
-                        3 -> AgreementFormContent(viewModel, it.data)
-                        else -> viewModel.failureDialog(it.message.toString()) {
-                            viewModel.navigateUpWithResult()
-                        }
+            ObsComponent(flow = viewModel.initialAgreementDetailResultFlow) {
+                when (it.status) {
+                    1 -> AgreementStatusContent(
+                        viewModel,
+                        it.message.toString(),
+                        it.data?.agreementUrl.toString()
+                    )
+                    3 -> AgreementFormContent(viewModel, it.data)
 
+                    else -> viewModel.failureDialog(it.message.toString()) {
+                        viewModel.navigateUpWithResult()
                     }
+
                 }
-            else AgreementWebViewContent(viewModel)
+            }
+
 
         }
 
@@ -143,7 +143,6 @@ private fun AgreementWebViewContent(viewModel: UserAgreementViewModel) {
             .fillMaxSize()
             .padding(8.dp)
     ) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -196,8 +195,9 @@ private fun AgreementWebViewContent(viewModel: UserAgreementViewModel) {
 @Composable
 private fun AgreementFormContent(viewModel: UserAgreementViewModel, data: AgreementInitialInfo?) {
 
-
-    Card(
+    if (!viewModel.showWebViewContentState.value)
+        AgreementWebViewContent(viewModel)
+    else Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .fillMaxWidth()
@@ -296,8 +296,7 @@ private fun AgreementStatusContent(
                             val downloadManager =
                                 context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                             viewModel.onDownloadAgreement(downloadUrl, downloadManager)
-                        }
-                        else {
+                        } else {
                             viewModel.navigateTo(
                                 NavScreen.PermissionScreen.passData(
                                     permissionType = PermissionType.CameraAndStorage
@@ -312,7 +311,6 @@ private fun AgreementStatusContent(
                     Text(text = "Download Agreement")
                 }
             }
-
 
 
         }

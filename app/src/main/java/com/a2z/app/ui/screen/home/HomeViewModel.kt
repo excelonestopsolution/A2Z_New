@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
+import com.a2z.app.data.model.PanAutoLoginResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
@@ -41,6 +42,7 @@ class HomeViewModel @Inject constructor(
 
     val balanceResponseFlow = resultStateFlow<BalanceResponse>()
     val hotelFlightDirectUrlFlow = resultShareFlow<FlightHotelRedirectUrlResponse>()
+    val panAutoLogFlow = resultShareFlow<PanAutoLoginResponse>()
 
 
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
@@ -179,7 +181,14 @@ class HomeViewModel @Inject constructor(
 
     fun flightHotelRedirectUrl() {
 
-        callApiForShareFlow(hotelFlightDirectUrlFlow) { repository.flightHotelRedirectUrl() }
+        val param = hashMapOf("na" to "na")
+        callApiForShareFlow(hotelFlightDirectUrlFlow) { repository.flightHotelRedirectUrl(param) }
+    }
+
+    fun panAutoLogin() {
+        val param = hashMapOf("na" to "na")
+        callApiForShareFlow(panAutoLogFlow) { repository.panAutoLogin(param) }
+
     }
 
 }

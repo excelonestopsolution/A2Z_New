@@ -1,6 +1,8 @@
 package com.a2z.app.ui.screen.fund.payment_gateway
 
 import android.util.Base64
+import androidx.compose.runtime.mutableStateOf
+import com.a2z.app.PGResultType
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.fund.PaymentGatewayInitiateData
@@ -13,6 +15,7 @@ import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.util.resultShareFlow
 import com.razorpay.Checkout
+import com.razorpay.PaymentData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import okhttp3.Credentials
@@ -34,6 +37,8 @@ class PaymentGatewayViewModel @Inject constructor(
 
     val initiatePaymentFlow = MutableSharedFlow<JSONObject>()
 
+    val resultDialogState = mutableStateOf<PGResultType>(PGResultType.Nothing)
+
 
     init {
 
@@ -47,25 +52,24 @@ class PaymentGatewayViewModel @Inject constructor(
                 options.put("theme.color", "#3399cc");
                 options.put("currency", "INR");
                 options.put("receipt", it.data?.ackNo.toString());
-                options.put("amount", input.amount.getValue())
+                options.put("amount", input.amount.getValue().toDouble() * 100.0)
 
-               /*  val retryObj = JSONObject();
-                 retryObj.put("enabled", true);
-                 retryObj.put("max_count", 4);
-                 options.put("retry", retryObj);*/
+                /*  val retryObj = JSONObject();
+                  retryObj.put("enabled", true);
+                  retryObj.put("max_count", 4);
+                  options.put("retry", retryObj);*/
 
-                 val prefill = JSONObject()
-                 prefill.put("email", appPreference.user?.email.toString())
-                 prefill.put("contact", input.mobile.getValue())
+                val prefill = JSONObject()
+                prefill.put("email", appPreference.user?.email.toString())
+                prefill.put("contact", input.mobile.getValue())
 
-                options.put("prefill",prefill)
+                options.put("prefill", prefill)
 
                 initiatePaymentFlow.emit(options)
             } else alertDialog(it.message)
         }
 
     }
-
 
 
     fun initiateTransaction() {
@@ -82,7 +86,7 @@ class PaymentGatewayViewModel @Inject constructor(
     }
 
     data class FormInput(
-        val amount: InputWrapper = InputWrapper { AppValidator.amountValidation(it) },
+        val amount: InputWrapper = InputWrapper { AppValidator.amountValidation(it, minAmount = 1.0) },
         val mobile: InputWrapper = InputWrapper { AppValidator.mobile(it) }
     ) : BaseInput(amount, mobile)
 }

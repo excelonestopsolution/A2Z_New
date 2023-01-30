@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.fund.payment_gateway
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -18,8 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.MainActivity
 import com.a2z.app.MainViewModel
+import com.a2z.app.PGResultType
 import com.a2z.app.R
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
@@ -27,6 +30,8 @@ import com.a2z.app.ui.component.common.AppFormUI
 import com.a2z.app.ui.component.common.MobileTextField
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.util.BaseInput
+import com.a2z.app.ui.util.rememberStateOf
+import com.a2z.app.util.AppUtil
 import com.razorpay.Checkout
 import kotlinx.coroutines.flow.collectLatest
 
@@ -52,10 +57,9 @@ fun PaymentGatewayScreen(mainViewModel: MainViewModel) {
                 val checkout = Checkout()
                 checkout.setImage(R.drawable.app_logo)
                 checkout.setKeyID(viewModel.initiateData?.key.toString())
-                checkout.open(activity,it)
+                checkout.open(activity, it)
             }
         })
-
 
 
         BaseContent(viewModel) {
@@ -116,6 +120,44 @@ fun PaymentGatewayScreen(mainViewModel: MainViewModel) {
             )
 
         }
+
+
+        PgResultDialog(state = viewModel.resultDialogState) {
+            viewModel.navigateUpWithResult()
+        }
+
+        CollectLatestWithScope(flow = mainViewModel.pgResult, callback = {
+            when (it) {
+
+                is PGResultType.Failure -> {
+                    viewModel.resultDialogState.value = it
+                    AppUtil.logger(
+                        "PaymentGatewayScreen : Failure -> " +
+                                "\nerrorCode : ${it.errorCode}" +
+                                " \n errorResponse ${it.response} "
+                    )
+
+                }
+                is PGResultType.Success -> {
+                    viewModel.resultDialogState.value = it
+                    AppUtil.logger(
+                        "PaymentGatewayScreen : Success -> " +
+                                "\n${it.razorpayPaymentId} " +
+                                AppUtil.logger(
+                                    "PaymentGatewayScreen : Success result : " +
+                                            " userContact : ${it.data?.userContact}" +
+                                            " userEmail : ${it.data?.userEmail}" +
+                                            " paymentId : ${it.data?.paymentId}" +
+                                            " orderId : ${it.data?.orderId}" +
+                                            " signature : ${it.data?.signature}" +
+                                            " data : ${it.data?.data}" +
+                                            " externalWallet : ${it.data?.externalWallet}"
+                                )
+                    )
+                }
+                else -> {}
+            }
+        })
     }
 
 }

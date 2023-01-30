@@ -26,4 +26,5 @@ interface ReportRepository {
     suspend fun otherPrintDetail(url : String) : TransactionDetailResponse
     suspend fun fundReport(data : FieldMapData) : FundReportResponse
     suspend fun dtReport(data : FieldMapData) : DTReportResponse
+    suspend fun pgReport(data : FieldMapData) : PGReportResponse
 }

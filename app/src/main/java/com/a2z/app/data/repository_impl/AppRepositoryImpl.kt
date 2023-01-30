@@ -1,6 +1,9 @@
 package com.a2z.app.data.repository_impl
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
+import com.a2z.app.data.model.PanAutoLoginResponse
+import com.a2z.app.data.model.PanCardServiceNoteResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
@@ -45,7 +48,11 @@ class AppRepositoryImpl @Inject constructor(private val appService: AppService) 
         return appService.schemeDetail(data)
     }
 
-    override suspend fun flightHotelRedirectUrl(): FlightHotelRedirectUrlResponse {
-        return appService.flightHotelRedirectUrl()
+    override suspend fun flightHotelRedirectUrl(data : FieldMapData): FlightHotelRedirectUrlResponse {
+        return appService.flightHotelRedirectUrl(data)
     }
+
+    override suspend fun panServiceNote() = appService.panServiceNote()
+    override suspend fun panServiceActivate(data : FieldMapData) = appService.panServiceActivate(data)
+    override suspend fun panAutoLogin(data: FieldMapData) = appService.panAutoLogin(data)
 }

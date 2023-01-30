@@ -1,5 +1,7 @@
 package com.a2z.app.ui.screen.aeps
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -11,10 +13,14 @@ import com.a2z.app.data.model.aeps.RDService
 import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.service.firebase.FBAppLog
+import com.a2z.app.service.firebase.FirebaseDatabase
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.safeSerializable
+import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.DateUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -144,7 +150,32 @@ class AepsViewModel @Inject constructor(
         val txnId = transactionResponse.record_id.toString()
         val param = hashMapOf("recordId" to txnId)
 
-        callApiForShareFlow(_tableCheckStatusResultFlow) {
+        callApiForShareFlow(_tableCheckStatusResultFlow,
+            beforeEmit = {
+
+                val apiName = "aeps/three/table-check-status"
+
+                val db = FirebaseDatabase()
+                if (it is ResultType.Success) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.data.toString(),
+                            apiName = apiName,
+                            isSuccess = true
+                        )
+                    )
+                } else if (it is ResultType.Failure) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.exception.message.toString(),
+                            apiName = apiName,
+                            isSuccess = false
+                        )
+                    )
+                }
+
+
+            }) {
             delay(4000)
             repository.tableCheckStatus(param)
         }
@@ -159,7 +190,32 @@ class AepsViewModel @Inject constructor(
         val txnId = transactionResponse.record_id.toString()
         val param = hashMapOf("record_id" to txnId)
 
-        callApiForShareFlow(_bankCheckStatusResultFlow) { repository.bankCheckStatus(param) }
+        callApiForShareFlow(_bankCheckStatusResultFlow,
+            beforeEmit = {
+
+                val apiName = "aeps/three/checkstatus"
+
+                val db = FirebaseDatabase()
+                if (it is ResultType.Success) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.data.toString(),
+                            apiName = apiName,
+                            isSuccess = true
+                        )
+                    )
+                } else if (it is ResultType.Failure) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.exception.message.toString(),
+                            apiName = apiName,
+                            isSuccess = false
+                        )
+                    )
+                }
+
+
+            }) { repository.bankCheckStatus(param) }
 
     }
 
@@ -267,7 +323,33 @@ class AepsViewModel @Inject constructor(
             }
         }
         callApiForShareFlow(
-            flow = _transactionResultFlow, call = call
+            flow = _transactionResultFlow, call = call,
+            beforeEmit = {
+                val db = FirebaseDatabase()
+
+                val apiName = when (aepsType) {
+                    AepsType.AEPS_1 -> "aeps/one-new"
+                    AepsType.AEPS_3 -> "aeps/three-new"
+                }
+
+                if (it is ResultType.Success) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.data.toString(),
+                            apiName = apiName,
+                            isSuccess = true
+                        )
+                    )
+                } else if (it is ResultType.Failure) {
+                    db.insertLog(
+                        FBAppLog(
+                            logs = it.exception.message.toString(),
+                            apiName = apiName,
+                            isSuccess = false
+                        )
+                    )
+                }
+            }
         )
     }
 }

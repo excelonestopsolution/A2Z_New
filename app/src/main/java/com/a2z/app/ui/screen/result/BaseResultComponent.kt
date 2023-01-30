@@ -472,8 +472,8 @@ private fun BuildContent(
             if (availableBalance != null) BuildAvailableAmount(availableBalance)
 
             Divider(Modifier.padding(vertical = 16.dp))
-            if (statement != null) BuildMiniStatement(statement!!)
-            if (statement != null) Divider(Modifier.padding(vertical = 16.dp))
+            if (statement != null && statement.isNotEmpty()) BuildMiniStatement(statement!!)
+            if (statement != null && statement.isNotEmpty()) Divider(Modifier.padding(vertical = 16.dp))
 
             BuildTitleValue(
                 title = "Shop Name",

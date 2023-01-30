@@ -253,6 +253,7 @@ sealed class NavScreen(val route: String) {
             "data" to data.toEncodedString()
         )
     }
+    object PanServiceScreen : NavScreen("pan-service-screen")
 
     object DeviceOrderScreen : NavScreen("device-order-screen")
     object UserAgreementScreen : NavScreen("user-agreement-screen")
@@ -264,5 +265,5 @@ sealed class NavScreen(val route: String) {
     object AEPSReportScreen : NavScreen("aeps-report-screen")
     object FundReportScreen : NavScreen("fund-report-screen")
     object DTReportScreen : NavScreen("dt-report-screen")
-    object FlightHotelScreen : NavScreen("flight-hotel-screen")
+    object PGReportScreen : NavScreen("pg-report-screen")
 }

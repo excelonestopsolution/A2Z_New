@@ -8,10 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.navigation.compose.rememberNavController
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.MainNav
@@ -19,13 +16,19 @@ import com.a2z.app.service.location.LocationService
 import com.a2z.app.ui.theme.A2ZApp
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtil
 import com.a2z.app.util.extension.showToast
+import com.a2z.app.util.resultShareFlow
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.razorpay.PaymentData
 import com.razorpay.PaymentResultListener
+import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 
@@ -34,7 +37,7 @@ enum class InitialRouteType {
 }
 
 @AndroidEntryPoint
-class MainActivity : FragmentActivity(), PaymentResultListener {
+class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
 
     private val TAG = MainActivity::class.java.simpleName
 
@@ -83,15 +86,18 @@ class MainActivity : FragmentActivity(), PaymentResultListener {
         }
     }
 
-    override fun onPaymentSuccess(p0: String?) {
-        showToast(p0.toString())
+    override fun onPaymentSuccess(razorpayPaymentId: String?, data: PaymentData?) {
+        lifecycleScope.launch {
+            viewModel.pgResult.emit(PGResultType.Success(data, razorpayPaymentId))
+        }
     }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        showToast(p0.toString() + " : "+p1.toString())
-
-        AppUtil.logger("onPaymentError : code : $p0, message : $p1")
+    override fun onPaymentError(errorCode: Int, response: String?, data: PaymentData?) {
+        lifecycleScope.launch {
+            viewModel.pgResult.emit(PGResultType.Failure(data, errorCode, response))
+        }
     }
+
 
 }
 
@@ -99,14 +105,25 @@ class MainViewModel : ViewModel() {
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    val pgResult = MutableSharedFlow<PGResultType>()
+
     init {
         viewModelScope.launch {
             delay(10)
             _isLoading.value = false
         }
     }
-
 }
+
+sealed class PGResultType {
+    object Nothing : PGResultType()
+    class Success(val data: PaymentData?, val razorpayPaymentId: String?) : PGResultType()
+    data class Failure(val data: PaymentData?, val errorCode: Int, val response: String?) :
+        PGResultType()
+}
+
+
+
 
 
 

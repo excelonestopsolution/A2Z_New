@@ -114,6 +114,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     Pair("DT Report") {
                         navController.navigate(NavScreen.DTReportScreen.route)
                     },
+                    Pair("PG Report") {
+                        navController.navigate(NavScreen.PGReportScreen.route)
+                    },
                 )
             )
             BuildSingleItemMenu(
