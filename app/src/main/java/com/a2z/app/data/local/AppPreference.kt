@@ -2,6 +2,7 @@ package com.a2z.app.data.local
 
 import android.content.Context
 import com.a2z.app.data.model.auth.User
+import com.a2z.app.data.model.dmt.UpiStaticMessage
 import javax.inject.Inject
 
 class AppPreference @Inject constructor(context: Context) : BasePreference(context) {
@@ -13,6 +14,9 @@ class AppPreference @Inject constructor(context: Context) : BasePreference(conte
     var user: User?
         set(value) = saveObject(USER, value)
         get() = getObject(USER, User::class.java)
+    var upiStateMessage: UpiStaticMessage?
+        set(value) = saveObject(UPI_STATIC_MESSAGE, value)
+        get() = getObject(UPI_STATIC_MESSAGE, UpiStaticMessage::class.java)
 
     var password: String
         set(value) = saveString(PASSWORD, value)

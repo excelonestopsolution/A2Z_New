@@ -74,6 +74,7 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         route = "main-root"
     ) {
 
+
         composable(
             route = NavScreen.DeviceLockScreen.route,
             content = {

@@ -22,6 +22,8 @@ interface UpiRepository {
     suspend fun vpaList(): VpaBankExtensionResponse
     suspend fun verificationCharge(@QueryMap data : FieldMapData): VpaVerificationChargeResponse
     suspend fun bankDownCheck(@QueryMap data : FieldMapData): BankDownCheckResponse
+    suspend fun upiVerifyStaticMessage(): UpiStaticMessage
+    suspend fun checkUpiAccountStatus(data : FieldMapData): AppResponse
 
 
 }

@@ -28,11 +28,18 @@ interface UpiService {
     suspend fun vpaList(): VpaBankExtensionResponse
 
     @GET("vpa/validation/charge")
-    suspend fun verificationCharge(@QueryMap data : FieldMapData): VpaVerificationChargeResponse
+    suspend fun verificationCharge(@QueryMap data: FieldMapData): VpaVerificationChargeResponse
 
 
-   @GET("vpa/checkdown")
-    suspend fun bankDownCheck(@QueryMap data : FieldMapData): BankDownCheckResponse
+    @GET("vpa/checkdown")
+    suspend fun bankDownCheck(@QueryMap data: FieldMapData): BankDownCheckResponse
+
+    @GET("vpa/static/message")
+    suspend fun upiVerifyStaticMessage(): UpiStaticMessage
+
+
+    @GET("vpa/check/status")
+    suspend fun checkUpiAccountStatus(@QueryMap data: FieldMapData): AppResponse
 
 
 }

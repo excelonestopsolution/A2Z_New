@@ -79,6 +79,7 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
                             initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
 */
                         MainNav(viewModel, initialRouteType)
+
                     }
                 }
             }

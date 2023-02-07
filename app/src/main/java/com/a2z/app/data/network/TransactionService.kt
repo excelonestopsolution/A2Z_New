@@ -4,6 +4,7 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
+import com.a2z.app.data.model.dmt.UpiVerifyPayment
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.util.FieldMapData
 import com.a2z.app.util.MapRequest
@@ -40,6 +41,10 @@ interface TransactionService {
     @POST("vpa/payment")
     @FormUrlEncoded
     suspend fun upiTransaction(@FieldMap data: FieldMapData): TransactionDetail
+
+  @POST("vpa/verify/payment")
+    @FormUrlEncoded
+    suspend fun upiVerifyPayment(@FieldMap data: FieldMapData): UpiVerifyPayment
 
     @POST("fund-transfer_r2r")
     @FormUrlEncoded

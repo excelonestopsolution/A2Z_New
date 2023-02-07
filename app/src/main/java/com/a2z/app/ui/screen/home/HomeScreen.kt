@@ -31,8 +31,10 @@ import com.a2z.app.ui.component.BackPressHandler
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.component.ObsComponent
+import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
-import com.a2z.app.ui.screen.fund.payment_gateway.PgResultDialog
+import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.dmt.util.DMTUtil
 import com.a2z.app.ui.screen.home.component.*
 import com.a2z.app.ui.theme.BackgroundColor2
 import com.a2z.app.ui.theme.LocalNavController
@@ -211,8 +213,6 @@ private fun HomeScreenMainContent(
     })
 
     HomeLocationServiceDialog()
-
-
 
 }
 

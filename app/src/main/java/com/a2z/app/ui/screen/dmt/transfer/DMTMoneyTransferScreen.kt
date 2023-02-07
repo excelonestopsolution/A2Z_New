@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
@@ -34,6 +33,8 @@ import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.dmt.util.DMTUtil
+import com.a2z.app.ui.screen.dmt.util.UpiPaymentVerifyResultDialog
+import com.a2z.app.ui.screen.dmt.util.UpiVerifyAccountDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
@@ -80,16 +81,19 @@ fun DMTMoneyTransferScreen() {
             AppFormUI(
                 button = {
 
-                    LocationComponent (
+                    LocationComponent(
                         onLocation = {
-                            viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
-                            manager.clearFocus()
-                            viewModel.confirmDialogState.value = true
-                        }
-                            ){
+                            if (viewModel.dmtType == DMTType.UPI) {
+                                viewModel.checkUpiAccountStatus()
+                            } else {
+                                viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
+                                manager.clearFocus()
+                                viewModel.confirmDialogState.value = true
+                            }
+                        }) {
                         Button(
                             onClick = {
-                              it.invoke()
+                                it.invoke()
                             },
                             enabled = viewModel.input.isValidObs.value,
                             modifier = Modifier
@@ -239,9 +243,11 @@ fun DMTMoneyTransferScreen() {
                 ))
 
             BaseConfirmDialog(
-                title = "Transaction Confirmation ?",
+                title = "Please Confirm ?",
                 state = viewModel.confirmDialogState,
                 amount = viewModel.input.amount.getValue(),
+                warningMessage = viewModel.upiWarningMessage.value,
+                successMessage = viewModel.upiSuccessMessage.value,
                 titleValues = if (viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
             ) {
                 viewModel.mpinDialogVisibleState.value = true
@@ -262,8 +268,37 @@ fun DMTMoneyTransferScreen() {
                             viewModel.proceedTransaction()
 
                         }
+                        MoneyTransferMPinType.UPI_VERIFY -> {
+                            manager.clearFocus()
+                            viewModel.verifyUpiPayment(mpin)
+                        }
                     }
                 })
+
+            UpiVerifyAccountDialog(
+                state = viewModel.verifyUpiAccountDialogState,
+                upiMessage = viewModel.upiMessage,
+                beneficiary = viewModel.beneficiary,
+                onConfirmWithoutVerify = {
+                    viewModel.upiWarningMessage.value =
+                        viewModel.upiMessage?.warningMessage?.get(2) ?: ""
+                    viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
+                    manager.clearFocus()
+                    viewModel.confirmDialogState.value = true
+                },
+                onConfirmVerifyUpiId = {
+                    viewModel.mpinType.value = MoneyTransferMPinType.UPI_VERIFY
+                    viewModel.mpinDialogVisibleState.value = true
+                }
+            )
+
+            UpiPaymentVerifyResultDialog(
+                state = viewModel.paymentVerifyResultDialogStatus,
+                data = viewModel.paymentVerifyData.value,
+                onProceed = {
+                    viewModel.checkUpiAccountStatus()
+                }
+            )
         }
 
     }

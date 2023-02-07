@@ -11,6 +11,7 @@ import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
 import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.data.repository.AppRepository
+import com.a2z.app.data.repository.UpiRepository
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: AppRepository,
+    private val upiRepository: UpiRepository,
     val appPreference: AppPreference
 ) : BaseViewModel() {
 
@@ -48,6 +50,7 @@ class HomeViewModel @Inject constructor(
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
 
     init {
+        fetchUpiVerifyStaticMessage()
         fetchWalletBalance()
         fetchBanners()
         fetchNews()
@@ -190,6 +193,20 @@ class HomeViewModel @Inject constructor(
         callApiForShareFlow(panAutoLogFlow) { repository.panAutoLogin(param) }
 
     }
+
+    fun fetchUpiVerifyStaticMessage() {
+        if (appPreference.upiStateMessage == null) callApiForShareFlow(
+            call = { upiRepository.upiVerifyStaticMessage() },
+            handleException = false,
+            beforeEmit = {
+                if (it is ResultType.Success) {
+                    appPreference.upiStateMessage = it.data
+                }
+            }
+        )
+
+    }
+
 
 }
 

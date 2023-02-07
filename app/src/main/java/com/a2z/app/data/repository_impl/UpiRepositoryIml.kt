@@ -48,5 +48,13 @@ class UpiRepositoryIml @Inject constructor(private val service: UpiService) :
         return service.bankDownCheck(data)
     }
 
+    override suspend fun upiVerifyStaticMessage(): UpiStaticMessage {
+        return service.upiVerifyStaticMessage()
+    }
+
+    override suspend fun checkUpiAccountStatus(data : FieldMapData): AppResponse {
+        return service.checkUpiAccountStatus(data)
+    }
+
 
 }
