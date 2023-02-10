@@ -5,12 +5,12 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.register.RegistrationActivity
 import com.a2z.app.activity.register.kyc.RegisterUserKycActivity
 import com.a2z.app.adapter.user.CompleteUserPagingAdapter
 import com.a2z.app.adapter.user.InCompleteUserPagingAdapter
-import com.a2z.app.databinding.FragmentRegisterUserListingBinding
+import com.a2z.di.databinding.FragmentRegisterUserListingBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.dialogs.StatusDialog

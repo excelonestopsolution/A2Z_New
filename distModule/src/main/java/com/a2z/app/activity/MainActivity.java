@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.a2z.app.AppPreference;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.activity.fund_request.FundRequestActivity;
 import com.a2z.app.activity.login.LoginActivity;
 import com.a2z.app.activity.login_id.create.CreateLoginIdActivity;

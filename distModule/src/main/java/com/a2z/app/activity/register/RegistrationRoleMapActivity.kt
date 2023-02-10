@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.user.RegistrationUserPagingAdapter
 import com.a2z.app.model.RegistrationRoleUser
-import com.a2z.app.databinding.ActivityRegistrationRoleMapBinding
+import com.a2z.di.databinding.ActivityRegistrationRoleMapBinding
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.dialogs.Dialogs
 import com.a2z.app.util.dialogs.UserFilterDialog

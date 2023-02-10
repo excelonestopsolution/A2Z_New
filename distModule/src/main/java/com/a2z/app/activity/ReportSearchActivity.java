@@ -33,7 +33,7 @@ import com.a2z.app.listener.OnDatePicker;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.model.Report;
 import com.a2z.app.model.FundReport;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.util.AppDialogs;
 import com.a2z.app.util.AppUitls;

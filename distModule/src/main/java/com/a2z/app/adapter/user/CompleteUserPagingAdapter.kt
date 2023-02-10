@@ -2,10 +2,10 @@ package com.a2z.app.adapter.user
 
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.BasePagingRecyclerViewAdapter
 import com.a2z.app.model.RegisterCompleteUser
-import com.a2z.app.databinding.ListCompleteUserBinding
+import com.a2z.di.databinding.ListCompleteUserBinding
 import com.a2z.app.util.ents.setupTextColor
 
 class CompleteUserPagingAdapter : BasePagingRecyclerViewAdapter<RegisterCompleteUser,

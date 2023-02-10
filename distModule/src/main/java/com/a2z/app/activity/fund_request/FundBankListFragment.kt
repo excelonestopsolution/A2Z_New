@@ -7,9 +7,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.FundRequestBankListAdapter
-import com.a2z.app.databinding.FragmentFundBankListBinding
+import com.a2z.di.databinding.FragmentFundBankListBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.model.BankDetail
 import com.a2z.app.util.apis.Resource

@@ -32,7 +32,7 @@ import com.a2z.app.adapter.FundTransferAdapter;
 import com.a2z.app.util.APIs;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.model.FundTransfer;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.AppPreference;
 import com.a2z.app.util.AppDialogs;

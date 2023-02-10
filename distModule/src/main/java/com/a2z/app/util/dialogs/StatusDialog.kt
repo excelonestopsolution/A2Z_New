@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.widget.Button
 import android.widget.TextView
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.dialogConfiguration
 import com.a2z.app.util.dialogFullScreenConfiguration
 import com.a2z.app.util.ents.hide

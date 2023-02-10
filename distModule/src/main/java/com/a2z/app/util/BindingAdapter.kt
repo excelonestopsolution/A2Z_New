@@ -5,7 +5,7 @@ package com.a2z.app.util
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.ents.setupTextColor
 
 /*@BindingAdapter("setVisibilityFromLiveData")

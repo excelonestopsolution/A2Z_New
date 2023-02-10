@@ -1,8 +1,8 @@
 package com.a2z.app.adapter
 
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.MiniStatement
-import com.a2z.app.databinding.ListMiniStatementBinding
+import com.a2z.di.databinding.ListMiniStatementBinding
 import com.a2z.app.util.ents.setupTextColor
 
 

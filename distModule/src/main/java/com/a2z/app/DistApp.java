@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.a2z.app.util.APIs;
 import com.a2z.app.util.RootTools;
+import com.a2z.di.R;
 
 import static com.a2z.app.util.AppConstants.BASE_URL;
 

@@ -14,7 +14,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    namespace 'com.a2z.app'
+    namespace 'com.a2z.di'
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 33
     defaultConfig {

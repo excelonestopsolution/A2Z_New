@@ -12,8 +12,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.a2z.app.AppPreference
-import com.a2z.app.R
-import com.a2z.app.databinding.FragmentAgreementBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.FragmentAgreementBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.model.AgreementInitialInfo
 import com.a2z.app.util.PermissionHandler2

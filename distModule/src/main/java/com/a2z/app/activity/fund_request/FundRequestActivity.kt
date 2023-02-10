@@ -3,7 +3,7 @@ package com.a2z.app.activity.fund_request
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.BankDetail
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.ents.showToast

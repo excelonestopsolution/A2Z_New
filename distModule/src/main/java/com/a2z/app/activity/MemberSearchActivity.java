@@ -27,7 +27,7 @@ import com.a2z.app.adapter.MemberAdapter;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.listener.WebApiCallListener;
 import com.a2z.app.model.Member;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.util.AppDialogs;
 import com.a2z.app.util.AutoLogoutManager;
 import com.a2z.app.util.MakeToast;

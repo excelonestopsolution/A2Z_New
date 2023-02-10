@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.a2z.app.AppPreference
-import com.a2z.app.databinding.ActivityShowQrImageBinding
+import com.a2z.di.databinding.ActivityShowQrImageBinding
 import com.a2z.app.fragment.home.HomeViewModel
 import com.a2z.app.util.file.StorageHelper
 import com.a2z.app.util.PermissionHandler2

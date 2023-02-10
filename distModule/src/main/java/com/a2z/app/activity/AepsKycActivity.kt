@@ -18,9 +18,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.a2z.app.PidParser2
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.AppPreference
-import com.a2z.app.databinding.ActivityKYCApprovalBinding
+import com.a2z.di.databinding.ActivityKYCApprovalBinding
 import com.a2z.app.listener.WebApiCallListener
 import com.a2z.app.util.*
 import com.a2z.app.util.dialogs.AepsDialogs

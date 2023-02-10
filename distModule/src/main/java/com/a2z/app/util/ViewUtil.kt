@@ -10,7 +10,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.ents.*
 import com.a2z.app.util.enums.LottieType
 import com.airbnb.lottie.LottieAnimationView

@@ -31,7 +31,7 @@ import com.a2z.app.util.enums.DatePickerType;
 import com.a2z.app.listener.OnDatePicker;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.model.PaymentReport;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.util.APIs;
 import com.a2z.app.util.AppDialogs;

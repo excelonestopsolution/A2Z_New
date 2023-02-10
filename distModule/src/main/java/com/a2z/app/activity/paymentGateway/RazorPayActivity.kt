@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.a2z.app.AppPreference
-import com.a2z.app.R
-import com.a2z.app.databinding.ActivityRazorPayBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.ActivityRazorPayBinding
 import com.a2z.app.util.AppSecurity
 import com.a2z.app.util.apis.Resource
 import com.a2z.app.util.dialogs.StatusDialog

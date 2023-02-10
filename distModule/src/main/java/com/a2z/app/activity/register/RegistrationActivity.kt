@@ -12,9 +12,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.RoleListAdapter
-import com.a2z.app.databinding.ActivityRegistrationBinding
+import com.a2z.di.databinding.ActivityRegistrationBinding
 import com.a2z.app.model.RegistrationCommonResponse
 import com.a2z.app.model.RegistrationRole
 import com.a2z.app.model.RegistrationRoleUser

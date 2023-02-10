@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a2z.app.model.PaymentReport;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.util.enums.PaymentReportType;
 
 import java.util.ArrayList;

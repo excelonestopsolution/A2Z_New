@@ -6,7 +6,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.report.ComplainType
 import com.a2z.app.util.dialogConfiguration
 import com.a2z.app.util.ents.setup

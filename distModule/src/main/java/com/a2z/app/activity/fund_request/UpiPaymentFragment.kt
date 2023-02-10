@@ -11,8 +11,8 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import com.a2z.app.AppPreference
-import com.a2z.app.R
-import com.a2z.app.databinding.FragmentUpiPaymentBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.FragmentUpiPaymentBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.listener.WebApiCallListener
 import com.a2z.app.util.APIs

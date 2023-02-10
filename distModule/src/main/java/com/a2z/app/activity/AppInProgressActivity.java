@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a2z.app.R;
 import com.a2z.app.util.AutoLogoutManager;
+import com.a2z.di.R;
 
 public class AppInProgressActivity extends AppCompatActivity {
     int type;

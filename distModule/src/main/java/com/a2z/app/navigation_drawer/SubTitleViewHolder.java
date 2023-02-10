@@ -3,7 +3,7 @@ package com.a2z.app.navigation_drawer;
 import android.view.View;
 import android.widget.TextView;
 
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 

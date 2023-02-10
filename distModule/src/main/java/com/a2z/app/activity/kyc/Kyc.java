@@ -41,7 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.loader.content.CursorLoader;
 
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.AppPreference;
 import com.a2z.app.util.APIs;

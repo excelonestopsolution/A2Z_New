@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.DistAepsResultActivity
 import com.a2z.app.activity.DistDmtResultActivity
 import com.a2z.app.activity.DistUpiResultActivity
@@ -14,7 +14,7 @@ import com.a2z.app.activity.matm.MatmResponseActivity
 import com.a2z.app.activity.recharge.BillRechargeResultActivity
 import com.a2z.app.adapter.report.LedgerPagingAdapter
 import com.a2z.app.model.report.LedgerReport
-import com.a2z.app.databinding.FragmentLedgreReportBinding
+import com.a2z.di.databinding.FragmentLedgreReportBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.DateUtil

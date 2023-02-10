@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.a2z.app.util.image_process.ImageCompressor
-import com.a2z.app.R
-import com.a2z.app.databinding.FragmentFundRequestBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.FragmentFundRequestBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.model.BankDetail
 import com.a2z.app.util.*

@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.a2z.app.R
-import com.a2z.app.databinding.ActivityForgotLoginIdBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.ActivityForgotLoginIdBinding
 import com.a2z.app.util.apis.Resource
 import com.a2z.app.util.dialogs.Dialogs
 import com.a2z.app.util.dialogs.StatusDialog

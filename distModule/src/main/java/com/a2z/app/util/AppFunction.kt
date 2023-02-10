@@ -9,7 +9,7 @@ import android.view.Gravity
 import android.view.Window
 import android.widget.FrameLayout
 import androidx.cardview.widget.CardView
-import com.a2z.app.R
+import com.a2z.di.R
 import java.util.*
 
 //DIALOG CONFIGURATION HELPER

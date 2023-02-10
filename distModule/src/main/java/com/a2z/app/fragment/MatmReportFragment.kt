@@ -3,11 +3,11 @@ package com.a2z.app.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.matm.MatmResponseActivity
 import com.a2z.app.adapter.MatmReportAdapter
 import com.a2z.app.model.TransactionDetail
-import com.a2z.app.databinding.FragmentReportAepsBinding
+import com.a2z.di.databinding.FragmentReportAepsBinding
 import com.a2z.app.listener.WebApiCallListener
 import com.a2z.app.model.MatmReportData
 import com.a2z.app.util.*

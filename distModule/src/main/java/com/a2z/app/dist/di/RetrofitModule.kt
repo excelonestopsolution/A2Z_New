@@ -1,7 +1,7 @@
 package com.a2z.app.dist.di
 
 import com.a2z.app.dist.data.service.*
-import com.a2z.app.BuildConfig
+import com.a2z.di.BuildConfig
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.apis.ApiInterceptor
 import com.google.gson.GsonBuilder

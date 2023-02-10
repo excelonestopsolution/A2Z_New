@@ -2,9 +2,9 @@ package com.a2z.app.adapter
 
 import android.util.TypedValue
 import androidx.core.content.ContextCompat
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.RegistrationRole
-import com.a2z.app.databinding.ListRegistrationRoleBinding
+import com.a2z.di.databinding.ListRegistrationRoleBinding
 import com.a2z.app.util.ents.setupTextColor
 
 

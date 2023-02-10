@@ -24,7 +24,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.a2z.app.PermissionHandler;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.AppPreference;
 import com.a2z.app.database.DBHelper;

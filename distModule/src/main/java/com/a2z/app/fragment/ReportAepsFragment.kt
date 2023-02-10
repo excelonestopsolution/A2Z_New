@@ -7,11 +7,11 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.DistAepsResultActivity
 import com.a2z.app.adapter.AepsReportListAdapter
 import com.a2z.app.model.TransactionDetail
-import com.a2z.app.databinding.FragmentReportAepsBinding
+import com.a2z.di.databinding.FragmentReportAepsBinding
 import com.a2z.app.fragment.report.LedgerReportComponent
 import com.a2z.app.fragment.report.ReportViewModel
 import com.a2z.app.listener.WebApiCallListener

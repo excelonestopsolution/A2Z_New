@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.AppUtil
 import com.a2z.app.util.enums.LottieType
 import com.airbnb.lottie.LottieAnimationView

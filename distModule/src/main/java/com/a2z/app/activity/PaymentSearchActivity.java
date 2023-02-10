@@ -27,7 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.a2z.app.adapter.PaymentFundReportAdapter;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.model.PaymentReport;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.util.AppDialogs;
 import com.a2z.app.util.AutoLogoutManager;

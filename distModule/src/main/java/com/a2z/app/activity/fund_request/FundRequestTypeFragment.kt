@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import com.a2z.app.R
-import com.a2z.app.databinding.FragmentFundRequestTypeBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.FragmentFundRequestTypeBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.util.ents.setupToolbar
 import com.a2z.app.util.enums.FundRequestType

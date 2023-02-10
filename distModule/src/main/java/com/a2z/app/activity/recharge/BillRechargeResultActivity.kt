@@ -10,10 +10,10 @@ import android.widget.ScrollView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.a2z.app.BuildConfig
-import com.a2z.app.R
+import com.a2z.di.BuildConfig
+import com.a2z.di.R
 import com.a2z.app.model.TransactionDetail
-import com.a2z.app.databinding.ActivityRechargeAndBillResponseBinding
+import com.a2z.di.databinding.ActivityRechargeAndBillResponseBinding
 import com.a2z.app.fragment.report.ReportViewModel
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.PermissionHandler2

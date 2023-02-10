@@ -1,7 +1,7 @@
 package com.a2z.app.adapter
 
-import com.a2z.app.R
-import com.a2z.app.databinding.ListFundRequestBankBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.ListFundRequestBankBinding
 import com.a2z.app.model.BankDetail
 
 class FundRequestBankListAdapter() : BaseRecyclerViewAdapter<BankDetail, ListFundRequestBankBinding>

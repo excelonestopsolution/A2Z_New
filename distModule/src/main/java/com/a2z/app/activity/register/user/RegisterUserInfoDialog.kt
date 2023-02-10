@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.RegisterCompleteUser
 import com.a2z.app.util.dialogConfiguration
 import com.a2z.app.util.ents.setupTextColor

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a2z.app.model.FundReport;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.util.enums.ReportTypes;
 
 import java.util.ArrayList;

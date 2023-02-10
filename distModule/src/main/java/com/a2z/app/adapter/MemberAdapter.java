@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a2z.app.model.Member;
-import com.a2z.app.R;
+import com.a2z.di.R;
 
 import java.util.ArrayList;
 import java.util.List;

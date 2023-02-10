@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
-import com.a2z.app.databinding.ActivityDeviceVerificationBinding
+import com.a2z.di.databinding.ActivityDeviceVerificationBinding
 import com.a2z.app.listener.WebApiCallListener
 import com.a2z.app.util.*
 import com.a2z.app.util.dialogs.StatusDialog

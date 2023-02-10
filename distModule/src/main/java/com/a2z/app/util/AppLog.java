@@ -2,7 +2,7 @@ package com.a2z.app.util;
 
 import android.util.Log;
 
-import com.a2z.app.BuildConfig;
+import com.a2z.di.BuildConfig;
 
 public class AppLog {
     private static boolean isDebug= BuildConfig.DEBUG;

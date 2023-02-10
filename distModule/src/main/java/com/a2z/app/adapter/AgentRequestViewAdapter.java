@@ -25,7 +25,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.a2z.app.activity.AppInProgressActivity;
 import com.a2z.app.listener.OnCallbackListener;
 import com.a2z.app.model.AgentRequestView;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.AppPreference;
 import com.a2z.app.util.APIs;

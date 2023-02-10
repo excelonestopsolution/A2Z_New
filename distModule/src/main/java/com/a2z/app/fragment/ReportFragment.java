@@ -42,7 +42,7 @@ import com.a2z.app.activity.ReportSearchActivity;
 import com.a2z.app.util.APIs;
 import com.a2z.app.listener.PaginationScrollListener;
 import com.a2z.app.model.Report;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.adapter.ReportAdapter;
 import com.a2z.app.util.AppDialogs;
 import com.a2z.app.util.AppUitls;

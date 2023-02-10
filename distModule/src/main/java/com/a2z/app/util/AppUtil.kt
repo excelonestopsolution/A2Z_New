@@ -8,7 +8,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Base64
 import android.util.Log
-import com.a2z.app.BuildConfig
+import com.a2z.di.BuildConfig
 import com.a2z.app.model.DoubleTxn
 import com.a2z.app.util.dialogs.StatusDialog
 import org.json.JSONObject

@@ -4,10 +4,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.BasePagingRecyclerViewAdapter
 import com.a2z.app.model.RegisterInCompleteUser
-import com.a2z.app.databinding.ListInCompleteUserBinding
+import com.a2z.di.databinding.ListInCompleteUserBinding
 import com.a2z.app.util.ents.setupTextColor
 
 class InCompleteUserPagingAdapter : BasePagingRecyclerViewAdapter<RegisterInCompleteUser,

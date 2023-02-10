@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import com.a2z.app.BuildConfig
+import com.a2z.di.BuildConfig
 import com.a2z.app.util.ents.disable
 import com.a2z.app.util.ents.hide
 import com.a2z.app.util.ents.show

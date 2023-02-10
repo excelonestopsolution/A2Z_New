@@ -1,7 +1,7 @@
 package com.a2z.app.adapter
 
-import com.a2z.app.R
-import com.a2z.app.databinding.ListReportMatmBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.ListReportMatmBinding
 import com.a2z.app.model.MatmReportData
 import com.a2z.app.util.ents.hide
 import com.a2z.app.util.ents.setupTextColor

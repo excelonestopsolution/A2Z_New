@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.a2z.app.listener.FundTransferListener;
 import com.a2z.app.model.FundTransfer;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.AppPreference;
 
 

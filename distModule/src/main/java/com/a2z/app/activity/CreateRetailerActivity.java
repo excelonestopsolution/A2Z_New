@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.a2z.app.AppPreference;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.util.APIs;
 import com.a2z.app.util.AppDialogs;

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.model.NotificationModel;
 
 import java.util.ArrayList;

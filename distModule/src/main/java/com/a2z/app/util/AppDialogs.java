@@ -16,9 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.a2z.app.BuildConfig;
+import com.a2z.di.BuildConfig;
 import com.a2z.app.activity.MainActivity;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.util.dialogs.StatusDialog;
 
 import java.util.Objects;

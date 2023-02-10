@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.TransactionDetail
 import com.a2z.app.model.matm.MatmTransactionResponse
-import com.a2z.app.databinding.ActivityMatmResponseBinding
+import com.a2z.di.databinding.ActivityMatmResponseBinding
 import com.a2z.app.util.APIs
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.PermissionHandler2

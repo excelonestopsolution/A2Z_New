@@ -6,7 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.text.InputFilter
 import android.widget.*
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.ViewUtil
 import com.a2z.app.util.dialogConfiguration
 import com.a2z.app.util.dialogFullScreenConfiguration

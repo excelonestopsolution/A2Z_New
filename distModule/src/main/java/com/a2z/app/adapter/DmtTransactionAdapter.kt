@@ -1,8 +1,8 @@
 package com.a2z.app.adapter
 
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.model.DmtTransactionDetail
-import com.a2z.app.databinding.ListDmtResponseBinding
+import com.a2z.di.databinding.ListDmtResponseBinding
 
 
 class DmtTransactionAdapter() :

@@ -12,7 +12,7 @@ import android.view.SurfaceView
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.BitmapUtil.toFile
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.face.FaceDetector

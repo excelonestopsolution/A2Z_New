@@ -8,7 +8,7 @@ import android.text.InputType
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.ents.setup
 import com.a2z.app.util.ents.show
 import com.google.android.material.bottomsheet.BottomSheetDialog

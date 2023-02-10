@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.model.BankDetail;
 
 import java.util.ArrayList;

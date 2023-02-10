@@ -2,7 +2,7 @@ package com.a2z.app.util
 
 import android.widget.Button
 import android.widget.TextView
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.ents.capitalizeWords
 import com.a2z.app.util.ents.disable
 import com.a2z.app.util.ents.removeComa

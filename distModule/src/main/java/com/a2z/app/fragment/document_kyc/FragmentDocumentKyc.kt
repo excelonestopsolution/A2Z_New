@@ -7,11 +7,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.a2z.app.util.image_process.ImageCompressor
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.MainActivity
 import com.a2z.app.activity.eye_blink.EyeBlinkCameraActivity
 import com.a2z.app.model.*
-import com.a2z.app.databinding.FragmentDocumentKycBinding
+import com.a2z.di.databinding.FragmentDocumentKycBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.fragment.document_kyc.DocumentKycViewModel.DocType
 import com.a2z.app.listener.KycRequiredListener

@@ -7,12 +7,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.AppInProgressActivity
 import com.a2z.app.activity.ShowQRImageActivity
 import com.a2z.app.activity.fund_request.FundRequestActivity
 import com.a2z.app.adapter.AgentRequestViewAdapter
-import com.a2z.app.databinding.FragmentAgentRequestViewBinding
+import com.a2z.di.databinding.FragmentAgentRequestViewBinding
 import com.a2z.app.fragment.home.HomeViewModel
 import com.a2z.app.listener.WebApiCallListener
 import com.a2z.app.model.AgentRequestView

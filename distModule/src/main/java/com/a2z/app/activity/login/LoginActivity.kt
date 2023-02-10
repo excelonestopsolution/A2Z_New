@@ -17,12 +17,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.ForgetPasswordActivity
 import com.a2z.app.activity.MainActivity
 import com.a2z.app.activity.login_id.forgot.ForgotLoginIdActivity
 import com.a2z.app.activity.register.RegistrationActivity
-import com.a2z.app.databinding.ActivityLogin2Binding
+import com.a2z.di.databinding.ActivityLogin2Binding
 import com.a2z.app.util.*
 import com.a2z.app.util.apis.Resource
 import com.a2z.app.util.dialogs.StatusDialog

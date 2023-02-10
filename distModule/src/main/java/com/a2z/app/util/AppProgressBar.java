@@ -3,7 +3,7 @@ package com.a2z.app.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import java.util.Objects;
 
 public class AppProgressBar {

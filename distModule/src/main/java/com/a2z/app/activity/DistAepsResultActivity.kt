@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.MiniStatementAdapter
-import com.a2z.app.databinding.ActivityAadharTransactionResponseBinding
+import com.a2z.di.databinding.ActivityAadharTransactionResponseBinding
 import com.a2z.app.model.MiniStatement
 import com.a2z.app.model.TransactionDetail
 import com.a2z.app.util.*

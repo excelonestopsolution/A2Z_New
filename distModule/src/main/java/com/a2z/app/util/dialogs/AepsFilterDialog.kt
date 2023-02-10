@@ -5,7 +5,7 @@ import android.text.InputFilter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.DateUtil
 import com.a2z.app.util.ents.hide
 import com.a2z.app.util.ents.setup

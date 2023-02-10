@@ -1,7 +1,7 @@
 package com.a2z.app.adapter
 
-import com.a2z.app.R
-import com.a2z.app.databinding.ListGridUserBinding
+import com.a2z.di.R
+import com.a2z.di.databinding.ListGridUserBinding
 
 
 class GridViewUserAdapter() : BaseRecyclerViewAdapter<String, ListGridUserBinding>(R.layout.list_grid_user) {

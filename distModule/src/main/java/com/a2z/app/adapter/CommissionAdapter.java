@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.a2z.app.AppPreference;
 import com.a2z.app.model.GridModel;
-import com.a2z.app.R;
+import com.a2z.di.R;
 
 import java.util.ArrayList;
 

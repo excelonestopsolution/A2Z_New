@@ -2,7 +2,7 @@ package com.a2z.app.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.a2z.app.R
+import com.a2z.di.R
 
 class ImagePreviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

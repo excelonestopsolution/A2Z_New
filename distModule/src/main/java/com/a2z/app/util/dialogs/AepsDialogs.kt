@@ -3,7 +3,7 @@ package com.a2z.app.util.dialogs
 import android.content.Context
 import android.widget.*
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.util.dialogConfiguration
 import com.a2z.app.util.ents.setupAdapter
 

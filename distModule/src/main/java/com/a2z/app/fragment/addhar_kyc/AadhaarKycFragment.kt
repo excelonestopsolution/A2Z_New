@@ -9,10 +9,10 @@ import android.util.Log
 import android.widget.*
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.AppPreference
 import com.a2z.app.model.*
-import com.a2z.app.databinding.FragmentAadhaarKycBinding
+import com.a2z.di.databinding.FragmentAadhaarKycBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.util.AppLog
 import com.a2z.app.util.LocationService

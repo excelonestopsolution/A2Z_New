@@ -2,9 +2,9 @@ package com.a2z.app.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.dist.data.preference.AppPreference
-import com.a2z.app.databinding.ActivityExceptionBinding
+import com.a2z.di.databinding.ActivityExceptionBinding
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.apis.Exceptions
 import com.a2z.app.util.ents.goToMainActivity

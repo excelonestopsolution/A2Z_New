@@ -3,10 +3,10 @@ package com.a2z.app.activity.register.kyc
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.register.user.RegisterUserKycType
 import com.a2z.app.model.RegisterCompleteUser
-import com.a2z.app.databinding.ActivityFragCommonContainerBinding
+import com.a2z.di.databinding.ActivityFragCommonContainerBinding
 import com.a2z.app.fragment.addhar_kyc.AadhaarKycFragment
 import com.a2z.app.fragment.document_kyc.FragmentDocumentKyc
 import com.a2z.app.util.ents.setupToolbar

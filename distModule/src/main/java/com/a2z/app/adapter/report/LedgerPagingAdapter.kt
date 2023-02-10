@@ -3,10 +3,10 @@ package com.a2z.app.adapter.report
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.adapter.BasePagingRecyclerViewAdapter
 import com.a2z.app.model.report.LedgerReport
-import com.a2z.app.databinding.ListLedgerReport2Binding
+import com.a2z.di.databinding.ListLedgerReport2Binding
 import com.a2z.app.util.ents.hide
 import com.a2z.app.util.ents.setupTextColor
 import com.a2z.app.util.ents.show

@@ -10,10 +10,10 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.a2z.app.BuildConfig
-import com.a2z.app.R
+import com.a2z.di.BuildConfig
+import com.a2z.di.R
 import com.a2z.app.model.TransactionDetail
-import com.a2z.app.databinding.ActivityUpiResponseBinding
+import com.a2z.di.databinding.ActivityUpiResponseBinding
 import com.a2z.app.fragment.report.ReportViewModel
 import com.a2z.app.util.AppConstants
 import com.a2z.app.util.PermissionHandler2

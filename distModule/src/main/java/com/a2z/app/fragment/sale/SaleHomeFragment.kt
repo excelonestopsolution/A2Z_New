@@ -4,12 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.a2z.app.AppPreference
-import com.a2z.app.R
+import com.a2z.di.R
 import com.a2z.app.activity.MainActivity
 import com.a2z.app.activity.register.RegistrationActivity
 import com.a2z.app.activity.register.user.RegisterUserListingActivity
 import com.a2z.app.adapter.GridViewUserAdapter
-import com.a2z.app.databinding.FragmentSaleHomeBinding
+import com.a2z.di.databinding.FragmentSaleHomeBinding
 import com.a2z.app.fragment.BaseFragment
 import com.a2z.app.listener.OnSaleItemClickListener
 import com.a2z.app.util.AppConstants

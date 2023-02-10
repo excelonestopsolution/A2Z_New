@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.a2z.app.R;
+import com.a2z.di.R;
 
 public class CreateRetailerFragment extends Fragment {
 

@@ -32,7 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.a2z.app.PermissionHandler;
-import com.a2z.app.R;
+import com.a2z.di.R;
 import com.a2z.app.RequestHandler;
 import com.a2z.app.activity.ForgetPasswordActivity;
 import com.a2z.app.adapter.DocumentsAdapter;

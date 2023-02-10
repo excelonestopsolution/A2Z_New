@@ -3,7 +3,7 @@ package com.a2z.app.navigation_drawer;
 import android.content.Context;
 
 import com.a2z.app.AppPreference;
-import com.a2z.app.R;
+import com.a2z.di.R;
 
 import java.util.ArrayList;
 
