@@ -38,7 +38,7 @@
     </queries>
 
     <application
-        >
+        android:name=".DistApp">
         <activity
             android:name=".activity.ImagePreviewActivity"/>
         <activity
@@ -52,10 +52,10 @@
 
         <activity android:name=".activity.fund_request.FundRequestActivity" />
 
-        <activity android:name=".activity.AadharTransactionResponseActivity" />
+        <activity android:name=".activity.DistAepsResultActivity" />
         <activity android:name=".activity.recharge.BillRechargeResultActivity" />
-        <activity android:name=".activity.DmtTransactionResponseActivity" />
-        <activity android:name=".activity.UpiTransactionResponseActivity" />
+        <activity android:name=".activity.DistDmtResultActivity" />
+        <activity android:name=".activity.DistUpiResultActivity" />
         <activity android:name=".activity.ShowQRImageActivity" />
 
         <activity android:name=".activity.register.RegistrationActivity" />

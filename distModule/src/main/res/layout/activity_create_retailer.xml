@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.di_md.a2z.activity.CreateRetailerActivity">
+    tools:context="com.a2z.app.activity.CreateRetailerActivity">
 
 
     <ScrollView

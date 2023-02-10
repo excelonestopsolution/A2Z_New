@@ -42,15 +42,15 @@
 -keepnames class * extends android.os.Parcelable
 -keepnames class * extends java.io.Serializable
 
--keep class com.di_md.a2z.data.model.**  { *; }
--keep class com.di_md.a2z.data.model.dmt.**  { *; }
--keep class com.di_md.a2z.data.model.report.**  { *; }
--keep class com.di_md.a2z.data.model.matm.**  { *; }
--keep class com.di_md.a2z.model.**  { *; }
--keep class com.di_md.a2z.model.pancard.**  { *; }
--keep class com.di_md.a2z.model.ParentPaymentRefund.**  { *; }
--keep class com.di_md.a2z.model.pg.**  { *; }
--keep class com.di_md.a2z.model.upiData.**  { *; }
+-keep class com.a2z.app.data.model.**  { *; }
+-keep class com.a2z.app.data.model.dmt.**  { *; }
+-keep class com.a2z.app.data.model.report.**  { *; }
+-keep class com.a2z.app.data.model.matm.**  { *; }
+-keep class com.a2z.app.model.**  { *; }
+-keep class com.a2z.app.model.pancard.**  { *; }
+-keep class com.a2z.app.model.ParentPaymentRefund.**  { *; }
+-keep class com.a2z.app.model.pg.**  { *; }
+-keep class com.a2z.app.model.upiData.**  { *; }
 -keep class okhttp3.**  { *; }
 -keep interface okhttp3.**  { *; }
 

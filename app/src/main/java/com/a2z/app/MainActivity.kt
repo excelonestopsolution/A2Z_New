@@ -8,9 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import com.a2z.app.activity.login.LoginActivity
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.service.location.LocationService
-import com.di_md.a2z.activity.login.LoginActivity
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,8 +54,9 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
             }
         }
 
-        val intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
+        Intent(this,LoginActivity::class.java).apply {
+            startActivity(this)
+        }
 
         /*  setContent {
 

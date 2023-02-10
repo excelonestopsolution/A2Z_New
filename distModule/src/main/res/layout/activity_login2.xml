@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.di_md.a2z.activity.login.LoginViewModel" />
+            type="com.a2z.app.activity.login.LoginViewModel" />
 
     </data>
 

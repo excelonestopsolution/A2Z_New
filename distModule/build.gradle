@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'com.google.gms.google-services'
 
 
 def keystoreProperties = new Properties()
@@ -15,11 +14,10 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    namespace 'com.di_md.a2z'
+    namespace 'com.a2z.app'
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 33
     defaultConfig {
-
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 53
@@ -62,7 +60,6 @@ android {
 
 dependencies {
 
-
     def lifecycle_version = "2.5.1"
 
     implementation fileTree(include: ['.jar', '.aar'], dir: 'libs')
@@ -86,14 +83,15 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
     implementation 'com.intuit.sdp:sdp-android:1.0.3'
     implementation 'xml-security:xmlsec:1.3.0'
+    implementation 'commons-codec:commons-codec:1.10'
     implementation 'com.karumi:dexter:6.2.2'
+
 
     //Progress Bar
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'net.lingala.zip4j:zip4j:2.6.4'
 
     implementation 'com.google.code.gson:gson:2.9.0'
-
 
     implementation 'com.github.hedzr:android-file-chooser:v1.2.0-final'
 
@@ -110,16 +108,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
 
     // Dagger & Dagger Hilt
-    /*implementation "com.google.dagger:hilt-android:2.42"
-    kapt "com.google.dagger:hilt-android-compiler:2.42"
-    kapt "com.google.dagger:hilt-compiler:2.42"*/
-
-    // hilt
     implementation "com.google.dagger:hilt-android:2.42"
-    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    kapt "com.google.dagger:hilt-android-compiler:2.42"
     kapt "com.google.dagger:hilt-compiler:2.42"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:2.42"
-    kaptAndroidTest "com.google.dagger:hilt-compiler:2.42"
 
     //navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
@@ -166,5 +157,7 @@ dependencies {
 
     implementation 'com.razorpay:checkout:1.6.26'
     implementation 'androidx.browser:browser:1.5.0'
+
+
 
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.di_md.a2z.data.response.RegisterInCompleteUser" />
+            type="com.a2z.app.model.RegisterInCompleteUser" />
 
     </data>
 

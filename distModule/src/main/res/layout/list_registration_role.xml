@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.di_md.a2z.data.response.RegistrationRole" />
+            type="com.a2z.app.model.RegistrationRole" />
     </data>
 
 

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.di_md.a2z.data.model.report.LedgerReport" />
+            type="com.a2z.app.model.report.LedgerReport" />
 
     </data>
     <androidx.cardview.widget.CardView
@@ -221,9 +221,10 @@
                     android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
                     android:layout_gravity="center_vertical"
+                    android:tint="@color/colorPrimaryDark"
                     android:id="@+id/btn_print"
                     android:src="@drawable/ic_baseline_print_24"
-                    app:tint="@color/colorPrimaryDark" />
+                   />
 
                 <View
                     android:layout_width="0dp"

@@ -24,7 +24,7 @@
             android:background="@android:color/transparent"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_cross_close2"
-            android:tint="@color/black2" />
+            app:tint="@color/black2" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_share"

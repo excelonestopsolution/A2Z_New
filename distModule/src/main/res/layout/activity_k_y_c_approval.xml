@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:background="@color/background_color"
-        tools:context="com.di_md.a2z.activity.AepsKycActivity">
+        tools:context="com.a2z.app.activity.AepsKycActivity">
 
 
         <RelativeLayout

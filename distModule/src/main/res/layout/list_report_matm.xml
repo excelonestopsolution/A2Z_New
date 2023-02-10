@@ -7,8 +7,8 @@
 
         <variable
             name="item"
-            type="com.di_md.a2z.model.MatmReportData" />
-        <import type="com.di_md.a2z.util.ents.StringEntsKt" />
+            type="com.a2z.app.model.MatmReportData" />
+        <import type="com.a2z.app.util.ents.StringEntsKt" />
     </data>
 
    <androidx.cardview.widget.CardView

@@ -7,7 +7,7 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:background="@color/background_color"
-     tools:context="com.di_md.a2z.fragment.ReportFragment">
+     tools:context="com.a2z.app.fragment.ReportFragment">
 
   <LinearLayout
       android:id="@+id/lin1"

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.di_md.a2z.activity.register.RegisterViewModel" />
+            type="com.a2z.app.activity.register.RegisterViewModel" />
     </data>
 
     <LinearLayout

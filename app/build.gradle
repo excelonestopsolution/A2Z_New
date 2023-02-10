@@ -151,4 +151,5 @@ dependencies {
 configurations.all{
     exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
     all*.exclude module: 'xmlsec'
+    all*.exclude module: 'commons-codec'
 }
