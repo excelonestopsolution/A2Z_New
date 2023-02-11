@@ -3,14 +3,24 @@ package com.a2z.app
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.navigation.compose.rememberNavController
 import com.a2z.app.data.local.AppPreference
+import com.a2z.app.nav.MainNav
 import com.a2z.app.service.location.LocationService
-import com.di_md.a2z.activity.login.LoginActivity
+import com.a2z.app.ui.theme.A2ZApp
+import com.a2z.app.ui.theme.LocalLocationService
+import com.a2z.app.ui.theme.LocalNavController
+import com.a2z_di.app.activity.login.LoginActivity
+import com.google.accompanist.insets.ProvideWindowInsets
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,8 +36,6 @@ enum class InitialRouteType {
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
-
-    private val TAG = MainActivity::class.java.simpleName
 
     @Inject
     lateinit var locationService: LocationService
@@ -54,32 +62,37 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
             }
         }
 
-        val intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
 
-        /*  setContent {
 
-              CompositionLocalProvider(
-                  LocalNavController provides rememberNavController(),
-                  LocalLocationService provides locationService
-              ) {
-                  A2ZApp {
-                      ProvideWindowInsets(
-                          windowInsetsAnimationsEnabled = true,
-                          consumeWindowInsets = false
-                      ) {
+        setContent {
 
-                          var initialRouteType = InitialRouteType.LOGIN_PAGE
-                          *//*if (!LocalAuth.checkForBiometrics(this))
-                            initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
-*//*
+            CompositionLocalProvider(
+                LocalNavController provides rememberNavController(),
+                LocalLocationService provides locationService
+            ) {
+                A2ZApp {
+                    ProvideWindowInsets(
+                        windowInsetsAnimationsEnabled = true,
+                        consumeWindowInsets = false
+                    ) {
+
+                        val context = LocalContext.current
+                        LaunchedEffect(key1 = true, block = {
+                            Intent(this@MainActivity,LoginActivity::class.java).apply {
+                                startActivity(this)
+                            }
+                        })
+
+                       var initialRouteType = InitialRouteType.LOGIN_PAGE
+                        initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
+
                         MainNav(viewModel, initialRouteType)
 
                     }
                 }
             }
 
-        }*/
+        }
     }
 
     override fun onPaymentSuccess(razorpayPaymentId: String?, data: PaymentData?) {

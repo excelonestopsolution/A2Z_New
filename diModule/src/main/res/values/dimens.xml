@@ -1,0 +1,12 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+
+    <dimen name="dim_1">1dp</dimen>
+    <dimen name="dim_20">20dp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+
+    <dimen name="placeholderTextHeight">8dp</dimen>
+
+</resources>
