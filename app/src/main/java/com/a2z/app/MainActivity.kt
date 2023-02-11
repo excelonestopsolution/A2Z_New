@@ -8,9 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
-import com.a2z.app.activity.login.LoginActivity
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.service.location.LocationService
+import com.app.mylibrary.TestActivity
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,8 +26,6 @@ enum class InitialRouteType {
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
-
-    private val TAG = MainActivity::class.java.simpleName
 
     @Inject
     lateinit var locationService: LocationService
@@ -54,7 +52,7 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
             }
         }
 
-        Intent(this,LoginActivity::class.java).apply {
+        Intent(this, TestActivity::class.java).apply {
             startActivity(this)
         }
 

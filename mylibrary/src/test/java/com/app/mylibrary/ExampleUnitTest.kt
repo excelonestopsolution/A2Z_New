@@ -1,4 +1,4 @@
-package com.a2z.dist
+package com.app.mylibrary
 
 import org.junit.Test
 

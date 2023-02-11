@@ -18,5 +18,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "A2Z_2022"
 include ':app'
-include ':distModule'
-include ':testModule'
+include ':mylibrary'

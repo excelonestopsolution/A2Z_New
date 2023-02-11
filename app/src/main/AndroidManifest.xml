@@ -47,7 +47,7 @@
         tools:node="replace"
         tools:targetApi="31">
 
-        <activity android:name="com.di_md.a2z.activity.login.LoginActivity"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
