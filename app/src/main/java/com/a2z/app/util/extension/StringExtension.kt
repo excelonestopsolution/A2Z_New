@@ -40,5 +40,8 @@ fun String?.notAvailable() : String{
     return if(this == null || this.isEmpty()) "Not Available";
     else this
 }
+fun String.prefixRS() : String{
+    return AppConstant.RUPEE_SYMBOL + " "+this
+}
 
 fun String.capitalizeWords(): String = split(" ").map { it.capitalize() }.joinToString(" ")

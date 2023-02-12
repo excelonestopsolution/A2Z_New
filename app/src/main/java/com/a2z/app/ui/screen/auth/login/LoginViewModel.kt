@@ -19,6 +19,7 @@ import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.security.AppSecurity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,7 +53,6 @@ class LoginViewModel @Inject constructor(
     }
 
 
-
     private suspend fun subscribers() {
         loginFlow.getLatest(
             progress = { progressDialog("Login") },
@@ -73,6 +73,8 @@ class LoginViewModel @Inject constructor(
                     route = NavScreen.DashboardScreen.passArgs(true),
                     popUpAll = true
                 )
+
+
             }
             700 -> {
                 val mobile = input.userIdWrapper.getValue()
@@ -106,7 +108,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun saveData(it: User) {
-        if (it.status == 1) appPreference.user = it
+
+        appPreference.user = it
         if (loginCheckState.value) {
             appPreference.loginCheck = true
             appPreference.loginId = input.userIdWrapper.input.value

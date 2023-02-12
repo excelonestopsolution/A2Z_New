@@ -196,7 +196,7 @@ private fun BuildItemVisibleContent(
                 fontWeight = FontWeight.Bold
 
             )
-            Text(
+          if(rightAmount.orEmpty().isNotEmpty())  Text(
                 text = AppConstant.RUPEE_SYMBOL + rightAmount,
                 style = MaterialTheme.typography.subtitle1.copy(
                     fontWeight = FontWeight.Bold,

@@ -1,14 +1,11 @@
 package com.a2z.app
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
@@ -19,7 +16,6 @@ import com.a2z.app.service.location.LocationService
 import com.a2z.app.ui.theme.A2ZApp
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z_di.app.activity.login.LoginActivity
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -75,13 +71,6 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
                         windowInsetsAnimationsEnabled = true,
                         consumeWindowInsets = false
                     ) {
-
-                        val context = LocalContext.current
-                        LaunchedEffect(key1 = true, block = {
-                            Intent(this@MainActivity,LoginActivity::class.java).apply {
-                                startActivity(this)
-                            }
-                        })
 
                        var initialRouteType = InitialRouteType.LOGIN_PAGE
                         initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE

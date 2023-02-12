@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +28,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.a2z.app.R
 import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.util.VoidCallback
 
 @Composable
 fun AppNetworkImage(
@@ -35,7 +37,8 @@ fun AppNetworkImage(
     contentScale: ContentScale = ContentScale.Crop,
     shape: Shape = RoundedCornerShape(5.dp),
     size: Int = 52,
-    border: Boolean = false
+    border: Boolean = false,
+    onClick : VoidCallback ? = null
 ) {
 
     val mPainter = rememberAsyncImagePainter(
@@ -55,6 +58,9 @@ fun AppNetworkImage(
             modifier = Modifier
                 .size(size.dp)
                 .clip(shape)
+                .clickable {
+                    onClick?.invoke()
+                }
         )
 
 

@@ -9,9 +9,11 @@ import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.kyc.KycInfoResponse
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.report.CommissionSchemeListResponse
 import com.a2z.app.util.FieldMapData
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
@@ -30,6 +32,10 @@ interface AppRepository {
     suspend fun panServiceNote() : PanCardServiceNoteResponse
     suspend fun panServiceActivate(data : FieldMapData) : AppResponse
     suspend fun panAutoLogin(data : FieldMapData) : PanAutoLoginResponse
+    suspend fun mobileEmailVerifyRequestOtp(data : FieldMapData) : AppResponse
+    suspend fun mobileEmailVerifyOtp(data : FieldMapData) : AppResponse
+
+    suspend fun kycCheck(): KycInfoResponse
 
 
 

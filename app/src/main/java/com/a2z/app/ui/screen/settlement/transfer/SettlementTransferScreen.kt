@@ -83,19 +83,21 @@ fun SettlementTransferScreen() {
                         }
                     )
                 ))
+
+
+            BaseConfirmDialog(
+                state = viewModel.confirmDialogState,
+                amount = viewModel.input.amount.getValue(), titleValues = listOf(
+                    "Account Number" to bank.accountNumber.toString(),
+                    "Beneficiary Name" to bank.name.toString(),
+                    "Bank Name" to bank.bankName.toString(),
+                    "IFSC Code" to bank.ifscCode.toString(),
+                )
+            ) {
+                viewModel.transfer()
+
+            }
         }
     }
 
-    BaseConfirmDialog(
-        state = viewModel.confirmDialogState,
-        amount = viewModel.input.amount.getValue(), titleValues = listOf(
-            "Account Number" to bank.accountNumber.toString(),
-            "Beneficiary Name" to bank.name.toString(),
-            "Bank Name" to bank.bankName.toString(),
-            "IFSC Code" to bank.ifscCode.toString(),
-        )
-    ) {
-        viewModel.transfer()
-
-    }
 }

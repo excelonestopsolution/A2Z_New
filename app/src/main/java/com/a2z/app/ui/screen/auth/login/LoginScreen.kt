@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.auth.login
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import com.a2z.app.MainActivity
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.service.LocalAuth
@@ -25,6 +27,7 @@ import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.PasswordTextField
 import com.a2z.app.ui.component.permission.LocationComponent
+import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
@@ -40,15 +43,17 @@ fun LoginScreen(
 
     val navController = LocalNavController.current
     val context = LocalContext.current
+    val activity = context as MainActivity
 
     LaunchedEffect(key1 = Unit, block = {
-        if (viewModel.appPreference.user != null && LocalAuth.checkForBiometrics(context)) {
+
+        if (viewModel.appPreference.user == null) return@LaunchedEffect
+        if (LocalAuth.checkForBiometrics(context))
             navController.navigate(NavScreen.DashboardScreen.route) {
                 popUpTo(NavScreen.DashboardScreen.route) {
                     inclusive = true
                 }
             }
-        }
     })
 
 
@@ -56,6 +61,8 @@ fun LoginScreen(
         val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
         if (shouldNavigate == true) viewModel.login()
     }
+
+
 
     BaseContent(viewModel) {
         BottomSheetComponent(sheetContent = {
@@ -188,6 +195,8 @@ private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
 
         }
     }
+
+
 
 
 }

@@ -214,6 +214,11 @@ private fun HomeScreenMainContent(
 
     HomeLocationServiceDialog()
 
+    KycWarningDialog(viewModel.kycDialogState, viewModel.kycInfo()){
+        viewModel.navigateKycScreen(it)
+    }
+
+
 }
 
 

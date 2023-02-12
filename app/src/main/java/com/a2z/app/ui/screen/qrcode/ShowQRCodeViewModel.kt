@@ -59,9 +59,6 @@ class ShowQRCodeViewModel @Inject constructor(
         return bitmap
     }
 
-    fun downloadQRCode() {
-
-
-    }
 
 }
+

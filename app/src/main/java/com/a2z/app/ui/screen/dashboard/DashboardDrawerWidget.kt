@@ -117,6 +117,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     Pair("PG Report") {
                         navController.navigate(NavScreen.PGReportScreen.route)
                     },
+                    Pair("Complaints") {
+                        navController.navigate(NavScreen.ComplaintScreen.route)
+                    },
                 )
             )
             BuildSingleItemMenu(
@@ -152,6 +155,8 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
 @Composable
 private fun HeaderContent(appPreference: AppPreference) {
+
+    val navController = LocalNavController.current
     BoxWithConstraints(
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -193,7 +198,10 @@ private fun HeaderContent(appPreference: AppPreference) {
                     AppNetworkImage(
                         url = appPreference.user?.profilePicture.toString(),
                         shape = CircleShape, size = 70,
-                        border = true
+                        border = true,
+                        onClick = {
+                            navController.navigate(NavScreen.ProfileScreen.route)
+                        }
                     )
 
                     Column() {

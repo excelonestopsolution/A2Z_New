@@ -163,7 +163,9 @@ sealed class NavScreen(val route: String) {
 
     }
 
-    object ShowQRScreen : NavScreen("show-qr-screen")
+    object ShowQRScreen : NavScreen("show-qr-screen"){
+
+    }
     object TestScreen : NavScreen("test-screen")
     object AepsScreen : NavScreen("aeps-screen".params("aeps_type")) {
         fun passArgs(aepsType: AepsType) =
@@ -266,4 +268,5 @@ sealed class NavScreen(val route: String) {
     object FundReportScreen : NavScreen("fund-report-screen")
     object DTReportScreen : NavScreen("dt-report-screen")
     object PGReportScreen : NavScreen("pg-report-screen")
+    object ProfileScreen : NavScreen("profile-screen")
 }

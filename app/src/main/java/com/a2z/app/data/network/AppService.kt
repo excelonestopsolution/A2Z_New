@@ -9,6 +9,7 @@ import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.kyc.KycInfoResponse
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.report.CommissionSchemeListResponse
 import com.a2z.app.util.FieldMapData
@@ -45,7 +46,7 @@ interface AppService {
 
     @FormUrlEncoded
     @POST("travel/flight-hotel")
-    suspend fun flightHotelRedirectUrl(@FieldMap data : FieldMapData): FlightHotelRedirectUrlResponse
+    suspend fun flightHotelRedirectUrl(@FieldMap data: FieldMapData): FlightHotelRedirectUrlResponse
 
     @GET("utipan-card/activation/static-message")
     suspend fun panServiceNote(): PanCardServiceNoteResponse
@@ -60,5 +61,15 @@ interface AppService {
     @POST("utipan-card/autologin")
     suspend fun panAutoLogin(@FieldMap data: FieldMapData): PanAutoLoginResponse
 
+    @FormUrlEncoded
+    @POST("user/send-verification-otp")
+    suspend fun mobileEmailVerifyRequestOtp(@FieldMap data: FieldMapData): AppResponse
+
+   @FormUrlEncoded
+    @POST("user/validate-verification-otp")
+    suspend fun mobileEmailVerifyOtp(@FieldMap data: FieldMapData): AppResponse
+
+    @GET("user/kyc/check")
+    suspend fun kycCheck(): KycInfoResponse
 
 }

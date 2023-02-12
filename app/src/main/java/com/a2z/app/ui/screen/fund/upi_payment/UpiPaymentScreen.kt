@@ -6,31 +6,31 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.component.NavTopBar
-import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.util.extension.showToast
+import com.a2z.app.util.AppConstant
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -88,42 +88,92 @@ fun UpiPaymentScreen() {
                         Button(
                             enabled = input.isValidObs.value,
                             onClick = {
-                                viewModel.fetchData()
+                                viewModel.fetchData(UpiPaymentViewModel.QRCodeActionType.SELF_PAYMENT)
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(52.dp)
                         ) {
-                            Text(text = "Proceed")
+                            Text(text = "Self Payment")
                         }
 
+                        Spacer(modifier = Modifier.height(5.dp))
+
+                        Button(
+                            enabled = input.isValidObs.value,
+                            onClick = {
+                                viewModel.fetchData(UpiPaymentViewModel.QRCodeActionType.GENERATE_QR_CODE)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(52.dp)
+                        ) {
+                            Text(text = "Genereate QR Code")
+                        }
+
+                    },
+                    AppFormCard {
+                        BuildNote(
+                            notes = listOf(
+                                "* No Charges to load money using UPI.",
+                                "* Topup between ${AppConstant.RUPEE_SYMBOL} 2,00,000 in a single transaction.",
+                                "Pending / Timeout transaction may take upto 2 working days to reflect in your account."
+                            )
+                        )
                     }
                 )
+            )
+            CollectLatestWithScope(flow = viewModel.onInitiateSuccessResult, callback = {
+
+                if (!it) return@CollectLatestWithScope
+
+                when (viewModel.actionType) {
+                    UpiPaymentViewModel.QRCodeActionType.SELF_PAYMENT -> {
+
+                        val intent = Intent()
+                        intent.data = Uri.parse(viewModel.upiUri.value)
+                        val chooser =
+                            Intent.createChooser(intent, "Pay with...")
+                        launcher.launch(chooser)
+                    }
+                    UpiPaymentViewModel.QRCodeActionType.GENERATE_QR_CODE -> {
+                        viewModel.qrcodeDialogState.value = true
+                    }
+                }
+
+            })
+
+
+            UPIQRCodeDialog(
+                state = viewModel.qrcodeDialogState,
+                upiUri = viewModel.upiUri.value
             )
         }
 
 
-        CollectLatestWithScope(flow = viewModel.onInitiateSuccessResult, callback = {
-
-            val amount = input.amount.getValue()
-            val mobile = viewModel.appPreference.user?.mobile
-            val shopName = viewModel.appPreference.user?.shopName
-            val refId = it
-            val upiStr =
-                "upi://pay?pa=excelone@icici&pn=Excel Stop&tr=$refId&am=$amount" +
-                        "&cu=INR&mc=5411&tn=$mobile$shopName"
-            val intent = Intent()
-            intent.data = Uri.parse(upiStr)
-            val chooser =
-                Intent.createChooser(intent, "Pay with...")
-            launcher.launch(chooser)
-
-        })
-
-        LaunchedEffect(key1 = Unit, block = {
-
-        })
     }
 
 
+}
+
+@Composable
+private fun BuildNote(notes: List<String>) {
+
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primary, MaterialTheme.shapes.small)
+            .padding(16.dp)
+    ) {
+        Text("Note : ", style = MaterialTheme.typography.h6.copy(color = Color.White))
+        Spacer(modifier = Modifier.height(8.dp))
+        notes.forEach {
+            Text(
+                it, style = TextStyle(
+                    color = Color.White.copy(alpha = 0.9f),
+                    fontSize = 12.sp
+                ), modifier = Modifier.padding(vertical = 4.dp)
+            )
+        }
+
+    }
 }

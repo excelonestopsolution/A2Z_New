@@ -19,6 +19,8 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun aepsCheckStatus(data: FieldMapData) = service.aepsCheckStatus(data)
 
     override suspend fun makeComplain(data: FieldMapData) = service.makeComplain(data)
+    override suspend fun complaintRequestView(data: FieldMapData)= service.complaintRequestView(data)
+
     override suspend fun fetchComplainTypes(data: FieldMapData) = service.fetchComplainTypes(data)
 
     override suspend fun downloadLedgerReceiptData(url: String) =

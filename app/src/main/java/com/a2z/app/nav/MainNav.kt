@@ -31,6 +31,7 @@ import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
 import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
+import com.a2z.app.ui.screen.profile.ProfileScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.qrcode.ShowQRCodeScreen
 import com.a2z.app.ui.screen.r2r.R2RTransferScreen
@@ -43,7 +44,6 @@ import com.a2z.app.ui.screen.result.*
 import com.a2z.app.ui.screen.settlement.add_bank.SettlementAddBankScreen
 import com.a2z.app.ui.screen.settlement.bank_list.SettlementBankScreen
 import com.a2z.app.ui.screen.settlement.transfer.SettlementTransferScreen
-import com.a2z.app.ui.screen.test.TestScreen
 import com.a2z.app.ui.screen.util.DeviceLockScreen
 import com.a2z.app.ui.screen.util.agreement.UserAgreementScreen
 import com.a2z.app.ui.screen.util.commission.MyCommissionScreen
@@ -265,6 +265,6 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(route = NavScreen.FundReportScreen.route, content = { FundReportScreen() })
         composable(route = NavScreen.DTReportScreen.route, content = { DTReportScreen() })
         composable(route = NavScreen.PGReportScreen.route, content = { PGReportScreen() })
-        composable(route = NavScreen.TestScreen.route, content = { TestScreen() })
+        composable(route = NavScreen.ProfileScreen.route, content = { ProfileScreen() })
     }
 }

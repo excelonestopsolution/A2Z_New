@@ -36,6 +36,10 @@ interface ReportService {
     @FormUrlEncoded
     suspend fun makeComplain(@FieldMap data: FieldMapData): AppResponse
 
+
+    @GET("complain-request-view")
+    suspend fun complaintRequestView(@QueryMap data: FieldMapData): ComplainListResponse
+
     @GET
     suspend fun downloadLedgerReceiptData(@Url url: String): TransactionDetailResponse
 

@@ -15,6 +15,7 @@ interface ReportRepository {
     suspend fun checkStatus(data: FieldMapData)  : AppResponse
     suspend fun aepsCheckStatus(data: FieldMapData)  : AppResponse
     suspend fun makeComplain(data: FieldMapData) : AppResponse
+    suspend fun complaintRequestView(data: FieldMapData) : ComplainListResponse
     suspend fun fetchComplainTypes(data: FieldMapData) : ComplainTypeListResponse
     suspend fun downloadLedgerReceiptData(url: String) : TransactionDetailResponse
     suspend fun schemeList() : CommissionSchemeListResponse

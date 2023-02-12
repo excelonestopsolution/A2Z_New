@@ -10,8 +10,10 @@ import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.Slider
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.kyc.KycInfoResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.data.repository.UpiRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType
@@ -48,6 +50,12 @@ class HomeViewModel @Inject constructor(
 
 
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
+    private val _checkKycInfoFlow = MutableSharedFlow<ResultType<KycInfoResponse>>()
+
+    val dmtKycPendingState = mutableStateOf(checkDMTKycPending())
+    val dmtAndAEPSKycPendingState = mutableStateOf(checkDMTAndAEPSKycPending())
+
+    val kycDialogState = mutableStateOf(false)
 
     init {
         fetchUpiVerifyStaticMessage()
@@ -56,6 +64,25 @@ class HomeViewModel @Inject constructor(
         fetchNews()
         fetchBankDown()
         observeLogoutShareFlow()
+
+        _checkKycInfoFlow.getLatest {
+
+            if (it.status == 1) {
+
+                appPreference.user = appPreference.user?.copy(
+                    isAadhaarKyc = it.data.is_aadhaar_kyc,
+                    isVideoKyc = it.data.is_video_kyc,
+                    isUserHasActiveSettlementAccount = it.data.is_user_has_active_settlemnet_account,
+                    aepsKyc = it.data.aeps_kyc
+                )
+
+                dmtKycPendingState.value = checkDMTKycPending()
+                dmtAndAEPSKycPendingState.value = checkDMTAndAEPSKycPending()
+                if (dmtAndAEPSKycPendingState.value) {
+                    kycDialogState.value = true
+                } else successDialog("You kyc process has done, Now you can access all Aeps and Dmt services. Thankyou")
+            } else alertDialog(it.message)
+        }
     }
 
     private fun observeLogoutShareFlow() = viewModelScope.launch {
@@ -131,7 +158,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun checkDMTAndAEPSKycPending(): Boolean {
+    private fun checkDMTAndAEPSKycPending(): Boolean {
         return appPreference.user?.isAadhaarKyc == 0
                 || appPreference.user?.aepsKyc == 0
                 || appPreference.user?.isUserHasActiveSettlementAccount == 0
@@ -143,7 +170,7 @@ class HomeViewModel @Inject constructor(
                 || appPreference.user?.isVideoKyc == 0
     }
 
-    fun kycInfo(): Triple<String, String, String>? {
+    fun kycInfo(): Triple<String, String, String> {
         when {
             appPreference.user?.isAadhaarKyc == 0 -> {
                 return Triple(
@@ -178,7 +205,12 @@ class HomeViewModel @Inject constructor(
 
                 )
             }
-            else -> return null
+            else -> return Triple(
+                "Kyc Required!",
+                "Kyc is required for AEPS and DMT Transactions",
+                ""
+
+            )
         }
     }
 
@@ -194,7 +226,7 @@ class HomeViewModel @Inject constructor(
 
     }
 
-    fun fetchUpiVerifyStaticMessage() {
+    private fun fetchUpiVerifyStaticMessage() {
         if (appPreference.upiStateMessage == null) callApiForShareFlow(
             call = { upiRepository.upiVerifyStaticMessage() },
             handleException = false,
@@ -207,6 +239,19 @@ class HomeViewModel @Inject constructor(
 
     }
 
+    fun checkKycInfo() {
+        callApiForShareFlow(_checkKycInfoFlow) { repository.kycCheck() }
+    }
+
+    fun navigateKycScreen(it: String) {
+        when (it) {
+            "AADHAAR_KYC" -> {navigateTo(NavScreen.AadhaarKycScreen.route)}
+            "VIDEO_KYC" -> {navigateTo(NavScreen.DocumentKycScreen.route)}
+            "SETTLEMENT" -> {navigateTo(NavScreen.SettlementBankAddScreen.route)}
+            "AEPS_KYC" -> {navigateTo(NavScreen.AEPSKycScreen.route)}
+        }
+
+    }
 
 }
 
