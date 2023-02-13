@@ -201,7 +201,7 @@ private fun BuildItemVisibleContent(
                 textAlign = TextAlign.Center
             )
         }
-        Column(Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+        Column(Modifier.weight(1.2f), horizontalAlignment = Alignment.End) {
             if (rightStatus.orEmpty().isNotEmpty()) Text(
                 text = rightStatus.toString(),
                 color = ReportUtil.getColorFromId(statusId),
@@ -211,8 +211,9 @@ private fun BuildItemVisibleContent(
             )
             if (rightAmount.orEmpty().isNotEmpty()) Text(
                 text = AppConstant.RUPEE_SYMBOL + rightAmount,
-                style = MaterialTheme.typography.subtitle1.copy(
+                style = MaterialTheme.typography.body1.copy(
                     fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
 
                     )
             )

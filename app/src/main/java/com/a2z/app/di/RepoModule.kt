@@ -48,4 +48,9 @@ interface RepoModule {
     fun provideAgreementRepositoryImpl(repository: AgreementRepositoryImpl): AgreementRepository
     @Binds
     fun provideRegistrationRepositoryImpl(repository: RegistrationRepositoryImpl): RegistrationRepository
+
+
+    @Binds
+    fun provideMemberRepositoryImpl(repository: MemberRepositoryImpl): MemberRepository
+
 }

@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.report.ledger
+package com.a2z.app.ui.screen.report.fund_transfer
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -16,23 +16,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
+import com.a2z.app.ui.screen.report.filter.FundTransferFilterDialog
 import com.a2z.app.ui.screen.report.filter.LedgerFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.util.VoidCallback
+import com.a2z.app.util.extension.prefixRS
 
 
 @Composable
-fun LedgerReportScreen() {
-    val viewModel: LedgerReportViewModel = hiltViewModel()
+fun FundTransferReportReportScreen() {
+    val viewModel: FundTransferReportViewModel = hiltViewModel()
 
-
-
-
-    LedgerFilterDialog(
+    FundTransferFilterDialog(
         showDialogState = viewModel.filterDialogVisibleState,
+        users = viewModel.userList,
         onFilter = {
-
             viewModel.pagingState.refresh()
             viewModel.searchInput = it
             viewModel.fetchReport()
@@ -42,23 +41,17 @@ fun LedgerReportScreen() {
         viewModel.filterDialogVisibleState.value = true
     }
 
-    ComplaintDialog(
-        complaintTypes = viewModel.complaintTypeListState,
-        dialogState = viewModel.complaintDialogVisibleState
-    ) { complainTypeId, remark ->
-        viewModel.onComplainSubmit(complainTypeId, remark)
-    }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun MainContent(
-    viewModel: LedgerReportViewModel,
+    viewModel: FundTransferReportViewModel,
     filterAction: VoidCallback
 ) {
 
     Scaffold(backgroundColor = BackgroundColor, topBar = {
-        NavTopBar(title = "Ledger Report", actions = {
+        NavTopBar(title = "Fund Transfer Report", actions = {
             ReportNavActionButton {
                 filterAction.invoke()
             }
@@ -75,37 +68,25 @@ private fun MainContent(
                         viewModel.fetchReport()
                     }
 
-                    BaseReportItem(statusId = it.statusId,
-                        leftSideDate = it.txnTime,
-                        leftSideId = it.id.toString(),
-                        centerHeading1 = it.number,
-                        centerHeading2 = it.serviceName,
-                        centerHeading3 = it.senderNumber,
-                        rightAmount = it.amount,
-                        rightStatus = it.statusDesc,
-                        isPrint = it.isPrint,
-                        isComplaint = it.isComplain,
-                        isCheckStatus = it.isCheckStatus,
+                    BaseReportItem(statusId = (it.status_id ?: "0").toDouble().toInt(),
+                        leftSideDate = it.date,
+                        leftSideId = it.order_id,
+                        centerHeading1 = it.user,
+                        centerHeading2 = "OP Bal ${it.opening_bal.toString().prefixRS()}",
+                        centerHeading3 = "Cl Bal ${it.opening_bal.toString().prefixRS()}",
+                        rightAmount = it.credit_amount,
+                        rightStatus = it.status,
                         expandListItems = listOf(
-                            "Mobile Number" to it.senderNumber,
-                            "Bank Name" to it.bankName,
-                            "IFSC Code" to it.ifsc,
-                            "Beneficiary Name" to it.beneName,
-                            "Reference Id" to it.operatorId,
-                            "Transaction Type" to it.txnType,
-                            "Opening Balance" to it.opBalance,
-                            "Txn Amount" to it.amount,
-                            "Credit Amount" to it.credit,
-                            "Debit Amount" to it.debit,
-                            "TDS Amount" to it.tds,
-                            "GST Amount" to it.gst,
-                            "Closing Balance" to it.clBalance,
-                            "Provider" to it.providerName,
+                            "Bank Charge" to it.bank_charge,
+                            "Wallet" to it.wallet,
+                            "Transfer To / From" to it.transfer_to_from,
+                            "Firm Name" to it.firm_name,
+                            "Ref Id" to it.ref_id,
+                            "Bank Ref" to it.bank_ref,
                             "Remark" to it.remark,
+                            "Agent Remark" to it.agent_remark,
+                            "Description" to it.description,
                         ),
-                        onPrint = { viewModel.onPrint(it) },
-                        onComplaint = { viewModel.onComplain(it) },
-                        onCheckStatus = { viewModel.onCheckStatus(it) }
                     )
                 }
                 item {

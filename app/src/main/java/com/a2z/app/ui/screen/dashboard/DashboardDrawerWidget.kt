@@ -83,6 +83,16 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 )
             )
             BuildExpandMenu(
+                menuHeading = "Members",
+                drawable = com.a2z.app.R.drawable.user,
+                menuList = listOf(
+                    Pair("Retailers") {
+                        navController.navigate(NavScreen.MemberListScreen.route)
+                    },
+
+                )
+            )
+            BuildExpandMenu(
                 menuHeading = "Fund Request",
                 drawable = com.a2z.app.R.drawable.fund_icon,
                 menuList = listOf(
@@ -120,6 +130,17 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     Pair("Complaints") {
                         navController.navigate(NavScreen.ComplaintScreen.route)
                     },
+                )
+            )
+
+
+            BuildExpandMenu(
+                menuHeading = "Payments",
+                drawable = com.a2z.app.R.drawable.icon_report,
+                menuList = listOf(
+                    Pair("Fund Transfer Report") {
+                        navController.navigate(NavScreen.FundTransferReportScreen.route)
+                    }
                 )
             )
             BuildSingleItemMenu(

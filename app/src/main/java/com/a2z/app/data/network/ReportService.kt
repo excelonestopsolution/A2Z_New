@@ -77,5 +77,8 @@ interface ReportService {
     @GET("agent-request-view")
     suspend fun agentRequestView(@QueryMap data: FieldMapData): Any
 
+    @GET("fund-transfer-report")
+    suspend fun fundTransfer(@QueryMap data: FieldMapData): Any
+
 
 }

@@ -1,9 +1,11 @@
-package com.a2z.app.ui.screen.report.ledger
+package com.a2z.app.ui.screen.members.list
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
@@ -13,58 +15,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.AppProgress
+import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.EmptyListComponent
+import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
-import com.a2z.app.ui.screen.report.filter.LedgerFilterDialog
-import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
-import com.a2z.app.util.VoidCallback
-
-
-@Composable
-fun LedgerReportScreen() {
-    val viewModel: LedgerReportViewModel = hiltViewModel()
-
-
-
-
-    LedgerFilterDialog(
-        showDialogState = viewModel.filterDialogVisibleState,
-        onFilter = {
-
-            viewModel.pagingState.refresh()
-            viewModel.searchInput = it
-            viewModel.fetchReport()
-        })
-
-    MainContent(viewModel) {
-        viewModel.filterDialogVisibleState.value = true
-    }
-
-    ComplaintDialog(
-        complaintTypes = viewModel.complaintTypeListState,
-        dialogState = viewModel.complaintDialogVisibleState
-    ) { complainTypeId, remark ->
-        viewModel.onComplainSubmit(complainTypeId, remark)
-    }
-}
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-private fun MainContent(
-    viewModel: LedgerReportViewModel,
-    filterAction: VoidCallback
-) {
+fun MemberListScreen() {
+    val viewModel: MemberListViewModel = hiltViewModel()
 
-    Scaffold(backgroundColor = BackgroundColor, topBar = {
-        NavTopBar(title = "Ledger Report", actions = {
-            ReportNavActionButton {
-                filterAction.invoke()
-            }
-        })
-    }) { _ ->
+    Scaffold(topBar = { NavTopBar(title = "Retailer List", actions = {
+        ReportNavActionButton {
+            viewModel.showFilterDialogState.value =true
+        }
+    }) }) {
+
         BaseContent(viewModel) {
+
             val pagingState = viewModel.pagingState
             LazyColumn {
                 items(viewModel.pagingState.items.size) { index ->
@@ -72,40 +43,23 @@ private fun MainContent(
                     val it = pagingState.items[index]
 
                     pagingState.shouldLoadNext(index) {
-                        viewModel.fetchReport()
+                        viewModel.fetchMembers()
                     }
 
-                    BaseReportItem(statusId = it.statusId,
-                        leftSideDate = it.txnTime,
-                        leftSideId = it.id.toString(),
-                        centerHeading1 = it.number,
-                        centerHeading2 = it.serviceName,
-                        centerHeading3 = it.senderNumber,
-                        rightAmount = it.amount,
-                        rightStatus = it.statusDesc,
-                        isPrint = it.isPrint,
-                        isComplaint = it.isComplain,
-                        isCheckStatus = it.isCheckStatus,
+                    BaseReportItem(
+                        statusId = (it.statusId ?: "0").toInt(),
+                        leftSideDate = it.prefix,
+                        leftSideId = "ID : " + it.id.toString(),
+                        centerHeading1 = it.mobile,
+                        centerHeading2 = it.name,
+                        centerHeading3 = null,
+                        rightAmount = it.balance,
+                        rightStatus = it.status,
                         expandListItems = listOf(
-                            "Mobile Number" to it.senderNumber,
-                            "Bank Name" to it.bankName,
-                            "IFSC Code" to it.ifsc,
-                            "Beneficiary Name" to it.beneName,
-                            "Reference Id" to it.operatorId,
-                            "Transaction Type" to it.txnType,
-                            "Opening Balance" to it.opBalance,
-                            "Txn Amount" to it.amount,
-                            "Credit Amount" to it.credit,
-                            "Debit Amount" to it.debit,
-                            "TDS Amount" to it.tds,
-                            "GST Amount" to it.gst,
-                            "Closing Balance" to it.clBalance,
-                            "Provider" to it.providerName,
-                            "Remark" to it.remark,
+                            "Shop Name" to it.shopName,
+                            "Parent" to it.parentDetails,
+                            "Email" to it.email,
                         ),
-                        onPrint = { viewModel.onPrint(it) },
-                        onComplaint = { viewModel.onComplain(it) },
-                        onCheckStatus = { viewModel.onCheckStatus(it) }
                     )
                 }
                 item {
@@ -163,8 +117,14 @@ private fun MainContent(
                     }
                 }
             }
+
+            MemberFilterDialog(
+                showDialogState = viewModel.showFilterDialogState,
+                onFilter = { type, input ->
+                    viewModel.pagingState.refresh()
+                    viewModel.fetchMembers(type,input)
+                })
+
         }
     }
 }
-
-

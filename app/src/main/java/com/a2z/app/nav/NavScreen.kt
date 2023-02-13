@@ -268,5 +268,8 @@ sealed class NavScreen(val route: String) {
     object FundReportScreen : NavScreen("fund-report-screen")
     object DTReportScreen : NavScreen("dt-report-screen")
     object PGReportScreen : NavScreen("pg-report-screen")
+    object FundTransferReportScreen : NavScreen("fund-transfer-report-screen")
     object ProfileScreen : NavScreen("profile-screen")
+    object MemberListScreen : NavScreen("member-list-screen")
+
 }

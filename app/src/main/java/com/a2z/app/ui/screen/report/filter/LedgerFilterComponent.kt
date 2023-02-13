@@ -2,12 +2,10 @@ package com.a2z.app.ui.screen.report.filter
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -24,7 +22,6 @@ import com.a2z.app.ui.component.keyboardAsState
 import com.a2z.app.ui.screen.report.ledger.LedgerReportViewModel
 import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.DateUtil
-import com.a2z.app.util.DateUtil.toFormat
 import com.a2z.app.util.extension.removeDateSeparator
 
 private val statusList = linkedMapOf(
