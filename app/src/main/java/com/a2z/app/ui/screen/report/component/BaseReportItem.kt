@@ -3,6 +3,7 @@ package com.a2z.app.ui.screen.report.component
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.a2z.app.ui.screen.report.ReportUtil
+import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.VoidCallback
@@ -44,6 +46,8 @@ fun BaseReportItem(
     onPrint: VoidCallback? = null,
     onCheckStatus: VoidCallback? = null,
     onComplaint: VoidCallback? = null,
+    actionButton: VoidCallback? = null,
+    isCard: Boolean = true,
     expandListItems: List<Pair<String, String?>>
 ) {
 
@@ -52,9 +56,16 @@ fun BaseReportItem(
         .clickable {
             isExpanded.value = !isExpanded.value
         }
-        .padding(horizontal = 12.dp, vertical = 4.dp)) {
+        .padding(horizontal = if (isCard) 12.dp else 8.dp, vertical = 4.dp),
+        elevation = if (isCard) 8.dp else 0.dp, shape = MaterialTheme.shapes.small) {
 
-        Column(modifier = Modifier.padding(vertical = 12.dp)) {
+        var colModifier = Modifier.padding(vertical = 5.dp)
+        if (!isCard) colModifier =
+            Modifier
+                .border(1.dp, PrimaryColor, MaterialTheme.shapes.small)
+                .padding(vertical = 5.dp)
+
+        Column(modifier = colModifier) {
             BuildItemVisibleContent(
                 statusId = statusId,
                 leftSideDate = leftSideDate,
@@ -64,6 +75,7 @@ fun BaseReportItem(
                 centerHeading3 = centerHeading3,
                 rightAmount = rightAmount,
                 rightStatus = rightStatus,
+                actionButton = actionButton
             )
             AnimatedContent(targetState = isExpanded.value) { targetExpanded ->
                 if (targetExpanded) BuildExpandableContent(expandListItems)
@@ -146,6 +158,7 @@ private fun BuildItemVisibleContent(
     centerHeading3: String?,
     rightAmount: String?,
     rightStatus: String?,
+    actionButton: VoidCallback?,
 ) {
     Row(Modifier.padding(8.dp)) {
         Column(Modifier.weight(1f)) {
@@ -196,13 +209,17 @@ private fun BuildItemVisibleContent(
                 fontWeight = FontWeight.Bold
 
             )
-          if(rightAmount.orEmpty().isNotEmpty())  Text(
+            if (rightAmount.orEmpty().isNotEmpty()) Text(
                 text = AppConstant.RUPEE_SYMBOL + rightAmount,
                 style = MaterialTheme.typography.subtitle1.copy(
                     fontWeight = FontWeight.Bold,
 
                     )
             )
+
+           if(actionButton != null) Button(onClick = { actionButton?.invoke()}) {
+                Text(text = "Action")
+            }
         }
 
     }

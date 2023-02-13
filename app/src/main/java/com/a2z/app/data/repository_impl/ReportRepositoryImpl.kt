@@ -1,5 +1,6 @@
 package com.a2z.app.data.repository_impl
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.*
 import com.a2z.app.data.network.ReportService
@@ -39,5 +40,6 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
 
     override suspend fun dtReport(data: FieldMapData) = service.dtReport(data)
     override suspend fun pgReport(data: FieldMapData) = service.pgReport(data)
+    override suspend fun agentRequestView(data: FieldMapData) = service.agentRequestView(data)
 
 }

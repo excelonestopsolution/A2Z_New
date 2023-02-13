@@ -5,6 +5,7 @@ import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.*
 import com.a2z.app.util.FieldMapData
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ReportService {
@@ -71,6 +72,10 @@ interface ReportService {
 
     @GET("pg/report")
     suspend fun pgReport(@QueryMap data: FieldMapData): PGReportResponse
+
+
+    @GET("agent-request-view")
+    suspend fun agentRequestView(@QueryMap data: FieldMapData): Any
 
 
 }

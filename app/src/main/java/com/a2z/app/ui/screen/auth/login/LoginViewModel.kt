@@ -7,10 +7,8 @@ import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.repository.AuthRepository
 import com.a2z.app.nav.NavScreen
-import com.a2z.app.ui.util.AppValidator
-import com.a2z.app.ui.util.BaseInput
-import com.a2z.app.ui.util.BaseViewModel
-import com.a2z.app.ui.util.InputWrapper
+import com.a2z.app.ui.theme.LocalUserRole
+import com.a2z.app.ui.util.*
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.util.AppUtil.Empty
@@ -125,7 +123,10 @@ class LoginViewModel @Inject constructor(
 data class LoginInput(
 
     val userIdWrapper: InputWrapper = InputWrapper { AppValidator.userId(it) },
-    val passwordWrapper: InputWrapper = InputWrapper { AppValidator.password(it) },
+    val passwordWrapper: InputWrapper = InputWrapper {
+        if (it.length < 6) Pair(false, "Enter valid password")
+        else Pair(true, "")
+    },
 
     ) : BaseInput(userIdWrapper, passwordWrapper)
 

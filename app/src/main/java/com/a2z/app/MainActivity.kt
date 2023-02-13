@@ -16,6 +16,8 @@ import com.a2z.app.service.location.LocationService
 import com.a2z.app.ui.theme.A2ZApp
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.theme.LocalUserRole
+import com.a2z.app.ui.util.UserRole
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -64,7 +66,8 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
 
             CompositionLocalProvider(
                 LocalNavController provides rememberNavController(),
-                LocalLocationService provides locationService
+                LocalLocationService provides locationService,
+
             ) {
                 A2ZApp {
                     ProvideWindowInsets(

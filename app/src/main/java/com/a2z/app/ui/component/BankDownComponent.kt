@@ -22,11 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.ui.dialog.BankDownDialog
-import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.RedColor

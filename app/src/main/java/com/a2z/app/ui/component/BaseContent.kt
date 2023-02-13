@@ -27,18 +27,12 @@ fun <T> CollectLatestWithScope(flow: MutableSharedFlow<T>, callback: (T) -> Unit
 @Composable
 fun BaseContent(
     vararg viewModels: ViewModel,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
 
-
-
-
-
-
-
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier) {
+        Column(modifier = modifier) {
             androidx.compose.animation.AnimatedVisibility(
                 visible = true,
                 enter = slideInVertically(),

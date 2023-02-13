@@ -8,7 +8,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.SettingsPower
 import androidx.compose.runtime.Composable
@@ -24,20 +23,19 @@ import androidx.compose.ui.unit.dp
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
-import com.a2z.app.ui.screen.home.HomeViewModel
-import com.a2z.app.ui.theme.CircularShape
-import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.ui.theme.PrimaryColor
-import com.a2z.app.ui.theme.ShapeZeroRounded
+import com.a2z.app.ui.theme.*
+import com.a2z.app.ui.util.UserRole
 import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeAppBarWidget(
     dashboardViewModel: DashboardViewModel,
-    viewModel: HomeViewModel,
+) {
 
-    ) {
+
+    val role = LocalUserRole.current
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = ShapeZeroRounded,
@@ -119,15 +117,14 @@ fun HomeAppBarWidget(
 
             }
             Spacer(modifier = Modifier.weight(1f))
-
-
             val navController = LocalNavController.current
-            BuildActionIcon(Icons.Default.QrCode){
+
+            if (role == UserRole.RETAILER) BuildActionIcon(Icons.Default.QrCode) {
                 navController.navigate(NavScreen.ShowQRScreen.route)
             }
             Spacer(modifier = Modifier.width(8.dp))
-            BuildActionIcon(Icons.Default.SettingsPower){
-                viewModel.exitDialogState.value = true
+            BuildActionIcon(Icons.Default.SettingsPower) {
+                dashboardViewModel.exitDialogState.value = true
             }
 
         }
@@ -135,7 +132,7 @@ fun HomeAppBarWidget(
 }
 
 @Composable
-private fun BuildActionIcon(icon: ImageVector,callback : VoidCallback) {
+private fun BuildActionIcon(icon: ImageVector, callback: VoidCallback) {
     Box(
         modifier = Modifier
             .clip(MaterialTheme.shapes.small)

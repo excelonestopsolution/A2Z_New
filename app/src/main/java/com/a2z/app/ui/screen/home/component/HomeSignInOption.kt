@@ -16,16 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
-import com.a2z.app.ui.screen.home.HomeViewModel
 import com.a2z.app.ui.theme.RedColor
 
 @Composable
 fun HomeSignInOptionWidget(
-    dashboardViewModel: DashboardViewModel,
-    viewModel: HomeViewModel = hiltViewModel(), ) {
+    viewModel: DashboardViewModel) {
 
     val activity = LocalContext.current as Activity
     if (viewModel.singInDialogState.value) Dialog(onDismissRequest = {}) {
@@ -68,7 +65,7 @@ fun HomeSignInOptionWidget(
                 TextButton(onClick = {
                     viewModel.appPreference.user = null
                     viewModel.singInDialogState.value = false
-                    dashboardViewModel.navigateTo(NavScreen.LoginScreen.route, true)
+                    viewModel.navigateTo(NavScreen.LoginScreen.route, true)
                 }) {
                     Text(text = "Username and Password", textAlign = TextAlign.Center)
                 }

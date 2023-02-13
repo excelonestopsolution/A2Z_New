@@ -1,7 +1,5 @@
-package com.a2z.app.ui.screen.home.component
+package com.a2z.app.ui.screen.home.retailer.component
 
-import android.content.Intent
-import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -13,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,18 +18,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.a2z.app.MainActivity
 import com.a2z.app.R
-import com.a2z.app.data.model.dmt.BankDownBank
 import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BankDownComponent
 import com.a2z.app.ui.screen.aeps.AepsType
 import com.a2z.app.ui.screen.dmt.util.DMTType
-import com.a2z.app.ui.screen.home.HomeViewModel
+import com.a2z.app.ui.screen.home.retailer.RetailerHomeViewModel
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.FunCompose
@@ -52,7 +46,7 @@ fun HomeServiceWidget() {
 @Composable
 private fun BuildMoneyAEPService() {
     val navController = LocalNavController.current
-    val viewModel : HomeViewModel = hiltViewModel()
+    val viewModel : RetailerHomeViewModel = hiltViewModel()
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -130,7 +124,7 @@ private fun BuildMoneyAEPService() {
 @Composable
 private fun BuildMoneyAndPaymentService() {
     val navController = LocalNavController.current
-    val viewModel: HomeViewModel = hiltViewModel()
+    val viewModel: RetailerHomeViewModel = hiltViewModel()
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -263,7 +257,7 @@ private fun BuildMoneyAndPaymentService() {
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                val viewModel: HomeViewModel = hiltViewModel()
+                val viewModel: RetailerHomeViewModel = hiltViewModel()
                 BankDownComponent(viewModel.bankDownResponseState)
 
             }

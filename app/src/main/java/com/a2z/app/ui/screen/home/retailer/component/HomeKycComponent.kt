@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.home.component
+package com.a2z.app.ui.screen.home.retailer.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Message
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -18,53 +17,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.a2z.app.ui.screen.home.HomeViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.a2z.app.ui.screen.home.retailer.RetailerHomeViewModel
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.RedColor
-import com.a2z.app.ui.util.rememberStateOf
-import com.a2z.app.util.VoidCallback
 
 @Composable
-fun BuildAlertComponent(homeViewModel: HomeViewModel) {
+fun HomeKycComponent(
+    homeViewModel : RetailerHomeViewModel = hiltViewModel()
+) {
 
 
-    val news = homeViewModel.newsResponseState.value
-    val kyc = homeViewModel.dmtAndAEPSKycPendingState.value
-
-    val isNews = news != null && news.status == 1
-
-    val newsDialogState = rememberStateOf(false)
-
-    if (newsDialogState.value) Dialog(onDismissRequest = { newsDialogState.value = false }) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.small)
-                .background(Color.White)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "NEWS",
-                style = MaterialTheme.typography.h6.copy(
-                    fontWeight = FontWeight.Bold
-                )
-            )
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
-
-            Text(text = news?.retailerNews.toString())
-        }
-    }
+    val isKycPending = homeViewModel.dmtAndAEPSKycPendingState.value
 
     val kycInfo = homeViewModel.kycInfo()
 
-
     Column(
-        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
         horizontalAlignment = Alignment.Start
     ) {
 
-        if (kyc) Card(
+        if (isKycPending) Card(
             shape = MaterialTheme.shapes.small,
             elevation = 8.dp,
             backgroundColor = RedColor,
@@ -86,7 +59,7 @@ fun BuildAlertComponent(homeViewModel: HomeViewModel) {
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
-                    text = kycInfo?.second.toString(),
+                    text = kycInfo.second,
                     maxLines = 2, overflow = TextOverflow.Ellipsis,
                     color = Color.White.copy(alpha = 0.9f),
                     fontSize = 13.sp,
@@ -95,38 +68,7 @@ fun BuildAlertComponent(homeViewModel: HomeViewModel) {
             }
         }
 
-        if (kyc) Spacer(modifier = Modifier.height(5.dp))
-        if (isNews) Card(
-            shape = MaterialTheme.shapes.small,
-            elevation = 8.dp,
-            backgroundColor = Color.White,
-            modifier = Modifier.clickable {
-                newsDialogState.value = true
-            }
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 12.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Message, contentDescription = null,
-                    tint = PrimaryColor.copy(0.9f),
-                    modifier = Modifier.size(32.dp)
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(
-                    text = news?.retailerNews.toString(),
-                    maxLines = 2, overflow = TextOverflow.Ellipsis,
-                    color = PrimaryColor.copy(alpha = 0.9f),
-                    fontSize = 13.sp,
-                    lineHeight = 22.sp
-                )
-            }
-        }
-
+        if (isKycPending) Spacer(modifier = Modifier.height(5.dp))
 
     }
 }

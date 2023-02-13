@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 import com.a2z.app.service.location.LocationService
+import com.a2z.app.ui.util.UserRole
 
 private val DarkColorPalette = darkColors(
     primary = PrimaryColorLight,
@@ -35,6 +36,8 @@ val LocalNavController = compositionLocalOf<NavHostController> {
     error("No LocalNavController provided")
 }
 
+val LocalUserRole = compositionLocalOf { UserRole.NOT_DEFINED }
+
 val LocalLocationService = compositionLocalOf<LocationService> {
     error("No LocalLocationService provided")
 }
@@ -49,7 +52,7 @@ fun A2ZApp(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -
     }
 
     CompositionLocalProvider(
-        LocalSpacing provides Spacing()
+        LocalSpacing provides Spacing(),
     ) {
         MaterialTheme(
             colors = colors,

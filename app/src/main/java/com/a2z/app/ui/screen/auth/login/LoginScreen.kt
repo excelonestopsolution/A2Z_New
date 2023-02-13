@@ -31,6 +31,8 @@ import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
+import com.a2z.app.ui.theme.LocalUserRole
+import com.a2z.app.ui.util.UserRole
 import com.a2z.app.ui.util.extension.singleResult
 import com.a2z.app.util.ToggleBottomSheet
 
@@ -43,17 +45,18 @@ fun LoginScreen(
 
     val navController = LocalNavController.current
     val context = LocalContext.current
-    val activity = context as MainActivity
 
     LaunchedEffect(key1 = Unit, block = {
 
         if (viewModel.appPreference.user == null) return@LaunchedEffect
-        if (LocalAuth.checkForBiometrics(context))
+        if (LocalAuth.checkForBiometrics(context)) {
+
             navController.navigate(NavScreen.DashboardScreen.route) {
                 popUpTo(NavScreen.DashboardScreen.route) {
                     inclusive = true
                 }
             }
+        }
     })
 
 
@@ -195,8 +198,6 @@ private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
 
         }
     }
-
-
 
 
 }

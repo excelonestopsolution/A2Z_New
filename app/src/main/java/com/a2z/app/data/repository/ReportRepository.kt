@@ -6,6 +6,7 @@ import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.report.*
 import com.a2z.app.util.FieldMapData
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
@@ -28,4 +29,5 @@ interface ReportRepository {
     suspend fun fundReport(data : FieldMapData) : FundReportResponse
     suspend fun dtReport(data : FieldMapData) : DTReportResponse
     suspend fun pgReport(data : FieldMapData) : PGReportResponse
+    suspend fun agentRequestView(data : FieldMapData) : Any
 }

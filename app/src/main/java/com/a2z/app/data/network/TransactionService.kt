@@ -10,7 +10,9 @@ import com.a2z.app.util.FieldMapData
 import com.a2z.app.util.MapRequest
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.QueryMap
 
 interface TransactionService {
     @FormUrlEncoded
@@ -75,5 +77,10 @@ interface TransactionService {
     @FormUrlEncoded
     suspend fun parentPaymentFundReturn(
         @FieldMap data : FieldMapData
+    ) : AppResponse
+
+    @GET("agent-request-approve")
+    suspend fun approveFundRequest(
+        @QueryMap data : FieldMapData
     ) : AppResponse
 }

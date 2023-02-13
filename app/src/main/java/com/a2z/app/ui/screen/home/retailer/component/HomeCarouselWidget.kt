@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.home.component
+package com.a2z.app.ui.screen.home.retailer.component
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -12,23 +12,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.a2z.app.ui.screen.home.HomeViewModel
+import com.a2z.app.ui.screen.home.retailer.RetailerHomeViewModel
 import com.a2z.app.ui.theme.BackgroundColor2
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HomeCarouselWidget(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: RetailerHomeViewModel = hiltViewModel()
 ) {
 
 
