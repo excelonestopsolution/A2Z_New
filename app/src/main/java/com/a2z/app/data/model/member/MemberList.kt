@@ -12,7 +12,7 @@ data class MemberListResponse(
     val status : Int,
     val message : String?,
     val page : String?,
-    val members : List<Member>?
+    @SerializedName("members", alternate = ["reports"])val members : List<Member>?
 ) : Parcelable
 
 @Keep
@@ -20,7 +20,7 @@ data class MemberListResponse(
 data class Member(
     val id : String?,
     @SerializedName("name", alternate = ["userDetails"])val name : String?,
-    val balance : String?,
+    @SerializedName("balance", alternate = ["moneyBalance"])val balance : String?,
     val status : String?,
     val shopName : String?,
     val email : String?,

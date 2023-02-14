@@ -26,6 +26,7 @@ import com.a2z.app.ui.screen.report.ReportUtil
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.AppConstant
+import com.a2z.app.util.FunCompose
 import com.a2z.app.util.VoidCallback
 import com.usdk.apiservice.aidl.dock.serialport.Parity
 
@@ -46,7 +47,7 @@ fun BaseReportItem(
     onPrint: VoidCallback? = null,
     onCheckStatus: VoidCallback? = null,
     onComplaint: VoidCallback? = null,
-    actionButton: VoidCallback? = null,
+    actionButton: FunCompose? = null,
     isCard: Boolean = true,
     expandListItems: List<Pair<String, String?>>
 ) {
@@ -158,7 +159,7 @@ private fun BuildItemVisibleContent(
     centerHeading3: String?,
     rightAmount: String?,
     rightStatus: String?,
-    actionButton: VoidCallback?,
+    actionButton: FunCompose?,
 ) {
     Row(Modifier.padding(8.dp)) {
         Column(Modifier.weight(1f)) {
@@ -218,9 +219,7 @@ private fun BuildItemVisibleContent(
                     )
             )
 
-           if(actionButton != null) Button(onClick = { actionButton?.invoke()}) {
-                Text(text = "Action")
-            }
+            actionButton?.invoke()
         }
 
     }

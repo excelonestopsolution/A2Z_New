@@ -80,5 +80,8 @@ interface ReportService {
     @GET("fund-transfer-report")
     suspend fun fundTransfer(@QueryMap data: FieldMapData): Any
 
+    @GET("payment-report")
+    suspend fun paymentReport(@QueryMap data: FieldMapData): PaymentReportResponse
+
 
 }

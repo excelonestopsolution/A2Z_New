@@ -34,10 +34,9 @@ import androidx.compose.ui.unit.sp
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.common.AppNetworkImage
-import com.a2z.app.ui.theme.CircularShape
-import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.ui.theme.PrimaryColor
-import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.screen.members.list.MemberListType
+import com.a2z.app.ui.theme.*
+import com.a2z.app.ui.util.UserRole
 import com.a2z.app.util.VoidCallback
 
 @Composable
@@ -45,6 +44,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
     val navController = LocalNavController.current
     val appPreference = viewModel.appPreference
+    val role = LocalUserRole.current
 
     Box(
         modifier = Modifier
@@ -67,7 +67,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 )
             )
 
-            BuildExpandMenu(
+         if(role == UserRole.RETAILER)   BuildExpandMenu(
                 menuHeading = "User Kyc",
                 drawable = com.a2z.app.R.drawable.kyc_icon,
                 menuList = listOf(
@@ -82,19 +82,33 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     },
                 )
             )
-            BuildExpandMenu(
+
+         if(role in UserRole.DISTRIBUTOR..UserRole.MD)   BuildExpandMenu(
                 menuHeading = "Members",
                 drawable = com.a2z.app.R.drawable.user,
                 menuList = listOf(
                     Pair("Retailers") {
-                        navController.navigate(NavScreen.MemberListScreen.route)
+                        navController.navigate(
+                            NavScreen.MemberListScreen.passArgs(
+                                isTransfer = false,
+                                memberType = MemberListType.RETAILER
+                            )
+                        )
                     },
+                    if (LocalUserRole.current == UserRole.MD) Pair("Distributors") {
+                        navController.navigate(
+                            NavScreen.MemberListScreen.passArgs(
+                                isTransfer = false,
+                                memberType = MemberListType.DISTRIBUTOR
+                            )
+                        )
+                    } else Pair("") {},
 
-                )
+                    )
             )
-            BuildExpandMenu(
+          if(role == UserRole.RETAILER)  BuildExpandMenu(
                 menuHeading = "Fund Request",
-                drawable = com.a2z.app.R.drawable.fund_icon,
+                drawable = com.a2z.app.R.drawable.money_bag,
                 menuList = listOf(
                     Pair("New Parent Request") {
                         navController.navigate(NavScreen.FundRequestScreen.route)
@@ -107,7 +121,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
 
 
-            BuildExpandMenu(
+         if(role == UserRole.RETAILER)   BuildExpandMenu(
                 menuHeading = "All Reports",
                 drawable = com.a2z.app.R.drawable.icon_report,
                 menuList = listOf(
@@ -132,18 +146,52 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     },
                 )
             )
-
-
-            BuildExpandMenu(
-                menuHeading = "Payments",
+            if(role == UserRole.DISTRIBUTOR || role ==UserRole.MD)   BuildExpandMenu(
+                menuHeading = "All Reports",
                 drawable = com.a2z.app.R.drawable.icon_report,
                 menuList = listOf(
-                    Pair("Fund Transfer Report") {
-                        navController.navigate(NavScreen.FundTransferReportScreen.route)
-                    }
+                    Pair("Ledger Report") {
+                        navController.navigate(NavScreen.NetworkLedgerReport.route)
+                    },
+                    Pair("Recharge Report") {
+                        navController.navigate(NavScreen.NetworkRechargeReport.route)
+                    },
+                    Pair("Account Statement") {
+                        navController.navigate(NavScreen.AccountStatementReport.route)
+                    },
                 )
             )
-            BuildSingleItemMenu(
+
+           if(role in UserRole.DISTRIBUTOR..UserRole.MD) BuildExpandMenu(
+                menuHeading = "Payments",
+                drawable = com.a2z.app.R.drawable.icon_payment,
+                menuList = listOf(
+                    Pair("Fund Transfer Retailer") {
+                        navController.navigate(
+                            NavScreen.MemberListScreen.passArgs(
+                                memberType = MemberListType.RETAILER,
+                                isTransfer = true
+                            )
+                        )
+                    },
+                   if(role == UserRole.MD) Pair("Fund Transfer Distributor") {
+                        navController.navigate(
+                            NavScreen.MemberListScreen.passArgs(
+                                memberType = MemberListType.DISTRIBUTOR,
+                                isTransfer = true
+                            )
+                        )
+                    } else Pair(""){},
+                    Pair("Fund Transfer Report") {
+                        navController.navigate(NavScreen.FundTransferReportScreen.route)
+                    },
+                    Pair("Payment Report") {
+                        navController.navigate(NavScreen.PaymentReportScreen.route)
+                    }
+
+                )
+            )
+         if(role == UserRole.RETAILER)   BuildSingleItemMenu(
                 text = "AEPS Settlement",
                 drawable = com.a2z.app.R.drawable.settlement,
                 callback = {
@@ -163,9 +211,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     Pair("Commission Scheme") {
                         navController.navigate(NavScreen.CommissionScreen.route)
                     },
-                    Pair("M-ATM Device") {
+                  if(role ==UserRole.RETAILER)  Pair("M-ATM Device") {
                         navController.navigate(NavScreen.DeviceOrderScreen.route)
-                    },
+                    } else Pair(""){},
                 )
             )
 
@@ -335,35 +383,40 @@ private fun BuildExpandMenu(
 
                 Column {
                     Spacer(modifier = Modifier.padding(8.dp))
+                    var count = 0
                     menuList.forEachIndexed { index, it ->
-                        Row(verticalAlignment = CenterVertically) {
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = (index + 1).toString(),
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .clip(CircularShape)
-                                    .height(28.dp)
-                                    .width(28.dp)
-                                    .padding(4.dp)
-                                    .background(
-                                        color = PrimaryColorDark,
-                                        shape = CircularShape
-                                    )
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = it.first, modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { it.second.invoke() }
-                                    .padding(8.dp),
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryColor,
-                                fontSize = 14.sp
-                            )
+                        if(it.first.isNotEmpty())
+                        {
+                            count++
+                            Row(verticalAlignment = CenterVertically) {
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = count.toString(),
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    fontSize = 14.sp,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .clip(CircularShape)
+                                        .height(28.dp)
+                                        .width(28.dp)
+                                        .padding(4.dp)
+                                        .background(
+                                            color = PrimaryColorDark,
+                                            shape = CircularShape
+                                        )
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = it.first, modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable { it.second.invoke() }
+                                        .padding(8.dp),
+                                    fontWeight = FontWeight.Bold,
+                                    color = PrimaryColor,
+                                    fontSize = 14.sp
+                                )
+                            }
                         }
                     }
                 }

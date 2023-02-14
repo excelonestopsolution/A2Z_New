@@ -31,4 +31,5 @@ interface ReportRepository {
     suspend fun pgReport(data : FieldMapData) : PGReportResponse
     suspend fun agentRequestView(data : FieldMapData) : Any
     suspend fun fundTransfer(data : FieldMapData) : Any
+    suspend fun paymentReport(data : FieldMapData) : PaymentReportResponse
 }

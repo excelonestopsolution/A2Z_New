@@ -24,4 +24,5 @@ interface TransactionRepository {
     suspend fun aeps3Transaction(data : FieldMapData) : AepsTransaction
     suspend fun parentPaymentFundReturn(data : FieldMapData) : AppResponse
     suspend fun approveFundRequest(data : FieldMapData) : AppResponse
+    suspend fun memberFundTransfer(data : FieldMapData) : AppResponse
 }

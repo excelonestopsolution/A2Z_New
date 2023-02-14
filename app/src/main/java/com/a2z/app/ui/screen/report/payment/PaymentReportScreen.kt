@@ -1,12 +1,9 @@
-package com.a2z.app.ui.screen.members.list
+package com.a2z.app.ui.screen.report.payment
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
@@ -16,27 +13,55 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.ui.component.AppProgress
-import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.EmptyListComponent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
+import com.a2z.app.ui.screen.report.filter.ReportDateFilterComponent
+import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.util.VoidCallback
+
+
+@Composable
+fun PaymentReportScreen() {
+    val viewModel: PaymentReportViewModel = hiltViewModel()
+
+
+    BottomSheetComponent(sheetContent = { closeAction ->
+        ReportDateFilterComponent { startDate,endDate ->
+            closeAction.invoke()
+            viewModel.onSearch(startDate,endDate)
+        }
+    }) { toggleAction ->
+
+        MainContent(viewModel) {
+            toggleAction.invoke()
+        }
+
+    }
+
+
+
+
+
+}
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MemberListScreen() {
-    val viewModel: MemberListViewModel = hiltViewModel()
+private fun MainContent(
+    viewModel: PaymentReportViewModel,
+    filterAction: VoidCallback
+) {
 
-    Scaffold(topBar = { NavTopBar(title = viewModel.title, actions = {
-        ReportNavActionButton {
-            viewModel.showFilterDialogState.value =true
-        }
-    }) }) {
-
+    Scaffold(backgroundColor = BackgroundColor, topBar = {
+        NavTopBar(title = "Payment Report", actions = {
+            ReportNavActionButton {
+                filterAction.invoke()
+            }
+        })
+    }) { _ ->
         BaseContent(viewModel) {
-
             val pagingState = viewModel.pagingState
             LazyColumn {
                 items(viewModel.pagingState.items.size) { index ->
@@ -44,33 +69,26 @@ fun MemberListScreen() {
                     val it = pagingState.items[index]
 
                     pagingState.shouldLoadNext(index) {
-                        viewModel.fetchMembers()
+                        viewModel.fetchReport()
                     }
 
-                    BaseReportItem(
-                        statusId = (it.statusId ?: "0").toInt(),
-                        leftSideDate = it.prefix,
-                        leftSideId = "ID : " + it.id.toString(),
-                        centerHeading1 = it.mobile,
-                        centerHeading2 = it.name,
+                    BaseReportItem(statusId = it.status_id!!.toDouble().toInt(),
+                        leftSideDate = it.date,
+                        leftSideId = it.id.toString(),
+                        centerHeading1 = it.request_to,
+                        centerHeading2 = it.bank_name,
                         centerHeading3 = null,
-                        rightAmount = it.balance,
+                        rightAmount = it.amount,
                         rightStatus = it.status,
                         expandListItems = listOf(
-                            "Shop Name" to it.shopName,
-                            "Parent" to it.parentDetails,
-                            "Email" to it.email,
+                            "Mode" to it.mode,
+                            "Deposit Date" to it.deposit_date,
+                            "Deposit Slip" to it.deposit_slip,
+                            "Ref Id" to it.ref_id,
+                            "Customer Remark" to it.customer_remark,
+                            "Update Remark" to it.updated_remark,
+                            "Remark" to it.remark,
                         ),
-                        actionButton = {
-                            if(viewModel.isTransfer) {
-                                Button(onClick = {
-                                    viewModel.member.value = it
-                                    viewModel.showTransferDialogState.value = true
-                                }) {
-                                    Text(text = ("Transfer"))
-                                }
-                            }
-                        }
                     )
                 }
                 item {
@@ -128,20 +146,8 @@ fun MemberListScreen() {
                     }
                 }
             }
-
-            MemberFilterDialog(
-                showDialogState = viewModel.showFilterDialogState,
-                onFilter = { type, input ->
-                    viewModel.pagingState.refresh()
-                    viewModel.fetchMembers(type,input)
-                })
-            MemberFundTransferDialog(
-                viewModel = viewModel,
-                onProceed = {amount,remark->
-                    viewModel.onTransfer(amount,remark)
-                }
-            )
-
         }
     }
 }
+
+

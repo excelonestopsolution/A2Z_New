@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.HomeScreen
-import com.a2z.app.ui.screen.home.retailer.RetailerHomeScreen
 import com.a2z.app.ui.screen.report.ledger.LedgerReportScreen
 
 

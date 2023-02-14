@@ -16,6 +16,7 @@ import com.a2z.app.ui.screen.aeps.AepsType
 import com.a2z.app.ui.screen.dmt.sender.register.SenderRegistrationArgs
 import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.members.list.MemberListType
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.util.AppUtil
@@ -269,7 +270,21 @@ sealed class NavScreen(val route: String) {
     object DTReportScreen : NavScreen("dt-report-screen")
     object PGReportScreen : NavScreen("pg-report-screen")
     object FundTransferReportScreen : NavScreen("fund-transfer-report-screen")
+    object PaymentReportScreen : NavScreen("payment-report-screen")
+    object NetworkLedgerReport : NavScreen("network-ledger-report-screen")
+    object NetworkRechargeReport : NavScreen("network-recharge-report-screen")
+    object AccountStatementReport : NavScreen("account-statement-screen")
     object ProfileScreen : NavScreen("profile-screen")
-    object MemberListScreen : NavScreen("member-list-screen")
+    object MemberListScreen : NavScreen("member-list-screen".params(
+        "memberType","isTransfer"
+    )){
+        fun passArgs(
+            memberType : MemberListType,
+            isTransfer: Boolean
+        ) = "member-list-screen".args(
+            "memberType" to memberType.toEncodedString(),
+            "isTransfer" to isTransfer.toString(),
+        )
+    }
 
 }

@@ -41,6 +41,7 @@ import com.a2z.app.ui.screen.report.dt.DTReportScreen
 import com.a2z.app.ui.screen.report.fund.FundReportScreen
 import com.a2z.app.ui.screen.report.fund_transfer.FundTransferReportReportScreen
 import com.a2z.app.ui.screen.report.matm.MATMReportScreen
+import com.a2z.app.ui.screen.report.payment.PaymentReportScreen
 import com.a2z.app.ui.screen.report.pg.PGReportScreen
 import com.a2z.app.ui.screen.result.*
 import com.a2z.app.ui.screen.settlement.add_bank.SettlementAddBankScreen
@@ -270,6 +271,9 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(
             route = NavScreen.FundTransferReportScreen.route,
             content = { FundTransferReportReportScreen() })
+        composable(
+            route = NavScreen.PaymentReportScreen.route,
+            content = { PaymentReportScreen() })
         composable(route = NavScreen.ProfileScreen.route, content = { ProfileScreen() })
         composable(route = NavScreen.MemberListScreen.route, content = { MemberListScreen() })
     }

@@ -42,5 +42,6 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun pgReport(data: FieldMapData) = service.pgReport(data)
     override suspend fun agentRequestView(data: FieldMapData) = service.agentRequestView(data)
     override suspend fun fundTransfer(data: FieldMapData) = service.fundTransfer(data)
+    override suspend fun paymentReport(data: FieldMapData) = service.paymentReport(data)
 
 }

@@ -11,8 +11,10 @@ import com.a2z.app.data.model.member.MemberListResponse
 import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
 import com.a2z.app.data.model.settlement.SettlementBankListResponse
 import com.a2z.app.util.FieldMapData
+import retrofit2.http.QueryMap
 
 interface MemberRepository {
     suspend fun memberList(data : FieldMapData): MemberListResponse
+    suspend fun fundTransferMemberList(data: FieldMapData): MemberListResponse
 
 }

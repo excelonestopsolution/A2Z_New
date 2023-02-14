@@ -83,4 +83,9 @@ interface TransactionService {
     suspend fun approveFundRequest(
         @QueryMap data : FieldMapData
     ) : AppResponse
+    @POST("fund-transafer")
+    @FormUrlEncoded
+    suspend fun memberFundTransfer(
+        @FieldMap data : FieldMapData
+    ) : AppResponse
 }

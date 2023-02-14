@@ -15,8 +15,8 @@ import retrofit2.http.QueryMap
 
 interface MemberService {
 
-    @GET("get-members")
+    @GET("retailer-fund-transfer")
+    suspend fun fundTransferMemberList(@QueryMap data: FieldMapData): MemberListResponse
+   @GET("get-members")
     suspend fun memberList(@QueryMap data: FieldMapData): MemberListResponse
-
-
 }

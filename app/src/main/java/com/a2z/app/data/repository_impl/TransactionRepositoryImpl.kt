@@ -37,6 +37,7 @@ class TransactionRepositoryImpl @Inject constructor(private val service: Transac
         service.parentPaymentFundReturn(data)
 
     override suspend fun approveFundRequest(data: FieldMapData) = service.approveFundRequest(data)
+    override suspend fun memberFundTransfer(data: FieldMapData) = service.memberFundTransfer(data)
 
 
 }

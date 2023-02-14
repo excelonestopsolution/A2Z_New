@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -81,8 +82,12 @@ fun ColumnScope.AgentRequestViewComponent(
                             rightStatus = it.status,
                             isCard = false,
                             actionButton = {
-                                viewModel.agentRequestView.value = it
-                                viewModel.approveDialogState.value = true
+                                Button(onClick = {
+                                    viewModel.agentRequestView.value = it
+                                    viewModel.approveDialogState.value = true
+                                }) {
+                                    Text(text = ("Approve"))
+                                }
                             },
                             expandListItems = listOf(
                                 "Slip" to it.slip,
