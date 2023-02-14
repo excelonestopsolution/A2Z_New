@@ -72,9 +72,8 @@ class RegistrationRepositoryImpl @Inject constructor(
         return service.resendOtp(requestId,type,isSelf)
     }
 
-    override suspend fun fetchCreateRole(): RegistrationResponse {
-        return service.fetchCreateRole()
-    }
+    override suspend fun fetchCreateRole()= service.fetchCreateRole()
+
 
     override suspend fun fetchMappingUserList(
         url: String,

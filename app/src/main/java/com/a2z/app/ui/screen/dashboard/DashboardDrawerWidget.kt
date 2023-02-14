@@ -56,7 +56,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
             BuildExpandMenu(
                 menuHeading = "Pin & Password",
-                vector = Icons.Default.Password,
+                drawable = com.a2z.app.R.drawable.icon_password,
                 menuList = listOf(
                     Pair("Change Pin") {
                         navController.navigate(NavScreen.ChangePinScreen.route)
@@ -67,7 +67,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 )
             )
 
-         if(role == UserRole.RETAILER)   BuildExpandMenu(
+            if (role == UserRole.RETAILER) BuildExpandMenu(
                 menuHeading = "User Kyc",
                 drawable = com.a2z.app.R.drawable.kyc_icon,
                 menuList = listOf(
@@ -83,7 +83,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 )
             )
 
-         if(role in UserRole.DISTRIBUTOR..UserRole.MD)   BuildExpandMenu(
+            if (role in UserRole.DISTRIBUTOR..UserRole.MD) BuildExpandMenu(
                 menuHeading = "Members",
                 drawable = com.a2z.app.R.drawable.user,
                 menuList = listOf(
@@ -102,11 +102,19 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                                 memberType = MemberListType.DISTRIBUTOR
                             )
                         )
-                    } else Pair("") {},
+                    }
+                    else Pair("") {},
+                    Pair("Create User") {
+                        navController.navigate(
+                            NavScreen.RegistrationTypeScreen.passArgs(
+                                false
+                            )
+                        )
+                    }
+                    ),
 
-                    )
             )
-          if(role == UserRole.RETAILER)  BuildExpandMenu(
+            if (role == UserRole.RETAILER) BuildExpandMenu(
                 menuHeading = "Fund Request",
                 drawable = com.a2z.app.R.drawable.money_bag,
                 menuList = listOf(
@@ -121,7 +129,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
 
 
-         if(role == UserRole.RETAILER)   BuildExpandMenu(
+            if (role == UserRole.RETAILER) BuildExpandMenu(
                 menuHeading = "All Reports",
                 drawable = com.a2z.app.R.drawable.icon_report,
                 menuList = listOf(
@@ -146,23 +154,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     },
                 )
             )
-            if(role == UserRole.DISTRIBUTOR || role ==UserRole.MD)   BuildExpandMenu(
-                menuHeading = "All Reports",
-                drawable = com.a2z.app.R.drawable.icon_report,
-                menuList = listOf(
-                    Pair("Ledger Report") {
-                        navController.navigate(NavScreen.NetworkLedgerReport.route)
-                    },
-                    Pair("Recharge Report") {
-                        navController.navigate(NavScreen.NetworkRechargeReport.route)
-                    },
-                    Pair("Account Statement") {
-                        navController.navigate(NavScreen.AccountStatementReport.route)
-                    },
-                )
-            )
 
-           if(role in UserRole.DISTRIBUTOR..UserRole.MD) BuildExpandMenu(
+
+            if (role in UserRole.DISTRIBUTOR..UserRole.MD) BuildExpandMenu(
                 menuHeading = "Payments",
                 drawable = com.a2z.app.R.drawable.icon_payment,
                 menuList = listOf(
@@ -174,14 +168,14 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                             )
                         )
                     },
-                   if(role == UserRole.MD) Pair("Fund Transfer Distributor") {
+                    if (role == UserRole.MD) Pair("Fund Transfer Distributor") {
                         navController.navigate(
                             NavScreen.MemberListScreen.passArgs(
                                 memberType = MemberListType.DISTRIBUTOR,
                                 isTransfer = true
                             )
                         )
-                    } else Pair(""){},
+                    } else Pair("") {},
                     Pair("Fund Transfer Report") {
                         navController.navigate(NavScreen.FundTransferReportScreen.route)
                     },
@@ -191,18 +185,25 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
 
                 )
             )
-         if(role == UserRole.RETAILER)   BuildSingleItemMenu(
+            if (role == UserRole.RETAILER) BuildSingleItemMenu(
                 text = "AEPS Settlement",
                 drawable = com.a2z.app.R.drawable.settlement,
                 callback = {
                     navController.navigate(NavScreen.SettlementBankScreen.route)
                 }
             )
+            if (role == UserRole.DISTRIBUTOR || role == UserRole.MD) BuildSingleItemMenu(
+                text = "Account Statement",
+                drawable = com.a2z.app.R.drawable.icon_report,
+                callback = {
+                    navController.navigate(NavScreen.AccountStatementReport.route)
+                }
+            )
 
 
             BuildExpandMenu(
                 menuHeading = "More...",
-                vector = Icons.Default.ReadMore,
+                drawable = com.a2z.app.R.drawable.more_option,
                 menuList = listOf(
                     Pair("User Agreement") {
                         navController.navigate(NavScreen.UserAgreementScreen.route)
@@ -211,9 +212,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     Pair("Commission Scheme") {
                         navController.navigate(NavScreen.CommissionScreen.route)
                     },
-                  if(role ==UserRole.RETAILER)  Pair("M-ATM Device") {
+                    if (role == UserRole.RETAILER) Pair("M-ATM Device") {
                         navController.navigate(NavScreen.DeviceOrderScreen.route)
-                    } else Pair(""){},
+                    } else Pair("") {},
                 )
             )
 
@@ -385,8 +386,7 @@ private fun BuildExpandMenu(
                     Spacer(modifier = Modifier.padding(8.dp))
                     var count = 0
                     menuList.forEachIndexed { index, it ->
-                        if(it.first.isNotEmpty())
-                        {
+                        if (it.first.isNotEmpty()) {
                             count++
                             Row(verticalAlignment = CenterVertically) {
                                 Spacer(modifier = Modifier.width(8.dp))

@@ -3,6 +3,8 @@ package com.a2z.app.nav
 import android.net.Uri
 import android.os.Parcelable
 import com.a2z.app.data.model.aeps.AepsTransaction
+import com.a2z.app.data.model.auth.RegistrationRole
+import com.a2z.app.data.model.auth.RegistrationRoleUser
 import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
@@ -164,9 +166,10 @@ sealed class NavScreen(val route: String) {
 
     }
 
-    object ShowQRScreen : NavScreen("show-qr-screen"){
+    object ShowQRScreen : NavScreen("show-qr-screen") {
 
     }
+
     object TestScreen : NavScreen("test-screen")
     object AepsScreen : NavScreen("aeps-screen".params("aeps_type")) {
         fun passArgs(aepsType: AepsType) =
@@ -178,8 +181,8 @@ sealed class NavScreen(val route: String) {
     }
 
     //dmt screens
-    object DmtSenderSearchScreen : NavScreen("sender-search-screen".params("dmtType","bankDown")) {
-        fun passArgs(dmtType: DMTType,bankDown : BankDownResponse): String {
+    object DmtSenderSearchScreen : NavScreen("sender-search-screen".params("dmtType", "bankDown")) {
+        fun passArgs(dmtType: DMTType, bankDown: BankDownResponse): String {
             return "sender-search-screen".args(
                 "dmtType" to dmtType.toEncodedString(),
                 "bankDown" to bankDown.toEncodedString(),
@@ -256,11 +259,34 @@ sealed class NavScreen(val route: String) {
             "data" to data.toEncodedString()
         )
     }
+
     object PanServiceScreen : NavScreen("pan-service-screen")
 
     object DeviceOrderScreen : NavScreen("device-order-screen")
     object UserAgreementScreen : NavScreen("user-agreement-screen")
-    object UserRegistrationScreen : NavScreen("user-registration-screen")
+    object UserRegistrationScreen : NavScreen(
+        "user-registration-screen".params(
+            "role", "mapRole", "selfRegister"
+        )
+    ) {
+        fun passArg(
+            role: RegistrationRole? = null,
+            mapRole: RegistrationRoleUser? = null,
+            selfRegister: Boolean
+        ): String {
+            return "user-registration-screen".args(
+                "role" to role?.toEncodedString().toString(),
+                "mapRole" to mapRole?.toEncodedString().toString(),
+                "selfRegister" to selfRegister.toString()
+            )
+        }
+    }
+
+    object RegistrationTypeScreen : NavScreen("user-role-registration-screen".params("shouldMap")) {
+        fun passArgs(shouldMap: Boolean) =
+            "user-role-registration-screen".args("shouldMap" to shouldMap.toString())
+    }
+
     object ForgotPasswordScreen : NavScreen("forgot-password-screen")
     object ForgotLoginIdScreen : NavScreen("forgot-login-id-screen")
     object ComplaintScreen : NavScreen("complaint-screen")
@@ -271,15 +297,15 @@ sealed class NavScreen(val route: String) {
     object PGReportScreen : NavScreen("pg-report-screen")
     object FundTransferReportScreen : NavScreen("fund-transfer-report-screen")
     object PaymentReportScreen : NavScreen("payment-report-screen")
-    object NetworkLedgerReport : NavScreen("network-ledger-report-screen")
-    object NetworkRechargeReport : NavScreen("network-recharge-report-screen")
     object AccountStatementReport : NavScreen("account-statement-screen")
     object ProfileScreen : NavScreen("profile-screen")
-    object MemberListScreen : NavScreen("member-list-screen".params(
-        "memberType","isTransfer"
-    )){
+    object MemberListScreen : NavScreen(
+        "member-list-screen".params(
+            "memberType", "isTransfer"
+        )
+    ) {
         fun passArgs(
-            memberType : MemberListType,
+            memberType: MemberListType,
             isTransfer: Boolean
         ) = "member-list-screen".args(
             "memberType" to memberType.toEncodedString(),

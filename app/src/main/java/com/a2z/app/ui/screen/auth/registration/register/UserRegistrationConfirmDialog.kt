@@ -1,6 +1,5 @@
-package com.a2z.app.ui.screen.auth.registration
+package com.a2z.app.ui.screen.auth.registration.register
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.auth.registration
+package com.a2z.app.ui.screen.auth.registration.register
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -6,7 +6,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +23,7 @@ fun UserRegistrationScreen() {
 
     val viewModel: UserRegistrationViewModel = hiltViewModel()
     Scaffold(backgroundColor = BackgroundColor,
-        topBar = { NavTopBar(title = "User Registration") }) {
+        topBar = { NavTopBar(title = viewModel.title) }) {
 
         @Composable
         fun mainContent() = when (viewModel.selectedStepperIndex.value) {

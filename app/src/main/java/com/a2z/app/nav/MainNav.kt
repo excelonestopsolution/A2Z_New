@@ -3,7 +3,6 @@ package com.a2z.app.nav
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.a2z.app.InitialRouteType
 import com.a2z.app.MainViewModel
 import com.a2z.app.ui.screen.kyc.document.DocumentKycScreen
 import com.a2z.app.ui.component.AppQRScanScreen
@@ -13,7 +12,8 @@ import com.a2z.app.ui.screen.auth.change.pin.ChangePinScreen
 import com.a2z.app.ui.screen.auth.forget.login_id.ForgotLoginIdScreen
 import com.a2z.app.ui.screen.auth.forget.password.ForgotPasswordScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
-import com.a2z.app.ui.screen.auth.registration.UserRegistrationScreen
+import com.a2z.app.ui.screen.auth.registration.register.UserRegistrationScreen
+import com.a2z.app.ui.screen.auth.registration.register_type.RegistrationTypeScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
 import com.a2z.app.ui.screen.dmt.beneficiary.info.BeneficiaryListInfoScreen
@@ -36,6 +36,7 @@ import com.a2z.app.ui.screen.profile.ProfileScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
 import com.a2z.app.ui.screen.qrcode.ShowQRCodeScreen
 import com.a2z.app.ui.screen.r2r.R2RTransferScreen
+import com.a2z.app.ui.screen.report.account_statement.AccountStatementReportScreen
 import com.a2z.app.ui.screen.report.aeps.AEPSReportScreen
 import com.a2z.app.ui.screen.report.dt.DTReportScreen
 import com.a2z.app.ui.screen.report.fund.FundReportScreen
@@ -61,31 +62,20 @@ import com.a2z.app.ui.theme.LocalNavController
 
 
 @Composable
-fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
-
-    val startDestination = when (initialRouteType) {
-        InitialRouteType.LOGIN_PAGE -> NavScreen.LoginScreen.route
-        InitialRouteType.DASHBOARD_PAGE -> NavScreen.DashboardScreen.route
-        InitialRouteType.DEVICE_LOCK_PAGE -> NavScreen.DeviceLockScreen.route
-    }
-
+fun MainNav(viewModel: MainViewModel, initialRoute: String) {
 
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = NavScreen.LoginScreen.route,
+        startDestination = initialRoute,
         route = "main-root"
     ) {
-
 
         composable(
             route = NavScreen.DeviceLockScreen.route,
             content = {
                 DeviceLockScreen()
             })
-
-
-
         composable(
             route = NavScreen.LoginScreen.route,
             content = { LoginScreen(it) })
@@ -257,6 +247,9 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
             route = NavScreen.UserRegistrationScreen.route,
             content = { UserRegistrationScreen() })
         composable(
+            route = NavScreen.RegistrationTypeScreen.route,
+            content = { RegistrationTypeScreen() })
+        composable(
             route = NavScreen.ForgotPasswordScreen.route,
             content = { ForgotPasswordScreen() })
         composable(route = NavScreen.ForgotLoginIdScreen.route, content = { ForgotLoginIdScreen() })
@@ -274,6 +267,9 @@ fun MainNav(viewModel: MainViewModel, initialRouteType: InitialRouteType) {
         composable(
             route = NavScreen.PaymentReportScreen.route,
             content = { PaymentReportScreen() })
+        composable(
+            route = NavScreen.AccountStatementReport.route,
+            content = { AccountStatementReportScreen() })
         composable(route = NavScreen.ProfileScreen.route, content = { ProfileScreen() })
         composable(route = NavScreen.MemberListScreen.route, content = { MemberListScreen() })
     }

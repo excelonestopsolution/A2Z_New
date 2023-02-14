@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.report.payment
+package com.a2z.app.ui.screen.report.account_statement
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -15,18 +15,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
-import com.a2z.app.ui.screen.report.account_statement.AccountStatementViewModel
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
 import com.a2z.app.ui.screen.report.filter.ReportDateFilterComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.util.VoidCallback
+import com.a2z.app.util.extension.prefixRS
 
 
 @Composable
-fun PaymentReportScreen() {
-    val viewModel: PaymentReportViewModel = hiltViewModel()
+fun AccountStatementReportScreen() {
+    val viewModel: AccountStatementViewModel = hiltViewModel()
 
 
     BottomSheetComponent(sheetContent = { closeAction ->
@@ -51,12 +51,12 @@ fun PaymentReportScreen() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun MainContent(
-    viewModel: PaymentReportViewModel,
+    viewModel: AccountStatementViewModel,
     filterAction: VoidCallback
 ) {
 
     Scaffold(backgroundColor = BackgroundColor, topBar = {
-        NavTopBar(title = "Payment Report", actions = {
+        NavTopBar(title = "Account Statement", actions = {
             ReportNavActionButton {
                 filterAction.invoke()
             }
@@ -73,21 +73,24 @@ private fun MainContent(
                         viewModel.fetchReport()
                     }
 
-                    BaseReportItem(statusId = it.status_id!!.toDouble().toInt(),
-                        leftSideDate = it.date,
+                    BaseReportItem(statusId = it.statusId!!.toDouble().toInt(),
+                        leftSideDate = it.created_at,
                         leftSideId = it.id.toString(),
-                        centerHeading1 = it.request_to,
-                        centerHeading2 = it.bank_name,
-                        centerHeading3 = null,
+                        centerHeading1 = it.product,
+                        centerHeading2 = "Cl "+it.total_bal?.prefixRS(),
+                        centerHeading3 = it.number,
                         rightAmount = it.amount,
                         rightStatus = it.status,
                         expandListItems = listOf(
                             "Mode" to it.mode,
-                            "Deposit Date" to it.deposit_date,
-                            "Deposit Slip" to it.deposit_slip,
-                            "Ref Id" to it.ref_id,
-                            "Customer Remark" to it.customer_remark,
-                            "Update Remark" to it.updated_remark,
+                            "Mobile Number" to it.mobile_number,
+                            "Name" to it.name,
+                            "Bank Name" to it.bank_name,
+                            "Txn Id" to it.txn_id,
+                            "Description" to it.description,
+                            "Opening Bal" to it.opening_bal?.prefixRS(),
+                            "Credit Charge" to it.credit_charge?.prefixRS(),
+                            "Debit Charge" to it.debit_charge?.prefixRS(),
                             "Remark" to it.remark,
                         ),
                     )

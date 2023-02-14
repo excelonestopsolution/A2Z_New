@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.auth.registration
+package com.a2z.app.ui.screen.auth.registration.register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

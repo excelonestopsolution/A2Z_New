@@ -24,7 +24,8 @@ fun ReportLFComponent(titleLeft: String, valueRight: String?) {
             )
             Text(text = "  :  ",
                 style =  MaterialTheme.typography.body1.copy(
-                    color = Color.Black.copy(0.9f)
+                    color = Color.Black.copy(0.9f),
+
                 ))
             Text(text = valueRight.toString(), modifier = Modifier.weight(2f),
                 style =  MaterialTheme.typography.body1.copy(

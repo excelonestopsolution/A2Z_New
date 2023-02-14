@@ -77,7 +77,9 @@ fun HomeScreen(viewModel: DashboardViewModel) {
 
         HomeSignInOptionWidget(viewModel)
 
-        HomeExitDialogComponent(viewModel.exitDialogState)
+        HomeExitDialogComponent(viewModel.exitDialogState){
+            viewModel.logout()
+        }
 
         val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
         val activity = LocalContext.current as FragmentActivity
@@ -113,7 +115,7 @@ fun HomeScreen(viewModel: DashboardViewModel) {
 
 
         LaunchedEffect(key1 = viewModel.onLaunchEffect.value, block = {
-            if (useLocalAuth && !BuildConfig.DEBUG)
+            if (useLocalAuth)
                 LocalAuth.showBiometricPrompt(activity) {
                     when (it) {
                         is LocalAuthResultType.Error ->

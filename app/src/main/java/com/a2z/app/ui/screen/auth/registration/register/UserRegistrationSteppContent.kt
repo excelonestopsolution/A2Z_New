@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.auth.registration
+package com.a2z.app.ui.screen.auth.registration.register
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.ui.component.CenterBox
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.EmailTextField
 import com.a2z.app.ui.component.common.MobileTextField

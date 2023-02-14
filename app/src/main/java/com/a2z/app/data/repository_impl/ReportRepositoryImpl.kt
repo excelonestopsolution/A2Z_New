@@ -1,8 +1,7 @@
 package com.a2z.app.data.repository_impl
 
-import com.a2z.app.data.model.AppResponse
-import com.a2z.app.data.model.dmt.TransactionDetailResponse
-import com.a2z.app.data.model.report.*
+import com.a2z.app.data.model.report.CommissionSchemeListResponse
+import com.a2z.app.data.model.report.LedgerReportResponse
 import com.a2z.app.data.network.ReportService
 import com.a2z.app.data.repository.ReportRepository
 import com.a2z.app.util.FieldMapData
@@ -43,5 +42,6 @@ class ReportRepositoryImpl @Inject constructor(private val service: ReportServic
     override suspend fun agentRequestView(data: FieldMapData) = service.agentRequestView(data)
     override suspend fun fundTransfer(data: FieldMapData) = service.fundTransfer(data)
     override suspend fun paymentReport(data: FieldMapData) = service.paymentReport(data)
+    override suspend fun accountStatement(data: FieldMapData) = service.accountStatement(data)
 
 }

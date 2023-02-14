@@ -1,14 +1,19 @@
-package com.a2z.app.ui.screen.auth.registration
+package com.a2z.app.ui.screen.auth.registration.register
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.auth.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationRole
+import com.a2z.app.data.model.auth.RegistrationRoleUser
 import com.a2z.app.data.repository.RegistrationRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
+import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.util.resultShareFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,8 +21,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserRegistrationViewModel @Inject constructor(
-    private val repository: RegistrationRepository
+    private val repository: RegistrationRepository, private val saveState: SavedStateHandle
 ) : BaseViewModel() {
+
+
+    private val registrationRole: RegistrationRole? = saveState.safeParcelable("role")
+    private val mappedUnder: RegistrationRoleUser? = saveState.safeParcelable("mapRole")
+    private val selfRegister = saveState.get<String>("selfRegister").toBoolean()
 
     val totalStepperCount = 4
     val selectedStepperIndex = mutableStateOf(1)
@@ -39,6 +49,10 @@ class UserRegistrationViewModel @Inject constructor(
 
     private var requestId = ""
     val finalResponseState = mutableStateOf<RegistrationResponse?>(null)
+
+
+    val title : String
+    get() = if(selfRegister) "User Registration" else "Create ${registrationRole?.title}"
 
     init {
         validateMobileEmailPanInput()
@@ -172,7 +186,8 @@ class UserRegistrationViewModel @Inject constructor(
         viewModelScope.launch {
             _registrationResultFlow.getLatest {
                 if (it.status == 1) successDialog(it.message) {
-                    navigateUpWithResult()
+                    if (selfRegister) navigateUpWithResult()
+                    else navigateTo(NavScreen.DashboardScreen.route, true)
                 }
                 else failureDialog(it.message)
             }
@@ -226,7 +241,9 @@ class UserRegistrationViewModel @Inject constructor(
                     data = input.pan.getValue()
                 )
             }
-            else -> register()
+            else -> {
+                if (selfRegister) register() else registerFromUser()
+            }
         }
     }
 
@@ -240,38 +257,45 @@ class UserRegistrationViewModel @Inject constructor(
     }
 
     private fun submitMobileNumber() {
-        callApiForShareFlow(
-            flow = _postMobileResultFlow,
-            call = { repository.postMobileNumber(input.mobile.getValue(), "true") }
-        )
+        callApiForShareFlow(flow = _postMobileResultFlow,
+            call = {
+                repository.postMobileNumber(
+                    input.mobile.getValue(),
+                    selfRegister.toString()
+                )
+            })
     }
 
     private fun verifyMobileNumber(otp: String) {
-        callApiForShareFlow(
-            flow = _verifyMobileResultFlow,
-            call = { repository.mobileNumberVerify(requestId, otp, "true") }
-        )
+        callApiForShareFlow(flow = _verifyMobileResultFlow,
+            call = { repository.mobileNumberVerify(requestId, otp, selfRegister.toString()) })
     }
 
     private fun submitEmailId() {
-        callApiForShareFlow(
-            flow = _postEmailResultFlow,
-            call = { repository.postEmailId(input.email.getValue(), requestId, "true") }
-        )
+        callApiForShareFlow(flow = _postEmailResultFlow,
+            call = {
+                repository.postEmailId(
+                    input.email.getValue(),
+                    requestId,
+                    selfRegister.toString()
+                )
+            })
     }
 
     private fun verifyEmailId(otp: String) {
-        callApiForShareFlow(
-            flow = _verifyEmailResultFlow,
-            call = { repository.verifyEmailId(otp, requestId, "true") }
-        )
+        callApiForShareFlow(flow = _verifyEmailResultFlow,
+            call = { repository.verifyEmailId(otp, requestId, selfRegister.toString()) })
     }
 
     private fun submitPanNumber() {
-        callApiForShareFlow(
-            flow = _postPanNumberResultFlow,
-            call = { repository.postPanNumber(requestId, input.pan.getValue(), "true") }
-        )
+        callApiForShareFlow(flow = _postPanNumberResultFlow,
+            call = {
+                repository.postPanNumber(
+                    requestId,
+                    input.pan.getValue(),
+                    selfRegister.toString()
+                )
+            })
     }
 
     fun onOtpSubmit(it: String) {
@@ -287,20 +311,42 @@ class UserRegistrationViewModel @Inject constructor(
         validateMobileEmailPanInput()
     }
 
-    fun register() {
-        callApiForShareFlow(
-            flow = _registrationResultFlow,
-            call = {
-                repository.selfRegister(
-                    requestId = requestId,
-                    password = finalInput.password.getValue(),
-                    confirmPassword = finalInput.confirmPassword.getValue(),
-                    outletName = finalInput.shopName.getValue(),
-                    outletAddress = finalInput.shopAddress.getValue(),
-                )
+    private fun register() {
+        callApiForShareFlow(flow = _registrationResultFlow, call = {
+            repository.selfRegister(
+                requestId = requestId,
+                password = finalInput.password.getValue(),
+                confirmPassword = finalInput.confirmPassword.getValue(),
+                outletName = finalInput.shopName.getValue(),
+                outletAddress = finalInput.shopAddress.getValue(),
+            )
 
-            }
+        })
+    }
+
+    private fun registerFromUser() {
+
+        val param = if (mappedUnder !=null) hashMapOf(
+            "role_id" to registrationRole!!.roleId.toString(),
+            "requestId" to requestId,
+            "password" to finalInput.password.getValue(),
+            "confirm_password" to finalInput.confirmPassword.getValue(),
+            "outlet_name" to finalInput.shopName.getValue(),
+            "outlet_address" to finalInput.shopAddress.getValue(),
+            "relationId" to mappedUnder.relationId.toString(),
+            "parentId" to mappedUnder.id.toString(),
         )
+        else hashMapOf(
+            "role_id" to registrationRole!!.roleId.toString(),
+            "requestId" to requestId,
+            "password" to finalInput.password.getValue(),
+            "confirm_password" to finalInput.confirmPassword.getValue(),
+            "outlet_name" to finalInput.shopName.getValue(),
+            "outlet_address" to finalInput.shopAddress.getValue(),
+
+            )
+
+        callApiForShareFlow(_registrationResultFlow) { repository.registerFromDistributor(param) }
     }
 
     data class MobileEmailPanFormInput(
@@ -316,8 +362,7 @@ class UserRegistrationViewModel @Inject constructor(
         val password: InputWrapper = InputWrapper { AppValidator.password(it) },
         val confirmPassword: InputWrapper = InputWrapper {
             AppValidator.confirmPassword(
-                it,
-                password.getValue()
+                it, password.getValue()
             )
         },
     ) : BaseInput(shopName, shopAddress, password, confirmPassword)

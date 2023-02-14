@@ -19,12 +19,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
+import com.a2z.app.util.VoidCallback
 
 
 @Composable
 fun HomeExitDialogComponent(
     dialogState: MutableState<Boolean>,
-    homeViewModel: DashboardViewModel = hiltViewModel()
+    onLogout: VoidCallback
 ) {
 
     if (!dialogState.value) return
@@ -59,7 +60,7 @@ fun HomeExitDialogComponent(
                 Divider()
                 TextButton(onClick = {
                     dialogState.value = false
-                    homeViewModel.logout()
+                    onLogout.invoke()
                 }) {
                     Row(modifier = Modifier.background(Color.Transparent)) {
                         Icon(

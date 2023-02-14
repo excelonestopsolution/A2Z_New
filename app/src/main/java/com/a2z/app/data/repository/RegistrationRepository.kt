@@ -1,7 +1,10 @@
 package com.a2z.app.data.repository
 
 import com.a2z.app.data.model.auth.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationRoleResponse
 import com.a2z.app.util.FieldMapData
+import retrofit2.Response
+import retrofit2.http.GET
 
 interface RegistrationRepository {
 
@@ -50,15 +53,12 @@ interface RegistrationRepository {
     suspend fun registerFromDistributor(data: FieldMapData): RegistrationResponse
 
 
+
     suspend fun resendOtp(
         requestId: String,
         type: String,
         isSelf: String,
     ): RegistrationResponse
-
-
-    suspend fun fetchCreateRole(): RegistrationResponse
-
 
     suspend fun fetchMappingUserList(
         url: String,
@@ -74,5 +74,10 @@ interface RegistrationRepository {
     suspend fun fetchInCompletedUserList(
         data: FieldMapData
     ): RegistrationResponse
+
+
+    suspend fun fetchCreateRole(): RegistrationRoleResponse
+
+
 
 }

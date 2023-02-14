@@ -233,7 +233,7 @@ private fun BuildExpandableContent(reports: List<Pair<String, String?>>) {
             .padding(12.dp)
             .background(
                 shape = MaterialTheme.shapes.medium, color =
-                PrimaryColorDark.copy(alpha = 0.2f)
+                Color.LightGray.copy(alpha = 0.2f)
             )
             .padding(12.dp)
     ) {
@@ -241,7 +241,11 @@ private fun BuildExpandableContent(reports: List<Pair<String, String?>>) {
         reports.forEach {
             if (it.first.orEmpty().isNotEmpty() &&
                 it.second.orEmpty().isNotEmpty()
-            ) ReportLFComponent(titleLeft = it.first.toString(), valueRight = it.second)
+            ) ReportLFComponent(
+                titleLeft = it.first.toString(),
+                valueRight = it.second,
+
+            )
         }
 
     }

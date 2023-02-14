@@ -2,6 +2,7 @@ package com.a2z.app.data.network
 
 
 import com.a2z.app.data.model.auth.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationRoleResponse
 import com.a2z.app.util.FieldMapData
 import retrofit2.http.*
 
@@ -73,7 +74,7 @@ interface RegistrationService {
 
 
     @GET("user/role/get")
-    suspend fun fetchCreateRole(): RegistrationResponse
+    suspend fun fetchCreateRole(): RegistrationRoleResponse
 
 
     @GET

@@ -6,18 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.navigation.compose.rememberNavController
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.MainNav
+import com.a2z.app.nav.NavScreen
+import com.a2z.app.service.LocalAuth
 import com.a2z.app.service.location.LocationService
 import com.a2z.app.ui.theme.A2ZApp
 import com.a2z.app.ui.theme.LocalLocationService
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.ui.theme.LocalUserRole
-import com.a2z.app.ui.util.UserRole
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
@@ -28,9 +29,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-enum class InitialRouteType {
-    LOGIN_PAGE, DASHBOARD_PAGE, DEVICE_LOCK_PAGE
-}
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
@@ -48,9 +46,6 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
-
         appPreference.latitude = ""
         appPreference.longitude = ""
 
@@ -60,26 +55,22 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
             }
         }
 
-
-
         setContent {
 
             CompositionLocalProvider(
                 LocalNavController provides rememberNavController(),
-                LocalLocationService provides locationService,
-
-            ) {
+                LocalLocationService provides locationService,) {
                 A2ZApp {
                     ProvideWindowInsets(
                         windowInsetsAnimationsEnabled = true,
                         consumeWindowInsets = false
                     ) {
-
-                       var initialRouteType = InitialRouteType.LOGIN_PAGE
-                        initialRouteType = InitialRouteType.DEVICE_LOCK_PAGE
-
-                        MainNav(viewModel, initialRouteType)
-
+                        val context = LocalContext.current
+                        var initialRoute = NavScreen.LoginScreen.route
+                        if (appPreference.user != null
+                            && LocalAuth.checkForBiometrics(context)
+                        ) initialRoute = NavScreen.DashboardScreen.route
+                        MainNav(viewModel, initialRoute)
                     }
                 }
             }
