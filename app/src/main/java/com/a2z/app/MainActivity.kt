@@ -65,12 +65,7 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
                         windowInsetsAnimationsEnabled = true,
                         consumeWindowInsets = false
                     ) {
-                        val context = LocalContext.current
-                        var initialRoute = NavScreen.LoginScreen.route
-                        if (appPreference.user != null
-                            && LocalAuth.checkForBiometrics(context)
-                        ) initialRoute = NavScreen.DashboardScreen.route
-                        MainNav(viewModel, initialRoute)
+                        MainNav(viewModel)
                     }
                 }
             }

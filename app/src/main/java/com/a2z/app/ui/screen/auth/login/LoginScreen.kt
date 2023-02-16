@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.service.LocalAuth
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
@@ -28,6 +30,7 @@ import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.singleResult
 import com.a2z.app.util.ToggleBottomSheet
+import com.google.android.gms.maps.model.Dash
 
 @Composable
 fun LoginScreen(
@@ -37,6 +40,19 @@ fun LoginScreen(
 ) {
 
     val navController = LocalNavController.current
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit, block = {
+
+        if (viewModel.appPreference.user != null
+            && LocalAuth.checkForBiometrics(context)
+        ) navController.navigate(NavScreen.DashboardScreen.route) {
+            popUpTo(NavScreen.DashboardScreen.route) {
+                inclusive = true
+            }
+        }
+
+    })
 
     LaunchedEffect(key1 = Unit) {
         val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
@@ -44,9 +60,17 @@ fun LoginScreen(
     }
 
 
-
     BaseContent(viewModel) {
-        BottomSheetComponent(sheetContent = {
+
+        if (viewModel.appPreference.user != null
+            && LocalAuth.checkForBiometrics(context)
+        ) Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.app_logo),
+                contentDescription = null,
+                modifier = Modifier.size(120.dp)
+            )
+        }else BottomSheetComponent(sheetContent = {
             LoginForgotComponent(
                 onLoginId = {
                     it.invoke()
@@ -72,6 +96,8 @@ fun LoginScreen(
                 }
             }
         }
+
+
     }
 }
 
@@ -165,9 +191,11 @@ private fun BoxScope.BuildFormWidget(toggle: ToggleBottomSheet) {
             Spacer(modifier = Modifier.height(24.dp))
 
             Row {
-                TextButton(onClick = { viewModel.navigateTo(
-                    NavScreen.UserRegistrationScreen.passArg(selfRegister = true)
-                ) }) {
+                TextButton(onClick = {
+                    viewModel.navigateTo(
+                        NavScreen.UserRegistrationScreen.passArg(selfRegister = true)
+                    )
+                }) {
                     Text(text = "Sign Up")
                 }
                 Spacer(modifier = Modifier.weight(1f))

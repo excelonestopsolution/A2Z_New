@@ -29,16 +29,6 @@ fun R2RTransferScreen() {
         topBar = { NavTopBar(title = "R2R Transfer") }
     ) {
 
-        BaseConfirmDialog(
-            state = viewModel.confirmDialogState,
-            amount = viewModel.input.amount.getValue(), titleValues = listOf(
-                "Mobile Number" to viewModel.r2rRetailer.value?.mobile.toString(),
-                "Retailer Name" to viewModel.r2rRetailer.value?.name.toString(),
-                "Shop Name" to viewModel.r2rRetailer.value?.shopName.toString(),
-            )
-        ) {
-            viewModel.transfer()
-        }
 
         BaseContent(viewModel) {
             AppFormUI(
@@ -135,6 +125,17 @@ fun R2RTransferScreen() {
                     )
                 )
             )
+            BaseConfirmDialog(
+                state = viewModel.confirmDialogState,
+                amount = viewModel.input.amount.getValue(), titleValues = listOf(
+                    "Mobile Number" to viewModel.r2rRetailer.value?.mobile.toString(),
+                    "Retailer Name" to viewModel.r2rRetailer.value?.name.toString(),
+                    "Shop Name" to viewModel.r2rRetailer.value?.shopName.toString(),
+                )
+            ) {
+                viewModel.transfer()
+            }
+
 
         }
 

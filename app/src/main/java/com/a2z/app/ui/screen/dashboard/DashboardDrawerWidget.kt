@@ -209,9 +209,9 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                         navController.navigate(NavScreen.UserAgreementScreen.route)
                     },
 
-                    Pair("Commission Scheme") {
+                   if(role in UserRole.RETAILER..UserRole.DISTRIBUTOR) Pair("Commission Scheme") {
                         navController.navigate(NavScreen.CommissionScreen.route)
-                    },
+                    } else Pair(""){},
                     if (role == UserRole.RETAILER) Pair("M-ATM Device") {
                         navController.navigate(NavScreen.DeviceOrderScreen.route)
                     } else Pair("") {},

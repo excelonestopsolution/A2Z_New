@@ -9,8 +9,8 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.repository.AppRepository
+import com.a2z.app.ui.screen.home.component.useLocalAuth
 import com.a2z.app.ui.screen.home.retailer.HomeScreenState
-import com.a2z.app.ui.screen.home.retailer.useLocalAuth
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.resource.ResultType

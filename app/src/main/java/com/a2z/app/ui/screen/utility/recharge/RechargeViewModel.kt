@@ -4,10 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.provider.Operator
-import com.a2z.app.data.model.utility.RechargeDthInfo
-import com.a2z.app.data.model.utility.RechargeOffer
-import com.a2z.app.data.model.utility.RechargeOfferResponse
-import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.data.model.utility.*
+import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.data.repository.UtilityRepository
 import com.a2z.app.ui.screen.utility.util.OperatorType
 import com.a2z.app.ui.screen.utility.util.RechargeUtil
@@ -22,22 +20,26 @@ import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
 import com.a2z.app.util.AppUtil
+import com.a2z.app.util.extension.notNullOrEmpty
+import com.a2z.app.util.extension.nullOrEmptyToDouble
+import com.a2z.app.util.resultStateFlow
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
 class RechargeViewModel @Inject constructor(
     private val repository: UtilityRepository,
+    private val transactionRepository: TransactionRepository,
     savedStateHandle: SavedStateHandle,
     appPreference: AppPreference
 ) : BaseViewModel() {
-
-    init {
-        AppUtil.logger("user balance : "+appPreference.user?.userBalance.toString())
-    }
+    
+    val countryState : Pair<String,String> = savedStateHandle.safeSerializable("countryState")!!
 
     val operator: Operator = savedStateHandle.safeParcelable("operator")!!
     private var operatorType: OperatorType = savedStateHandle.safeSerializable("operatorType")!!
@@ -60,42 +62,83 @@ class RechargeViewModel @Inject constructor(
 
 
     var rOfferDialogState = mutableStateOf(false)
-    var rOfferState = mutableStateOf<RechargeOffer?>(null)
+    var rechargePlanDialogState = mutableStateOf(false)
+    var rechargePlanState = mutableStateOf<RechargePlan?>(null)
     var confirmDialogState = mutableStateOf(false)
-    private var rOfferList: List<RechargeOffer>? = null
+    var offerList: List<RechargePlan>? = null
 
     fun onNumberChange(it: String) {
         if (isPrepaid()) {
-            rOfferList = null
-            if (it.length == 10) fetchROffer()
+            offerList = null
+            if (it.length == 10) fetchRechargePlan()
         }
 
     }
 
     fun onAmountChange(amount: String) {
+
         if (isPrepaid()) {
-            if (rOfferList == null) return
-            rOfferState.value = rOfferList!!.find {
-                it.price.trim() == amount
+            if (offerList == null) return
+            rechargePlanState.value = offerList?.find {
+                it.rs.nullOrEmptyToDouble() == amount.nullOrEmptyToDouble()
             }
         }
     }
 
 
-    private val _rOfferFlow =
-        MutableStateFlow<ResultType<RechargeOfferResponse>>(ResultType.Loading())
-    val rOfferFlow: StateFlow<ResultType<RechargeOfferResponse>> = _rOfferFlow
+    val rOfferFlow = resultStateFlow<ROfferResponse>()
     private fun fetchROffer() {
-        callApiForStateFlow(_rOfferFlow, beforeEmit = {
+        callApiForStateFlow(rOfferFlow, beforeEmit = {
             if (it is ResultType.Success) {
                 if (it.data.status.equals("success", ignoreCase = true)) {
-                    rOfferList = it.data.offers
+                    offerList = it.data.offers
                 }
             }
         }) {
             repository.fetchRechargeOffer(
                 "mobile_number" to input.numberInputWrapper.input.value,
                 "provider" to operator.operatorName.toString()
+            )
+        }
+    }
+
+
+    val rechargePlanResponseFlow = resultStateFlow<Any>()
+    private fun fetchRechargePlan() {
+        callApiForStateFlow(rechargePlanResponseFlow, beforeEmit = {
+            if(it is ResultType.Success){
+                val rechargePlans = arrayListOf<RechargePlan>()
+
+                val response = JSONObject(Gson().toJson(it.data))
+                val status = response.getInt("status")
+                if (status == 1) {
+                    val records = response.getJSONObject("records")
+                    val keys = records.keys()
+                    keys.forEach { key ->
+                        val mArray = records.getJSONArray(key)
+                        for (i in 0 until mArray.length()) {
+                            rechargePlans.add(
+                                RechargePlan(
+                                    rs = mArray.getJSONObject(i).optString("rs"),
+                                    desc = mArray.getJSONObject(i).optString("desc"),
+                                    validity = mArray.getJSONObject(i).optString("validity"),
+                                    remark = mArray.getJSONObject(i).optString("remark"),
+                                    discontinued = mArray.getJSONObject(i)
+                                        .optString("discontinued"),
+                                )
+                            )
+
+                        }
+                    }
+                    offerList = rechargePlans
+                }
+
+
+            }
+        }) {
+            repository.fetchRechargePlan(
+                "state" to countryState.first,
+                "provider" to operator.id.toString()
             )
         }
     }
@@ -146,10 +189,13 @@ class RechargeViewModel @Inject constructor(
         val amount = input.amountInputWrapper.input.value
 
         return callApiForShareFlow {
-            repository.rechargeTransaction(
-                "number" to number,
-                "provider" to providerId,
-                "amount" to amount,
+            transactionRepository.rechargeTransaction(
+                hashMapOf(
+                    "number" to number,
+                    "provider" to providerId,
+                    "amount" to amount,
+                    "state" to countryState.first
+                )
             )
         }
     }
@@ -157,7 +203,7 @@ class RechargeViewModel @Inject constructor(
     fun isPrepaid() = operatorType == OperatorType.PREPAID
 
     fun onFetchInfoButtonClick() {
-        if (isPrepaid()) rOfferDialogState.value = true
+        if (isPrepaid()) rechargePlanDialogState.value = true
         else fetchDthInfo()
     }
 

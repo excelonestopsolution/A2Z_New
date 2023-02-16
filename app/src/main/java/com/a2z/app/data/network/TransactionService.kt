@@ -6,6 +6,7 @@ import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.dmt.UpiVerifyPayment
 import com.a2z.app.data.model.utility.BillPaymentResponse
+import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.util.FieldMapData
 import com.a2z.app.util.MapRequest
 import retrofit2.http.FieldMap
@@ -22,6 +23,9 @@ interface TransactionService {
     @FormUrlEncoded
     @POST("bill-payment-two")
     suspend fun billPaymentRouteTwo(@FieldMap data: MapRequest): BillPaymentResponse
+    @FormUrlEncoded
+    @POST("recharge/new")
+    suspend fun rechargeTransaction(@FieldMap data: MapRequest): RechargeTransactionResponse
 
     @POST("a2z/plus/wallet/transaction")
     @FormUrlEncoded

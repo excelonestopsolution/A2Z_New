@@ -77,13 +77,14 @@ sealed class NavScreen(val route: String) {
 
     object RechargeScreen : NavScreen(
         "recharge-screen".params(
-            "operatorType", "operator"
+            "operatorType", "operator","countryState"
         )
     ) {
-        fun passArgs(operatorType: OperatorType, operator: Operator) =
+        fun passArgs(operatorType: OperatorType, operator: Operator,countryState : Pair<String,String> ) =
             "recharge-screen".args(
                 "operatorType" to operatorType.toEncodedString(),
-                "operator" to operator.toEncodedString()
+                "operator" to operator.toEncodedString(),
+                "countryState" to countryState.toEncodedString()
             )
     }
 

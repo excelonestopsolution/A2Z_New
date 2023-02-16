@@ -62,12 +62,12 @@ import com.a2z.app.ui.theme.LocalNavController
 
 
 @Composable
-fun MainNav(viewModel: MainViewModel, initialRoute: String) {
+fun MainNav(viewModel: MainViewModel) {
 
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = initialRoute,
+        startDestination = NavScreen.LoginScreen.route,
         route = "main-root"
     ) {
 

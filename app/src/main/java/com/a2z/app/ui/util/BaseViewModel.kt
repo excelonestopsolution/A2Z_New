@@ -74,6 +74,19 @@ open class BaseViewModel : ViewModel() {
         dialogState.value = StatusDialogType.Alert(message, callback)
     }
 
+    private var obsDialogVisible = false
+    fun showObsAlertDialog(message: String, callback: VoidCallback?=null) {
+        if (!obsDialogVisible) {
+            dialogState.value = StatusDialogType.Alert(message) {
+                obsDialogVisible = false
+                if(callback !=null) callback.invoke()
+                else navigateUpWithResult()
+            }
+            obsDialogVisible = true
+        }
+
+    }
+
 
     fun setBanner(withNewType: BannerType = BannerType.None) {
         bannerState.value = withNewType

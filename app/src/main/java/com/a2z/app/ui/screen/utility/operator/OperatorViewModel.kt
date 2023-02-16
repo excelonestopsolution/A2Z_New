@@ -28,7 +28,7 @@ class OperatorViewModel @Inject constructor(
     var operatorList: List<Operator> = emptyList()
     var operatorListObs = mutableListOf<Operator>()
     var spinnerDialogState = mutableStateOf(false)
-    var selectedState = mutableStateOf("RAJASTHAN")
+    var selectedState = mutableStateOf(Pair("8", "RAJASTHAN"))
 
     val util = UtilityUtil(operatorType = operatorType)
 
@@ -112,11 +112,12 @@ class OperatorViewModel @Inject constructor(
     )
 
     fun onStateSelect(state: String) {
-        if (selectedState.value != state) {
-            selectedState.value = state
+        if (selectedState.value.first != state) {
+            selectedState.value = getStateList().find { it.second == state }!!
             val stateId = getStateList().find {
                 it.second == state
             }!!.first
+            if(operatorType == OperatorType.ELECTRICITY)
             fetchOperatorList(stateId = stateId)
         }
     }

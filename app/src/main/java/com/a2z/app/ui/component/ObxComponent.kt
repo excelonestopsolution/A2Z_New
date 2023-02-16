@@ -57,3 +57,8 @@ fun RetryComponent(onClick : VoidCallback) {
 
 
 }
+
+@Composable
+fun Obs() {
+
+}

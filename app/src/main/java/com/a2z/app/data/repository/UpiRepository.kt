@@ -2,13 +2,7 @@ package com.a2z.app.data.repository
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.dmt.*
-import com.a2z.app.data.model.provider.OperatorResponse
-import com.a2z.app.data.model.utility.BillFetchInfoResponse
-import com.a2z.app.data.model.utility.RechargeDthInfoResponse
-import com.a2z.app.data.model.utility.RechargeOfferResponse
-import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.util.FieldMapData
-import com.a2z.app.util.PairRequest
 import retrofit2.Response
 import retrofit2.http.FieldMap
 import retrofit2.http.QueryMap

@@ -1,10 +1,7 @@
 package com.a2z.app.data.network
 
 import com.a2z.app.data.model.provider.OperatorResponse
-import com.a2z.app.data.model.utility.BillFetchInfoResponse
-import com.a2z.app.data.model.utility.RechargeDthInfoResponse
-import com.a2z.app.data.model.utility.RechargeOfferResponse
-import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.data.model.utility.*
 import com.a2z.app.util.MapRequest
 import retrofit2.http.*
 
@@ -15,11 +12,11 @@ interface UtilityService {
 
 
     @GET("get-special-offer")
-    suspend fun fetchRechargeOffer(@QueryMap data: MapRequest): RechargeOfferResponse
+    suspend fun fetchRechargeOffer(@QueryMap data: MapRequest): ROfferResponse
 
-    @FormUrlEncoded
-    @POST("make-recharge")
-    suspend fun rechargeTransaction(@FieldMap data: MapRequest): RechargeTransactionResponse
+    @GET("offer/prepaid/simple")
+    suspend fun fetchRechargePlan(@QueryMap data: MapRequest): Any
+
 
     @GET("get-dth-customer-info")
     suspend fun fetchDthInfo(@QueryMap data: MapRequest): RechargeDthInfoResponse

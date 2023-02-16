@@ -78,8 +78,9 @@ private fun BuildProviderList(operatorResponse: OperatorResponse, operatorType: 
         Column {
 
 
-            if (operatorType == OperatorType.ELECTRICITY) DropDownTextField(
-                value = viewModel.selectedState.value, hint = "Select State"
+            if (operatorType == OperatorType.ELECTRICITY || operatorType == OperatorType.PREPAID)
+                DropDownTextField(
+                value = viewModel.selectedState.value.second, hint = "Select State"
             ) {
                 viewModel.spinnerDialogState.value = true
             }
@@ -109,7 +110,8 @@ private fun BuildProviderList(operatorResponse: OperatorResponse, operatorType: 
                                 .navigate(
                                     NavScreen.RechargeScreen.passArgs(
                                         operatorType = operatorType,
-                                        operator = operator
+                                        operator = operator,
+                                        countryState = viewModel.selectedState.value
                                     )
                                 )
                         else navController

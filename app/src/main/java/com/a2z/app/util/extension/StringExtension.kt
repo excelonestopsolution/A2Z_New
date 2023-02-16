@@ -36,6 +36,16 @@ fun String?.notNullOrEmpty(): Boolean {
     return this.isNotEmpty()
 }
 
+fun String?.nullOrEmptyToDouble(): Double {
+    if(this == null || this == "" || this == "null" ) return 0.0
+    if(this.trim().isEmpty()) return 0.0
+    return try {
+        this.toDouble()
+    }catch (e : java.lang.Exception) {
+        0.0
+    }
+}
+
 fun String?.notAvailable() : String{
     return if(this == null || this.isEmpty()) "Not Available";
     else this

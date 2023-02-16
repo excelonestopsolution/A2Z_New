@@ -3,6 +3,6 @@
 
     <style name="Theme.A2Z" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
-        <item name="android:windowBackground">@color/purple_700</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 </resources>

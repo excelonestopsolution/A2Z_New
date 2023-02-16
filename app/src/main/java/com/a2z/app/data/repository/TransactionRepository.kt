@@ -6,12 +6,14 @@ import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.dmt.UpiVerifyPayment
 import com.a2z.app.data.model.utility.BillPaymentResponse
+import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.util.FieldMapData
 
 interface TransactionRepository {
 
     suspend fun billPaymentRouteOne(data : HashMap<String,String>): BillPaymentResponse
     suspend fun billPaymentRouteTwo(data : HashMap<String,String>): BillPaymentResponse
+    suspend fun rechargeTransaction(data : HashMap<String,String>): RechargeTransactionResponse
     suspend fun wallet1Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun wallet2Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun wallet3Transaction(data : FieldMapData) : TransactionDetailResponse

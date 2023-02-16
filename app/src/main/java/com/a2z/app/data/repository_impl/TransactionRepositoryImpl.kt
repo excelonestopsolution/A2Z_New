@@ -3,6 +3,7 @@ package com.a2z.app.data.repository_impl
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.utility.BillPaymentResponse
+import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.data.network.TransactionService
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.util.FieldMapData
@@ -18,6 +19,10 @@ class TransactionRepositoryImpl @Inject constructor(private val service: Transac
 
     override suspend fun billPaymentRouteTwo(data: HashMap<String, String>): BillPaymentResponse {
         return service.billPaymentRouteTwo(data)
+    }
+
+    override suspend fun rechargeTransaction(data: HashMap<String, String>): RechargeTransactionResponse {
+        return service.rechargeTransaction(data)
     }
 
     override suspend fun wallet1Transaction(data: FieldMapData) = service.wallet1Transaction(data)

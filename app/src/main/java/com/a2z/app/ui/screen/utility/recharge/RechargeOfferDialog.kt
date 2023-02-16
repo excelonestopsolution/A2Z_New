@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.data.model.utility.RechargeOffer
+import com.a2z.app.data.model.utility.RechargePlan
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
@@ -46,8 +46,8 @@ fun ROfferDialog(viewModel: RechargeViewModel = hiltViewModel()) {
                     AppBar(viewModel)
                     if (it.status.equals("success", ignoreCase = true))
                         BuildList(it.offers) { offer ->
-                            viewModel.input.amountInputWrapper.input.value = offer.price
-                            viewModel.rOfferState.value = offer
+                            viewModel.input.amountInputWrapper.input.value = offer.rs.toString()
+                            viewModel.rechargePlanState.value = offer
                             viewModel.rOfferDialogState.value = false
                             viewModel.input.validate()
                         }
@@ -73,7 +73,7 @@ fun ROfferDialog(viewModel: RechargeViewModel = hiltViewModel()) {
 
 
 @Composable
-private fun BuildList(it: List<RechargeOffer>, onClick: (RechargeOffer) -> Unit) {
+private fun BuildList(it: List<RechargePlan>, onClick: (RechargePlan) -> Unit) {
     LazyColumn(content = {
         items(it) {
             Card(modifier = Modifier
@@ -88,14 +88,14 @@ private fun BuildList(it: List<RechargeOffer>, onClick: (RechargeOffer) -> Unit)
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text(
-                        "₹ " + it.price, style = MaterialTheme.typography.h6.copy(
+                        "₹ " + it.rs, style = MaterialTheme.typography.h6.copy(
                             color = MaterialTheme.colors.primary,
                             fontWeight = FontWeight.Bold
                         )
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        it.offer, style = MaterialTheme.typography.subtitle1.copy(
+                        it.rs.toString(), style = MaterialTheme.typography.subtitle1.copy(
                             color = Color.Gray,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,

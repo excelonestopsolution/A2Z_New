@@ -57,14 +57,15 @@ fun ShowQRCodeScreen() {
 
         BaseContent(viewModel) {
             ObsComponent(flow = viewModel.qrCodeObs) {
-                ImageCaptureComponent() {download,share->
+                if(it.status ==1)ImageCaptureComponent() {download,share->
                     BuildContentForScreenShot(
                         response = it,
                         onDownload = {download.invoke()},
                         onShare = {share.invoke()},
 
-                    )
+                        )
                 }
+                else viewModel.showObsAlertDialog(it.message)
             }
         }
 

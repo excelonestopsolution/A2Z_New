@@ -68,9 +68,10 @@ class R2RTransferViewModel @Inject constructor(
                     }
                 },
                 success = {
-                    successDialog(it.message) {
+                    if (it.status == 1) successDialog(it.message) {
                         navigateTo(NavScreen.DashboardScreen.route, true)
                     }
+                    else alertDialog(it.message)
                 }
             )
         }
@@ -117,7 +118,7 @@ class R2RTransferViewModel @Inject constructor(
     fun transfer() {
 
         var remark = input.remark.getValue()
-        if(remark.trim().isEmpty()) remark = "not avaialble"
+        if (remark.trim().isEmpty()) remark = "not avaialble"
         val param = hashMapOf(
             "amount" to input.amount.getValue(),
             "dt_scheme" to "0.0",

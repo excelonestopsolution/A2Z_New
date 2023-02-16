@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.auth.login
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.repository.AuthRepository
 import com.a2z.app.nav.NavScreen
+import com.a2z.app.service.LocalAuth
 import com.a2z.app.ui.theme.LocalUserRole
 import com.a2z.app.ui.util.*
 import com.a2z.app.ui.util.extension.callApiForShareFlow
@@ -30,6 +32,7 @@ class LoginViewModel @Inject constructor(
 
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
+
 
     private val loginFlow = resultShareFlow<User>()
 

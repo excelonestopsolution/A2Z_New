@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,18 +17,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.util.VoidCallback
 
 @Composable
 fun HomeSignInOptionWidget(
-    viewModel: DashboardViewModel) {
+    dialogState : MutableState<Boolean>,
+    onBiometric : VoidCallback,
+    onLogin : VoidCallback
+) {
 
     val activity = LocalContext.current as Activity
-    if (viewModel.singInDialogState.value) Dialog(onDismissRequest = {}) {
+    if (dialogState.value) Dialog(onDismissRequest = {}) {
 
-        AnimatedVisibility(visible = viewModel.singInDialogState.value) {
+        AnimatedVisibility(visible = dialogState.value) {
             Column(
                 modifier = Modifier
                     .background(
@@ -56,24 +62,23 @@ fun HomeSignInOptionWidget(
                 )
                 Divider()
                 TextButton(onClick = {
-                    viewModel.singInDialogState.value = false
-                    viewModel.setOnLaunchEffect()
+                    dialogState.value = false
+                    onBiometric.invoke()
                 }) {
                     Text(text = "Use Biometric Login", textAlign = TextAlign.Center)
                 }
                 Divider()
                 TextButton(onClick = {
-                    viewModel.appPreference.user = null
-                    viewModel.singInDialogState.value = false
-                    viewModel.navigateTo(NavScreen.LoginScreen.route, true)
+                    dialogState.value = false
+                    onLogin.invoke()
                 }) {
                     Text(text = "Username and Password", textAlign = TextAlign.Center)
                 }
                 Divider()
                 TextButton(
                     onClick = {
+                        dialogState.value = false
                         activity.finishAffinity();
-
                     }, colors = ButtonDefaults.textButtonColors(
                         contentColor = RedColor
                     )

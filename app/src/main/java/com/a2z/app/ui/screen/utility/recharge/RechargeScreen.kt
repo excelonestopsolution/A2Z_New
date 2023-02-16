@@ -57,7 +57,8 @@ fun RechargeScreen(
                 button = { FormButton(viewModel) },
                 cardContents = listOf(AppFormCard { FormCard(viewModel) })
             )
-            ROfferDialog()
+           /* ROfferDialog()*/
+            RechargeOfferPlanDialog()
 
             val scope = rememberCoroutineScope()
             BaseConfirmDialog(
@@ -154,12 +155,21 @@ private fun FormCard(viewModel: RechargeViewModel) {
             url = image, placeholderRes = viewModel.util.getIconFromOperatorType()
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = operator.operatorName.toString(),
-            style = MaterialTheme.typography.subtitle1.copy(
-                fontWeight = FontWeight.Bold
+        Column {
+            Text(
+                text = operator.operatorName.toString(),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    fontWeight = FontWeight.Bold
+                )
             )
-        )
+            Text(
+                text = viewModel.countryState.second,
+                style = MaterialTheme.typography.body1.copy(
+                    fontWeight = FontWeight.Bold,
+
+                )
+            )
+        }
     }
 
 
@@ -199,7 +209,7 @@ private fun FormCard(viewModel: RechargeViewModel) {
         downText = "Enter amount ${viewModel.inputMinAmount} to 10000"
     )
 
-    if (viewModel.rOfferState.value != null)
+    if (viewModel.rechargePlanState.value != null)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -210,14 +220,14 @@ private fun FormCard(viewModel: RechargeViewModel) {
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "₹ " + viewModel.rOfferState.value!!.price,
+                    text = "₹ " + viewModel.rechargePlanState.value!!.rs.toString(),
                     style = MaterialTheme.typography.subtitle1.copy(
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                     )
                 )
                 Text(
-                    text = viewModel.rOfferState.value!!.offer, style = TextStyle(
+                    text = viewModel.rechargePlanState.value!!.desc.toString(), style = TextStyle(
                         fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color.Gray
                     )
                 )
@@ -234,14 +244,14 @@ private fun FormCard(viewModel: RechargeViewModel) {
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "₹ " + viewModel.rOfferState.value!!.price,
+                    text = "₹ " + viewModel.rechargePlanState.value!!.rs.toString(),
                     style = MaterialTheme.typography.subtitle1.copy(
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                     )
                 )
                 Text(
-                    text = viewModel.rOfferState.value!!.offer, style = TextStyle(
+                    text = viewModel.rechargePlanState.value!!.desc.toString(), style = TextStyle(
                         fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color.Gray
                     )
                 )

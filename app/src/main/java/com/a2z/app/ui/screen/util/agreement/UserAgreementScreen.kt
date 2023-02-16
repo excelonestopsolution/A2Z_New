@@ -166,9 +166,9 @@ private fun AgreementWebViewContent(viewModel: UserAgreementViewModel) {
                 }, update = {
                     it.loadUrl(
                         "https://partners.a2zsuvidhaa.com/mobileapp/api/agreement/content",
-                        mapOf(
+                        hashMapOf(
                             "user-id" to viewModel.user?.id.toString(),
-                            "token" to viewModel.user?.token
+                            "token" to viewModel.user?.token.toString()
                         )
                     )
                 }, modifier = Modifier
@@ -195,7 +195,7 @@ private fun AgreementWebViewContent(viewModel: UserAgreementViewModel) {
 @Composable
 private fun AgreementFormContent(viewModel: UserAgreementViewModel, data: AgreementInitialInfo?) {
 
-    if (!viewModel.showWebViewContentState.value)
+    if (viewModel.showWebViewContentState.value)
         AgreementWebViewContent(viewModel)
     else Card(
         shape = MaterialTheme.shapes.medium,

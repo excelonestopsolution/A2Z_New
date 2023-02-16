@@ -21,7 +21,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel()
 ) {
 
-    val role = when (viewModel.appPreference.user!!.roleId) {
+    val role = when (viewModel.appPreference.user?.roleId) {
         5 -> UserRole.RETAILER
         4 -> UserRole.DISTRIBUTOR
         3 -> UserRole.MD

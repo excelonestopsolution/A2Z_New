@@ -30,14 +30,16 @@ import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.util.VoidCallback
+import com.a2z.app.util.extension.nullOrEmptyToDouble
 import okhttp3.internal.wait
 
 
 private data class ConfirmFormInput(
     val amount: String,
     val amountInput: InputWrapper = InputWrapper {
-        if (it == amount) Pair(true, "")
+        if (it.nullOrEmptyToDouble() == amount.nullOrEmptyToDouble()) Pair(true, "")
         else Pair(false, "Amount didn't matched!")
+
     }
 ) : BaseInput(amountInput)
 

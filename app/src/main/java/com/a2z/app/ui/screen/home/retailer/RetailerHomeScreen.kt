@@ -23,7 +23,7 @@ import com.a2z.app.ui.theme.BackgroundColor2
 import com.a2z.app.ui.util.resource.ResultType
 
 
-var useLocalAuth = true
+
 
 @Composable
 fun RetailerHomeScreen(

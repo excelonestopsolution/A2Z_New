@@ -1,10 +1,7 @@
 package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.provider.OperatorResponse
-import com.a2z.app.data.model.utility.BillFetchInfoResponse
-import com.a2z.app.data.model.utility.RechargeDthInfoResponse
-import com.a2z.app.data.model.utility.RechargeOfferResponse
-import com.a2z.app.data.model.utility.RechargeTransactionResponse
+import com.a2z.app.data.model.utility.*
 import com.a2z.app.data.network.UtilityService
 import com.a2z.app.data.repository.UtilityRepository
 import com.a2z.app.util.PairRequest
@@ -19,13 +16,14 @@ class UtilityRepositoryIml @Inject constructor(private val utilityService: Utili
         return utilityService.rechargeOperators(data.toMap())
     }
 
-    override suspend fun fetchRechargeOffer(vararg data: PairRequest): RechargeOfferResponse {
+    override suspend fun fetchRechargeOffer(vararg data: PairRequest): ROfferResponse {
         return utilityService.fetchRechargeOffer(data.toMap())
     }
 
-    override suspend fun rechargeTransaction(vararg data: PairRequest): RechargeTransactionResponse {
-        return utilityService.rechargeTransaction(data.toMap())
+    override suspend fun fetchRechargePlan(vararg data: PairRequest): Any {
+        return utilityService.fetchRechargePlan(data.toMap())
     }
+
 
     override suspend fun fetchDthInfo(vararg data: PairRequest): RechargeDthInfoResponse {
         return utilityService.fetchDthInfo(data.toMap())
