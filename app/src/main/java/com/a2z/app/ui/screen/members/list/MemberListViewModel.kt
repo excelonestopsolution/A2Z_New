@@ -27,6 +27,7 @@ class MemberListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val memberType: MemberListType = savedStateHandle.safeSerializable("memberType")!!
+    private val isSale : Boolean = savedStateHandle.get<String>("isSale").toBoolean()
     val isTransfer = savedStateHandle.get<String?>("isTransfer")?.toBoolean()!!
 
     var member = mutableStateOf<Member?>(null)
@@ -39,13 +40,18 @@ class MemberListViewModel @Inject constructor(
             return when (memberType) {
                 MemberListType.RETAILER -> "Retailer$suffix"
                 MemberListType.DISTRIBUTOR -> "Distributor$suffix"
+                MemberListType.MD -> "MD$suffix"
+                MemberListType.API -> "API$suffix"
+                MemberListType.FOS -> "FOS$suffix"
+                MemberListType.ASM -> "ASM$suffix"
+                MemberListType.NA -> "Not Available"
             }
         }
 
     private val paramType: String
         get() = when (memberType) {
-            MemberListType.RETAILER -> ""
             MemberListType.DISTRIBUTOR -> "Distributor"
+            else ->""
         }
 
     private val _memberResponseFlow = resultStateFlow<MemberListResponse>()
@@ -111,8 +117,22 @@ class MemberListViewModel @Inject constructor(
         callApiForShareFlow(
             flow = _memberResponseFlow,
             call = {
-                if (isTransfer) repository.fundTransferMemberList(param)
-                else repository.memberList(param)
+                if(!isSale){
+                    if (isTransfer) repository.fundTransferMemberList(param)
+                    else repository.memberList(param)
+                }
+                else{
+                   val url = when (memberType) {
+                        MemberListType.MD -> "sales/member/md-list"
+                        MemberListType.API -> "sales/member/api-list"
+                        MemberListType.FOS -> "sales/member/fos-list"
+                        MemberListType.ASM -> "sales/member/md-list"
+                        MemberListType.DISTRIBUTOR -> "sales/member/distributor-list"
+                        MemberListType.RETAILER -> "sales/member/retailer-list"
+                        MemberListType.NA -> ""
+                    }
+                    repository.saleMembersList(url,param)
+                }
             }
         )
     }

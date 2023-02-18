@@ -56,7 +56,7 @@ fun DocumentKycScreen() {
             ) {
 
                 ObsComponent(flow = viewModel.documentKycDetailResultFlow) {
-                    Column(
+                  if(it.status ==1)  Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
@@ -95,6 +95,7 @@ fun DocumentKycScreen() {
                         }
 
                     }
+                    else viewModel.showObsAlertDialog(it.message)
                 }
             }
         }

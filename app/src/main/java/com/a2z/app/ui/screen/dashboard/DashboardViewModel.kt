@@ -9,6 +9,7 @@ import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.app.BalanceResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.repository.AppRepository
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.home.component.useLocalAuth
 import com.a2z.app.ui.screen.home.retailer.HomeScreenState
 import com.a2z.app.ui.util.BaseViewModel
@@ -63,6 +64,11 @@ class DashboardViewModel @Inject constructor(
             flow = balanceResponseFlow,
             handleException = false,
             beforeEmit = {
+                if(it is ResultType.Success){
+                    if(it.data.status != 1){
+                        navigateTo(NavScreen.LoginScreen.route,true)
+                    }
+                }
                 if (it is ResultType.Failure) {
                     homeScreenState.emit(HomeScreenState.OnHomeApiFailure(it.exception))
                 }

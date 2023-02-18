@@ -189,8 +189,8 @@ class RetailerHomeViewModel @Inject constructor(
 
     fun navigateKycScreen(it: String) {
         when (it) {
-            "AADHAAR_KYC" -> {navigateTo(NavScreen.AadhaarKycScreen.route)}
-            "VIDEO_KYC" -> {navigateTo(NavScreen.DocumentKycScreen.route)}
+            "AADHAAR_KYC" -> {navigateTo(NavScreen.AadhaarKycScreen.passArgs())}
+            "VIDEO_KYC" -> {navigateTo(NavScreen.DocumentKycScreen.passArgs())}
             "SETTLEMENT" -> {navigateTo(NavScreen.SettlementBankAddScreen.route)}
             "AEPS_KYC" -> {navigateTo(NavScreen.AEPSKycScreen.route)}
         }

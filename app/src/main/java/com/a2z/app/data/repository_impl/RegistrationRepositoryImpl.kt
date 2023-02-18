@@ -1,6 +1,8 @@
 package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.auth.RegistrationResponse
+import com.a2z.app.data.model.auth.RegistrationRoleResponse
+import com.a2z.app.data.model.auth.RegistrationRoleUserResponse
 import com.a2z.app.data.network.RegistrationService
 import com.a2z.app.data.repository.RegistrationRepository
 import com.a2z.app.util.FieldMapData
@@ -78,7 +80,7 @@ class RegistrationRepositoryImpl @Inject constructor(
     override suspend fun fetchMappingUserList(
         url: String,
         data: FieldMapData
-    ): RegistrationResponse {
+    ): RegistrationRoleUserResponse {
         return service.fetchMappingUserList(url,data)
     }
 

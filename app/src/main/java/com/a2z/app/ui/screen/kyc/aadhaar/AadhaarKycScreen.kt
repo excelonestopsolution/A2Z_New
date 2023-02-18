@@ -47,7 +47,10 @@ fun AadhaarKycScreen() {
         topBar = { NavTopBar(title = "Aadhaar Kyc") }) {
         BaseContent(viewModel) {
 
-            if (viewModel.appPreference.user?.isAadhaarKyc == 1)
+            if (
+                viewModel.appPreference.user?.isAadhaarKyc == 1 &&
+                viewModel.parentUserId.isEmpty()
+            )
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center

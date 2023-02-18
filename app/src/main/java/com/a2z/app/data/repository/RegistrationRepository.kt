@@ -2,9 +2,12 @@ package com.a2z.app.data.repository
 
 import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.data.model.auth.RegistrationRoleResponse
+import com.a2z.app.data.model.auth.RegistrationRoleUserResponse
 import com.a2z.app.util.FieldMapData
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.QueryMap
+import retrofit2.http.Url
 
 interface RegistrationRepository {
 
@@ -63,7 +66,7 @@ interface RegistrationRepository {
     suspend fun fetchMappingUserList(
         url: String,
         data: FieldMapData
-    ): RegistrationResponse
+    ): RegistrationRoleUserResponse
 
 
     suspend fun fetchCompletedUserList(
@@ -77,7 +80,6 @@ interface RegistrationRepository {
 
 
     suspend fun fetchCreateRole(): RegistrationRoleResponse
-
 
 
 }

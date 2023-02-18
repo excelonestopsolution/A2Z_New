@@ -26,6 +26,7 @@ class RegistrationTypeViewModel @Inject constructor(
 
 
     private val shouldMap = saveState.get<String>("shouldMap").toBoolean()
+    val mobileNumber = saveState.get<String>("mobileNumber") ?: ""
     val roleListResultFlow = resultStateFlow<RegistrationRoleResponse>()
     val selectedRole = mutableStateOf<RegistrationRole?>(null)
     var mapRole: RegistrationRoleUser? = null

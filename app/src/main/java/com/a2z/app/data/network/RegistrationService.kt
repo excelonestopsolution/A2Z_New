@@ -3,6 +3,7 @@ package com.a2z.app.data.network
 
 import com.a2z.app.data.model.auth.RegistrationResponse
 import com.a2z.app.data.model.auth.RegistrationRoleResponse
+import com.a2z.app.data.model.auth.RegistrationRoleUserResponse
 import com.a2z.app.util.FieldMapData
 import retrofit2.http.*
 
@@ -81,7 +82,7 @@ interface RegistrationService {
     suspend fun fetchMappingUserList(
         @Url url: String,
         @QueryMap data: FieldMapData
-    ): RegistrationResponse
+    ): RegistrationRoleUserResponse
 
     @GET("sales/created/member")
     suspend fun fetchCompletedUserList(

@@ -23,7 +23,8 @@ fun UserRegistrationScreen() {
 
     val viewModel: UserRegistrationViewModel = hiltViewModel()
     Scaffold(backgroundColor = BackgroundColor,
-        topBar = { NavTopBar(title = viewModel.title) }) {
+        topBar = { NavTopBar(title = viewModel.title,
+        subTitle = viewModel.subTitle) }) {
 
         @Composable
         fun mainContent() = when (viewModel.selectedStepperIndex.value) {

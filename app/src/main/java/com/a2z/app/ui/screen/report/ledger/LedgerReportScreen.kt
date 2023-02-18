@@ -65,104 +65,142 @@ private fun MainContent(
         })
     }) { _ ->
         BaseContent(viewModel) {
-            val pagingState = viewModel.pagingState
-            LazyColumn {
-                items(viewModel.pagingState.items.size) { index ->
 
-                    val it = pagingState.items[index]
-
-                    pagingState.shouldLoadNext(index) {
-                        viewModel.fetchReport()
-                    }
-
-                    BaseReportItem(statusId = it.statusId,
-                        leftSideDate = it.txnTime,
-                        leftSideId = it.id.toString(),
-                        centerHeading1 = it.number,
-                        centerHeading2 = it.serviceName,
-                        centerHeading3 = it.senderNumber,
-                        rightAmount = it.amount,
-                        rightStatus = it.statusDesc,
-                        isPrint = it.isPrint,
-                        isComplaint = it.isComplain,
-                        isCheckStatus = it.isCheckStatus,
-                        expandListItems = listOf(
-                            "Mobile Number" to it.senderNumber,
-                            "Bank Name" to it.bankName,
-                            "IFSC Code" to it.ifsc,
-                            "Beneficiary Name" to it.beneName,
-                            "Reference Id" to it.operatorId,
-                            "Transaction Type" to it.txnType,
-                            "Opening Balance" to it.opBalance,
-                            "Txn Amount" to it.amount,
-                            "Credit Amount" to it.credit,
-                            "Debit Amount" to it.debit,
-                            "TDS Amount" to it.tds,
-                            "GST Amount" to it.gst,
-                            "Closing Balance" to it.clBalance,
-                            "Provider" to it.providerName,
-                            "Remark" to it.remark,
-                        ),
-                        onPrint = { viewModel.onPrint(it) },
-                        onComplaint = { viewModel.onComplain(it) },
-                        onCheckStatus = { viewModel.onCheckStatus(it) }
-                    )
-                }
-                item {
-                    if (pagingState.items.isEmpty() &&
-                        !pagingState.isLoading
-                    ) {
-                        Box(
-                            modifier = Modifier.fillParentMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            EmptyListComponent()
-                        }
-                    }
-                }
-                item {
-                    val modifier = if (pagingState.page == 1)
-                        Modifier.fillParentMaxSize() else Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                    if (pagingState.isLoading && pagingState.exception == null) Box(
-                        modifier = modifier,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        AppProgress()
-                    }
-                }
-
-                item {
-                    val modifier = if (pagingState.page == 1)
-                        Modifier.fillParentMaxSize() else Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                    if (pagingState.exception != null) Box(
-                        modifier = modifier,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Error, contentDescription = null,
-                                tint = RedColor,
-                                modifier = Modifier.size(52.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = pagingState.exception!!.message.toString(),
-                                fontSize = 14.sp, color = RedColor,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
+            AppPagingComponent(
+                pagingState = viewModel.pagingState,
+                onLoadNext = { viewModel.fetchReport() }
+            ) {
+                BaseReportItem(statusId = it.statusId,
+                    leftSideDate = it.txnTime,
+                    leftSideId = it.id.toString(),
+                    centerHeading1 = it.number,
+                    centerHeading2 = it.serviceName,
+                    centerHeading3 = it.senderNumber,
+                    rightAmount = it.amount,
+                    rightStatus = it.statusDesc,
+                    isPrint = it.isPrint,
+                    isComplaint = it.isComplain,
+                    isCheckStatus = it.isCheckStatus,
+                    expandListItems = listOf(
+                        "Mobile Number" to it.senderNumber,
+                        "Bank Name" to it.bankName,
+                        "IFSC Code" to it.ifsc,
+                        "Beneficiary Name" to it.beneName,
+                        "Reference Id" to it.operatorId,
+                        "Transaction Type" to it.txnType,
+                        "Opening Balance" to it.opBalance,
+                        "Txn Amount" to it.amount,
+                        "Credit Amount" to it.credit,
+                        "Debit Amount" to it.debit,
+                        "TDS Amount" to it.tds,
+                        "GST Amount" to it.gst,
+                        "Closing Balance" to it.clBalance,
+                        "Provider" to it.providerName,
+                        "Remark" to it.remark,
+                    ),
+                    onPrint = { viewModel.onPrint(it) },
+                    onComplaint = { viewModel.onComplain(it) },
+                    onCheckStatus = { viewModel.onCheckStatus(it) }
+                )
             }
+
+            /*  LazyColumn {
+                  items(viewModel.pagingState.items.size) { index ->
+
+                      val it = pagingState.items[index]
+
+                      pagingState.shouldLoadNext(index) {
+                          viewModel.fetchReport()
+                      }
+
+                      BaseReportItem(statusId = it.statusId,
+                          leftSideDate = it.txnTime,
+                          leftSideId = it.id.toString(),
+                          centerHeading1 = it.number,
+                          centerHeading2 = it.serviceName,
+                          centerHeading3 = it.senderNumber,
+                          rightAmount = it.amount,
+                          rightStatus = it.statusDesc,
+                          isPrint = it.isPrint,
+                          isComplaint = it.isComplain,
+                          isCheckStatus = it.isCheckStatus,
+                          expandListItems = listOf(
+                              "Mobile Number" to it.senderNumber,
+                              "Bank Name" to it.bankName,
+                              "IFSC Code" to it.ifsc,
+                              "Beneficiary Name" to it.beneName,
+                              "Reference Id" to it.operatorId,
+                              "Transaction Type" to it.txnType,
+                              "Opening Balance" to it.opBalance,
+                              "Txn Amount" to it.amount,
+                              "Credit Amount" to it.credit,
+                              "Debit Amount" to it.debit,
+                              "TDS Amount" to it.tds,
+                              "GST Amount" to it.gst,
+                              "Closing Balance" to it.clBalance,
+                              "Provider" to it.providerName,
+                              "Remark" to it.remark,
+                          ),
+                          onPrint = { viewModel.onPrint(it) },
+                          onComplaint = { viewModel.onComplain(it) },
+                          onCheckStatus = { viewModel.onCheckStatus(it) }
+                      )
+                  }
+                  item {
+                      if (pagingState.items.isEmpty() &&
+                          !pagingState.isLoading
+                      ) {
+                          Box(
+                              modifier = Modifier.fillParentMaxSize(),
+                              contentAlignment = Alignment.Center
+                          ) {
+                              EmptyListComponent()
+                          }
+                      }
+                  }
+                  item {
+                      val modifier = if (pagingState.page == 1)
+                          Modifier.fillParentMaxSize() else Modifier
+                          .fillMaxWidth()
+                          .height(100.dp)
+                      if (pagingState.isLoading && pagingState.exception == null) Box(
+                          modifier = modifier,
+                          contentAlignment = Alignment.Center
+                      ) {
+                          AppProgress()
+                      }
+                  }
+
+                  item {
+                      val modifier = if (pagingState.page == 1)
+                          Modifier.fillParentMaxSize() else Modifier
+                          .fillMaxWidth()
+                          .height(100.dp)
+                      if (pagingState.exception != null) Box(
+                          modifier = modifier,
+                          contentAlignment = Alignment.Center
+                      ) {
+                          Column(
+                              modifier = Modifier
+                                  .fillMaxWidth()
+                                  .padding(16.dp),
+                              horizontalAlignment = Alignment.CenterHorizontally
+                          ) {
+                              Icon(
+                                  imageVector = Icons.Default.Error, contentDescription = null,
+                                  tint = RedColor,
+                                  modifier = Modifier.size(52.dp)
+                              )
+                              Spacer(modifier = Modifier.width(8.dp))
+                              Text(
+                                  text = pagingState.exception!!.message.toString(),
+                                  fontSize = 14.sp, color = RedColor,
+                                  fontWeight = FontWeight.Bold
+                              )
+                          }
+                      }
+                  }
+              }*/
         }
     }
 }

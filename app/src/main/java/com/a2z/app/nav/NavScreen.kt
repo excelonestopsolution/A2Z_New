@@ -77,10 +77,14 @@ sealed class NavScreen(val route: String) {
 
     object RechargeScreen : NavScreen(
         "recharge-screen".params(
-            "operatorType", "operator","countryState"
+            "operatorType", "operator", "countryState"
         )
     ) {
-        fun passArgs(operatorType: OperatorType, operator: Operator,countryState : Pair<String,String> ) =
+        fun passArgs(
+            operatorType: OperatorType,
+            operator: Operator,
+            countryState: Pair<String, String>
+        ) =
             "recharge-screen".args(
                 "operatorType" to operatorType.toEncodedString(),
                 "operator" to operator.toEncodedString(),
@@ -218,6 +222,8 @@ sealed class NavScreen(val route: String) {
     }
 
 
+
+
     object DmtSenderRegisterScreen :
         NavScreen("beneficiary-sender-screen".params("senderRegistrationArgs")) {
         fun passArgs(args: SenderRegistrationArgs) =
@@ -251,9 +257,17 @@ sealed class NavScreen(val route: String) {
     }
 
 
-    object DocumentKycScreen : NavScreen("document-kyc-screen")
+    object DocumentKycScreen : NavScreen("document-kyc-screen".params("parentUserId")) {
+        fun passArgs(parentUserId: String = "") =
+            "document-kyc-screen".args("parentUserId" to parentUserId)
+    }
+
     object AEPSKycScreen : NavScreen("aeps-kyc-screen")
-    object AadhaarKycScreen : NavScreen("aadhaar-kyc-screen")
+    object AadhaarKycScreen : NavScreen("aadhaar-kyc-screen".params("parentUserId")) {
+        fun passArgs(parentUserId: String = "") =
+            "aadhaar-kyc-screen".args("parentUserId" to parentUserId)
+    }
+
     object CommissionScreen : NavScreen("commission-screen")
     object SchemeDetailScreen : NavScreen("scheme-detail-screen".params("data")) {
         fun passArgs(data: CommissionSchemeDetailResponse) = "scheme-detail-screen".args(
@@ -267,25 +281,45 @@ sealed class NavScreen(val route: String) {
     object UserAgreementScreen : NavScreen("user-agreement-screen")
     object UserRegistrationScreen : NavScreen(
         "user-registration-screen".params(
-            "role", "mapRole", "selfRegister"
+            "role", "mapRole", "selfRegister","mobileNumber"
         )
     ) {
         fun passArg(
             role: RegistrationRole? = null,
             mapRole: RegistrationRoleUser? = null,
+            mobileNumber : String = "",
             selfRegister: Boolean
         ): String {
             return "user-registration-screen".args(
                 "role" to role?.toEncodedString().toString(),
                 "mapRole" to mapRole?.toEncodedString().toString(),
-                "selfRegister" to selfRegister.toString()
+                "selfRegister" to selfRegister.toString(),
+                "mobileNumber" to mobileNumber,
             )
         }
     }
 
-    object RegistrationTypeScreen : NavScreen("user-role-registration-screen".params("shouldMap")) {
-        fun passArgs(shouldMap: Boolean) =
-            "user-role-registration-screen".args("shouldMap" to shouldMap.toString())
+    object RegistrationTypeScreen : NavScreen(
+        "user-role-registration-screen".params(
+            "shouldMap", "mobileNumber"
+        )
+    ) {
+        fun passArgs(shouldMap: Boolean, mobileNumber: String = "") =
+            "user-role-registration-screen".args(
+                "shouldMap" to shouldMap.toString(),
+                "mobileNumber" to mobileNumber
+            )
+    }
+
+    object RegistrationMappedUserScreen : NavScreen(
+        "registration-mapped-under-screen".params(
+            "createRole"
+        )
+    ) {
+        fun passArgs(createRole : Int) =
+            "registration-mapped-under-screen".args(
+                "createRole" to createRole.toString(),
+            )
     }
 
     object ForgotPasswordScreen : NavScreen("forgot-password-screen")
@@ -302,15 +336,24 @@ sealed class NavScreen(val route: String) {
     object ProfileScreen : NavScreen("profile-screen")
     object MemberListScreen : NavScreen(
         "member-list-screen".params(
-            "memberType", "isTransfer"
+            "memberType", "isTransfer", "isSale"
         )
     ) {
         fun passArgs(
             memberType: MemberListType,
-            isTransfer: Boolean
+            isTransfer: Boolean,
+            isSale: Boolean = false,
         ) = "member-list-screen".args(
             "memberType" to memberType.toEncodedString(),
             "isTransfer" to isTransfer.toString(),
+            "isSale" to isSale.toString(),
+        )
+    }
+
+    object MemberCreatedBySaleScreen :
+        NavScreen("member-created-by-sale-screen".params("isCompleted")) {
+        fun passArgs(isCompleted: Boolean) = "member-created-by-sale-screen".args(
+            "isCompleted" to isCompleted.toString()
         )
     }
 

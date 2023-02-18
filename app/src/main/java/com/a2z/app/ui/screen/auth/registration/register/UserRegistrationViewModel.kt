@@ -28,6 +28,7 @@ class UserRegistrationViewModel @Inject constructor(
     private val registrationRole: RegistrationRole? = saveState.safeParcelable("role")
     private val mappedUnder: RegistrationRoleUser? = saveState.safeParcelable("mapRole")
     private val selfRegister = saveState.get<String>("selfRegister").toBoolean()
+    private val mobileNumber = saveState.get<String>("mobileNumber")
 
     val totalStepperCount = 4
     val selectedStepperIndex = mutableStateOf(1)
@@ -54,7 +55,18 @@ class UserRegistrationViewModel @Inject constructor(
     val title : String
     get() = if(selfRegister) "User Registration" else "Create ${registrationRole?.title}"
 
+    val subTitle : String?
+    get() = if(mappedUnder == null) null else "Under - "+ mappedUnder.userDetails
+
     init {
+
+        if(mobileNumber != null && mobileNumber.isNotEmpty())
+        {
+            input.mobile.setValue(mobileNumber)
+            onProceed()
+
+        }
+
         validateMobileEmailPanInput()
 
         viewModelScope.launch {

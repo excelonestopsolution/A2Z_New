@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
+import com.a2z.app.data.model.auth.RegistrationRoleUser
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
@@ -27,13 +30,38 @@ import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.PrimaryColor
-import com.a2z.app.ui.util.rememberStateOf
+import com.a2z.app.ui.util.extension.singleParcelableResult
+import com.a2z.app.ui.util.extension.singleResult
+import com.a2z.app.util.AppUtil
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun RegistrationTypeScreen() {
+fun RegistrationTypeScreen(navBackStackEntry: NavBackStackEntry) {
+
 
     val viewModel: RegistrationTypeViewModel = hiltViewModel()
+    val navController = LocalNavController.current
+
+    fun navigate() {
+        navController.navigate(
+            NavScreen.UserRegistrationScreen.passArg(
+                selfRegister = false,
+                role = viewModel.selectedRole.value,
+                mapRole = viewModel.mapRole,
+                mobileNumber = viewModel.mobileNumber
+            )
+        )
+    }
+
+
+    LaunchedEffect(key1 = Unit) {
+        val data =
+            navBackStackEntry.singleParcelableResult<RegistrationRoleUser>("registrationUserRole")
+        if (data != null) {
+            viewModel.mapRole = data
+            navigate()
+        }
+    }
 
     Scaffold(
         drawerBackgroundColor = BackgroundColor,
@@ -106,17 +134,6 @@ fun RegistrationTypeScreen() {
 
                     }
 
-                    val navController = LocalNavController.current
-                    fun navigate() {
-                        navController.navigate(
-                            NavScreen.UserRegistrationScreen.passArg(
-                                selfRegister = false,
-                                role = viewModel.selectedRole.value,
-                                mapRole = viewModel.mapRole
-                            )
-                        )
-                    }
-
                     if (viewModel.selectedRole.value != null) Button(
                         onClick = {
 
@@ -126,7 +143,12 @@ fun RegistrationTypeScreen() {
                                             && viewModel.selectedRole.value!!.roleId == 3)
                                 ) navigate()
                                 else {
-                                    //todo select role activity/screen
+
+                                    navController.navigate(
+                                        NavScreen.RegistrationMappedUserScreen.passArgs(
+                                            viewModel.selectedRole.value!!.roleId.toInt()
+                                        )
+                                    )
                                 }
                             } else navigate()
 

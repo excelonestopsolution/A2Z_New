@@ -13,6 +13,7 @@ import com.a2z.app.ui.screen.auth.forget.login_id.ForgotLoginIdScreen
 import com.a2z.app.ui.screen.auth.forget.password.ForgotPasswordScreen
 import com.a2z.app.ui.screen.auth.login.LoginScreen
 import com.a2z.app.ui.screen.auth.registration.register.UserRegistrationScreen
+import com.a2z.app.ui.screen.auth.registration.register_map.RegistrationMappedScreen
 import com.a2z.app.ui.screen.auth.registration.register_type.RegistrationTypeScreen
 import com.a2z.app.ui.screen.auth.verification.LoginOtpScreen
 import com.a2z.app.ui.screen.dashboard.DashboardScreen
@@ -31,6 +32,7 @@ import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
 import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
+import com.a2z.app.ui.screen.members.by_sale.MemberCreatedBySaleScreen
 import com.a2z.app.ui.screen.members.list.MemberListScreen
 import com.a2z.app.ui.screen.profile.ProfileScreen
 import com.a2z.app.ui.screen.util.permission.PermissionScreen
@@ -248,7 +250,10 @@ fun MainNav(viewModel: MainViewModel) {
             content = { UserRegistrationScreen() })
         composable(
             route = NavScreen.RegistrationTypeScreen.route,
-            content = { RegistrationTypeScreen() })
+            content = { RegistrationTypeScreen(it) })
+        composable(
+            route = NavScreen.RegistrationMappedUserScreen.route,
+            content = { RegistrationMappedScreen() })
         composable(
             route = NavScreen.ForgotPasswordScreen.route,
             content = { ForgotPasswordScreen() })
@@ -272,5 +277,8 @@ fun MainNav(viewModel: MainViewModel) {
             content = { AccountStatementReportScreen() })
         composable(route = NavScreen.ProfileScreen.route, content = { ProfileScreen() })
         composable(route = NavScreen.MemberListScreen.route, content = { MemberListScreen() })
+        composable(
+            route = NavScreen.MemberCreatedBySaleScreen.route,
+            content = { MemberCreatedBySaleScreen() })
     }
 }

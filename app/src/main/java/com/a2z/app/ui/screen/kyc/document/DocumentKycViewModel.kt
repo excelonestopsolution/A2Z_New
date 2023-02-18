@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.kyc.document
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.kyc.DocumentKycDetail
@@ -17,12 +18,14 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class DocumentKycViewModel @Inject constructor(
     private val repository: KycRepository,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
     val documentKycDetailResultFlow = resultStateFlow<DocumentKycResponse>()
@@ -35,6 +38,7 @@ class DocumentKycViewModel @Inject constructor(
     lateinit var docs: DocumentKycDetail
 
     private val _onUploadResponseResult = resultShareFlow<AppResponse>()
+    private val parentUserId = savedStateHandle.get<String>("parentUserId") ?: ""
 
     init {
         fetchDocumentKycDetails()
@@ -51,9 +55,15 @@ class DocumentKycViewModel @Inject constructor(
 
     private fun fetchDocumentKycDetails() {
 
+        val call = suspend {
+            if (parentUserId.isEmpty())
+                repository.documentKycDetails()
+            else repository.registerUserUploadedFilesDetails(parentUserId)
+        }
+
         callApiForStateFlow(
             flow = documentKycDetailResultFlow,
-            call = { repository.documentKycDetails() },
+            call = { call.invoke() },
             beforeEmit = {
                 if (it is ResultType.Success) docs = it.data.data
             }
@@ -107,25 +117,50 @@ class DocumentKycViewModel @Inject constructor(
     }
 
     fun onPickFile(docType: DocumentKycType, file: File?) {
-        this.selectedFile.value= file
+        this.selectedFile.value = file
         this.selectDocType = docType
         this.previewDialogState.value = true
     }
 
     fun uploadDoc() {
+
+
+     val call = suspend {
+         if (parentUserId.isEmpty())
+             repository.uploadDocs(
+                 panFilePart = getFilePart(),
+                 profileFilePart = getFilePart(),
+                 aadhaarFrontPart = getFilePart(),
+                 aadhaarBackPart = getFilePart(),
+                 shopPart = getFilePart(),
+                 cancelChequePart = getFilePart(),
+                 sealChequePart = getFilePart(),
+                 gstPart = getFilePart(),
+             )
+         else {
+             val userIdBodyPart =
+                 parentUserId.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+             repository.registerUserUploadDocs(
+                 panFilePart = getFilePart(),
+                 profileFilePart = getFilePart(),
+                 aadhaarFrontPart = getFilePart(),
+                 aadhaarBackPart = getFilePart(),
+                 shopPart = getFilePart(),
+                 cancelChequePart = getFilePart(),
+                 sealChequePart = getFilePart(),
+                 gstPart = getFilePart(),
+                 userId = userIdBodyPart
+             )
+         }
+     }
+
+
+
         callApiForShareFlow(
             flow = _onUploadResponseResult,
             call = {
-                repository.uploadDocs(
-                    panFilePart = getFilePart(),
-                    profileFilePart = getFilePart(),
-                    aadhaarFrontPart = getFilePart(),
-                    aadhaarBackPart = getFilePart(),
-                    shopPart = getFilePart(),
-                    cancelChequePart = getFilePart(),
-                    sealChequePart = getFilePart(),
-                    gstPart = getFilePart(),
-                )
+                call.invoke()
             }
         )
     }

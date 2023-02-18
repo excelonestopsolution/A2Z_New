@@ -14,6 +14,13 @@ inline fun <reified T : Serializable> NavBackStackEntry.singleResult(key: String
     return arg1
 }
 
+inline fun <reified T : Parcelable> NavBackStackEntry.singleParcelableResult(key: String): T? {
+
+    val arg1 = savedStateHandle.get<T>(key)
+    savedStateHandle.remove<T>(key)
+    return arg1
+}
+
 inline fun <reified T : Serializable> NavBackStackEntry.safeSerializable(key: String): T? {
 
     val arg1 = arguments?.getString(key)

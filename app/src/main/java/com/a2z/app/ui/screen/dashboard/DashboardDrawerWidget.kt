@@ -72,10 +72,10 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                 drawable = com.a2z.app.R.drawable.kyc_icon,
                 menuList = listOf(
                     Pair("Document Kyc") {
-                        navController.navigate(NavScreen.DocumentKycScreen.route)
+                        navController.navigate(NavScreen.DocumentKycScreen.passArgs())
                     },
                     Pair("Aadhaar Kyc") {
-                        navController.navigate(NavScreen.AadhaarKycScreen.route)
+                        navController.navigate(NavScreen.AadhaarKycScreen.passArgs())
                     },
                     Pair("AEPS Kyc") {
                         navController.navigate(NavScreen.AEPSKycScreen.route)
@@ -106,9 +106,7 @@ fun ColumnScope.DashboardDrawerWidget(viewModel: DashboardViewModel) {
                     else Pair("") {},
                     Pair("Create User") {
                         navController.navigate(
-                            NavScreen.RegistrationTypeScreen.passArgs(
-                                false
-                            )
+                            NavScreen.RegistrationTypeScreen.passArgs(false)
                         )
                     }
                     ),

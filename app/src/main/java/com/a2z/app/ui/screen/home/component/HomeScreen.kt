@@ -52,6 +52,8 @@ fun HomeScreen(viewModel: DashboardViewModel) {
    BaseContent(viewModel) {
 
        val navController = LocalNavController.current
+       val activity = LocalContext.current as FragmentActivity
+
        BackPressHandler(onBack = {
 
            if (viewModel.scaffoldState?.drawerState?.isOpen == true) {
@@ -85,36 +87,6 @@ fun HomeScreen(viewModel: DashboardViewModel) {
 
                HomeLocationServiceDialog()
 
-               val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
-               val activity = LocalContext.current as FragmentActivity
-
-               LaunchedEffect(true) {
-                   lifecycleScope.launchWhenStarted {
-                       viewModel.homeScreenState.collectLatest {
-                           when (it) {
-                               is HomeScreenState.OnHomeApiFailure -> {
-                                   activity.showToast(it.exception.message.toString())
-                                   if (it.exception is Exceptions.SessionExpiredException) {
-                                       navController.navigate(NavScreen.LoginScreen.route) {
-                                           popUpTo(NavScreen.LoginScreen.route) {
-                                               inclusive = true
-                                           }
-                                       }
-                                   } else {
-                                       viewModel.exitFromApp = true
-                                   }
-                               }
-                               is HomeScreenState.OnLogoutComplete -> {
-                                   navController.navigate(NavScreen.LoginScreen.route) {
-                                       popUpTo(NavScreen.LoginScreen.route) {
-                                           inclusive = true
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
 
                LaunchedEffect(key1 = viewModel.onLaunchEffect.value, block = {
                    if (useLocalAuth)
@@ -140,11 +112,40 @@ fun HomeScreen(viewModel: DashboardViewModel) {
                    viewModel.fetchNews()
                }
            ) {
+
                viewModel.exitFromApp = false
                viewModel.bottomSheetVisibilityState.value = true
            }
 
 
+       }
+       val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
+       LaunchedEffect(true) {
+           lifecycleScope.launchWhenStarted {
+               viewModel.homeScreenState.collectLatest {
+                   when (it) {
+                       is HomeScreenState.OnHomeApiFailure -> {
+                           activity.showToast(it.exception.message.toString())
+                           if (it.exception is Exceptions.SessionExpiredException) {
+                               navController.navigate(NavScreen.LoginScreen.route) {
+                                   popUpTo(NavScreen.LoginScreen.route) {
+                                       inclusive = true
+                                   }
+                               }
+                           } else {
+                               viewModel.exitFromApp = true
+                           }
+                       }
+                       is HomeScreenState.OnLogoutComplete -> {
+                           navController.navigate(NavScreen.LoginScreen.route) {
+                               popUpTo(NavScreen.LoginScreen.route) {
+                                   inclusive = true
+                               }
+                           }
+                       }
+                   }
+               }
+           }
        }
    }
 
