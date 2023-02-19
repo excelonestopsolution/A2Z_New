@@ -28,7 +28,7 @@ class AccountStatementViewModel @Inject constructor(
     var pagingState by mutableStateOf<PagingState<AccountStatement>>(PagingState())
     private val _reportPagingFlow = resultStateFlow<AccountStatementResponse>()
 
-
+    val filterDialogState = mutableStateOf(false)
     init {
 
         fetchReport()

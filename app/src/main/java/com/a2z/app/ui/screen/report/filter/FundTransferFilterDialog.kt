@@ -1,6 +1,5 @@
 package com.a2z.app.ui.screen.report.filter
 
-import android.widget.Spinner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -12,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.a2z.app.ui.component.common.AppDropDownMenu
 import com.a2z.app.ui.component.common.DateTextField
 import com.a2z.app.ui.component.common.DropDownTextField
 import com.a2z.app.ui.dialog.SpinnerSearchDialog

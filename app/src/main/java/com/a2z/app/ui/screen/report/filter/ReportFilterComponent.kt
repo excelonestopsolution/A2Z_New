@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.report.filter
 
 import android.widget.Space
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +27,7 @@ fun BaseReportFilterComponent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .background(Color.White,MaterialTheme.shapes.small)
             .padding(16.dp)
     ) {
         Row(

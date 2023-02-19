@@ -2,8 +2,6 @@ package com.a2z.app.data.model.auth
 
 import android.os.Parcelable
 import androidx.annotation.Keep
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import kotlinx.parcelize.Parcelize
 
 @Keep

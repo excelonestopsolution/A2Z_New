@@ -10,12 +10,10 @@ import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.EmptyListComponent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
-import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
-import com.a2z.app.ui.screen.report.filter.MatmReportFilterComponent
+import com.a2z.app.ui.screen.report.filter.MatmReportFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.util.VoidCallback
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -23,25 +21,6 @@ import com.a2z.app.util.VoidCallback
 fun MATMReportScreen() {
 
     val viewModel: MatmReportViewModel = hiltViewModel()
-
-    BottomSheetComponent(sheetContent = { closeAction ->
-        MatmReportFilterComponent { searchInput ->
-            closeAction.invoke()
-            viewModel.searchInput = searchInput
-            viewModel.fetchReport()
-        }
-    }) { toggleAction ->
-        MainContent(viewModel) {
-            toggleAction.invoke()
-        }
-    }
-
-
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-private fun MainContent(viewModel: MatmReportViewModel, callback: VoidCallback) {
 
 
     Scaffold(
@@ -51,7 +30,7 @@ private fun MainContent(viewModel: MatmReportViewModel, callback: VoidCallback) 
                 title = "M-ATM Request Report",
                 actions = {
                     ReportNavActionButton() {
-                        callback.invoke()
+                        viewModel.filterDialogState.value = true
                     }
                 })
         }) {
@@ -94,4 +73,12 @@ private fun MainContent(viewModel: MatmReportViewModel, callback: VoidCallback) 
             }
         }
     }
+
+
+    MatmReportFilterDialog(viewModel.filterDialogState) { searchInput ->
+        viewModel.searchInput = searchInput
+        viewModel.fetchReport()
+    }
+
+
 }

@@ -15,6 +15,7 @@ import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
+import androidx.annotation.Keep
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.lang.Exception
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class MemberListViewModel @Inject constructor(
 
     private val memberType: MemberListType = savedStateHandle.safeSerializable("memberType")!!
     private val isSale : Boolean = savedStateHandle.get<String>("isSale").toBoolean()
-    val isTransfer = savedStateHandle.get<String?>("isTransfer")?.toBoolean()!!
+    val isTransfer = savedStateHandle.get<String>("isTransfer")?.toBoolean()!!
 
     var member = mutableStateOf<Member?>(null)
 

@@ -28,6 +28,7 @@ class PaymentReportViewModel @Inject constructor(
     var pagingState by mutableStateOf<PagingState<PaymentReport>>(PagingState())
     private val _reportPagingFlow = resultStateFlow<PaymentReportResponse>()
 
+    val filterDialogState = mutableStateOf(false)
 
     init {
 

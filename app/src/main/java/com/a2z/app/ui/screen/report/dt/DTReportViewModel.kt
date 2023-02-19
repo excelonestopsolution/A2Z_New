@@ -29,6 +29,7 @@ class DTReportViewModel @Inject constructor(
 
     private val _reportResultResponse = resultStateFlow<DTReportResponse>()
 
+    val filterDialogState = mutableStateOf(false)
     init {
         fetchReport()
 

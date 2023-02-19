@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.report.matm
 
+import androidx.compose.runtime.mutableStateOf
 import com.a2z.app.data.model.report.MatmReportResponse
 import com.a2z.app.data.repository.ReportRepository
 import com.a2z.app.ui.util.BaseViewModel
@@ -18,6 +19,8 @@ class MatmReportViewModel @Inject constructor(
     val reportResultFlow = resultStateFlow<MatmReportResponse>()
 
     var searchInput = SearchInput()
+
+    val filterDialogState = mutableStateOf(false)
 
     init {
         fetchReport()

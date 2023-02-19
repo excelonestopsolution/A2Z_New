@@ -29,6 +29,7 @@ class FundReportViewModel @Inject constructor(
 
     private val _reportResultResponse = resultStateFlow<FundReportResponse>()
 
+    val filterDialogState = mutableStateOf(false)
     init {
         fetchReport()
 

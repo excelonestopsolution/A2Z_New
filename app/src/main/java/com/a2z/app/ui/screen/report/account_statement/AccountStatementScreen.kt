@@ -1,6 +1,5 @@
 package com.a2z.app.ui.screen.report.account_statement
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -14,13 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
-import com.a2z.app.ui.screen.report.filter.ReportDateFilterComponent
+import com.a2z.app.ui.screen.report.filter.ReportDateFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
-import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.prefixRS
 
 
@@ -29,39 +26,13 @@ fun AccountStatementReportScreen() {
     val viewModel: AccountStatementViewModel = hiltViewModel()
 
 
-    BottomSheetComponent(sheetContent = { closeAction ->
-        ReportDateFilterComponent { startDate,endDate ->
-            closeAction.invoke()
-            viewModel.onSearch(startDate,endDate)
-        }
-    }) { toggleAction ->
-
-        MainContent(viewModel) {
-            toggleAction.invoke()
-        }
-
-    }
-
-
-
-
-
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-private fun MainContent(
-    viewModel: AccountStatementViewModel,
-    filterAction: VoidCallback
-) {
-
     Scaffold(backgroundColor = BackgroundColor, topBar = {
         NavTopBar(title = "Account Statement", actions = {
             ReportNavActionButton {
-                filterAction.invoke()
+                viewModel.filterDialogState.value = true
             }
         })
-    }) { _ ->
+    }) {
         BaseContent(viewModel) {
             val pagingState = viewModel.pagingState
             LazyColumn {
@@ -152,6 +123,11 @@ private fun MainContent(
             }
         }
     }
+
+    ReportDateFilterDialog(viewModel.filterDialogState) { startDate, endDate ->
+        viewModel.onSearch(startDate,endDate)
+    }
 }
+
 
 

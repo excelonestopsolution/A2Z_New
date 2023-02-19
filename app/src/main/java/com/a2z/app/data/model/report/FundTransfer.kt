@@ -1,8 +1,7 @@
 package com.a2z.app.data.model.report
 
 import android.os.Parcelable
-import com.google.common.collect.Lists
-import com.google.errorprone.annotations.Keep
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

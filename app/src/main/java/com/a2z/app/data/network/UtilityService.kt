@@ -23,6 +23,6 @@ interface UtilityService {
 
 
     @GET("fetch")
-    suspend fun fetchBillInfo(@QueryMap data: MapRequest): BillFetchInfoResponse
+    suspend fun fetchBillInfo(@QueryMap data: MapRequest): Any
 
 }

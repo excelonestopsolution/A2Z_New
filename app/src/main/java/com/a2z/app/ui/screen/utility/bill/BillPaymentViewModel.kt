@@ -21,9 +21,11 @@ import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtil
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,23 +47,24 @@ class BillPaymentViewModel @Inject constructor(
 
 
     private val billPaymentResponse = MutableSharedFlow<ResultType<BillPaymentResponse>>()
-    private val billFetchResponse = MutableSharedFlow<ResultType<BillFetchInfoResponse>>()
+    private val billFetchResponse = MutableSharedFlow<ResultType<Any>>()
 
     init {
         viewModelScope.launch { billPaymentResult() }
         viewModelScope.launch { fetchBillResult() }
     }
 
-    private suspend fun fetchBillResult() {
-        billFetchResponse.getLatest {
-
-            AppUtil.logger("hello dev : bill fet")
-
-            val status = it.status
-            val message = it.message
-            val info = it.info
+    private fun fetchBillResult() {
+        billFetchResponse.getLatest {res->
+            val rawResponse = Gson().toJson(res)
+            val jsonObject = JSONObject(rawResponse)
+            val message = jsonObject.optString("message")
+            val status = jsonObject.getInt("status")
 
             if (status == 1) {
+
+                val it = Gson().fromJson(rawResponse,BillFetchInfoResponse::class.java)
+                val info = it.info
                 util.fetchBillInfo.value = false
                 util.useAmountValidation.value = true
                 util.useMobileValidation.value = false
@@ -73,12 +76,12 @@ class BillPaymentViewModel @Inject constructor(
 
                 successBanner("Bill Fetch Result", message)
 
-            } else alertBanner("Bill Fetch Result", message)
+            } else alertDialog(message)
 
         }
     }
 
-    private suspend fun billPaymentResult() {
+    private fun billPaymentResult() {
         billPaymentResponse.getLatest(
             progress = {transactionProgressDialog()}
         ) {
@@ -105,11 +108,13 @@ class BillPaymentViewModel @Inject constructor(
         amountValidator = { util.amountValidator(it) }
     )
 
-    init {
-
-    }
 
     val isAmountReadyOnly = mutableStateOf(true)
+    init {
+        isAmountReadyOnly.value = operator.isAmountEditable == 0
+    }
+
+
     val billInfo = mutableStateOf<BillFetchInfo?>(null)
 
     fun onButtonClick() {
@@ -121,6 +126,7 @@ class BillPaymentViewModel @Inject constructor(
                 confirmDialogState.value = true
             }
         }
+
     }
 
     fun makePayment() {

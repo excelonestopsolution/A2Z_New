@@ -9,5 +9,5 @@ interface UtilityRepository {
     suspend fun fetchRechargeOffer(vararg data: PairRequest): ROfferResponse
     suspend fun fetchRechargePlan(vararg data: PairRequest): Any
     suspend fun fetchDthInfo(vararg data: PairRequest): RechargeDthInfoResponse
-    suspend fun fetchBillInfo(vararg data: PairRequest): BillFetchInfoResponse
+    suspend fun fetchBillInfo(vararg data: PairRequest): Any
 }

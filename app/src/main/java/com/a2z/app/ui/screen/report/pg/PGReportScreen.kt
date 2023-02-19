@@ -15,7 +15,7 @@ import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
-import com.a2z.app.ui.screen.report.filter.ReportDateFilterComponent
+import com.a2z.app.ui.screen.report.filter.ReportDateFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.notAvailable
@@ -23,34 +23,16 @@ import com.a2z.app.util.extension.notAvailable
 @Composable
 fun PGReportScreen() {
     val viewModel: PGReportViewModel = hiltViewModel()
-    BottomSheetComponent(sheetContent = { closeAction ->
-        ReportDateFilterComponent { startDate,endDate ->
-            closeAction.invoke()
-            viewModel.onSearch(startDate,endDate)
-        }
-    }) { toggleAction ->
-        MainContent(viewModel) {
-            toggleAction.invoke()
-        }
-    }
 
-}
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Composable
-private fun MainContent(
-    viewModel: PGReportViewModel,
-    filterAction: VoidCallback
-) {
 
 
     Scaffold(backgroundColor = BackgroundColor, topBar = {
         NavTopBar(title = "PG Report", actions = {
             ReportNavActionButton {
-                filterAction.invoke()
+                viewModel.filterDialogState.value = true
             }
         })
-    }) { _ ->
+    }) {
         BaseContent(viewModel) {
             val pagingState = viewModel.pagingState
             LazyColumn {
@@ -110,4 +92,12 @@ private fun MainContent(
             }
         }
     }
+
+
+    ReportDateFilterDialog(viewModel.filterDialogState) { startDate, endDate ->
+
+        viewModel.onSearch(startDate,endDate)
+    }
+
 }
+

@@ -45,7 +45,7 @@ fun ComplaintScreen() {
                         viewModel.fetchReport()
                     }
 
-                    BaseReportItem(statusId = it.status_id.toInt(),
+                    BaseReportItem(statusId = (it.status_id ?: "0").toDouble().toInt(),
                         leftSideDate = it.created_at,
                         leftSideId = it.id,
                         centerHeading1 = it.issue_type,

@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.extension.isValidateDate
+import java.util.*
 
 @Composable
 fun DatePickerDialog(
@@ -16,9 +17,11 @@ fun DatePickerDialog(
     onDatePicked: (date: String) -> Unit,
 ) {
 
-    val preYear by remember { mutableStateOf(1998) }
-    val preMonth by remember { mutableStateOf(0) }
-    val preDay by remember { mutableStateOf(1) }
+
+    val c = Calendar.getInstance()
+      val preYear by remember { mutableStateOf(c.get(Calendar.YEAR)) }
+    val preMonth by remember { mutableStateOf(c.get(Calendar.MONTH)) }
+    val preDay by remember { mutableStateOf(c.get(Calendar.DAY_OF_MONTH)) }
 
     val context = LocalContext.current
     val datePicker = android.app.DatePickerDialog(
@@ -29,7 +32,7 @@ fun DatePickerDialog(
             val day = if (d > 9) "$d" else "0$d"
             val month = if (m2 > 9) "$m2" else "0$m2"
 
-            val mDate = "$day${AppConstant.DATE_SEPARATOR}$month${AppConstant.DATE_SEPARATOR}$year"
+            val mDate = "$month${AppConstant.DATE_SEPARATOR}$day${AppConstant.DATE_SEPARATOR}$year"
             onDatePicked.invoke(mDate)
         },
         preYear,
@@ -47,7 +50,6 @@ fun DatePickerDialog(
             datePicker.updateDate(mYear, mMonth, mDay)
         }
     }
-
 
 
     datePicker.show()

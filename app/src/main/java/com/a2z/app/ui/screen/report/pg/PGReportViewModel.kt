@@ -29,6 +29,8 @@ class PGReportViewModel @Inject constructor(
 
     private val _reportResultResponse = resultStateFlow<PGReportResponse>()
 
+    val filterDialogState = mutableStateOf(false)
+
     init {
         fetchReport()
 

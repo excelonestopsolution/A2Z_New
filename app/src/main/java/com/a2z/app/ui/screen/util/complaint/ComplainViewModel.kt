@@ -32,8 +32,8 @@ class ComplainViewModel @Inject constructor(
             },
             success = {
                 pagingState = if (it.status == 1)
-                    pagingState.successState(it.complains!!)
-                else pagingState.failureState(Exception(it.message.toString()))
+                    pagingState.successState(it.complains ?: emptyList())
+                else pagingState.failureState(Exception(it.message ?: "Something went wrong! please try again!"))
             },
             failure = {
                 pagingState = pagingState.failureState(it)

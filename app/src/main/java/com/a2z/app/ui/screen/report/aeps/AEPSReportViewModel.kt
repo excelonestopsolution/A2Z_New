@@ -36,6 +36,8 @@ class AEPSReportViewModel @Inject constructor(
     private val _printDetailResultFlow = resultShareFlow<TransactionDetailResponse>()
 
 
+    val filterDialogState = mutableStateOf(false)
+
     init {
         fetchReport()
 

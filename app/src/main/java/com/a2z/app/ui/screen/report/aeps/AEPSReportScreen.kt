@@ -20,64 +20,60 @@ fun AEPSReportScreen() {
     val viewModel: AEPSReportViewModel = hiltViewModel()
 
 
-    BottomSheetComponent(sheetContent = { closeAction ->
-        AepsReportFilterComponent { searchInput ->
-            closeAction.invoke()
-            viewModel.searchInput = searchInput
-            viewModel.fetchReport()
-        }
-    }) { toggleAction ->
-
-        Scaffold(
-            backgroundColor = BackgroundColor,
-            topBar = {
-                NavTopBar(title = "AEPS Report",
-                    actions = {
-                        ReportNavActionButton {
-                            toggleAction.invoke()
-                        }
-                    })
-            }) {_->
-
-            BaseContent(viewModel) {
-                ObsComponent(flow = viewModel.reportResultFlow) {response->
-                    if (response.status == 1 && response.data!!.isNotEmpty()) LazyColumn {
-                        items(response.data) {
-                            BaseReportItem(
-                                statusId = it.status_id,
-                                leftSideDate = it.created_at,
-                                leftSideId = it.api_name,
-                                centerHeading1 = it.number,
-                                centerHeading2 = it.txn_type,
-                                centerHeading3 = it.bank_name,
-                                rightAmount = it.amount,
-                                rightStatus = it.status,
-                                isPrint = it.is_print ?: false,
-                                isCheckStatus = it.is_check_status ?: false,
-                                isComplaint = it.is_complain ?: false,
-                                onComplaint = { viewModel.onComplaint(it) },
-                                expandListItems = listOf(
-                                    "Order Id" to it.order_id,
-                                    "Bank Ref" to it.bank_ref,
-                                    "Mobile Number" to it.customer_number,
-                                    "Mode" to it.mode,
-                                    "Ak No." to it.ackno,
-                                    "Opening Bal." to it.opening_balance,
-                                    "Credit Charge" to it.credit_charge,
-                                    "Debit Charge" to it.debit_charge,
-                                    "TDS" to it.tds,
-                                    "Total Balance" to it.total_balance,
-                                    "Message" to it.fail_msg,
-                                ),
-                                onCheckStatus = {viewModel.onCheckStatus(it)},
-                                onPrint = {viewModel.onPrint(it)}
-                            )
-                        }
+    Scaffold(
+        backgroundColor = BackgroundColor,
+        topBar = {
+            NavTopBar(title = "AEPS Report",
+                actions = {
+                    ReportNavActionButton {
+                     viewModel.filterDialogState.value = true
                     }
-                    else EmptyListComponent()
+                })
+        }) {_->
+
+        BaseContent(viewModel) {
+            ObsComponent(flow = viewModel.reportResultFlow) {response->
+                if (response.status == 1 && response.data!!.isNotEmpty()) LazyColumn {
+                    items(response.data) {
+                        BaseReportItem(
+                            statusId = it.status_id,
+                            leftSideDate = it.created_at,
+                            leftSideId = it.api_name,
+                            centerHeading1 = it.number,
+                            centerHeading2 = it.txn_type,
+                            centerHeading3 = it.bank_name,
+                            rightAmount = it.amount,
+                            rightStatus = it.status,
+                            isPrint = it.is_print ?: false,
+                            isCheckStatus = it.is_check_status ?: false,
+                            isComplaint = it.is_complain ?: false,
+                            onComplaint = { viewModel.onComplaint(it) },
+                            expandListItems = listOf(
+                                "Order Id" to it.order_id,
+                                "Bank Ref" to it.bank_ref,
+                                "Mobile Number" to it.customer_number,
+                                "Mode" to it.mode,
+                                "Ak No." to it.ackno,
+                                "Opening Bal." to it.opening_balance,
+                                "Credit Charge" to it.credit_charge,
+                                "Debit Charge" to it.debit_charge,
+                                "TDS" to it.tds,
+                                "Total Balance" to it.total_balance,
+                                "Message" to it.fail_msg,
+                            ),
+                            onCheckStatus = {viewModel.onCheckStatus(it)},
+                            onPrint = {viewModel.onPrint(it)}
+                        )
+                    }
                 }
+                else EmptyListComponent()
             }
         }
+    }
+
+    AepsReportFilterDialog (viewModel.filterDialogState){ searchInput ->
+        viewModel.searchInput = searchInput
+        viewModel.fetchReport()
     }
 
 

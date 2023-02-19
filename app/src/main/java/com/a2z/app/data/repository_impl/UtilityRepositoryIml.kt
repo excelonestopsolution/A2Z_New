@@ -29,7 +29,7 @@ class UtilityRepositoryIml @Inject constructor(private val utilityService: Utili
         return utilityService.fetchDthInfo(data.toMap())
     }
 
-    override suspend fun fetchBillInfo(vararg data: PairRequest): BillFetchInfoResponse {
+    override suspend fun fetchBillInfo(vararg data: PairRequest): Any {
         return utilityService.fetchBillInfo(data.toMap())
     }
 

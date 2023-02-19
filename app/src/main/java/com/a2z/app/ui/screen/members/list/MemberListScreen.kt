@@ -23,7 +23,9 @@ import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
 import com.a2z.app.ui.theme.RedColor
+import androidx.annotation.Keep
 
+@Keep
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MemberListScreen() {

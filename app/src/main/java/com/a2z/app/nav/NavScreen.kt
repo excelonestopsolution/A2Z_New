@@ -334,8 +334,7 @@ sealed class NavScreen(val route: String) {
     object PaymentReportScreen : NavScreen("payment-report-screen")
     object AccountStatementReport : NavScreen("account-statement-screen")
     object ProfileScreen : NavScreen("profile-screen")
-    object MemberListScreen : NavScreen(
-        "member-list-screen".params(
+    object MemberListScreen : NavScreen("member-list-screen".params(
             "memberType", "isTransfer", "isSale"
         )
     ) {
