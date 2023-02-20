@@ -380,4 +380,10 @@ sealed class NavScreen(val route: String) {
             )
     }
 
+    object INRegistrationScreen : NavScreen("in-registration-screen"
+        .params("mobileNumber")){
+        fun passArgs(mobileNumber: String) = "in-registration-screen"
+            .args("mobileNumber" to mobileNumber)
+    }
+
 }

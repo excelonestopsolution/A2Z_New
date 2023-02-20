@@ -31,6 +31,7 @@ import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
 import com.a2z.app.ui.screen.indonepal.beneficiary_list.INBeneficiaryListScreen
 import com.a2z.app.ui.screen.indonepal.detail_sender.INDetailSenderScreen
+import com.a2z.app.ui.screen.indonepal.register_sender.INRegisterSenderScreen
 import com.a2z.app.ui.screen.indonepal.search_sender.INSearchSenderScreen
 import com.a2z.app.ui.screen.indonepal.transfer.INTransferScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
@@ -297,5 +298,8 @@ fun MainNav(viewModel: MainViewModel) {
         composable(
             route = NavScreen.INTransferScreen.route,
             content = { INTransferScreen() })
+        composable(
+            route = NavScreen.INRegistrationScreen.route,
+            content = { INRegisterSenderScreen() })
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Keep
 @Parcelize
-data class INTxnOtpResponse(
+data class INCommonOtpResponse(
     val status: Int,
     val message: String,
     val data: INTxnOtp?
@@ -18,4 +18,5 @@ data class INTxnOtpResponse(
 data class INTxnOtp(
     val message: String?,
     val txnProcessId: String?,
+    val ProcessId: String?,
 ) : Parcelable

@@ -29,10 +29,10 @@ class INSearchSenderViewModel @Inject constructor(
         _searchSenderResponse.getLatest {
             when (it.status) {
                 1 -> {
-                   navigateTo(NavScreen.INDetailSenderScreen.passArgs(it.data!!))
+                    navigateTo(NavScreen.INDetailSenderScreen.passArgs(it.data!!))
                 }
                 11 -> {
-                    //navigate to sender registration screen
+                    navigateTo(NavScreen.INRegistrationScreen.passArgs(input.mobileNumber.getValue()))
                 }
                 else -> alertDialog(it.message)
             }
@@ -41,15 +41,11 @@ class INSearchSenderViewModel @Inject constructor(
 
 
     fun onSearchClick() {
-        //todo remove in production
-        /*apiUtil.fakeApiForShareFlow(
-            flow = _searchSenderResponse,
-            scope = viewModelScope,
-            fileName = "in_search_sender"
-        )*/
-        callApiForShareFlow(_searchSenderResponse) { repository.mobileVerification(
-            hashMapOf("number" to input.mobileNumber.getValue())
-        ) }
+        callApiForShareFlow(_searchSenderResponse) {
+            repository.mobileVerification(
+                hashMapOf("number" to input.mobileNumber.getValue())
+            )
+        }
     }
 
 

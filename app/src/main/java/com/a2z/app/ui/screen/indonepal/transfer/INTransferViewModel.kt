@@ -34,7 +34,7 @@ class INTransferViewModel @Inject constructor(
 
     var serviceCharge: INServiceCharge? = null
 
-    private val _txnOtpResultFlow = resultShareFlow<INTxnOtpResponse>()
+    private val _txnOtpResultFlow = resultShareFlow<INCommonOtpResponse>()
     private var txnProcessId  = ""
 
     init {

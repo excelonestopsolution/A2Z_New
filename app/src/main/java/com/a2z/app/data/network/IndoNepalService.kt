@@ -1,11 +1,6 @@
 package com.a2z.app.data.network
 
-import com.a2z.app.data.model.AppResponse
-import com.a2z.app.data.model.aeps.AepsBankListResponse
-import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.indonepal.*
-import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
-import com.a2z.app.data.model.settlement.SettlementBankListResponse
 import com.a2z.app.util.FieldMapData
 import retrofit2.http.*
 
@@ -27,7 +22,14 @@ interface IndoNepalService {
 
     @POST("indo-nepal/txn-otp")
     @FormUrlEncoded
-    suspend fun txnOtp(@FieldMap data: FieldMapData): INTxnOtpResponse
+    suspend fun txnOtp(@FieldMap data: FieldMapData): INCommonOtpResponse
+
+    @POST("indo-nepal/sender-otp")
+    @FormUrlEncoded
+    suspend fun senderRegistrationOtp(@FieldMap data: FieldMapData): INCommonOtpResponse
+
+    @GET("indo-nepal/static-data")
+    suspend fun staticData(): Any
 
 
 }

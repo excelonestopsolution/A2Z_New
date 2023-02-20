@@ -2,6 +2,7 @@ package com.a2z.app.ui.screen.indonepal.detail_sender
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person3
@@ -34,14 +35,14 @@ fun INDetailSenderScreen(navBackStackEntry: NavBackStackEntry) {
             showWalletCard = false,
             button = {
                 Button(
+                    shape = MaterialTheme.shapes.small.copy(all = CornerSize(0.dp)),
                     onClick = {
                         navController.navigate(
                             NavScreen.INBeneficiaryScreen.passArgs(sender)
                         )
                     },
                     modifier = Modifier
-                        .padding(top = 4.dp, bottom = 32.dp, start = 32.dp, end = 32.dp)
-                        .height(52.dp)
+                        .height(48.dp)
                         .fillMaxWidth()
                 ) {
                     Icon(

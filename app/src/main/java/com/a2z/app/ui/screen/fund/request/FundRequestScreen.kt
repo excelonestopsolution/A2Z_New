@@ -87,6 +87,7 @@ fun FundRequestScreen() {
                                 onChange = { dateInput.onChange(it) },
                                 error = dateInput.formError(),
                                 onDateSelected = { dateInput.onChange(it.removeDateSeparator()) })
+
                             AmountTextField(
                                 value = amountInput.formValue(),
                                 error = amountInput.formError(),
