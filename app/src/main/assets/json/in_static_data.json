@@ -1,12 +1,4 @@
-package com.a2z.app.ui.screen.indonepal
-
-import com.a2z.app.data.model.indonepal.INStaticData
-import com.google.gson.Gson
-
-object INUtil {
-
-    private const val STATIC_RAW_DATA = """
-        {
+{
   "gender": [
     {
       "id": "Male",
@@ -679,10 +671,4 @@ object INUtil {
       "name": "Aadhaar Card"
     }
   ]
-}
-    """
-
-    fun staticData(): INStaticData {
-        return Gson().fromJson(STATIC_RAW_DATA, INStaticData::class.java)
-    }
 }

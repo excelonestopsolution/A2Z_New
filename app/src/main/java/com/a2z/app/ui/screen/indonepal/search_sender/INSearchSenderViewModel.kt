@@ -1,7 +1,10 @@
 package com.a2z.app.ui.screen.indonepal.search_sender
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.indonepal.INMobileVerificationResponse
+import com.a2z.app.data.model.indonepal.INStaticData
 import com.a2z.app.data.repository.IndoNepalRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.util.AppValidator
@@ -17,7 +20,6 @@ import javax.inject.Inject
 @HiltViewModel
 class INSearchSenderViewModel @Inject constructor(
     private val repository: IndoNepalRepository,
-    private val apiUtil: ApiUtil
 ) : BaseViewModel() {
 
     val input = FormInput()

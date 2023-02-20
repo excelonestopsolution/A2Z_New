@@ -14,11 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.CounterOtpTextField
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.TitleValueHorizontally
 import com.a2z.app.ui.component.common.*
-import com.a2z.app.ui.screen.indonepal.INUtil
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.util.rememberStateOf
 
@@ -64,7 +62,7 @@ fun INTransferScreen() {
                             AppDropDownMenu(
                                 selectedState = viewModel.selectedReasonOfTransfer,
                                 label = "Reason of Transfer",
-                                list = INUtil.reasonOfTransferList
+                                list = viewModel.staticData.purposeOfRemitence.map { it.name }
                             )
                             AmountTextField(
                                 value = input.amount.formValue(),

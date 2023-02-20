@@ -6,20 +6,23 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.CircularShape
+import com.a2z.app.ui.util.extension.singleResult
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun INSearchSenderScreen() {
+fun INSearchSenderScreen(navBackStackEntry: NavBackStackEntry) {
 
     val viewModel: INSearchSenderViewModel = hiltViewModel()
 
@@ -28,6 +31,11 @@ fun INSearchSenderScreen() {
         backgroundColor = BackgroundColor,
 
         ) {
+
+        LaunchedEffect(key1 = Unit) {
+            val shouldNavigate = navBackStackEntry.singleResult<Boolean>("isRegistered")
+            if (shouldNavigate == true) viewModel.onSearchClick()
+        }
 
         BaseContent(viewModel) {
             Card(Modifier.padding(12.dp)) {

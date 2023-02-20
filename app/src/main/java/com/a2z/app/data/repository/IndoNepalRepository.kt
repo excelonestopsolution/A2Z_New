@@ -1,5 +1,6 @@
 package com.a2z.app.data.repository
 
+import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.indonepal.*
 import com.a2z.app.util.FieldMapData
 
@@ -9,6 +10,9 @@ interface IndoNepalRepository {
     suspend fun serviceCharge(data : FieldMapData): INServiceChargeResponse
     suspend fun txnOtp(data : FieldMapData): INCommonOtpResponse
     suspend fun senderRegistrationOtp(data : FieldMapData): INCommonOtpResponse
-    suspend fun staticData() : Any
+    suspend fun senderRegistrationOtpVerify(data : FieldMapData): AppResponse
+    suspend fun staticData() : INStaticData
+
+    suspend fun fetchDistrict(stateId : String) : INDistrictResponse
 
 }

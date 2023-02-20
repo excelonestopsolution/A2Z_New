@@ -3,9 +3,10 @@ package com.a2z.app.ui.screen.indonepal.transfer
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.indonepal.*
 import com.a2z.app.data.repository.IndoNepalRepository
-import com.a2z.app.ui.screen.indonepal.INUtil
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
@@ -15,21 +16,25 @@ import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.util.extension.nullOrEmptyToDouble
 import com.a2z.app.util.resultShareFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class INTransferViewModel @Inject constructor(
     private val repository: IndoNepalRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val appPreference: AppPreference
 ) : BaseViewModel() {
 
 
     val beneficiary = savedStateHandle.safeParcelable<INBeneficiary>("beneficiary")!!
     val sender = savedStateHandle.safeParcelable<INSender>("sender")!!
 
+    val staticData = appPreference.inStaticData!!
+
     val isChargeFetched = mutableStateOf(false)
     val input = InputForm(isChargeFetched)
-    val selectedReasonOfTransfer = mutableStateOf(INUtil.reasonOfTransferList.first())
+    val selectedReasonOfTransfer = mutableStateOf("")
     private val _serviceChargeResultFlow = resultShareFlow<INServiceChargeResponse>()
 
     var serviceCharge: INServiceCharge? = null
@@ -37,7 +42,9 @@ class INTransferViewModel @Inject constructor(
     private val _txnOtpResultFlow = resultShareFlow<INCommonOtpResponse>()
     private var txnProcessId  = ""
 
+
     init {
+
         _serviceChargeResultFlow.getLatest {
             if (it.status == 1) {
                 successBanner("Service Charge", it.message)
@@ -53,7 +60,10 @@ class INTransferViewModel @Inject constructor(
             }
             else alertDialog(it.message)
         }
+
+
     }
+
 
     fun onTransfer() {
         if(txnProcessId.isEmpty()) {

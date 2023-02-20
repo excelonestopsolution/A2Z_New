@@ -22,10 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.a2z.app.R
-import com.a2z.app.ui.theme.GreenColor
-import com.a2z.app.ui.theme.PrimaryColorDark
-import com.a2z.app.ui.theme.RedColor
-import com.a2z.app.ui.theme.ShapeZeroRounded
+import com.a2z.app.ui.theme.*
 import com.a2z.app.ui.util.resource.BannerType
 import kotlinx.coroutines.delay
 
@@ -61,7 +58,7 @@ fun AppNotificationBanner(
                 message = (state.value as BannerType.Failure).message
             }
             is BannerType.Alert -> {
-                color = PrimaryColorDark
+                color = YellowColor
                 icon = R.drawable.baseline_info_24
                 title = (state.value as BannerType.Alert).title
                 message = (state.value as BannerType.Alert).message

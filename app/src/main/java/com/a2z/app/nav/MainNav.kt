@@ -288,7 +288,7 @@ fun MainNav(viewModel: MainViewModel) {
 
         composable(
             route = NavScreen.INSearchSenderScreen.route,
-            content = { INSearchSenderScreen() })
+            content = { INSearchSenderScreen(it) })
         composable(
             route = NavScreen.INDetailSenderScreen.route,
             content = { INDetailSenderScreen(it) })

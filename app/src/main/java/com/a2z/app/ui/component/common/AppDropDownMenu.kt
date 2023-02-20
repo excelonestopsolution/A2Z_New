@@ -59,6 +59,7 @@ fun AppDropDownMenu(
                    DropdownMenuItem(
                        onClick = {
                            selectedState.value = selectionOption
+                           onSelect?.invoke(selectionOption)
                            expanded = false
                        }
                    ) {

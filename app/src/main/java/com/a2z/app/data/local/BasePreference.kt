@@ -10,6 +10,7 @@ open class BasePreference(context: Context) {
     companion object {
         const val UNIQUE_KEY = "app_unique_key"
         const val USER = "user"
+        const val IN_STATIC_DATA = "in_static_data"
         const val UPI_STATIC_MESSAGE = "upi_static_message"
         const val PASSWORD = "password"
         const val LOGIN_ID = "login_id"
