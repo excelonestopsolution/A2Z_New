@@ -58,6 +58,13 @@ object ApiModule {
     fun providerDMTService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): DMTService =
         client.create(DMTService::class.java)
 
+
+    @Provides
+    @Singleton
+    fun provideIndoNepalService(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): IndoNepalService =
+        client.create(IndoNepalService::class.java)
+
+
     @Provides
     @Singleton
     fun providerDMT3Service(@Named(DIConstant.RETROFIT_NORMAL) client: Retrofit): DMT3Service =

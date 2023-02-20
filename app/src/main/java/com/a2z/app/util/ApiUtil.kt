@@ -1,18 +1,44 @@
 package com.a2z.app.util
 
 import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.a2z.app.ui.util.resource.ResultType
 import com.google.gson.Gson
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.IOException
 import java.io.InputStream
+import javax.inject.Singleton
 
+@Singleton
 class ApiUtil(val context: Context) {
 
 
+    inline fun <reified T> fakeApiForShareFlow(
+        flow: MutableSharedFlow<ResultType<T>>,
+        scope: CoroutineScope,
+        fileName: String
+    ) {
+        scope.launch {
+            flow.emit(ResultType.Loading())
+            val response =
+                loadJSONFromAsset<T>(fileName)
+            flow.emit(response)
+        }
+    }
 
+    inline fun <reified T> fakeApiForStateFlow(
+        flow: MutableStateFlow<ResultType<T>>,
+        scope: CoroutineScope,
+        fileName: String
+    ) {
+        scope.launch {
+            flow.emit(ResultType.Loading())
+            val response =
+                loadJSONFromAsset<T>(fileName)
+            flow.emit(response)
+        }
+    }
 
     @Throws(Exception::class)
     suspend inline fun <reified T> loadJSONFromAsset(
@@ -31,11 +57,11 @@ class ApiUtil(val context: Context) {
                 AppUtil.logger("=============FAKE API END===============")
                 Gson().fromJson(data, T::class.java)
             }
-            val result =  data.await()
-            return  ResultType.Success(result)
+            val result = data.await()
+            return ResultType.Success(result)
 
         } catch (e: java.lang.Exception) {
-            throw  e
+            throw e
         }
     }
 

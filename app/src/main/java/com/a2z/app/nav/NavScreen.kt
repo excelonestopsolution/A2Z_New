@@ -8,6 +8,8 @@ import com.a2z.app.data.model.auth.RegistrationRoleUser
 import com.a2z.app.data.model.dmt.*
 import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
+import com.a2z.app.data.model.indonepal.INBeneficiary
+import com.a2z.app.data.model.indonepal.INSender
 import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
@@ -354,6 +356,28 @@ sealed class NavScreen(val route: String) {
         fun passArgs(isCompleted: Boolean) = "member-created-by-sale-screen".args(
             "isCompleted" to isCompleted.toString()
         )
+    }
+
+    //indo nepal
+    object INSearchSenderScreen : NavScreen("in-search-sender-screen")
+    object INDetailSenderScreen : NavScreen("in-detail-sender-screen"
+        .params("sender")){
+        fun passArgs(sender: INSender) = "in-detail-sender-screen"
+            .args("sender" to sender.toEncodedString())
+    }
+
+    object INBeneficiaryScreen : NavScreen("in-beneficiary-screen"
+        .params("sender")){
+        fun passArgs(sender: INSender) = "in-beneficiary-screen"
+            .args("sender" to sender.toEncodedString())
+    }
+    object INTransferScreen : NavScreen("in-transfer-screen"
+        .params("sender","beneficiary")){
+        fun passArgs(sender: INSender, beneficiary : INBeneficiary) = "in-transfer-screen"
+            .args(
+                "sender" to sender.toEncodedString(),
+                "beneficiary" to beneficiary.toEncodedString(),
+            )
     }
 
 }

@@ -29,6 +29,10 @@ import com.a2z.app.ui.screen.fund.payment_gateway.PaymentGatewayScreen
 import com.a2z.app.ui.screen.fund.payment_return.ParentPaymentReturnScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
+import com.a2z.app.ui.screen.indonepal.beneficiary_list.INBeneficiaryListScreen
+import com.a2z.app.ui.screen.indonepal.detail_sender.INDetailSenderScreen
+import com.a2z.app.ui.screen.indonepal.search_sender.INSearchSenderScreen
+import com.a2z.app.ui.screen.indonepal.transfer.INTransferScreen
 import com.a2z.app.ui.screen.kyc.aadhaar.AadhaarKycScreen
 import com.a2z.app.ui.screen.kyc.aeps.AEPSKycScreen
 import com.a2z.app.ui.screen.matm.MatmScreen
@@ -69,7 +73,7 @@ fun MainNav(viewModel: MainViewModel) {
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = NavScreen.LoginScreen.route,
+        startDestination = NavScreen.INSearchSenderScreen.route,
         route = "main-root"
     ) {
 
@@ -280,5 +284,18 @@ fun MainNav(viewModel: MainViewModel) {
         composable(
             route = NavScreen.MemberCreatedBySaleScreen.route,
             content = { MemberCreatedBySaleScreen() })
+
+        composable(
+            route = NavScreen.INSearchSenderScreen.route,
+            content = { INSearchSenderScreen() })
+        composable(
+            route = NavScreen.INDetailSenderScreen.route,
+            content = { INDetailSenderScreen(it) })
+        composable(
+            route = NavScreen.INBeneficiaryScreen.route,
+            content = { INBeneficiaryListScreen() })
+        composable(
+            route = NavScreen.INTransferScreen.route,
+            content = { INTransferScreen() })
     }
 }

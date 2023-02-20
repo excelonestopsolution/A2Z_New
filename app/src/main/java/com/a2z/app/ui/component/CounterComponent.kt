@@ -36,10 +36,10 @@ fun CounterOtpTextField(
     isOutline: Boolean = false,
     error: FormFieldError = FormErrorType.Initial,
     topSpace: Dp = MaterialTheme.spacing.small,
-    timerSecond : Int = if(BuildConfig.DEBUG) 6 else 60,
-    timerState : MutableState<Boolean>,
-    onResend : VoidCallback,
-    onTimerComplete : VoidCallback? =null
+    timerSecond: Int = if (BuildConfig.DEBUG) 6 else 60,
+    timerState: MutableState<Boolean>,
+    onResend: VoidCallback,
+    onTimerComplete: VoidCallback? = null
 ) {
 
     val passwordVisibility by rememberSaveable { mutableStateOf(true) }
@@ -53,7 +53,7 @@ fun CounterOtpTextField(
                 AppTextField(
                     value = value,
                     hint = "******",
-                    label =  "OTP",
+                    label = "OTP",
                     onChange = onChange,
                     keyboardType = KeyboardType.Number,
                     leadingIcon = Icons.Default.Password,
@@ -86,7 +86,7 @@ fun CounterOtpTextField(
 
                     },
 
-                )
+                    )
 
                 if (counter != 0) Row(
                     verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(
@@ -104,8 +104,11 @@ fun CounterOtpTextField(
                     AppUtil.logger("progressTest : $progress")
 
                     Box(contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(progress = progress.toFloat(), modifier = Modifier.size(32.dp))
-                        Text(text = counter.toString())
+                        CircularProgressIndicator(
+                            progress = progress.toFloat(),
+                            modifier = Modifier.size(32.dp), strokeWidth = 4.dp
+                        )
+                        Text(text = counter.toString(), fontSize = 12.sp)
                     }
                 }
 
@@ -117,7 +120,6 @@ fun CounterOtpTextField(
 
 
 }
-
 
 
 @Composable

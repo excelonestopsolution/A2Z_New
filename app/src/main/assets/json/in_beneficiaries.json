@@ -1,0 +1,22 @@
+{
+  "status": 1,
+  "message": "Bene Found",
+  "data": [
+    {
+      "id": 6985,
+      "receiver_id": "1220313",
+      "sender_id": "728715",
+      "name": "HEMANTI NATH",
+      "mobile": "9741781447",
+      "gender": "Female",
+      "address": "KANCHANPUR NEPAL",
+      "account_number": null,
+      "bank_branch_id": null,
+      "bank_branch_name": null,
+      "bank_name": null,
+      "relationship": "Other",
+      "paymentMode": "Cash Payment",
+      "user_id": "13089"
+    }
+  ]
+}
