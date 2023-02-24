@@ -52,6 +52,9 @@ open class BaseViewModel : ViewModel() {
         AppUtil.logger("onProgress")
         dialogState.value = StatusDialogType.Progress(message)
     }
+    fun progressFullScreenDialog(message: String = "Loading") {
+        dialogState.value = StatusDialogType.ProgressFull(message)
+    }
 
     fun transactionProgressDialog() {
         dialogState.value = StatusDialogType.Transaction

@@ -20,7 +20,7 @@ fun TitleValueVertically(
     value: String?,
     useNA: Boolean = false
 ) {
-    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+   if(value != null && value.trim().isNotEmpty()) Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Text(
             title, style = TextStyle.Default.copy(
                 fontSize = 12.sp,
@@ -42,7 +42,7 @@ fun TitleValueHorizontally(
     useNA: Boolean = false,
     color : Color ? = null
 ) {
-    Column {
+  if(value !=null && value.toString().isNotEmpty())  Column {
         Row(modifier = Modifier.padding(vertical = 4.dp).fillMaxWidth()) {
             Text(
                 title, style = TextStyle.Default.copy(

@@ -12,7 +12,10 @@ import com.a2z.app.ui.screen.indonepal.INUtil
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorLight
 import com.a2z.app.ui.theme.RedColor
+import com.a2z.app.ui.util.AppValidator
+import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
+import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.resource.ResultType
@@ -33,11 +36,17 @@ class INServiceActivationViewModel @Inject constructor(
 
     val staticData = INUtil.staticServiceData()
 
+    val input = FormInput()
+
     val initialDataResultResponse = resultStateFlow<INActivationInitialResponse>()
 
     val selectedFile = mutableStateOf<File?>(null)
 
+    val confirmDialogState = mutableStateOf(false)
+
     private val _documentUploadResultFlow = resultShareFlow<AppResponse>()
+    private val _activateServiceResulFlow = resultShareFlow<AppResponse>()
+    private val _courierDataResultFlow = resultShareFlow<AppResponse>()
 
     init {
         fetchInitialData()
@@ -49,17 +58,27 @@ class INServiceActivationViewModel @Inject constructor(
             else alertDialog(it.message)
         }
 
+        _activateServiceResulFlow.getLatest {
+            if (it.status == 1) {
+                successDialog(it.message) {
+                    fetchInitialData()
+                }
+            } else alertDialog(it.message)
+        }
+
+
+        _courierDataResultFlow.getLatest {
+            if (it.status == 1) {
+                successDialog(it.message) {
+                    fetchInitialData()
+                }
+            } else alertDialog(it.message)
+        }
     }
 
     private fun fetchInitialData() {
 
-        callApiForStateFlow(initialDataResultResponse, beforeEmit = {
-            if (it is ResultType.Success) {
-                if (it.data.data.service_status == "1")
-                    appPreference.user =
-                    appPreference.user?.copy(indoNepal = "1")
-            }
-        })
+        callApiForStateFlow(initialDataResultResponse)
         { repository.fetchActivationInitialData() }
     }
 
@@ -83,17 +102,42 @@ class INServiceActivationViewModel @Inject constructor(
     fun onActivation() {
 
 
+        callApiForShareFlow(_activateServiceResulFlow)
+        { repository.activateIndoNepalService(hashMapOf("na" to "na")) }
     }
 
     fun uploadDoc() {
+
+        if(selectedFile.value ==null){
+            alertBanner("PDF Document","select pdf document")
+            return
+        }
 
         val multiFile = RetrofitUtil.fileToMultipart(selectedFile.value, "document_image")
         callApiForShareFlow(_documentUploadResultFlow) { repository.uploadActivationDoc(multiFile) }
 
     }
 
+    fun onCourierDataSubmit() {
+
+        callApiForShareFlow(_courierDataResultFlow) {
+            repository.submitCourierData(hashMapOf(
+                "courierName" to input.courierName.getValue(),
+                "docketNumber" to input.docketNumber.getValue(),
+                "CourierDispatchDate" to input.courierDate.getValue()
+            ))
+        }
+    }
+
 
     enum class DownloadFormType {
         SAMPLE, FORM
     }
+
+
+    data class FormInput(
+        val courierName : InputWrapper = InputWrapper{AppValidator.minThreeChar(it)},
+        val docketNumber : InputWrapper = InputWrapper{AppValidator.minThreeChar(it)},
+        val courierDate : InputWrapper = InputWrapper{AppValidator.dobValidation(it)},
+    ) : BaseInput(courierName,docketNumber,courierDate)
 }

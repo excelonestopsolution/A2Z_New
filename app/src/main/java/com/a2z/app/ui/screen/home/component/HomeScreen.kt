@@ -68,54 +68,38 @@ fun HomeScreen(viewModel: DashboardViewModel) {
        }, enabled = true) {
 
 
-           if (viewModel.bottomSheetVisibilityState.value){
-
-               HomeSignInOptionWidget(
-                   dialogState = viewModel.singInDialogState,
-                   onBiometric = {
-                       viewModel.singInDialogState.value = false
-                       viewModel.setOnLaunchEffect()
-                   },
-                   onLogin = {
-                       viewModel.logout()
-                   }
-               )
-
-               HomeExitDialogComponent(viewModel.exitDialogState){
+           HomeSignInOptionWidget(
+               dialogState = viewModel.singInDialogState,
+               onBiometric = {
+                   viewModel.singInDialogState.value = false
+                   viewModel.setOnLaunchEffect()
+               },
+               onLogin = {
                    viewModel.logout()
                }
+           )
 
-               HomeLocationServiceDialog()
+           HomeExitDialogComponent(viewModel.exitDialogState){
+               viewModel.logout()
+           }
+
+           HomeLocationServiceDialog()
 
 
-               LaunchedEffect(key1 = viewModel.onLaunchEffect.value, block = {
-                   if (useLocalAuth)
-                       LocalAuth.showBiometricPrompt(activity) {
-                           when (it) {
-                               is LocalAuthResultType.Error ->
-                                   viewModel.singInDialogState.value = true
-                               LocalAuthResultType.Failure -> {}
-                               is LocalAuthResultType.Success -> {
-                                   useLocalAuth = false
-                               }
+           LaunchedEffect(key1 = viewModel.onLaunchEffect.value, block = {
+               if (useLocalAuth)
+                   LocalAuth.showBiometricPrompt(activity) {
+                       when (it) {
+                           is LocalAuthResultType.Error ->
+                               viewModel.singInDialogState.value = true
+                           LocalAuthResultType.Failure -> {}
+                           is LocalAuthResultType.Success -> {
+                               useLocalAuth = false
                            }
                        }
-               })
-               HomeScreenContent()
-
-           }
-
-           else ObsComponent(
-               flow = viewModel.balanceResponseFlow,
-               onRetry = {
-                   viewModel.fetchWalletBalance()
-                   viewModel.fetchNews()
-               }
-           ) {
-
-               viewModel.exitFromApp = false
-               viewModel.bottomSheetVisibilityState.value = true
-           }
+                   }
+           })
+           HomeScreenContent()
 
 
        }

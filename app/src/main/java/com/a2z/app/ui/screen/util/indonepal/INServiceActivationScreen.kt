@@ -31,12 +31,16 @@ import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.AppTextField
+import com.a2z.app.ui.component.common.DateTextField
 import com.a2z.app.ui.component.common.FileTextField
 import com.a2z.app.ui.component.permission.CheckCameraStoragePermission
+import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.theme.*
+import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.AppUtil
 import com.a2z.app.util.FilePath
 import com.a2z.app.util.FileUtil
+import com.a2z.app.util.extension.removeDateSeparator
 import java.io.File
 
 
@@ -58,38 +62,11 @@ fun INServiceActivationScreen() {
                             .padding(8.dp),
                         shape = MaterialTheme.shapes.small
                     ) {
-                        if (it.data.service_status == "1")
-                            BuildAlreadyActivated()
-                        else BuildMainContent(viewModel, it)
+                        BuildMainContent(viewModel, it)
                     }
                 } else viewModel.showObsAlertDialog(it.message)
             }
 
-        }
-    }
-}
-
-@Composable
-private fun BuildAlreadyActivated() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-            Image(
-                painter = painterResource(id = R.drawable.icon_sucess),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(GreenColor),
-                modifier = Modifier.size(90.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Service is activated!",
-                fontWeight = FontWeight.SemiBold,
-                color = GreenColor,
-                fontSize = 14.sp
-            )
         }
     }
 }
@@ -119,6 +96,12 @@ private fun BuildMainContent(
 
         BuildActivationButton(it, viewModel)
     }
+
+    ConfirmActionDialog(
+        state = viewModel.confirmDialogState,
+        title = "You are sure ?",
+        description = viewModel.staticData.warning.first()
+    ) {viewModel.onActivation()}
 }
 
 @Composable
@@ -132,70 +115,6 @@ fun BuildActivationFormContent(it: INActivationInitialResponse) {
 
     @Composable
     fun BuildUploadContent() {
-
-        fun getFileFromUri(context: Context, uri: Uri?): File? {
-            uri ?: return null
-            uri.path ?: return null
-
-            var newUriString = uri.toString()
-            newUriString = newUriString.replace(
-                "content://com.android.providers.downloads.documents/",
-                "content://com.android.providers.media.documents/"
-            )
-            newUriString = newUriString.replace(
-                "/msf%3A", "/image%3A"
-            )
-            val newUri = Uri.parse(newUriString)
-
-            var realPath = String()
-            val databaseUri: Uri
-            val selection: String?
-            val selectionArgs: Array<String>?
-            if (newUri.path?.contains("/document/image:") == true) {
-                databaseUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                selection = "_id=?"
-                selectionArgs = arrayOf(DocumentsContract.getDocumentId(newUri).split(":")[1])
-            } else {
-                databaseUri = newUri
-                selection = null
-                selectionArgs = null
-            }
-            try {
-                val column = "_data"
-                val projection = arrayOf(column)
-                val cursor = context.contentResolver.query(
-                    databaseUri,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null
-                )
-                cursor?.let {
-                    if (it.moveToFirst()) {
-                        val columnIndex = cursor.getColumnIndexOrThrow(column)
-                        realPath = cursor.getString(columnIndex)
-                    }
-                    cursor.close()
-                }
-            } catch (e: Exception) {
-                Log.i("GetFileUri Exception:", e.message ?: "")
-            }
-            val path = realPath.ifEmpty {
-                when {
-                    newUri.path?.contains("/document/raw:") == true -> newUri.path?.replace(
-                        "/document/raw:",
-                        ""
-                    )
-                    newUri.path?.contains("/document/primary:") == true -> newUri.path?.replace(
-                        "/document/primary:",
-                        "/storage/emulated/0/"
-                    )
-                    else -> return null
-                }
-            }
-            return if (path.isNullOrEmpty()) null else File(path)
-        }
-
 
         val context = LocalContext.current
 
@@ -248,7 +167,7 @@ fun BuildActivationFormContent(it: INActivationInitialResponse) {
         }
     }
 
-    Column(
+    if (it.data.service_status != "0") Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
@@ -277,31 +196,61 @@ fun BuildActivationFormContent(it: INActivationInitialResponse) {
             BuildStatusContent(text = documentText, isPending = isDocumentPending)
         }
 
-        Text(
-            text = "Courier", style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(vertical = 8.dp)
-        )
-        if (getStatus(it.data.courier_status) == 0)
-            Column() {
-                AppTextField(value = "", label = "Courier Name")
-                AppTextField(value = "", label = "Docket Number")
-                AppTextField(value = "", label = "Courier Dispatch Date")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "Submit")
-                }
+        if(getStatus(it.data.document_status) == 1){
+            Text(
+                text = "Courier", style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+            if (getStatus(it.data.courier_status) == 0)
+                BuildInputForm()
+            else if (getStatus(it.data.courier_status) == 1) {
+                BuildStatusContent(text = "Courier Approved", isPending = false)
+            } else if (getStatus(it.data.courier_status) == 3) {
+                BuildStatusContent(text = "Courier Screening...", isPending = true)
+            } else if (getStatus(it.data.courier_status) == 4) {
+                Text(text = "Courier Reject ! Please content with admin", color = RedColor)
             }
-        else if (getStatus(it.data.courier_status) == 1) {
-            BuildStatusContent(text = "Courier Approved", isPending = false)
-        } else if (getStatus(it.data.courier_status) == 3) {
-            BuildStatusContent(text = "Courier Screening...", isPending = true)
-        } else if (getStatus(it.data.courier_status) == 4) {
-            Text(text = "Courier Reject ! Please content with admin", color = RedColor)
         }
 
     }
 
 
+}
+
+@Composable
+private fun BuildInputForm() {
+    val viewModel : INServiceActivationViewModel = hiltViewModel()
+    val input = viewModel.input
+    Column {
+        AppTextField(
+            value = input.courierName.formValue(),
+            label = "Courier Name",
+            error = input.courierName.formError(),
+            onChange = {input.courierName.onChange(it)}
+        )
+        AppTextField(
+            value = input.docketNumber.formValue(),
+            label = "Docket Number",
+            error = input.docketNumber.formError(),
+            onChange = {input.docketNumber.onChange(it)}
+        )
+         DateTextField(
+            value = input.courierDate.formValue(),
+            label = "Courier Dispatch Date",
+            onChange = { value -> input.courierDate.onChange(value) },
+            error = input.courierDate.formError(),
+            topSpace = MaterialTheme.spacing.medium,
+            downText = "hint : dob form 01/01/1970",
+            onDateSelected = { input.courierDate.onChange(it.removeDateSeparator()) }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(
+            enabled = input.isValidObs.value,
+            onClick = {viewModel.onCourierDataSubmit()},
+            modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Submit")
+        }
+    }
 }
 
 
@@ -378,7 +327,9 @@ private fun BuildActivationButton(
     it: INActivationInitialResponse, viewModel: INServiceActivationViewModel
 ) {
     if (it.data.service_status == "0") Button(
-        onClick = { viewModel.onActivation() },
+        onClick = {
+            viewModel.confirmDialogState.value = true
+        },
         modifier = Modifier
             .padding(vertical = 16.dp)
             .fillMaxWidth()

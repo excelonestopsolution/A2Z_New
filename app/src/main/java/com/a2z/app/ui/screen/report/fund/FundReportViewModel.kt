@@ -49,8 +49,8 @@ class FundReportViewModel @Inject constructor(
 
     fun fetchReport() {
         val param = hashMapOf(
-            "fromdate" to startDate.insertDateSeparator(),
-            "todate" to endDate.insertDateSeparator(),
+            "start_date" to startDate.insertDateSeparator(),
+            "end_date" to endDate.insertDateSeparator(),
             "page" to pagingState.page.toString()
         )
         val call = suspend { repository.fundReport(param) }

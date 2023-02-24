@@ -29,7 +29,7 @@ fun DTReportScreen() {
     Scaffold(backgroundColor = BackgroundColor, topBar = {
         NavTopBar(title = "DT Report", actions = {
             ReportNavActionButton {
-                viewModel.filterDialogState.value = false
+                viewModel.filterDialogState.value = true
             }
         })
     }) {

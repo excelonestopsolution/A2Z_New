@@ -21,8 +21,10 @@ data class BillFetchInfoResponse(
 data class BillFetchInfo(
     @SerializedName("context") val context : String?,
     @SerializedName("CustomerName") val customerName : String?,
-    @SerializedName("Billamount") val billAmount : String,
+    @SerializedName("customerRefId") val customerRef : String?,
+    @SerializedName("billPeriod") val billPeriod : String?,
+    @SerializedName("Billamount", alternate = ["billAmount"]) val billAmount : String,
     @SerializedName("Duedate")val dueDate : String,
-    @SerializedName("BillNumber")val billNumber : String,
+    @SerializedName("BillNumber", alternate = ["billNumber"])val billNumber : String,
     @SerializedName("Billdate")val Billdate : String,
 ) : Parcelable

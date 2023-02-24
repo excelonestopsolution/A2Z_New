@@ -37,6 +37,7 @@ fun StatusDialog(
     if (
         state is StatusDialogType.Progress ||
         state is StatusDialogType.Transaction ||
+        state is StatusDialogType.ProgressFull ||
         state is StatusDialogType.None
     ) {
         when (state) {
@@ -46,6 +47,10 @@ fun StatusDialog(
             }
             is StatusDialogType.Transaction -> {
                 TransactionDialog()
+            }
+            is StatusDialogType.ProgressFull -> {
+                val message = (state as StatusDialogType.ProgressFull).message
+                ProgressFullScreenDialog(message)
             }
             else -> Box {}
         }

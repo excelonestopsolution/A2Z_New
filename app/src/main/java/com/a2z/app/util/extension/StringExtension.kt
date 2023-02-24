@@ -20,12 +20,12 @@ fun String.removeDateSeparator(): String {
     return this.replace(AppConstant.DATE_SEPARATOR, "")
 }
 
-fun String.insertDateSeparator(): String {
+fun String.insertDateSeparator(character : String = AppConstant.DATE_SEPARATOR): String {
     val charArray = this.toCharArray()
     val build = StringBuilder()
     charArray.forEachIndexed { index, value ->
         if (index == 2 || index == 4)
-            build.append("${AppConstant.DATE_SEPARATOR}$value")
+            build.append("$character$value")
         else build.append(value.toString())
     }
     return build.toString()

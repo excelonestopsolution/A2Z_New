@@ -167,8 +167,8 @@ fun BuildMainContent() {
 
                                 if (viewModel.isMPos) Text(text = "Enter amount in range of $minAmount to $maxAmount")
                                 else Text(text = "Enter amount in range of 100 to 10000")
-                                if (viewModel.isMPos) Text(text = "Enter amount multiple of 10")
-                                if (viewModel.isMPos) Text(text = "Such as 100, 110, 120 ... 1000")
+                                 Text(text = "Enter amount multiple of 10")
+                                 Text(text = "Such as 100, 110, 120 ... 1000")
 
 
                             }

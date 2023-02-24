@@ -46,9 +46,6 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appPreference.latitude = ""
-        appPreference.longitude = ""
-
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 viewModel.isLoading.value ?: false

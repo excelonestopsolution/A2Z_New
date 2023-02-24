@@ -1,4 +1,4 @@
-package com.a2z.app.ui.component
+package com.a2z.app.ui.component.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -25,3 +25,5 @@ fun AppCheckBox(
         Text(title, style = MaterialTheme.typography.subtitle2)
     }
 }
+
+

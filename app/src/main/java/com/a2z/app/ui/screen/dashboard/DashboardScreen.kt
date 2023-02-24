@@ -30,12 +30,10 @@ fun DashboardScreen(
     ) {
         val homeBottomNavController = rememberNavController()
         viewModel.scaffoldState = rememberScaffoldState()
-        viewModel.bottomSheetVisibilityState
 
         Scaffold(
             scaffoldState = viewModel.scaffoldState!!,
             bottomBar = {
-                if (viewModel.bottomSheetVisibilityState.value)
                     DashboardBottomBarWidget(homeBottomNavController)
             },
             drawerShape = MaterialTheme.shapes.small,

@@ -89,9 +89,8 @@ fun INBeneficiaryAddScreen() {
                             label = "Payment Type",
                             list = viewModel.staticData.paymentMode.map { it.name },
                             onSelect = {
-                                if(it == "Account Deposit")
-                                    viewModel.validateAccountNumber.value = true
-                                else viewModel.validateAccountNumber.value = false
+                                viewModel.validateAccountNumber.value = it == "Account Deposit"
+                                Unit
                             }
                         )
 

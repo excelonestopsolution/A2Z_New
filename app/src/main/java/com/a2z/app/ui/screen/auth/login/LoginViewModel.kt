@@ -2,7 +2,9 @@ package com.a2z.app.ui.screen.auth.login
 
 import android.content.Context
 import android.os.Build
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.auth.User
@@ -32,6 +34,7 @@ class LoginViewModel @Inject constructor(
 
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
+    var autoLogin by mutableStateOf(false)
 
 
     private val loginFlow = resultShareFlow<User>()
@@ -49,14 +52,16 @@ class LoginViewModel @Inject constructor(
             input.validate()
         }
         viewModelScope.launch { subscribers() }
-
-
     }
 
 
     private suspend fun subscribers() {
         loginFlow.getLatest(
-            progress = { progressDialog("Login") },
+            progress = {
+                if (autoLogin)
+                    progressFullScreenDialog("Login")
+                else progressDialog("Login")
+            },
             success = { onLoginSuccess(it) }
         )
     }
@@ -66,31 +71,44 @@ class LoginViewModel @Inject constructor(
         val message = user.message
         when (status) {
             1 -> {
-                setBanner(BannerType.Success(title = "User Login", message = message))
                 saveData(user)
-                delay(1000)
-
+                if (!autoLogin) {
+                    setBanner(BannerType.Success(title = "User Login", message = message))
+                    delay(1000)
+                }
                 navigateTo(
-                    route = NavScreen.DashboardScreen.passArgs(true),
+                    route = NavScreen.DashboardScreen.passArgs(!autoLogin),
                     popUpAll = true
                 )
-
-
             }
             700 -> {
+
+                if (autoLogin) {
+                    autoLogin = false
+                    appPreference.latitude = ""
+                    appPreference.longitude = ""
+                }
+
                 val mobile = input.userIdWrapper.getValue()
                 navigateTo(NavScreen.LoginOtpScreen.passArgs(mobile))
             }
             else -> {
-                alertDialog(message)
+                if (autoLogin) {
+                    autoLogin = false
+                    appPreference.latitude = ""
+                    appPreference.longitude = ""
+                } else alertDialog(message)
             }
         }
     }
 
     fun login() {
-        if (bannerState.value is BannerType.Success) return
-        val password = AppSecurity.encrypt(input.passwordWrapper.input.value) ?: ""
-        val mobile = AppSecurity.encrypt(input.userIdWrapper.input.value) ?: ""
+        if (bannerState.value is BannerType.Success && !autoLogin) return
+        val password =
+            if (autoLogin) AppSecurity.encrypt(appPreference.password) ?: ""
+            else AppSecurity.encrypt(input.passwordWrapper.input.value) ?: ""
+        val mobile = if (autoLogin) AppSecurity.encrypt(appPreference.loginId) ?: ""
+        else AppSecurity.encrypt(input.userIdWrapper.input.value) ?: ""
         val latitude = appPreference.latitude
         val longitude = appPreference.longitude
         callApiForShareFlow(loginFlow) {

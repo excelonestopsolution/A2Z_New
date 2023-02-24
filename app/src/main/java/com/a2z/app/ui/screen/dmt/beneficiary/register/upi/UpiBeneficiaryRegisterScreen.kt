@@ -95,26 +95,6 @@ fun UpiBeneficiaryRegisterScreen(
         topBar = { NavTopBar(title = "Upi Beneficiary Register") }) {
 
 
-        ConfirmActionDialog(
-            title = "Confirm Verification ? ",
-            description = "Verification for upi id ${viewModel.input.upiId.getValue()} ?"
-                    + "\n\nIt will charge for rs ${viewModel.chargeAmount.value.toString()}",
-            buttonText = "Verify",
-            state = viewModel.confirmVerificationDialog,
-        ) {
-
-            viewModel.verifyUpiId()
-        }
-
-        ConfirmActionDialog(
-            title = "Confirm Reset ? ",
-            description = "Are you sure! to reset verification details",
-            buttonText = "Reset Detail",
-            state = viewModel.confirmResetDialog,
-        ) {
-
-            viewModel.onReset()
-        }
 
         BaseContent(viewModel) {
 
@@ -305,6 +285,28 @@ fun UpiBeneficiaryRegisterScreen(
                             }
                         )
                     ))
+
+                ConfirmActionDialog(
+                    title = "Confirm Verification ? ",
+                    description = "Verification for upi id ${viewModel.input.upiId.getValue()} ?"
+                            + "\n\nIt will charge for rs ${viewModel.chargeAmount.value.toString()}",
+                    buttonText = "Verify",
+                    state = viewModel.confirmVerificationDialog,
+                ) {
+
+                    viewModel.verifyUpiId()
+                }
+
+                ConfirmActionDialog(
+                    title = "Confirm Reset ? ",
+                    description = "Are you sure! to reset verification details",
+                    buttonText = "Reset Detail",
+                    state = viewModel.confirmResetDialog,
+                ) {
+
+                    viewModel.onReset()
+                }
+
             }
         }
 

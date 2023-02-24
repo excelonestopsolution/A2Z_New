@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.matm.MatmServiceInformation
 import com.a2z.app.nav.NavScreen
-import com.a2z.app.ui.component.AppCheckBox
+import com.a2z.app.ui.component.common.AppCheckBox
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.PickCameraAndGalleryImage
@@ -45,7 +45,6 @@ import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.*
 import com.a2z.app.ui.util.extension.dashedBorder
 import com.a2z.app.util.BitmapUtil
-import com.a2z.app.util.FileUtil
 
 @Composable
 fun MATMOrderTabContent() {

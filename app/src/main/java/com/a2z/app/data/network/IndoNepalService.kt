@@ -59,4 +59,13 @@ interface IndoNepalService {
         @Part documentImage: MultipartBody.Part? = null,
     ): AppResponse
 
+    @POST("indo-nepal/service-activation")
+    @FormUrlEncoded
+    suspend fun activateIndoNepalService(@FieldMap data : FieldMapData): AppResponse
+
+    @POST("indo-nepal/upload-data")
+    @FormUrlEncoded
+    suspend fun submitCourierData(@FieldMap data : FieldMapData): AppResponse
+
+
 }

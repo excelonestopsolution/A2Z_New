@@ -244,6 +244,11 @@ class AepsViewModel @Inject constructor(
 
     fun setTransactionType(type: AepsTransactionType) {
         transactionType.value = type
+
+        if(transactionType.value == AepsTransactionType.MINI_STATEMENT ||
+                transactionType.value == AepsTransactionType.BALANCE_ENQUIRY){
+            input.amountInputWrapper.setValue("0")
+        }
         setFormValid()
     }
 

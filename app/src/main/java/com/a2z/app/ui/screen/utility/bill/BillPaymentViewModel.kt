@@ -21,6 +21,7 @@ import com.a2z.app.ui.util.extension.safeParcelable
 import com.a2z.app.ui.util.extension.safeSerializable
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppUtil
+import com.a2z.app.util.extension.insertDateSeparator
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -152,7 +153,7 @@ class BillPaymentViewModel @Inject constructor(
     private fun fetchBillInfo() {
         fun param() = listOf(
             "number" to input.numberInputWrapper.getValue(),
-            "dob" to input.dobInputWrapper.getValue(),
+            "dob" to input.dobInputWrapper.getValue().insertDateSeparator(),
             "customerMobileNumber" to input.mobileInputWrapper.getValue(),
             "provider" to operator.id.toString()
         ).toTypedArray()

@@ -2,12 +2,8 @@ package com.a2z.app.ui.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -21,17 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.a2z.app.ui.component.AppButton
+import com.a2z.app.ui.component.common.AppCheckBox
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.ui.util.BaseInput
-import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.InputWrapper
+import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.nullOrEmptyToDouble
-import okhttp3.internal.wait
 
 
 private data class ConfirmFormInput(
@@ -47,7 +41,7 @@ private data class ConfirmFormInput(
 @Composable
 fun BaseConfirmDialog(
     state: MutableState<Boolean>,
-    amount: String,
+    amount: String? = null,
     title: String = "Confirm",
     titleValues: List<Pair<String, String>>,
     warningMessage: String? = null,
@@ -64,8 +58,16 @@ fun BaseConfirmDialog(
         )
     ) {
 
-        val input = remember { ConfirmFormInput(amount) }
+        val input = remember { ConfirmFormInput(amount ?: "0") }
         val amountInput = input.amountInput
+
+        val isChecked = rememberStateOf(value = true)
+
+        val message = (successMessage ?: warningMessage) ?: ""
+
+        LaunchedEffect(key1 = Unit, block = {
+            if(message.isNotEmpty()) isChecked.value = false
+        })
 
         Box(
             modifier = Modifier
@@ -82,7 +84,7 @@ fun BaseConfirmDialog(
                     )
                 )
 
-                Text(
+                if (amount != null) Text(
                     text = "₹ $amount/-",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
@@ -93,6 +95,7 @@ fun BaseConfirmDialog(
                         .align(Alignment.Start)
                         .padding(vertical = 12.dp)
                 )
+                if (amount == null) Spacer(modifier = Modifier.height(12.dp))
 
                 titleValues.forEach {
 
@@ -102,9 +105,7 @@ fun BaseConfirmDialog(
                 }
 
 
-                val message = successMessage ?: warningMessage
-
-                if (message != null && message.isNotEmpty()) Spacer(
+                if (message.isNotEmpty()) Spacer(
                     modifier = Modifier.height(
                         8.dp
                     )
@@ -112,19 +113,27 @@ fun BaseConfirmDialog(
 
                 val color = if (successMessage != null && successMessage.isNotEmpty()) GreenColor
                 else RedColor
-                if (message != null && message.isNotEmpty()) Text(
-                    text = message.toString(),
-                    textAlign = TextAlign.Start,
-                    lineHeight = 22.sp,
-                    color = color.copy(alpha = 0.8f),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
 
-                if (confirmAmount) Spacer(modifier = Modifier.height(16.dp))
+                if (message.isNotEmpty()) Row{
+
+                    Checkbox(checked = isChecked.value, onCheckedChange = {
+                        isChecked.value = it
+                    })
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = message.toString(),
+                        textAlign = TextAlign.Start,
+                        lineHeight = 22.sp,
+                        color = color.copy(alpha = 0.8f),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
+                if (confirmAmount && amount != null) Spacer(modifier = Modifier.height(16.dp))
 
 
-                if (confirmAmount) AmountTextField(
+                if (confirmAmount && amount != null) AmountTextField(
                     value = amountInput.formValue(),
                     onChange = { amountInput.onChange(it) },
                     isOutline = true,
@@ -134,7 +143,8 @@ fun BaseConfirmDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    enabled = if (!confirmAmount) true else input.isValidObs.value,
+                    enabled = if (!confirmAmount || amount == null) true
+                    else input.isValidObs.value && isChecked.value,
                     onClick = {
                         state.value = false
                         onConfirm()

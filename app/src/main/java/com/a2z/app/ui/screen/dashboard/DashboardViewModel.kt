@@ -32,8 +32,6 @@ class DashboardViewModel @Inject constructor(
     var scaffoldState: ScaffoldState? = null
     var fromLogin = saveStateHandle.get<String?>("fromLogin").toBoolean()
 
-    val bottomSheetVisibilityState = mutableStateOf(false)
-
     var exitFromApp = false
 
     val exitDialogState = mutableStateOf(false)
@@ -51,7 +49,6 @@ class DashboardViewModel @Inject constructor(
     private val _logoutSharedFlow = MutableSharedFlow<ResultType<AppResponse>>()
 
     init {
-        fetchWalletBalance()
         fetchNews()
         observeLogoutShareFlow()
     }

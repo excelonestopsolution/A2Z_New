@@ -40,6 +40,7 @@ fun DatePickerDialog(
         preDay
     )
 
+    datePicker.datePicker.maxDate = System.currentTimeMillis()
     datePicker.setOnCancelListener { onCancelled.invoke() }
 
     if (preSelectedDate.isValidateDate()) {

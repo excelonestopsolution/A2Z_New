@@ -22,6 +22,7 @@ import com.a2z.app.nav.NavScreen
 import com.a2z.app.service.LocalAuth
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
+import com.a2z.app.ui.component.common.AppCheckBox
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.PasswordTextField
 import com.a2z.app.ui.component.permission.LocationComponent
@@ -30,7 +31,6 @@ import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.singleResult
 import com.a2z.app.util.ToggleBottomSheet
-import com.google.android.gms.maps.model.Dash
 
 @Composable
 fun LoginScreen(
@@ -46,11 +46,12 @@ fun LoginScreen(
 
         if (viewModel.appPreference.user != null
             && LocalAuth.checkForBiometrics(context)
-        ) navController.navigate(NavScreen.DashboardScreen.route) {
-            popUpTo(NavScreen.DashboardScreen.route) {
-                inclusive = true
-            }
-        }
+            && viewModel.appPreference.latitude.isNotEmpty()
+            && viewModel.appPreference.longitude.isNotEmpty()
+        ) {
+            viewModel.autoLogin= true
+            viewModel.login()
+        }else viewModel.autoLogin = false
 
     })
 
@@ -62,9 +63,7 @@ fun LoginScreen(
 
     BaseContent(viewModel) {
 
-        if (viewModel.appPreference.user != null
-            && LocalAuth.checkForBiometrics(context)
-        ) Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        if (viewModel.autoLogin) Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Image(
                 painter = painterResource(id = R.drawable.app_logo),
                 contentDescription = null,

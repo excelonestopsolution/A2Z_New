@@ -26,5 +26,7 @@ interface IndoNepalRepository {
     suspend fun fetchActivationInitialData() : INActivationInitialResponse
 
     suspend fun uploadActivationDoc(documentImage: MultipartBody.Part?): AppResponse
+    suspend fun activateIndoNepalService(data : FieldMapData): AppResponse
+    suspend fun submitCourierData(data : FieldMapData): AppResponse
 
 }

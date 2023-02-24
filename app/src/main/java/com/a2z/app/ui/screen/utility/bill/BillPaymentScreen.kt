@@ -95,8 +95,8 @@ private fun FetchFormCard() {
                 )
             )
             if (viewModel.billInfo.value != null) TitleValueVertically(
-                title = "Bill Number",
-                value = viewModel.billInfo.value?.billNumber
+                title = "Customer Ref",
+                value = viewModel.billInfo.value?.customerRef
             )
 
         }
@@ -198,6 +198,8 @@ fun BuildInfoComponent() {
                 .padding(12.dp)
         ) {
             TitleValueHorizontally(title = "Bill Amount", value = billInfo.billAmount)
+            TitleValueHorizontally(title = "Bill Number", value = billInfo.billNumber)
+            TitleValueHorizontally(title = "Bill Period", value = billInfo.billPeriod)
             TitleValueHorizontally(title = "Customer Name", value = billInfo.customerName)
             TitleValueHorizontally(title = "Bill Date", value = billInfo.Billdate, useNA = true)
             TitleValueHorizontally(title = "Due Date", value = billInfo.dueDate)

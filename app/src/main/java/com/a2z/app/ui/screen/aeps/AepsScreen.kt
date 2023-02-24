@@ -170,7 +170,10 @@ fun BuildMainContent() {
 
     BaseConfirmDialog(
         state = viewModel.showConfirmDialogState,
-        amount = input.amountInputWrapper.getValue(),
+        amount = if (viewModel.transactionType.value == AepsTransactionType.AADHAAR_PAY ||
+            viewModel.transactionType.value == AepsTransactionType.CASH_WITHDRAWAL
+        ) input.amountInputWrapper.getValue()
+        else null,
         titleValues = listOf(
             "Aadhaar Number" to input.aadhaarInputWrapper.getValue(),
             "Transaction Type" to viewModel.transactionTypeText,

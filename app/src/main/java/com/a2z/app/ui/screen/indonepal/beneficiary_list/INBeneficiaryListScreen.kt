@@ -57,17 +57,18 @@ fun INBeneficiaryListScreen(navBackStackEntry: NavBackStackEntry) {
             FloatingActionButton(
                 onClick = {
                     val customerId = viewModel.sender.customerId!!
-                     navController.navigate(NavScreen.INBeneficiaryAddScreen.passArgs(customerId))
+                    navController.navigate(NavScreen.INBeneficiaryAddScreen.passArgs(customerId))
                 },
 
-            ) {
-                Icon(imageVector = Icons.Default.Add,
-                    contentDescription =null,
+                ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
                     tint = Color.White
                 )
             }
         }
-    ) {_->
+    ) { _ ->
         BaseContent(viewModel) {
             ObsComponent(flow = viewModel.listResultFlow) {
                 if (it.status == 1) {
@@ -75,16 +76,20 @@ fun INBeneficiaryListScreen(navBackStackEntry: NavBackStackEntry) {
                     else {
                         LazyColumn {
                             items(it.data) {
-                                BuildListItem(beneficiary = it){
-                                    navController.navigate(NavScreen.INTransferScreen.passArgs(
-                                        sender = viewModel.sender,
-                                        beneficiary = it
-                                    ))
+                                BuildListItem(beneficiary = it) {
+                                    navController.navigate(
+                                        NavScreen.INTransferScreen.passArgs(
+                                            sender = viewModel.sender,
+                                            beneficiary = it
+                                        )
+                                    )
                                 }
                             }
                         }
                     }
-                } else viewModel.showObsAlertDialog(it.message)
+                } else if (it.status == 2 && it.message.trim() == "No Beneficiary Found")
+                    EmptyListComponent()
+                else viewModel.showObsAlertDialog(it.message)
             }
         }
     }
@@ -93,7 +98,7 @@ fun INBeneficiaryListScreen(navBackStackEntry: NavBackStackEntry) {
 @Composable
 private fun BuildListItem(
     beneficiary: INBeneficiary,
-    callback : (INBeneficiary)->Unit
+    callback: (INBeneficiary) -> Unit
 ) {
 
     val isVisible = remember {
@@ -118,7 +123,7 @@ private fun BuildListItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Column(modifier = Modifier.weight(1f),) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = beneficiary.name.orEmpty(),
                     fontSize = 16.sp,
@@ -132,7 +137,7 @@ private fun BuildListItem(
                     color = PrimaryColorDark.copy(alpha = 0.8f)
                 )
 
-                if (beneficiary.bank_name != null ) Text(
+                if (beneficiary.bank_name != null) Text(
                     text = "Bank Name : ${beneficiary.bank_name}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,

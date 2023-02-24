@@ -28,4 +28,6 @@ class IndoNepalRepositoryImpl @Inject constructor(private val service: IndoNepal
     override suspend fun addBeneficiary(data: FieldMapData) = service.addBeneficiary(data)
     override suspend fun fetchActivationInitialData() = service.fetchActivationInitialData()
     override suspend fun uploadActivationDoc(documentImage: MultipartBody.Part?) = service.uploadActivationDoc(documentImage)
+    override suspend fun activateIndoNepalService(data: FieldMapData) = service.activateIndoNepalService(data)
+    override suspend fun submitCourierData(data: FieldMapData)=service.submitCourierData(data)
 }
