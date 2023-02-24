@@ -1,5 +1,6 @@
 package com.a2z.app.util
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.database.Cursor
 import android.database.DatabaseUtils
@@ -29,7 +30,7 @@ object FileUtil {
     }
 
     @Throws(IOException::class)
-     fun saveImage(context: Context,bitmap: Bitmap, name: String) : Boolean {
+    fun saveImage(context: Context, bitmap: Bitmap, name: String): Boolean {
         val saved: Boolean
         val fos: OutputStream? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val resolver: ContentResolver = context.contentResolver
@@ -103,7 +104,11 @@ object FileUtil {
         document.close()
 
 
-        return FileProvider.getUriForFile(context, context.applicationContext.packageName.toString() + ".provider", filePath)
+        return FileProvider.getUriForFile(
+            context,
+            context.applicationContext.packageName.toString() + ".provider",
+            filePath
+        )
 
     }
 
@@ -117,6 +122,7 @@ object FileUtil {
 
         }
     }
+
     fun viewPdfFile(uri: Uri?, context: Context) {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -142,9 +148,9 @@ object FileUtil {
             ImageDecoder.decodeBitmap(source)
         }
 
-       /* if (this == null) return null
-        val filePath = this.path
-        return BitmapFactory.decodeFile(filePath);*/
+        /* if (this == null) return null
+         val filePath = this.path
+         return BitmapFactory.decodeFile(filePath);*/
     }
 
     fun toUri(context: Context, file: File): Uri? {
@@ -175,7 +181,7 @@ object FileUtil {
 
     private fun getLocalPath(context: Context, uri: Uri): String? {
         if (DEBUG) Log.d(
-             " File -",
+            " File -",
             "Authority: " + uri.authority +
                     ", Fragment: " + uri.fragment +
                     ", Port: " + uri.port +
@@ -184,7 +190,7 @@ object FileUtil {
                     ", Host: " + uri.host +
                     ", Segments: " + uri.pathSegments.toString()
         )
-            val isKitKat = true
+        val isKitKat = true
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
@@ -281,6 +287,7 @@ object FileUtil {
     fun isGooglePhotosUri(uri: Uri): Boolean {
         return "com.google.android.apps.photos.content" == uri.authority
     }
+
     fun isGoogleDriveUri(uri: Uri): Boolean {
         return "com.google.android.apps.docs.storage.legacy" == uri.authority || "com.google.android.apps.docs.storage" == uri.authority
     }
@@ -309,7 +316,7 @@ object FileUtil {
         }
     }
 
-    fun generateFileName( name: String?, directory: File?): File? {
+    fun generateFileName(name: String?, directory: File?): File? {
         var name = name ?: return null
         var file = File(directory, name)
         if (file.exists()) {
@@ -378,6 +385,7 @@ object FileUtil {
     fun isDownloadsDocument(uri: Uri): Boolean {
         return "com.android.providers.downloads.documents" == uri.authority
     }
+
     fun getDocumentCacheDir(context: Context): File? {
         val dir = File(context.cacheDir, DOCUMENTS_DIR)
         if (!dir.exists()) {
@@ -385,6 +393,7 @@ object FileUtil {
         }
         return dir
     }
+
     fun getDataColumn(
         context: Context, uri: Uri?, selection: String?,
         selectionArgs: Array<String>?
@@ -460,5 +469,53 @@ object FileUtil {
             storageDir //directory
         )
     }
+
+    @SuppressLint("SimpleDateFormat")
+    fun createTempFileFromUir(
+        context: Context,
+        uri: Uri,
+    ): File {
+        val returnCursor: Cursor = context.contentResolver.query(
+            uri, arrayOf(
+                OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
+            ), null, null, null
+        )!!
+        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        val sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE)
+        returnCursor.moveToFirst()
+        val name = returnCursor.getString(nameIndex)
+        val size = returnCursor.getLong(sizeIndex).toString()
+
+        val dotIndex = name.indexOf(".")
+        val fileName = name.substring(0, dotIndex)
+        val fileExtension = name.substring(dotIndex)
+
+        AppUtil.logger("fileName : $fileName")
+        AppUtil.logger("fileExtension : $fileExtension")
+
+
+        val storageDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        val output: File = File.createTempFile(
+            fileName, fileExtension, storageDir)
+
+
+        try {
+            val inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
+            val outputStream = FileOutputStream(output)
+            var read = 0
+            val bufferSize = size.toInt()
+            val buffers = ByteArray(bufferSize)
+            while (inputStream.read(buffers).also { read = it } != -1) {
+                outputStream.write(buffers, 0, read)
+            }
+            inputStream.close()
+            outputStream.close()
+        } catch (e: Exception) {
+            Log.e("Exception", e.message!!)
+        }
+        returnCursor.close()
+        return output
+    }
+
 
 }

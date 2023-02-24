@@ -6,6 +6,8 @@ import com.a2z.app.data.model.FlightHotelRedirectUrlResponse
 import com.a2z.app.data.model.PanAutoLoginResponse
 import com.a2z.app.data.model.app.Slider
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.indonepal.INRequestStatus
+import com.a2z.app.data.model.indonepal.INRequestStatusResponse
 import com.a2z.app.data.model.kyc.KycInfoResponse
 import com.a2z.app.data.repository.AppRepository
 import com.a2z.app.data.repository.UpiRepository
@@ -26,14 +28,12 @@ class RetailerHomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-
     val isSliderVisible = mutableStateOf(false)
     val sliders = mutableListOf<Slider>()
 
 
     val hotelFlightDirectUrlFlow = resultShareFlow<FlightHotelRedirectUrlResponse>()
     val panAutoLogFlow = resultShareFlow<PanAutoLoginResponse>()
-
 
 
     private val _checkKycInfoFlow = MutableSharedFlow<ResultType<KycInfoResponse>>()
@@ -70,12 +70,6 @@ class RetailerHomeViewModel @Inject constructor(
     }
 
 
-
-
-
-
-
-
     private fun fetchBanners() {
         callApiForShareFlow(beforeEmit = {
             if (it is ResultType.Success) {
@@ -89,8 +83,6 @@ class RetailerHomeViewModel @Inject constructor(
     }
 
 
-
-
     private fun fetchBankDown() {
         callApiForShareFlow(beforeEmit = {
             if (it is ResultType.Success)
@@ -99,7 +91,6 @@ class RetailerHomeViewModel @Inject constructor(
                 } else bankDownResponseState.value = null
         }, handleException = false) { repository.fetchBankDown() }
     }
-
 
 
     private fun checkDMTAndAEPSKycPending(): Boolean {
@@ -189,14 +180,21 @@ class RetailerHomeViewModel @Inject constructor(
 
     fun navigateKycScreen(it: String) {
         when (it) {
-            "AADHAAR_KYC" -> {navigateTo(NavScreen.AadhaarKycScreen.passArgs())}
-            "VIDEO_KYC" -> {navigateTo(NavScreen.DocumentKycScreen.passArgs())}
-            "SETTLEMENT" -> {navigateTo(NavScreen.SettlementBankAddScreen.route)}
-            "AEPS_KYC" -> {navigateTo(NavScreen.AEPSKycScreen.route)}
+            "AADHAAR_KYC" -> {
+                navigateTo(NavScreen.AadhaarKycScreen.passArgs())
+            }
+            "VIDEO_KYC" -> {
+                navigateTo(NavScreen.DocumentKycScreen.passArgs())
+            }
+            "SETTLEMENT" -> {
+                navigateTo(NavScreen.SettlementBankAddScreen.route)
+            }
+            "AEPS_KYC" -> {
+                navigateTo(NavScreen.AEPSKycScreen.route)
+            }
         }
 
     }
-
 }
 
 sealed class HomeScreenState {

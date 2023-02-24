@@ -12,7 +12,10 @@ import androidx.compose.material.icons.filled.Input
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -20,6 +23,7 @@ fun AppDropDownMenu(
     selectedState: MutableState<String>,
     label: String,
     onSelect: ((String) -> Unit?)? = null,
+    downText : String?=null,
     list: List<String>
 ) {
 
@@ -67,6 +71,17 @@ fun AppDropDownMenu(
                    }
                }
            }
+       }
+
+       if (downText!=null) {
+           Spacer(modifier = Modifier.height(2.dp))
+           Text(
+               text = downText, style = TextStyle(
+                   fontSize = 12.sp,
+                   fontWeight = FontWeight.W500,
+                   color = Color.Black.copy(alpha = 0.6f)
+               )
+           )
        }
        Spacer(modifier = Modifier.height(4.dp))
    }

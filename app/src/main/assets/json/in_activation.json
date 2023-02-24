@@ -1,0 +1,15 @@
+{
+  "status" : 1,
+  "message": "",
+  "data" : {
+    "user_id": 16,
+    "service_status": "3",
+    "document_status": "4",
+    "document_image": "https://partners.a2zsuvidhaa.com/user-uploaded-files/16/16-shop-image-1677154545.png",
+    "courier_name":  null,
+    "courier_date": null,
+    "courier_status": "0",
+    "status_id": "0",
+    "remark": null
+  }
+}

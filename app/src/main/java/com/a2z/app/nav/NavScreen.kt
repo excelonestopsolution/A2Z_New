@@ -386,4 +386,12 @@ sealed class NavScreen(val route: String) {
             .args("mobileNumber" to mobileNumber)
     }
 
+    object INBeneficiaryAddScreen : NavScreen("in-beneficiary-add-screen"
+        .params("customerId")){
+        fun passArgs(customerId: String) = "in-beneficiary-add-screen"
+            .args("customerId" to customerId)
+    }
+
+    object INServiceActivationScreen : NavScreen("in-service-activation-screen")
+
 }

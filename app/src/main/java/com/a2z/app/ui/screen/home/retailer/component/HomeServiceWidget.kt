@@ -46,7 +46,7 @@ fun HomeServiceWidget() {
 @Composable
 private fun BuildMoneyAEPService() {
     val navController = LocalNavController.current
-    val viewModel : RetailerHomeViewModel = hiltViewModel()
+    val viewModel: RetailerHomeViewModel = hiltViewModel()
 
     ServiceCard {
         val color = Color(0xFF044274)
@@ -63,7 +63,7 @@ private fun BuildMoneyAEPService() {
                         onClick = {
                             if (viewModel.dmtAndAEPSKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else   navController.navigate(
+                            else navController.navigate(
                                 NavScreen.AepsScreen.passArgs(
                                     aepsType = AepsType.AEPS_1
                                 )
@@ -78,7 +78,7 @@ private fun BuildMoneyAEPService() {
                         onClick = {
                             if (viewModel.dmtAndAEPSKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else   navController.navigate(
+                            else navController.navigate(
                                 NavScreen.AepsScreen.passArgs(
                                     aepsType = AepsType.AEPS_3
                                 )
@@ -93,7 +93,7 @@ private fun BuildMoneyAEPService() {
                         onClick = {
                             if (viewModel.dmtAndAEPSKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else  navController.navigate(
+                            else navController.navigate(
                                 NavScreen.MatmScreen.passArgs(
                                     isMPos = false
                                 )
@@ -108,7 +108,7 @@ private fun BuildMoneyAEPService() {
                         onClick = {
                             if (viewModel.dmtAndAEPSKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else    navController.navigate(
+                            else navController.navigate(
                                 NavScreen.MatmScreen.passArgs(
                                     isMPos = true
                                 )
@@ -160,7 +160,7 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             if (viewModel.dmtKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else    navController.navigate(
+                            else navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
                                     dmtType = DMTType.WALLET_2,
                                     bankDown = viewModel.bankDownResponseState.value
@@ -179,7 +179,7 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             if (viewModel.dmtKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else  navController.navigate(
+                            else navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
                                     dmtType = DMTType.WALLET_3,
                                     bankDown = viewModel.bankDownResponseState.value
@@ -198,7 +198,7 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             if (viewModel.dmtKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else   navController.navigate(
+                            else navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
                                     dmtType = DMTType.DMT_3,
                                     bankDown = viewModel.bankDownResponseState.value
@@ -222,7 +222,7 @@ private fun BuildMoneyAndPaymentService() {
                         onClick = {
                             if (viewModel.dmtKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else   navController.navigate(
+                            else navController.navigate(
                                 NavScreen.DmtSenderSearchScreen.passArgs(
                                     dmtType = DMTType.UPI,
                                     bankDown = BankDownResponse(
@@ -233,6 +233,18 @@ private fun BuildMoneyAndPaymentService() {
                             )
                         }
                     )
+
+                    BuildIconAndIconTitle(
+                        title = "Indo Nepal",
+                        icon = R.drawable.ic_launcher_money,
+                        color = color,
+                        onClick = {
+                            if (viewModel.appPreference.user?.indoNepal == "0")
+                                navController.navigate(NavScreen.INServiceActivationScreen.route)
+                            else navController.navigate(NavScreen.INSearchSenderScreen.route)
+                        }
+                    )
+
 
                     BuildIconAndIconTitle(
                         title = "Flight Hotel",
@@ -254,10 +266,9 @@ private fun BuildMoneyAndPaymentService() {
                             else navController.navigate(NavScreen.PanServiceScreen.route)
                         }
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+
                 }
 
-                val viewModel: RetailerHomeViewModel = hiltViewModel()
                 BankDownComponent(viewModel.bankDownResponseState)
 
             }

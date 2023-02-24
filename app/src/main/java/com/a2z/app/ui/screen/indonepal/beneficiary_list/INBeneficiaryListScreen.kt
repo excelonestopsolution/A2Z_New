@@ -9,8 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,9 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.data.model.dmt.Beneficiary
+import androidx.navigation.NavBackStackEntry
 import com.a2z.app.data.model.indonepal.INBeneficiary
-import com.a2z.app.data.model.indonepal.INSender
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.EmptyListComponent
@@ -33,17 +34,40 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.util.extension.singleResult
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun INBeneficiaryListScreen() {
+fun INBeneficiaryListScreen(navBackStackEntry: NavBackStackEntry) {
 
     val viewModel: INBeneficiaryListViewModel = hiltViewModel()
     val navController = LocalNavController.current
+
+    LaunchedEffect(key1 = Unit) {
+        val isRegistered = navBackStackEntry.singleResult<Boolean>("isRegistered")
+        if (isRegistered == true) viewModel.fetchBeneficiary()
+    }
+
+
     Scaffold(
         backgroundColor = BackgroundColor,
-        topBar = { NavTopBar(title = "Beneficiary List") }) {_->
+        topBar = { NavTopBar(title = "Beneficiary List") },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    val customerId = viewModel.sender.customerId!!
+                     navController.navigate(NavScreen.INBeneficiaryAddScreen.passArgs(customerId))
+                },
+
+            ) {
+                Icon(imageVector = Icons.Default.Add,
+                    contentDescription =null,
+                    tint = Color.White
+                )
+            }
+        }
+    ) {_->
         BaseContent(viewModel) {
             ObsComponent(flow = viewModel.listResultFlow) {
                 if (it.status == 1) {

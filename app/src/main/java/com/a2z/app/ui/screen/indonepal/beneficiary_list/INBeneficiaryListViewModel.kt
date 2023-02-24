@@ -30,13 +30,8 @@ class INBeneficiaryListViewModel @Inject constructor(
         fetchBeneficiary()
     }
 
-    private fun fetchBeneficiary(){
+    fun fetchBeneficiary(){
 
-        /*apiUtil.fakeApiForStateFlow(
-            flow = listResultFlow,
-            scope = viewModelScope,
-            fileName = "in_beneficiaries"
-        )*/
 
         callApiForStateFlow(listResultFlow) { repository.fetchBeneficiary(
             hashMapOf("senderMobileNumber" to sender.mobile.toString())

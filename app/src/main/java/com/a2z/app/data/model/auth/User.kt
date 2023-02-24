@@ -47,5 +47,6 @@ data class User(
     @SerializedName("is_pan_card_activated") val isPanCardActivated: Int,
     @SerializedName("matm") val matm: String,
     @SerializedName("mpos") val mpos: String,
+    @SerializedName("indoNepal") val indoNepal: String,
 
     ) : Parcelable

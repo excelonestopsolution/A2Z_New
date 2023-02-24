@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.indonepal.*
 import com.a2z.app.data.repository.IndoNepalRepository
+import com.a2z.app.ui.screen.indonepal.INUtil
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
@@ -30,7 +31,7 @@ class INTransferViewModel @Inject constructor(
     val beneficiary = savedStateHandle.safeParcelable<INBeneficiary>("beneficiary")!!
     val sender = savedStateHandle.safeParcelable<INSender>("sender")!!
 
-    val staticData = appPreference.inStaticData!!
+    val staticData = INUtil.staticData()
 
     val isChargeFetched = mutableStateOf(false)
     val input = InputForm(isChargeFetched)

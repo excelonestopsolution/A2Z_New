@@ -29,6 +29,7 @@ import com.a2z.app.ui.screen.fund.payment_gateway.PaymentGatewayScreen
 import com.a2z.app.ui.screen.fund.payment_return.ParentPaymentReturnScreen
 import com.a2z.app.ui.screen.fund.request.FundRequestScreen
 import com.a2z.app.ui.screen.fund.upi_payment.UpiPaymentScreen
+import com.a2z.app.ui.screen.indonepal.beneficiary_add.INBeneficiaryAddScreen
 import com.a2z.app.ui.screen.indonepal.beneficiary_list.INBeneficiaryListScreen
 import com.a2z.app.ui.screen.indonepal.detail_sender.INDetailSenderScreen
 import com.a2z.app.ui.screen.indonepal.register_sender.INRegisterSenderScreen
@@ -60,6 +61,7 @@ import com.a2z.app.ui.screen.util.agreement.UserAgreementScreen
 import com.a2z.app.ui.screen.util.commission.MyCommissionScreen
 import com.a2z.app.ui.screen.util.complaint.ComplaintScreen
 import com.a2z.app.ui.screen.util.device_order.DeviceOrderTabScreen
+import com.a2z.app.ui.screen.util.indonepal.INServiceActivationScreen
 import com.a2z.app.ui.screen.util.pan_service.PanServiceScreen
 import com.a2z.app.ui.screen.util.scheme_detail.SchemeDetailScreen
 import com.a2z.app.ui.screen.utility.bill.BillPaymentScreen
@@ -74,7 +76,7 @@ fun MainNav(viewModel: MainViewModel) {
 
     NavHost(
         navController = LocalNavController.current,
-        startDestination = NavScreen.INSearchSenderScreen.route,
+        startDestination = NavScreen.LoginScreen.route,
         route = "main-root"
     ) {
 
@@ -294,12 +296,19 @@ fun MainNav(viewModel: MainViewModel) {
             content = { INDetailSenderScreen(it) })
         composable(
             route = NavScreen.INBeneficiaryScreen.route,
-            content = { INBeneficiaryListScreen() })
+            content = { INBeneficiaryListScreen(it) })
         composable(
             route = NavScreen.INTransferScreen.route,
             content = { INTransferScreen() })
         composable(
             route = NavScreen.INRegistrationScreen.route,
             content = { INRegisterSenderScreen() })
+        composable(
+            route = NavScreen.INBeneficiaryAddScreen.route,
+            content = { INBeneficiaryAddScreen() })
+
+        composable(
+            route = NavScreen.INServiceActivationScreen.route,
+            content = { INServiceActivationScreen() })
     }
 }

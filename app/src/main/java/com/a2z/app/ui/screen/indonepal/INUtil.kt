@@ -1,6 +1,7 @@
 package com.a2z.app.ui.screen.indonepal
 
 import com.a2z.app.data.model.indonepal.INStaticData
+import com.a2z.app.data.model.indonepal.INStaticServiceData
 import com.google.gson.Gson
 
 object INUtil {
@@ -682,7 +683,31 @@ object INUtil {
 }
     """
 
+    private const val STATIC_SERVICE_DATA = """
+        {
+						"status": 1,
+						"warning": [
+							"You want to do Activation Process For IndoNepal Money Transfer.This is chargeable Service.You have to pay 100Rs(including Gst) for this Service after complete the process"
+						],
+						"note": [
+							"Your Csp Code is:-write here user id.",
+							"Please download the application form through download link.",
+							"Please fill all mandatory fields and upload in PDF format.",
+							"Send the application form along with self-attested Aadhar Card, PAN Card to the below mentioned address.",
+							"Send all the three documents to - EXCEL ONE STOP SOLUTION PVT. LTD. Granthlok, 5A, 1st Floor Wing A, Taj Hari Hotal, New Pali Road, Near Bhagat ki Kothi Police Chowki, Jodhpur-342005.",
+							"Activation will be done within 7-10 working days after receiving the above documents."
+						],
+						"image": {
+							"form": "https://partners.a2zsuvidhaa.com/indoNepal_Onboarding_form/form.pdf",
+							"sampleForm": "https://partners.a2zsuvidhaa.com/indoNepal_Onboarding_form/sample.pdf"
+						}
+					}
+    """
     fun staticData(): INStaticData {
         return Gson().fromJson(STATIC_RAW_DATA, INStaticData::class.java)
+    }
+
+    fun staticServiceData(): INStaticServiceData {
+        return Gson().fromJson(STATIC_SERVICE_DATA, INStaticServiceData::class.java)
     }
 }

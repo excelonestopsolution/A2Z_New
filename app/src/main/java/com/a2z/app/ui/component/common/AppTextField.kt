@@ -490,7 +490,7 @@ fun DropDownTextField(
                 value = value,
                 onValueChange = {},
                 textStyle = TextStyle.Default.copy(
-                    fontWeight = FontWeight.SemiBold, fontSize = 16.sp
+                    fontWeight = FontWeight.SemiBold, fontSize = 14.sp
                 ),
                 placeholder = { Text(text = hint) },
                 modifier = Modifier.fillMaxWidth(),

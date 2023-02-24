@@ -295,6 +295,7 @@ private fun AgreementStatusContent(
                         if (result) {
                             val downloadManager =
                                 context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
                             viewModel.onDownloadAgreement(downloadUrl, downloadManager)
                         } else {
                             viewModel.navigateTo(

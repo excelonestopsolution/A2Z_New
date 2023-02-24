@@ -88,7 +88,7 @@ class INRegisterSenderViewModel @Inject constructor(
         val param = hashMapOf(
             "senderName" to input.fullName.getValue(),
             "gender" to genderState.value,
-            "dob" to "04-05-1998",
+            "dob" to "1998-05-04",
             "senderAddress" to input.senderAddress.getValue(),
             "senderMobileNumber" to mobileNumber,
             "employer" to input.senderWorkPlace.getValue(),

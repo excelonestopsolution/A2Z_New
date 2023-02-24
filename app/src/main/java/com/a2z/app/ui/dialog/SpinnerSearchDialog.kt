@@ -31,6 +31,7 @@ fun SpinnerSearchDialog(
 
     state: MutableState<Boolean>,
     list: ArrayList<String>,
+    mutableList: MutableList<String>? = null,
     title: String = "Select",
     onClick: (String) -> Unit
 ) {
@@ -43,7 +44,10 @@ fun SpinnerSearchDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
 
-        val renderList = remember { mutableListOf(*list.toTypedArray()) }
+
+        val renderList = if (mutableList == null)
+            remember { mutableListOf(*list.toTypedArray()) }
+        else remember { mutableList }
 
 
         val selectedItem = rememberStateOf<String?>(value = null)
@@ -78,17 +82,15 @@ fun SpinnerSearchDialog(
                     value = searchInput,
                     onQuery = { value ->
                         searchInput = value
-                        if (value.isNotEmpty())
-                        {
-                            val newLists =  list.filter {
+                        if (value.isNotEmpty()) {
+                            val newLists = list.filter {
                                 it.contains(value, ignoreCase = true)
                             }
                             renderList.clear()
                             renderList.addAll(newLists)
 
                             AppUtil.logger(newLists)
-                        }
-                        else {
+                        } else {
                             renderList.clear()
                             renderList.addAll(list)
                         }
@@ -125,7 +127,6 @@ fun SpinnerSearchDialog(
         }
 
     }
-
 
 
 }

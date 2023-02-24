@@ -3,6 +3,8 @@ package com.a2z.app.data.network
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.indonepal.*
 import com.a2z.app.util.FieldMapData
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface IndoNepalService {
@@ -39,5 +41,22 @@ interface IndoNepalService {
     @GET("indo-nepal/state-distic")
     suspend fun fetchDistrict(@Query("stateId") stateId: String): INDistrictResponse
 
+    @POST("indo-nepal/get-bank-branches")
+    @FormUrlEncoded
+    suspend fun fetchBranchList(@Field("bankName") stateId: String): INBranchResponse
+
+
+    @POST("indo-nepal/create-receiver")
+    @FormUrlEncoded
+    suspend fun addBeneficiary(@FieldMap data : FieldMapData): AppResponse
+
+    @GET("indo-nepal/user-data")
+    suspend fun fetchActivationInitialData(): INActivationInitialResponse
+
+    @Multipart
+    @POST("indo-nepal/upload-document")
+    suspend fun uploadActivationDoc(
+        @Part documentImage: MultipartBody.Part? = null,
+    ): AppResponse
 
 }

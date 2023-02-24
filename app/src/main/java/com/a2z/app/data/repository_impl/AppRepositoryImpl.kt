@@ -9,6 +9,7 @@ import com.a2z.app.data.model.app.BannerResponse
 import com.a2z.app.data.model.app.NewsResponse
 import com.a2z.app.data.model.app.QRCodeResponse
 import com.a2z.app.data.model.dmt.BankDownResponse
+import com.a2z.app.data.model.indonepal.INRequestStatus
 import com.a2z.app.data.model.kyc.KycInfoResponse
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
 import com.a2z.app.data.model.report.CommissionSchemeListResponse
@@ -59,4 +60,5 @@ class AppRepositoryImpl @Inject constructor(private val appService: AppService) 
     override suspend fun mobileEmailVerifyRequestOtp(data: FieldMapData) = appService.mobileEmailVerifyRequestOtp(data)
     override suspend fun mobileEmailVerifyOtp(data: FieldMapData)=appService.mobileEmailVerifyOtp(data)
     override suspend fun kycCheck() = appService.kycCheck()
+    override suspend fun checkIndoNepalStatus() = appService.checkIndoNepalStatus()
 }

@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.CollectLatestWithScope
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
@@ -20,6 +22,7 @@ import com.a2z.app.ui.screen.home.component.HomeAppBarWidget
 import com.a2z.app.ui.screen.home.component.HomeWalletWidget
 import com.a2z.app.ui.screen.home.retailer.component.*
 import com.a2z.app.ui.theme.BackgroundColor2
+import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
 
 
@@ -30,7 +33,10 @@ fun RetailerHomeScreen(
     dashboardViewModel: DashboardViewModel,
 
     viewModel: RetailerHomeViewModel = hiltViewModel()
+
 ) {
+
+    val navController = LocalNavController.current
 
    BaseContent(viewModel) {
        Column(

@@ -20,6 +20,7 @@ import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.resource.ResultType
+import com.a2z.app.util.DownloadUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -141,18 +142,12 @@ class UserAgreementViewModel @Inject constructor(
 
         progressDialog("Downloading..")
 
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fileName = "A2Z_Agreement_${timeStamp}.pdf"
-        val desc = "A2Z Suvidhaa Agreement File"
-        val request = DownloadManager.Request(Uri.parse(url))
-            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-            .setTitle(fileName)
-            .setDescription(desc)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setAllowedOverMetered(true)
-            .setAllowedOverRoaming(false)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-        downloadManager.enqueue(request)
+        DownloadUtil(
+            downloadManager= downloadManager,
+            downloadUrl = url,
+            fileName = "Agreement",
+            fileExtension = "pdf"
+        )
 
         viewModelScope.launch {
             delay(1000)

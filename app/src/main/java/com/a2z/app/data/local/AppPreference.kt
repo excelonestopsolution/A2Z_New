@@ -19,12 +19,6 @@ class AppPreference @Inject constructor(context: Context) : BasePreference(conte
         set(value) = saveObject(UPI_STATIC_MESSAGE, value)
         get() = getObject(UPI_STATIC_MESSAGE, UpiStaticMessage::class.java)
 
-
-    var inStaticData: INStaticData?
-        set(value) = saveObject(IN_STATIC_DATA, value)
-        get() = getObject(IN_STATIC_DATA, INStaticData::class.java)
-
-
     var password: String
         set(value) = saveString(PASSWORD, value)
         get() = getString(PASSWORD)

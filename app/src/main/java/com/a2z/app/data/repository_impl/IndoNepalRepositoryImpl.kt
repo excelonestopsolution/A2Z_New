@@ -1,10 +1,11 @@
 package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
-import com.a2z.app.data.model.indonepal.INCommonOtpResponse
+import com.a2z.app.data.model.indonepal.INActivationInitialResponse
 import com.a2z.app.data.network.IndoNepalService
 import com.a2z.app.data.repository.IndoNepalRepository
 import com.a2z.app.util.FieldMapData
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,4 +24,8 @@ class IndoNepalRepositoryImpl @Inject constructor(private val service: IndoNepal
 
     override suspend fun staticData() = service.staticData()
     override suspend fun fetchDistrict(stateId: String) = service.fetchDistrict(stateId)
+    override suspend fun fetchBranchList(bankName: String) = service.fetchBranchList(bankName)
+    override suspend fun addBeneficiary(data: FieldMapData) = service.addBeneficiary(data)
+    override suspend fun fetchActivationInitialData() = service.fetchActivationInitialData()
+    override suspend fun uploadActivationDoc(documentImage: MultipartBody.Part?) = service.uploadActivationDoc(documentImage)
 }
