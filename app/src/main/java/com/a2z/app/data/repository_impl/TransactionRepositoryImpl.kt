@@ -2,6 +2,7 @@ package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsTransaction
+import com.a2z.app.data.model.indonepal.INTransferResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.data.network.TransactionService
@@ -43,6 +44,7 @@ class TransactionRepositoryImpl @Inject constructor(private val service: Transac
 
     override suspend fun approveFundRequest(data: FieldMapData) = service.approveFundRequest(data)
     override suspend fun memberFundTransfer(data: FieldMapData) = service.memberFundTransfer(data)
+    override suspend fun indoNepalTransfer(data: FieldMapData) = service.indoNepalTransfer(data)
 
 
 }

@@ -71,6 +71,7 @@ fun BaseResultComponent(
     dmtInfo: ArrayList<DmtTransactionDetail>? = null,
     vararg titleValues: List<Pair<String, String>>,
     statement: ArrayList<MiniStatement>? = null,
+    commissionAmount: Boolean = false,
     backPressHandle: Boolean = true
 ) {
 
@@ -91,91 +92,104 @@ fun BaseResultComponent(
             backgroundColor = BackgroundColor
         ) { _ ->
 
-         BaseContent(viewModel) {
-             Box(
-                 modifier = Modifier
-                     .fillMaxSize()
-             ) {
+            BaseContent(viewModel) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
 
-                 AndroidView(factory = {
-                     val view = LayoutInflater.from(context)
-                         .inflate(R.layout.view_receipt, null, false)
-                     view
-                 }, update = {
-                     scrollView = it.findViewById(R.id.scroll_view)
+                    AndroidView(factory = {
+                        val view = LayoutInflater.from(context)
+                            .inflate(R.layout.view_receipt, null, false)
+                        view
+                    }, update = {
+                        scrollView = it.findViewById(R.id.scroll_view)
 
-                     val mainView = ComposeView(context = context).apply {
-                         this.setContent {
-                             BuildContent(
-                                 statusId = statusId,
-                                 message = message,
-                                 status = status,
-                                 dateTime = dateTime,
-                                 serviceName = amountTopText,
-                                 providerName = amountBelowText,
-                                 amount = amount,
-                                 availableBalance = availableBalance,
-                                 dmtInfo = dmtInfo,
-                                 isPaymentAmount = isPaymentAmount,
-                                 serviceIconRes = serviceIconRes,
-                                 serviceIconNet = serviceIconNet,
-                                 titleValues = titleValues,
-                                 iconSize = iconSize,
-                                 statement = statement
-                             )
-                         }
-                     }
-                     val spaceView = TextView(context).apply {
-                         layoutParams =
-                             ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
-                     }
+                        val mainView = ComposeView(context = context).apply {
+                            this.setContent {
+                                BuildContent(
+                                    statusId = statusId,
+                                    message = message,
+                                    status = status,
+                                    dateTime = dateTime,
+                                    serviceName = amountTopText,
+                                    providerName = amountBelowText,
+                                    amount = amount,
+                                    availableBalance = availableBalance,
+                                    dmtInfo = dmtInfo,
+                                    isPaymentAmount = isPaymentAmount,
+                                    serviceIconRes = serviceIconRes,
+                                    serviceIconNet = serviceIconNet,
+                                    titleValues = titleValues,
+                                    iconSize = iconSize,
+                                    statement = statement
+                                )
+                            }
+                        }
+                        val spaceView = TextView(context).apply {
+                            layoutParams =
+                                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
+                        }
 
-                     val linearLayout = LinearLayout(context).apply {
+                        val linearLayout = LinearLayout(context).apply {
 
-                         //layout params
-                         this.orientation = LinearLayout.VERTICAL
-                         this.layoutParams = LinearLayout.LayoutParams(
-                             ViewGroup.LayoutParams.MATCH_PARENT,
-                             ViewGroup.LayoutParams.WRAP_CONTENT
-                         )
-                         //add views
-                         this.addView(mainView)
-                         this.addView(spaceView)
-                     }
+                            //layout params
+                            this.orientation = LinearLayout.VERTICAL
+                            this.layoutParams = LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                            )
+                            //add views
+                            this.addView(mainView)
+                            this.addView(spaceView)
+                        }
 
-                     scrollView?.let { sv ->
-                         if (sv.childCount == 0) sv.addView(linearLayout)
-                     }
-
-
-                 }, modifier = Modifier.padding(16.dp))
+                        scrollView?.let { sv ->
+                            if (sv.childCount == 0) sv.addView(linearLayout)
+                        }
 
 
-                 BuildShareButtons(
-                     onShare = { saveAndShare(scrollView!!) },
-                     onWhatsapp = { saveAndShare(scrollView!!, true) },
-                     onDownload = {
-                         viewModel.downloadReceiptData()
-                     })
+                    }, modifier = Modifier.padding(16.dp))
 
-             }
 
-             CollectLatestWithScope(flow = viewModel.resultFlow, callback = {
-                 when (it) {
-                     is ResultType.Failure -> viewModel.failureDialog("Opps something went wrong")
-                     is ResultType.Loading -> viewModel.progressDialog("Downloading...")
-                     is ResultType.Success -> {
-                         viewModel.dismissDialog()
-                         ReceiptDownloadUtil.download(
-                             context = context,
-                             data = it.data,
-                             txnResultPrintReceiptType = viewModel.receiptType,
-                             commission = null
-                         )
-                     }
-                 }
-             })
-         }
+                    BuildShareButtons(
+                        onShare = { saveAndShare(scrollView!!) },
+                        onWhatsapp = { saveAndShare(scrollView!!, true) },
+                        onDownload = {
+                            viewModel.downloadReceiptData()
+                        })
+
+                }
+
+                CollectLatestWithScope(flow = viewModel.resultFlow, callback = {
+                    when (it) {
+                        is ResultType.Failure -> viewModel.failureDialog("Opps something went wrong")
+                        is ResultType.Loading -> viewModel.progressDialog("Downloading...")
+                        is ResultType.Success -> {
+                            viewModel.response = it.data
+                            viewModel.dismissDialog()
+                            if (!commissionAmount)
+                                ReceiptDownloadUtil.download(
+                                    context = context,
+                                    data = it.data,
+                                    txnResultPrintReceiptType = viewModel.receiptType,
+                                    commission = null
+                                )
+                            else viewModel.commissionAmountDialog.value = true
+                        }
+                    }
+                })
+
+
+                DMTCommissionDialog(state = viewModel.commissionAmountDialog, onProceed = {
+                    ReceiptDownloadUtil.download(
+                        context = context,
+                        data = viewModel.response,
+                        txnResultPrintReceiptType = viewModel.receiptType,
+                        commission = it
+                    )
+                })
+            }
         }
     }
 }

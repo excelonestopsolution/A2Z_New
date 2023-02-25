@@ -1,0 +1,27 @@
+{
+  "status": 1,
+  "message": "Success",
+  "data": {
+    "report_id":"123",
+    "status":3,
+    "message":"Transaction is Pending",
+    "status_desc":"Success",
+    "txn_time":"16-02-2023 3:12:01",
+    "slip_type":"TRANSACTION",
+    "amount":"2000",
+    "outlet_name":"test",
+    "outlet_address":"Test",
+    "outlet_number":"9876543210",
+    "name":"test",
+    "bank_name" : "test",
+    "number":"1234567890",
+    "provider":"DMT",
+    "service_name":"IndoNepal",
+    "sender_name":"test",
+    "api_id":"91",
+    "sender_number":"Test",
+    "bank_ref":"987654321",
+    "txn_id":"123123",
+    "debit_charge":"12"
+  }
+}

@@ -147,6 +147,13 @@ fun MainNav(viewModel: MainViewModel) {
         )
 
         composable(
+            route = NavScreen.IndoNepalTxnScreen.route,
+            content = {
+                IndoNepalResultScreen(it)
+            }
+        )
+
+        composable(
             route = NavScreen.FundMethodScreen.route,
             content = { FundMethodScreen() }
         )

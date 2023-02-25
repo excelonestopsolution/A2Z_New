@@ -41,9 +41,7 @@ fun HomeLocationServiceDialog() {
 
     LaunchedEffect(key1 = Unit, block = {
         val result = locationService.isEnable()
-        val latitude = appPreference.latitude
-        val longitude = appPreference.longitude
-        if (latitude.isEmpty() || longitude.isEmpty()) {
+        if (!appPreference.locationFetched) {
             if (!result) locationDialogState.value = true
             else locationService.getCurrentLocation()
         }

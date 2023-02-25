@@ -2,6 +2,7 @@ package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.indonepal.INActivationInitialResponse
+import com.a2z.app.data.model.indonepal.INKycRedirect
 import com.a2z.app.data.network.IndoNepalService
 import com.a2z.app.data.repository.IndoNepalRepository
 import com.a2z.app.util.FieldMapData
@@ -30,4 +31,7 @@ class IndoNepalRepositoryImpl @Inject constructor(private val service: IndoNepal
     override suspend fun uploadActivationDoc(documentImage: MultipartBody.Part?) = service.uploadActivationDoc(documentImage)
     override suspend fun activateIndoNepalService(data: FieldMapData) = service.activateIndoNepalService(data)
     override suspend fun submitCourierData(data: FieldMapData)=service.submitCourierData(data)
+    override suspend fun verifyTransaction(param: FieldMapData) = service.verifyTransaction(param)
+    override suspend fun kycRedirectUrl(param: FieldMapData) = service.kycRedirectUrl(param)
+    override suspend fun onboardSender(param: FieldMapData) = service.onboardSender(param)
 }

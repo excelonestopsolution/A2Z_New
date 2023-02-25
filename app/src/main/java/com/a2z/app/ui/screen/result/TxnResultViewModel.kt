@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.result
 
+import androidx.compose.runtime.mutableStateOf
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.repository.ReportRepository
 import com.a2z.app.ui.util.BaseViewModel
@@ -13,12 +14,13 @@ class TxnResultViewModel @Inject constructor(
     private val repository: ReportRepository
 ) : BaseViewModel() {
 
+    lateinit var response: TransactionDetailResponse
     var receiptType = TxnResultPrintReceiptType.OTHER
     var recordId : String = ""
 
     val resultFlow = resultShareFlow<TransactionDetailResponse>()
 
-
+    val commissionAmountDialog = mutableStateOf(false)
     fun downloadReceiptData() {
 
         val call = suspend {

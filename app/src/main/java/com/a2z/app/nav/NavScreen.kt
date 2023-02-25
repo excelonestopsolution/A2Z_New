@@ -10,6 +10,7 @@ import com.a2z.app.data.model.fund.FundMethod
 import com.a2z.app.data.model.fund.FundRequestBank
 import com.a2z.app.data.model.indonepal.INBeneficiary
 import com.a2z.app.data.model.indonepal.INSender
+import com.a2z.app.data.model.indonepal.INTransferData
 import com.a2z.app.data.model.matm.MatmTransactionResponse
 import com.a2z.app.data.model.provider.Operator
 import com.a2z.app.data.model.report.CommissionSchemeDetailResponse
@@ -138,6 +139,11 @@ sealed class NavScreen(val route: String) {
 
     object MATMTxnScreen : NavScreen("matm-txn-screen".params("response")) {
         fun passArgs(response: MatmTransactionResponse) = "matm-txn-screen".args(
+            "response" to response.toEncodedString()
+        )
+    }
+    object IndoNepalTxnScreen : NavScreen("indo-nepal-txn-screen".params("response")) {
+        fun passArgs(response: INTransferData) = "indo-nepal-txn-screen".args(
             "response" to response.toEncodedString()
         )
     }

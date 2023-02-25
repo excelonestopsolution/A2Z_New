@@ -5,6 +5,7 @@ import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.dmt.UpiVerifyPayment
+import com.a2z.app.data.model.indonepal.INTransferResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.util.FieldMapData
@@ -27,4 +28,5 @@ interface TransactionRepository {
     suspend fun parentPaymentFundReturn(data : FieldMapData) : AppResponse
     suspend fun approveFundRequest(data : FieldMapData) : AppResponse
     suspend fun memberFundTransfer(data : FieldMapData) : AppResponse
+    suspend fun indoNepalTransfer(data : FieldMapData) : INTransferResponse
 }

@@ -46,6 +46,8 @@ class MainActivity : FragmentActivity(), PaymentResultWithDataListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        appPreference.locationFetched = false
+
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 viewModel.isLoading.value ?: false

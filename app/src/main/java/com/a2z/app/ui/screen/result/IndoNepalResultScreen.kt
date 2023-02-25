@@ -6,47 +6,50 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
 import com.a2z.app.data.model.dmt.TransactionDetail
+import com.a2z.app.data.model.indonepal.INTransferData
+import com.a2z.app.util.AppUtil
 import com.google.gson.Gson
 
 
 @Composable
-fun DMTResultScreen(it: NavBackStackEntry) {
+fun IndoNepalResultScreen(it: NavBackStackEntry) {
 
     val arg = it.arguments?.getString("response")
-    val response = Gson().fromJson(arg!!, TransactionDetail::class.java)
+    val response = Gson().fromJson(arg!!, INTransferData::class.java)
 
 
     val viewModel: TxnResultViewModel = hiltViewModel()
 
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.recordId = response.reportId.toString()
+        viewModel.recordId = response.report_id.toString()
+
+        AppUtil.logger("response : : "+response.toString())
     })
 
     val dmtTitleValue = listOf(
         "Name" to response.name.toString(),
+        "Sender Name" to response.sender_name.toString(),
+        "Sender Number" to response.sender_number.toString(),
         "Account No." to response.number.toString(),
-        "Bank Name" to response.bankName.toString(),
-        "IFSc Code" to response.ifsc.toString(),
-        "Txn Type" to response.txnType.toString()
+        "Bank Name" to response.bank_name.toString(),
+        "Bank Ref" to response.bank_ref.toString(),
+        "Debit Charge" to response.debit_charge.toString(),
 
     )
 
-    val paymentAmount = if (response.serviceName.equals("dmt one")) response.totalAmount
-    else response.amount
 
     BaseResultComponent(
         statusId = response.status ?: 0,
         message = response.message.toString(),
-        status = response.statusDesc ?: "NA",
-        dateTime = response.txnTime ?: "NA",
-        amountTopText = response.serviceName ?: "NA",
+        status = response.status_desc ?: "NA",
+        dateTime = response.txn_time ?: "NA",
+        amountTopText = response.service_name ?: "NA",
         amountBelowText = "Money Transfer",
-        amount = paymentAmount ?: "0.0",
+        amount = response.amount ?: "0",
         serviceIconRes = R.drawable.ic_launcher_money,
-        dmtInfo = response.dmtDetails,
+        dmtInfo = null,
         titleValues = arrayOf(dmtTitleValue),
-        backPressHandle = response.isTransaction,
-        commissionAmount = response.serviceName != "dmt one"
+        backPressHandle = response.isTransaction
     )
 }
 

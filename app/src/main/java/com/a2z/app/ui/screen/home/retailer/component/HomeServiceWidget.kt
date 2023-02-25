@@ -239,10 +239,9 @@ private fun BuildMoneyAndPaymentService() {
                         icon = R.drawable.ic_launcher_money,
                         color = color,
                         onClick = {
-                            //todo remove in live env
-                            /*if (viewModel.appPreference.user?.indoNepal == "0")
+                            if (viewModel.appPreference.user?.indoNepal == "0")
                                 navController.navigate(NavScreen.INServiceActivationScreen.route)
-                            else*/ navController.navigate(NavScreen.INSearchSenderScreen.route)
+                            else navController.navigate(NavScreen.INSearchSenderScreen.route)
                         }
                     )
 

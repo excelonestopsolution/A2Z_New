@@ -38,6 +38,10 @@ class AppPreference @Inject constructor(context: Context) : BasePreference(conte
         set(value) = saveString(LONGITUDE, value)
         get() = getString(LONGITUDE)
 
+    var locationFetched: Boolean
+        set(value) = saveBoolean(LOCATION_FETCHED, value)
+        get() = getBoolean(LOCATION_FETCHED)
+
 
 }
 

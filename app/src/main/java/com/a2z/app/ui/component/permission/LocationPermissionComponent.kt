@@ -56,16 +56,17 @@ fun LocationComponent(
 
     fun fetchLocation() {
 
-        if (appViewModel.appPreference.latitude.isNotEmpty()) {
+        if (appViewModel.appPreference.locationFetched) {
             onLocation.invoke()
             return
         }
 
-        dialogState.value = StatusDialogType.Progress()
+        dialogState.value = StatusDialogType.Progress("Fetching Location")
         locationService.getCurrentLocation()
         locationService.setupListener(object : LocationService.MLocationListener {
             override fun onLocationChange(location: Location) {
                 appViewModel.appPreference.apply {
+                    locationFetched = true
                     latitude = location.latitude.toString()
                     longitude = location.longitude.toString()
                 }

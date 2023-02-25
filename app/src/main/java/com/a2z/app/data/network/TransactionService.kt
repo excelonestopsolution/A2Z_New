@@ -5,6 +5,7 @@ import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.dmt.TransactionDetail
 import com.a2z.app.data.model.dmt.TransactionDetailResponse
 import com.a2z.app.data.model.dmt.UpiVerifyPayment
+import com.a2z.app.data.model.indonepal.INTransferResponse
 import com.a2z.app.data.model.utility.BillPaymentResponse
 import com.a2z.app.data.model.utility.RechargeTransactionResponse
 import com.a2z.app.util.FieldMapData
@@ -92,4 +93,10 @@ interface TransactionService {
     suspend fun memberFundTransfer(
         @FieldMap data : FieldMapData
     ) : AppResponse
+
+    @POST("indo-nepal/transaction")
+    @FormUrlEncoded
+    suspend fun indoNepalTransfer(
+        @FieldMap data : FieldMapData
+    ) : INTransferResponse
 }

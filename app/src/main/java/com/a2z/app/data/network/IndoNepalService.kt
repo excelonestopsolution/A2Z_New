@@ -68,4 +68,18 @@ interface IndoNepalService {
     suspend fun submitCourierData(@FieldMap data : FieldMapData): AppResponse
 
 
+    @POST("indo-nepal/verify-txn")
+    @FormUrlEncoded
+    suspend fun verifyTransaction(@FieldMap data : FieldMapData): AppResponse
+
+
+    @POST("indo-nepal/do-kyc")
+    @FormUrlEncoded
+    suspend fun kycRedirectUrl(@FieldMap data : FieldMapData): INKycRedirect
+
+    @POST("indo-nepal/sender-onboarding")
+    @FormUrlEncoded
+    suspend fun onboardSender(@FieldMap data : FieldMapData): AppResponse
+
+
 }

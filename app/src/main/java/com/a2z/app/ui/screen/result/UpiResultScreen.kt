@@ -38,7 +38,8 @@ fun UPIResultScreen(it: NavBackStackEntry) {
         amount = response.amount ?: "0.0",
         serviceIconRes = R.drawable.ic_launcher_money,
         titleValues = arrayOf(upiTitleValue1,upiTitleValue2),
-        backPressHandle = response.isTransaction
+        backPressHandle = response.isTransaction,
+        commissionAmount = true
     )
 }
 
