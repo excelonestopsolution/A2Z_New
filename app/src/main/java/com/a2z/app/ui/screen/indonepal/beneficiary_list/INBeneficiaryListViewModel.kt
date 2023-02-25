@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class INBeneficiaryListViewModel @Inject constructor(
     private val repository: IndoNepalRepository,
-    private val apiUtil : ApiUtil,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 

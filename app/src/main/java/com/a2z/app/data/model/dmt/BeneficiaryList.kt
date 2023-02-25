@@ -28,8 +28,7 @@ data class Beneficiary(
     @SerializedName("mobile_number") var mobileNumber: String? = null,
     @SerializedName("ifsc") var ifsc: String? = null,
     @SerializedName("beneId") var beneId: String? = null,
-    @SerializedName("bank_verified") var bankVerified: Int? = null,
-    @SerializedName("is_bank_verified") var upiBankVerified: Int? = null,
+    @SerializedName("bank_verified", alternate = ["is_bank_verified"]) var bankVerified: Int? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("status_id") var statusId: Int? = null,
     @SerializedName("last_success_time") var lastSuccessTime: String? = null

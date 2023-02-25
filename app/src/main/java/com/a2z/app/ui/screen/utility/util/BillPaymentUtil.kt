@@ -114,8 +114,8 @@ class BillPaymentUtil(
 
 
     private fun extraFieldValidation() {
-        val email: String? = operator.extraParams.find { it?.fieldName == "email" }?.fieldName
-        val dob: String? = operator.extraParams.find { it?.fieldName == "dob" }?.fieldName
+        val email: String? = operator.extraParams.find { it?.field_name == "email" }?.field_name
+        val dob: String? = operator.extraParams.find { it?.field_name == "dob" }?.field_name
 
         if (email.notNullOrEmpty()) useEmailValidation.value = true
         if (dob.notNullOrEmpty()) useDobValidation.value = true

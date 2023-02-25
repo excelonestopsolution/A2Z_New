@@ -1,4 +1,4 @@
-package com.a2z.app.ui.screen.util.device_order
+package com.a2z.app.ui.screen.util.device_order.matm
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +15,6 @@ import com.a2z.app.ui.util.InputWrapper
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.ApiUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +31,6 @@ import javax.inject.Inject
 class MATMOderViewModel @Inject constructor(
     private val repository: MatmRepository,
     private val appPreference: AppPreference,
-    private val apiUtil: ApiUtil
 ) : BaseViewModel() {
 
     private lateinit var matmInfoData: MatmServiceInformation

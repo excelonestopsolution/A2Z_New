@@ -396,25 +396,29 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
             }
         }
 
-        if (viewModel.dmtType != DMTType.UPI) Column {
+
             Spacer(modifier = Modifier.height(8.dp))
 
-            val accountTitle = if (viewModel.dmtType == DMTType.UPI) "UPI ID" else "Account Number"
-            val bankTitle = if (viewModel.dmtType == DMTType.UPI) "Upi Id" else "Bank"
-            TitleValueVertically(title = accountTitle, value = beneficiary.accountNumber)
-            if (beneficiary.bankVerified == 1)
-                Row {
-                    Text(text = "$bankTitle is verified", color = GreenColor)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.Default.Verified,
-                        contentDescription = null,
-                        tint = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-        }
-        else BuildBlinkText(if (viewModel.dmtType == DMTType.UPI) "Selected upi id is not verified!" else "Selected bank is not verified!")
+        val accountTitle = if (viewModel.dmtType == DMTType.UPI) "UPI ID" else "Account Number"
+        val bankTitle = if (viewModel.dmtType == DMTType.UPI) "Upi Id" else "Bank"
+           if(viewModel.dmtType != DMTType.UPI){
+               TitleValueVertically(title = accountTitle, value = beneficiary.accountNumber)
+           }
+
+
+        if (beneficiary.bankVerified == 1)
+            Row {
+                Text(text = "$bankTitle is verified", color = GreenColor)
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.Default.Verified,
+                    contentDescription = null,
+                    tint = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        else BuildBlinkText(if (viewModel.dmtType == DMTType.UPI)
+            "Selected upi id is not verified!" else "Selected bank is not verified!")
     }
 
 }

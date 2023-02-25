@@ -36,7 +36,7 @@ data class Operator(
 @Keep
 @Parcelize
 data class ProviderExtraParam(
-    val fieldName: String?
+    val field_name: String?
 ) : Parcelable
 
 

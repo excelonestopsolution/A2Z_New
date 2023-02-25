@@ -165,7 +165,6 @@ private fun BuildListItem(
                 imageVector = Icons.Default.Verified,
                 contentDescription = null,
                 tint = if (beneficiary.bankVerified == 1
-                    || beneficiary.upiBankVerified == 1
                 ) GreenColor else Color.Gray,
                 modifier = Modifier.size(20.dp)
             )
@@ -175,7 +174,7 @@ private fun BuildListItem(
                     text = beneficiary.name.orEmpty(),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) GreenColor else Color.Gray
+                    color = if (beneficiary.bankVerified == 1 ) GreenColor else Color.Gray
                 )
                 if (!isUpi) Text(
                     text = beneficiary.bankName.orEmpty(),
@@ -263,7 +262,7 @@ private fun BuildListItem(
                         ) {
                             Icon(imageVector = Icons.Default.Verified, contentDescription = "Verify")
                             Spacer(modifier = Modifier.width(5.dp))
-                            Text(text = if (beneficiary.bankVerified == 1 || beneficiary.upiBankVerified == 1) "Re-verified" else "Verified")
+                            Text(text = if (beneficiary.bankVerified == 1 ) "Re-verified" else "Verified")
                         }
                     }
                 }

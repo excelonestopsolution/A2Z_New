@@ -34,7 +34,7 @@ import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.PickCameraAndGalleryImage
 import com.a2z.app.ui.component.common.AppDropDownMenu
 import com.a2z.app.ui.component.permission.PermissionComponent
-import com.a2z.app.ui.screen.util.device_order.MATMOderViewModel
+import com.a2z.app.ui.screen.util.device_order.matm.MATMOderViewModel
 import com.a2z.app.ui.screen.util.permission.AppPermissionList
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.*

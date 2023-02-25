@@ -38,8 +38,6 @@ import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.component.permission.PermissionComponent
 import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.dialog.ImageNetworkDialog
-import com.a2z.app.ui.screen.util.device_order.MATMDocumentType
-import com.a2z.app.ui.screen.util.device_order.MATMOderViewModel
 import com.a2z.app.ui.screen.util.permission.AppPermissionList
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.*

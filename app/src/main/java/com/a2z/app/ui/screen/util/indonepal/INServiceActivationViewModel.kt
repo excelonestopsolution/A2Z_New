@@ -30,7 +30,6 @@ import javax.inject.Inject
 @HiltViewModel
 class INServiceActivationViewModel @Inject constructor(
     private val repository: IndoNepalRepository,
-    private val apiUtil: ApiUtil,
     val appPreference: AppPreference
 ) : BaseViewModel() {
 
