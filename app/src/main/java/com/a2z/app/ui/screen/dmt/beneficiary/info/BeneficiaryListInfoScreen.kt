@@ -35,12 +35,13 @@ import com.a2z.app.data.model.dmt.Beneficiary
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.EmptyListComponent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.SearchTextField
 import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.dmt.util.DMTUtil
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
@@ -153,7 +154,8 @@ private fun BuildListItem(
         }) {
 
         val dmtType = viewModel.dmtType
-        val isUpi = dmtType == DMTType.UPI
+        val isUpi = DMTUtil.isUPI(dmtType)
+
 
         Row(
             modifier = Modifier.padding(
@@ -309,7 +311,7 @@ private fun HeaderComponent() {
                         shape = CircleShape,
                         backgroundColor = GreenColor,
                         modifier = Modifier.clickable {
-                            if (viewModel.dmtType == DMTType.UPI) viewModel.navigateTo(
+                            if (DMTUtil.isUPI(viewModel.dmtType)) viewModel.navigateTo(
                                 NavScreen.UpiBeneficiaryRegisterScreen.passArgs(
                                     moneySender = viewModel.moneySender
                                 )
@@ -330,7 +332,7 @@ private fun HeaderComponent() {
 
                     }
                     Spacer(modifier = Modifier.height(5.dp))
-                    val addNewText = if (viewModel.dmtType == DMTType.UPI)
+                    val addNewText = if (DMTUtil.isUPI(viewModel.dmtType))
                         "Add New\nID" else "Add New\nBeneficiary"
                     Text(
                         text = addNewText,

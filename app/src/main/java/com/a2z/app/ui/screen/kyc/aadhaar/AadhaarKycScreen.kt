@@ -1,7 +1,6 @@
 package com.a2z.app.ui.screen.kyc.aadhaar
 
 import android.annotation.SuppressLint
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -17,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.common.AadhaarTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
@@ -25,7 +24,6 @@ import com.a2z.app.ui.component.common.MobileTextField
 import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.theme.BackgroundColor2
 import com.a2z.app.ui.theme.GreenColor
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

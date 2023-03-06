@@ -10,6 +10,8 @@ interface UpiService {
 
     @GET("vpa/mobile/remitter")
     suspend fun searchSender(@QueryMap data: FieldMapData): Response<MoneySenderResponse>
+    @GET("vpa/two/remitter")
+    suspend fun searchSender2(@QueryMap data: FieldMapData): Response<MoneySenderResponse>
 
     @GET("vpa/beneficiary")
     suspend fun beneficiaryList(@QueryMap data: FieldMapData): BeneficiaryListResponse

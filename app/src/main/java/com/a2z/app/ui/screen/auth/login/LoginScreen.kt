@@ -6,15 +6,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Login
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.a2z.app.R
@@ -30,6 +34,7 @@ import com.a2z.app.ui.screen.auth.component.AuthBackgroundDraw
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.extension.singleResult
+import com.a2z.app.util.Exceptions
 import com.a2z.app.util.ToggleBottomSheet
 
 @Composable
@@ -49,27 +54,64 @@ fun LoginScreen(
             && viewModel.appPreference.latitude.isNotEmpty()
             && viewModel.appPreference.longitude.isNotEmpty()
         ) {
-            viewModel.autoLogin= true
+            viewModel.autoLogin = true
             viewModel.login()
-        }else viewModel.autoLogin = false
+        } else viewModel.autoLogin = false
 
     })
 
-    LaunchedEffect(key1 = Unit) {
-        val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
-        if (shouldNavigate == true) viewModel.login()
-    }
+//    LaunchedEffect(key1 = Unit) {
+//        val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
+//        if (shouldNavigate == true) viewModel.login()
+//    }
 
 
     BaseContent(viewModel) {
 
-        if (viewModel.autoLogin) Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Image(
-                painter = painterResource(id = R.drawable.app_logo),
-                contentDescription = null,
-                modifier = Modifier.size(120.dp)
-            )
-        }else BottomSheetComponent(sheetContent = {
+        if (viewModel.error.value != null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                    Icon(
+                        imageVector = Icons.Default.Info, contentDescription = null,
+                        tint = Color.Gray,
+                        modifier = Modifier.size(80.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    val text = when (viewModel.error.value!!) {
+                        is Exceptions.NoInternetException -> "No Internet connection!"
+                        else -> "Unable to login!!"
+                    }
+
+                    Text(
+                        text = text,
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(onClick = {
+                        viewModel.login()
+                    }, shape = CircularShape) {
+                        Text(text = "Retry Login")
+                    }
+
+
+                }
+            }
+        } else if (viewModel.autoLogin)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = null,
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+        else BottomSheetComponent(sheetContent = {
             LoginForgotComponent(
                 onLoginId = {
                     it.invoke()

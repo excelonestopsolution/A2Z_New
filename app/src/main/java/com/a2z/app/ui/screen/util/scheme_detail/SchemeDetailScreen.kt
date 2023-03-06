@@ -9,8 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.a2z.app.data.model.report.CommissionSchemeDetail
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.TitleValueHorizontally
 import com.a2z.app.ui.theme.BackgroundColor
 

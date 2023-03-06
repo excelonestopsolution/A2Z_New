@@ -1,47 +1,30 @@
 package com.a2z.app.ui.screen.qrcode
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.media.MediaScannerConnection
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.applyCanvas
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.app.QRCodeResponse
-import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.ImageCaptureComponent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.permission.CheckCameraStoragePermission
-import com.a2z.app.ui.component.permission.PermissionComponent
-import com.a2z.app.ui.screen.util.permission.AppPermissionList
-import com.a2z.app.ui.screen.util.permission.PermissionType
-import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.util.BitmapUtil
-import com.a2z.app.util.BitmapUtil.toFile
-import com.a2z.app.util.FileUtil
 import com.a2z.app.util.VoidCallback
-import org.apache.xml.security.utils.I18n.translate
-import kotlin.math.roundToInt
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

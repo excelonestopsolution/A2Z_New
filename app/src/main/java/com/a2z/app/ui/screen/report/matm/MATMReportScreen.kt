@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.EmptyListComponent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton

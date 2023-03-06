@@ -12,7 +12,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.TitleValueVertically
 import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.dialog.BaseConfirmDialog

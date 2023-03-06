@@ -1,7 +1,6 @@
 package com.a2z.app.ui.screen.kyc.document
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,30 +10,21 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.permission.PermissionComponent
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.dialog.ImageDialog
 import com.a2z.app.ui.dialog.ImageNetworkDialog
-import com.a2z.app.ui.screen.util.permission.AppPermissionList
-import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.*
 import com.a2z.app.ui.util.extension.dashedBorder
-import com.a2z.app.util.AppUtil
-import com.a2z.app.util.BitmapUtil
-import com.a2z.app.util.BitmapUtil.toFile
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

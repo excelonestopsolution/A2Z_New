@@ -152,6 +152,7 @@ class SearchSenderViewModel @Inject constructor(
                     DMTType.WALLET_3 -> repository.searchMobileNumberWalletThree(param)
                     DMTType.DMT_3 -> dmt3Repository.searchMobileNumberDmtThree(param)
                     DMTType.UPI ->  upiRepository.searchSender(param).body()!!
+                    DMTType.UPI_2 ->  upiRepository.searchSender2(param).body()!!
                 }
             }
         )

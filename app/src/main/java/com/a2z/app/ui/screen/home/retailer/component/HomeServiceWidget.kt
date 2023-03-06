@@ -37,6 +37,7 @@ import com.a2z.app.util.VoidCallback
 fun HomeServiceWidget() {
     Column {
         BuildMoneyAndPaymentService()
+        PGAndTravelService()
         BuildMoneyAEPService()
         BuildRechargeService()
         BuildUtilityService()
@@ -235,6 +236,25 @@ private fun BuildMoneyAndPaymentService() {
                     )
 
                     BuildIconAndIconTitle(
+                        title = "UPI 2",
+                        icon = R.drawable.ic_launcher_money,
+                        color = color,
+                        onClick = {
+                            if (viewModel.dmtKycPendingState.value)
+                                viewModel.checkKycInfo()
+                            else navController.navigate(
+                                NavScreen.DmtSenderSearchScreen.passArgs(
+                                    dmtType = DMTType.UPI_2,
+                                    bankDown = BankDownResponse(
+                                        status = 2,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+                    )
+
+                    BuildIconAndIconTitle(
                         title = "Indo Nepal",
                         icon = R.drawable.ic_launcher_money,
                         color = color,
@@ -246,6 +266,31 @@ private fun BuildMoneyAndPaymentService() {
                     )
 
 
+                    Spacer(modifier = Modifier.weight(1f))
+
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                BankDownComponent(viewModel.bankDownResponseState)
+
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun PGAndTravelService() {
+    val navController = LocalNavController.current
+    val viewModel: RetailerHomeViewModel = hiltViewModel()
+
+    ServiceCard {
+        val color = Color(0xFF044274)
+        Column {
+            BuildServiceTitle("Pan Card & Travel")
+            Column(modifier = Modifier.padding(8.dp)) {
+
+                Row{
                     BuildIconAndIconTitle(
                         title = "Flight Hotel",
                         icon = R.drawable.flight_hotel,
@@ -267,10 +312,9 @@ private fun BuildMoneyAndPaymentService() {
                         }
                     )
 
+                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))
                 }
-
-                BankDownComponent(viewModel.bankDownResponseState)
-
             }
         }
     }
@@ -363,11 +407,11 @@ private fun BuildUtilityService() {
                             navigateToOperatorScreen(navController, OperatorType.INSURANCE)
                         })
                     BuildIconAndIconTitle(title = "Loan Repayment",
-                        icon = R.drawable.ic_launcher_insurence,
+                        icon = R.drawable.loan,
                         color = color,
                         onClick = {
                             navigateToOperatorScreen(navController, OperatorType.LOAN_REPAYMENT)
-                        })
+                        }, padding = 12.dp)
                     BuildIconAndIconTitle(title = "Postpaid",
                         icon = R.drawable.ic_launcher_mobile,
                         color = color,

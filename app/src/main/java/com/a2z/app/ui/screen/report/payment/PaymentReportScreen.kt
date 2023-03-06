@@ -1,6 +1,5 @@
 package com.a2z.app.ui.screen.report.payment
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -14,13 +13,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
 import com.a2z.app.ui.screen.report.filter.ReportDateFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.RedColor
-import com.a2z.app.util.VoidCallback
 
 
 @Composable

@@ -1,8 +1,6 @@
 package com.a2z.app.ui.screen.dmt.transfer
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
@@ -12,8 +10,8 @@ import com.a2z.app.data.repository.DMTRepository
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.data.repository.UpiRepository
 import com.a2z.app.nav.NavScreen
-import com.a2z.app.ui.dialog.StatusDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.dmt.util.DMTUtil
 import com.a2z.app.ui.util.AppValidator
 import com.a2z.app.ui.util.BaseInput
 import com.a2z.app.ui.util.BaseViewModel
@@ -183,7 +181,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
         _upiVerifyPaymentFlow.getLatest {
             paymentVerifyData.value = it
             when (it.status) {
-                1,34,3 -> {
+                1, 34, 3 -> {
                     paymentVerifyResultDialogStatus.value = true
                 }
                 else -> alertDialog(it.message)
@@ -203,7 +201,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
         )
 
         suspend fun callApi() = when (dmtType) {
-            DMTType.UPI -> upiRepository.bankDownCheck(paramUpi)
+            DMTType.UPI, DMTType.UPI_2 -> upiRepository.bankDownCheck(paramUpi)
             else -> repository.bankDownCheck(param)
         }
 
@@ -251,30 +249,36 @@ class DMTMoneyTransferViewModel @Inject constructor(
         val upiParam = hashMapOf(
             "amount" to input.amount.getValue(),
             "bene_id" to beneficiary.id.orEmpty(),
-            "sender_number" to moneySender?.mobileNumber.orEmpty(),
+            "sender_number" to moneySender.mobileNumber.orEmpty(),
             "latitude" to appPreference.latitude,
             "longitude" to appPreference.longitude,
             "txn_pin" to mpin.orEmpty(),
         )
 
-        suspend fun callApi() = when (dmtType) {
+        suspend fun callDMTTransactionApi() = when (dmtType) {
             DMTType.WALLET_1 -> transactionRepository.wallet1Transaction(walletParam)
             DMTType.WALLET_2 -> transactionRepository.wallet2Transaction(walletParam)
             DMTType.WALLET_3 -> transactionRepository.wallet3Transaction(walletParam)
             DMTType.DMT_3 -> transactionRepository.dmt3Transaction(walletParam)
-            DMTType.UPI -> throw Exception("Unsupported dmt type")
+            else -> throw Exception("Unsupported dmt type")
         }
 
-        if (dmtType == DMTType.UPI)
+        suspend fun callUPITransactionApi() = when (dmtType) {
+            DMTType.UPI -> transactionRepository.upiTransaction(upiParam)
+            DMTType.UPI_2 -> transactionRepository.upi2Transaction(upiParam)
+            else -> throw Exception("Unsupported upi type")
+        }
+
+        if (DMTUtil.isUPI(dmtType))
             callApiForShareFlow(
                 flow = _upiTransactionResultFlow,
-                call = { transactionRepository.upiTransaction(upiParam) },
+                call = { callUPITransactionApi() },
                 handleException = false,
                 popUpScreen = false
             )
         else callApiForShareFlow(
             flow = _walletTransactionResultFlow,
-            call = { callApi() },
+            call = { callDMTTransactionApi() },
             handleException = false,
             popUpScreen = false
         )
@@ -291,7 +295,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
 
     }
 
-    fun verifyUpiPayment(mpin : String) {
+    fun verifyUpiPayment(mpin: String) {
         val param = hashMapOf(
             "bene_id" to beneficiary.id.orEmpty(),
             "upi_id" to beneficiary.accountNumber.toString(),

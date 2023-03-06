@@ -13,10 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.data.model.fund.PaymentReturnDetailResponse
 import com.a2z.app.ui.component.*
-import com.a2z.app.ui.component.common.AmountTextField
-import com.a2z.app.ui.component.common.AppFormCard
-import com.a2z.app.ui.component.common.AppFormUI
-import com.a2z.app.ui.component.common.AppTextField
+import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.theme.BackgroundColor
 

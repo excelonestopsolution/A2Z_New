@@ -28,6 +28,7 @@ import com.a2z.app.ui.theme.PrimaryColorDark
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.FunCompose
 import com.a2z.app.util.VoidCallback
+import com.a2z.app.util.extension.prefixRS
 import com.usdk.apiservice.aidl.dock.serialport.Parity
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -40,6 +41,7 @@ fun BaseReportItem(
     centerHeading2: String?,
     centerHeading3: String?,
     rightAmount: String?,
+    rightCBal: String? = null,
     rightStatus: String?,
     isPrint: Boolean = false,
     isComplaint: Boolean = false,
@@ -58,7 +60,7 @@ fun BaseReportItem(
             isExpanded.value = !isExpanded.value
         }
         .padding(horizontal = if (isCard) 12.dp else 8.dp, vertical = 4.dp),
-        elevation = if (isCard) 8.dp else 0.dp, shape = MaterialTheme.shapes.small) {
+        elevation = if (isCard) 2.dp else 0.dp, shape = MaterialTheme.shapes.small) {
 
         var colModifier = Modifier.padding(vertical = 5.dp)
         if (!isCard) colModifier =
@@ -76,6 +78,7 @@ fun BaseReportItem(
                 centerHeading3 = centerHeading3,
                 rightAmount = rightAmount,
                 rightStatus = rightStatus,
+                rightCBal = rightCBal,
                 actionButton = actionButton
             )
             AnimatedContent(targetState = isExpanded.value) { targetExpanded ->
@@ -159,17 +162,20 @@ private fun BuildItemVisibleContent(
     centerHeading3: String?,
     rightAmount: String?,
     rightStatus: String?,
+    rightCBal: String?,
     actionButton: FunCompose?,
 ) {
     Row(Modifier.padding(8.dp)) {
         Column(Modifier.weight(1f)) {
             if (leftSideDate.orEmpty().isNotEmpty()) Text(
                 text = leftSideDate.toString(),
-                style = MaterialTheme.typography.body2.copy(color = Color.Gray)
+                style = MaterialTheme.typography.body2.copy(color = Color.Gray,
+                fontSize = 12.sp)
             )
             if (leftSideId.orEmpty().isNotEmpty()) Text(
                 text = leftSideId.toString(),
-                color = MaterialTheme.colors.primary
+                color = MaterialTheme.colors.primary,
+                fontSize = 12.sp
             )
         }
         Column(
@@ -181,7 +187,8 @@ private fun BuildItemVisibleContent(
             if (centerHeading1.orEmpty().isNotEmpty()) Text(
                 text = centerHeading1.toString(),
                 style = MaterialTheme.typography.subtitle1.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 14.sp
                 ),
                 textAlign = TextAlign.Center
             )
@@ -191,7 +198,9 @@ private fun BuildItemVisibleContent(
             if (centerHeading2.orEmpty().isNotEmpty()) Text(
                 text = centerHeading2.toString(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body1,
+                color = Color.Gray,
+                fontSize = 14.sp
             )
 
             if (centerHeading3.orEmpty().isNotBlank()) Divider(
@@ -199,7 +208,9 @@ private fun BuildItemVisibleContent(
             )
             if (centerHeading3.orEmpty().isNotEmpty()) Text(
                 text = centerHeading3.toString(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = Color.Gray,
+                fontSize = 14.sp
             )
         }
         Column(Modifier.weight(1.2f), horizontalAlignment = Alignment.End) {
@@ -217,6 +228,15 @@ private fun BuildItemVisibleContent(
                     fontSize = 14.sp
 
                     )
+            )
+            if (rightCBal.orEmpty().isNotEmpty()) Text(
+                text =rightCBal.toString().prefixRS(),
+                style = MaterialTheme.typography.body1.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+
+                )
             )
 
             actionButton?.invoke()

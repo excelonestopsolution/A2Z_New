@@ -35,6 +35,7 @@ class LoginViewModel @Inject constructor(
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
     var autoLogin by mutableStateOf(false)
+    var error = mutableStateOf<java.lang.Exception?>(null)
 
 
     private val loginFlow = resultShareFlow<User>()
@@ -62,6 +63,10 @@ class LoginViewModel @Inject constructor(
                     progressFullScreenDialog("Login")
                 else progressDialog("Login")
             },
+            failure = {
+                if (autoLogin)
+                    error.value = it
+            },
             success = { onLoginSuccess(it) }
         )
     }
@@ -85,8 +90,6 @@ class LoginViewModel @Inject constructor(
 
                 if (autoLogin) {
                     autoLogin = false
-                    appPreference.latitude = ""
-                    appPreference.longitude = ""
                 }
 
                 val mobile = input.userIdWrapper.getValue()
@@ -95,8 +98,6 @@ class LoginViewModel @Inject constructor(
             else -> {
                 if (autoLogin) {
                     autoLogin = false
-                    appPreference.latitude = ""
-                    appPreference.longitude = ""
                 } else alertDialog(message)
             }
         }
@@ -104,6 +105,7 @@ class LoginViewModel @Inject constructor(
 
     fun login() {
         if (bannerState.value is BannerType.Success && !autoLogin) return
+        error.value = null
         val password =
             if (autoLogin) AppSecurity.encrypt(appPreference.password) ?: ""
             else AppSecurity.encrypt(input.passwordWrapper.input.value) ?: ""
@@ -111,7 +113,7 @@ class LoginViewModel @Inject constructor(
         else AppSecurity.encrypt(input.userIdWrapper.input.value) ?: ""
         val latitude = appPreference.latitude
         val longitude = appPreference.longitude
-        callApiForShareFlow(loginFlow) {
+        callApiForShareFlow(loginFlow, handleException = !autoLogin) {
             authRepository.login(
                 "case" to "FIRST",
                 "password" to password,

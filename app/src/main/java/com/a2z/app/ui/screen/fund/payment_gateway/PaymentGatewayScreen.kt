@@ -1,7 +1,6 @@
 package com.a2z.app.ui.screen.fund.payment_gateway
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -23,14 +22,12 @@ import com.a2z.app.PGResultType
 import com.a2z.app.R
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.CollectLatestWithScope
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
 import com.a2z.app.ui.component.common.MobileTextField
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.util.BaseInput
-import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.util.AppUtil
 import com.razorpay.Checkout
 import kotlinx.coroutines.flow.collectLatest

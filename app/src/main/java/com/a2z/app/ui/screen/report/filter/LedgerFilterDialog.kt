@@ -211,13 +211,13 @@ fun LedgerFilterDialog(
                         label = "Select Product",
                         list = productList.map { it.key }
                     )
-                    AppDropDownMenu(
+                  if(criteriaList(productState.value).isNotEmpty())  AppDropDownMenu(
                         selectedState = criteriaState,
                         label = "Select Criteria",
                         list = criteriaList(productState.value).map { it.key }
                     )
 
-                    if (criteriaState.value.isNotEmpty()) AppTextField(
+                    if (criteriaState.value.isNotEmpty() && criteriaList(productState.value).isNotEmpty()) AppTextField(
                         value = inputState.value,
                         onChange = {
                             if (it == "," || it == "-" || it == ".") {

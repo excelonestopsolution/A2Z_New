@@ -28,7 +28,6 @@ import com.a2z.app.ui.screen.util.permission.AppPermissionList
 import com.a2z.app.ui.screen.util.permission.PermissionType
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.util.FileUtil
 import com.a2z.app.util.extension.removeDateSeparator
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

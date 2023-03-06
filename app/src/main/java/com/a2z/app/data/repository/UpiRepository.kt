@@ -10,6 +10,7 @@ import retrofit2.http.QueryMap
 interface UpiRepository {
 
     suspend fun searchSender(@QueryMap data: FieldMapData): Response<MoneySenderResponse>
+    suspend fun searchSender2(@QueryMap data: FieldMapData): Response<MoneySenderResponse>
     suspend fun beneficiaryList(@QueryMap data: FieldMapData): BeneficiaryListResponse
     suspend fun accountValidation(@FieldMap data: FieldMapData): AccountVerify
     suspend fun addBeneficiary(@FieldMap data: FieldMapData): AppResponse

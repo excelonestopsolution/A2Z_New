@@ -11,6 +11,7 @@ import com.a2z.app.data.repository.UpiRepository
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferArgs
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.dmt.util.DMTUtil
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
 import com.a2z.app.ui.util.extension.callApiForStateFlow
@@ -77,7 +78,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
 
         viewModelScope.launch {
             verificationFlow.getLatest {
-                val beneName = if (dmtType == DMTType.UPI) it.upiBeneName else it.beneName
+                val beneName = if (DMTUtil.isUPI(dmtType)) it.upiBeneName else it.beneName
                 if (it.status == 1) successDialog(it.message +"\n"+beneName){
                     fetchBeneficiary()
                 }
@@ -104,7 +105,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
             DMTType.WALLET_3,
             DMTType.DMT_3,
             -> repository.beneficiaryList(param)
-            DMTType.UPI -> upiRepository.beneficiaryList(param)
+            DMTType.UPI ,DMTType.UPI_2-> upiRepository.beneficiaryList(param)
         }
 
         callApiForStateFlow(
@@ -160,7 +161,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
             "type" to "VPA"
         )
 
-        if (dmtType == DMTType.UPI) callApiForShareFlow(
+        if (DMTUtil.isUPI(dmtType)) callApiForShareFlow(
             flow = verificationFlow,
             call = { upiRepository.accountValidation(paramUpi) }
         )
@@ -215,7 +216,7 @@ class BeneficiaryListInfoViewModel @Inject constructor(
     }
 
     private fun getBeneId() = when (dmtType) {
-        DMTType.UPI -> beneficiaryState.value?.id.orEmpty()
+        DMTType.UPI,DMTType.UPI_2 -> beneficiaryState.value?.id.orEmpty()
         DMTType.DMT_3,
         DMTType.WALLET_1,
         DMTType.WALLET_2,

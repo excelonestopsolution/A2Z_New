@@ -1,7 +1,6 @@
 package com.a2z.app.ui.screen.profile
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -13,16 +12,14 @@ import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.TitleValueHorizontally
-import com.a2z.app.ui.component.TitleValueVertically
 import com.a2z.app.ui.component.common.AppNetworkImage
 import com.a2z.app.ui.dialog.OTPVerifyDialog
 import com.a2z.app.ui.theme.BackgroundColor

@@ -38,7 +38,7 @@ class LoginOtpViewModel @Inject constructor(
 
         viewModelScope.launch {
             _resendOtpResultFlow.getLatest {
-                if(it.status ==1){
+                if(it.status ==700){
                     successBanner("Resend Otp",it.message)
                 }
                 else failureBanner("Resend Otp",it.message)
@@ -77,6 +77,8 @@ class LoginOtpViewModel @Inject constructor(
             "count" to resendCount.toString(),
             "mobileNumber" to AppSecurity.encrypt(mobileNumber).orEmpty(),
             "type" to AppSecurity.encrypt("NEW_DEVICE_OTP").orEmpty(),
+            "latitude" to appPreference.latitude,
+            "longitude" to appPreference.longitude
         )
 
         callApiForShareFlow(

@@ -1,10 +1,8 @@
 package com.a2z.app.ui.screen.home.sale
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,11 +22,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
+import com.a2z.app.ui.component.common.AppFormUI
 import com.a2z.app.ui.screen.dashboard.DashboardViewModel
 import com.a2z.app.ui.screen.home.component.HomeAppBarWidget
 import com.a2z.app.ui.screen.home.component.HomeWalletWidget
 import com.a2z.app.ui.screen.home.retailer.component.HomeNewsComponent
 import com.a2z.app.ui.theme.*
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -37,143 +37,158 @@ fun SaleHomeScreen(dashboardViewModel: DashboardViewModel) {
 
     BaseContent(viewModel) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+
         ) {
+
+
             HomeAppBarWidget(dashboardViewModel)
             Spacer(modifier = Modifier.height(2.dp))
-            Column(
-                modifier = Modifier
-                    .background(color = BackgroundColor2)
-                    .fillMaxSize()
-                    .weight(1f)
-
-            ) {
 
 
-                Card(
-                    shape = MaterialTheme.shapes.small,
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .fillMaxWidth()
-                ) {
-
-                    Column(modifier = Modifier.padding(12.dp)) {
-
-                        Row {
-                            Column() {
-                                Text(text = "Users", style = MaterialTheme.typography.h6)
-                                Text(
-                                    text = "mapped under you",
-                                    fontSize = 14.sp, color = PrimaryColorLight
-                                )
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            OutlinedButton(onClick = {
-                                viewModel.navigateTo(NavScreen.RegistrationTypeScreen.passArgs(
-                                    shouldMap = true
-                                ))
-                            }) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text("Create New")
-                            }
-                        }
-
-                        val mList = viewModel.getMappedUserTags()
-                        Spacer(modifier = Modifier.height(12.dp))
-                        LazyVerticalGrid(columns = GridCells.Fixed(3), content = {
-
-
-                            items(mList) {
-
-                                Card(
-                                    modifier = Modifier
-                                        .padding(3.dp)
-                                        .weight(1f)
-                                        .clickable {
-                                            viewModel.navigateMemberList(it)
-                                        },
-                                    shape = MaterialTheme.shapes.small,
-                                    elevation = 8.dp
-                                ) {
-
-                                    Column(
-                                        modifier = Modifier.padding(12.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.user),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(60.dp)
-                                        )
-                                        Spacer(modifier = Modifier.height(5.dp))
-                                        Text(text = it)
-                                    }
-
-                                }
-
-                            }
-                        })
-
-
-                    }
-
-                }
-
-
-                Card(
-                    shape = MaterialTheme.shapes.small,
-                    modifier = Modifier
-                        .padding(top = 0.dp, bottom = 12.dp, start = 12.dp, end = 12.dp)
-                        .fillMaxWidth()
-                ) {
-
-
-                    Column(
+            LazyColumn(modifier = Modifier
+                .weight(1f)
+                .background(BackgroundColor2), content = {
+                item {
+                    Card(
+                        shape = MaterialTheme.shapes.small,
                         modifier = Modifier
                             .padding(12.dp)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.user),
-                                contentDescription = null,
-                                modifier = Modifier.size(40.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "Users Created By User",
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryColorLight
-                            )
+
+                        Column(modifier = Modifier.padding(12.dp)) {
+
+                            Row {
+                                Column() {
+                                    Text(text = "Users", style = MaterialTheme.typography.h6)
+                                    Text(
+                                        text = "mapped under you",
+                                        fontSize = 14.sp, color = PrimaryColorLight
+                                    )
+                                }
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                OutlinedButton(onClick = {
+                                    viewModel.navigateTo(
+                                        NavScreen.RegistrationTypeScreen.passArgs(
+                                            shouldMap = true
+                                        )
+                                    )
+                                }) {
+                                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text("Create New")
+                                }
+                            }
+
+                            val mList = viewModel.getMappedUserTags()
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            FlowRow(
+                                mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth(),
+
+                            ){
+                                mList.forEach {
+                                    Card(
+                                        modifier = Modifier
+                                            .padding(horizontal = 8.dp, vertical = 5.dp)
+                                            .weight(1f)
+                                            .clickable {
+                                                viewModel.navigateMemberList(it)
+                                            },
+                                        shape = MaterialTheme.shapes.small,
+                                        elevation = 8.dp
+                                    ) {
+
+                                        Column(
+                                            modifier = Modifier.padding(12.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Image(
+                                                painter = painterResource(id = R.drawable.user),
+                                                contentDescription = null,
+                                                modifier = Modifier.size(60.dp)
+                                            )
+                                            Spacer(modifier = Modifier.height(5.dp))
+                                            Text(text = it, fontSize = 12.sp)
+                                        }
+
+                                    }
+                                }
+                            }
+
+
                         }
 
-                        Divider(modifier = Modifier.padding(vertical = 8.dp))
-                        OutlinedButton(
-                            onClick = {viewModel.navigateTo( NavScreen.MemberCreatedBySaleScreen.passArgs(true)) },
-                            border = BorderStroke(1.dp, color = GreenColor)
+                    }
+                    
+
+                    Card(
+                        shape = MaterialTheme.shapes.small,
+                        modifier = Modifier
+                            .padding(top = 0.dp, bottom = 12.dp, start = 12.dp, end = 12.dp)
+                            .fillMaxWidth()
+                    ) {
+
+
+                        Column(
+                            modifier = Modifier
+                                .padding(12.dp)
+                                .fillMaxWidth(),
                         ) {
-                            Text(text = "Registration Completed Users   ")
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.user),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Users Created By You",
+                                    fontWeight = FontWeight.Bold,
+                                    color = PrimaryColorLight
+                                )
+                            }
+
+                            Divider(modifier = Modifier.padding(vertical = 8.dp))
+                            OutlinedButton(
+                                onClick = {
+                                    viewModel.navigateTo(
+                                        NavScreen.MemberCreatedBySaleScreen.passArgs(
+                                            true
+                                        )
+                                    )
+                                },
+                                border = BorderStroke(1.dp, color = GreenColor)
+                            ) {
+                                Text(text = "Registration Completed Users   ")
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            OutlinedButton(
+                                onClick = {
+                                    viewModel.navigateTo(
+                                        NavScreen.MemberCreatedBySaleScreen.passArgs(
+                                            false
+                                        )
+                                    )
+                                },
+                                border = BorderStroke(1.dp, color = RedColor)
+                            ) {
+                                Text(text = "Registration InCompleted Users")
+                            }
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedButton(
-                            onClick = {
-                                viewModel.navigateTo(NavScreen.MemberCreatedBySaleScreen.passArgs(false))
-                            },
-                            border = BorderStroke(1.dp, color = RedColor)
-                        ) {
-                            Text(text = "Registration InCompleted Users")
-                        }
+
+
                     }
 
-
                 }
+            })
 
-
-            }
         }
     }
 }

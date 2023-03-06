@@ -49,7 +49,12 @@ interface TransactionService {
     @FormUrlEncoded
     suspend fun upiTransaction(@FieldMap data: FieldMapData): TransactionDetail
 
-  @POST("vpa/verify/payment")
+    @POST("vpa/two/transaction")
+    @FormUrlEncoded
+    suspend fun upi2Transaction(@FieldMap data: FieldMapData): TransactionDetail
+
+
+    @POST("vpa/verify/payment")
     @FormUrlEncoded
     suspend fun upiVerifyPayment(@FieldMap data: FieldMapData): UpiVerifyPayment
 

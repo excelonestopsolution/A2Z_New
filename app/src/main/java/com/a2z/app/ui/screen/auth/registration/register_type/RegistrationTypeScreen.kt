@@ -24,15 +24,13 @@ import com.a2z.app.R
 import com.a2z.app.data.model.auth.RegistrationRoleUser
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.PrimaryColor
 import com.a2z.app.ui.util.extension.singleParcelableResult
-import com.a2z.app.ui.util.extension.singleResult
-import com.a2z.app.util.AppUtil
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable

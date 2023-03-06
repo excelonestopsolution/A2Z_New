@@ -30,7 +30,7 @@ import com.a2z.app.R
 import com.a2z.app.data.model.AgreementInitialInfo
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.EmailTextField

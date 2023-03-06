@@ -1,11 +1,6 @@
 package com.a2z.app.ui.screen.util.indonepal
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.net.Uri
-import android.provider.DocumentsContract
-import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -23,12 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.R
 import com.a2z.app.data.model.indonepal.INActivationInitialResponse
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.component.common.DateTextField
@@ -36,12 +30,8 @@ import com.a2z.app.ui.component.common.FileTextField
 import com.a2z.app.ui.component.permission.CheckCameraStoragePermission
 import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.theme.*
-import com.a2z.app.ui.util.rememberStateOf
-import com.a2z.app.util.AppUtil
-import com.a2z.app.util.FilePath
 import com.a2z.app.util.FileUtil
 import com.a2z.app.util.extension.removeDateSeparator
-import java.io.File
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

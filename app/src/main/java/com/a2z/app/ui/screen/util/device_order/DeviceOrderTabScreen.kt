@@ -8,14 +8,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.screen.util.device_order.matm.MATMOrderTabContent
 import com.a2z.app.ui.screen.util.device_order.mpos.MPOSOrderTabContent
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.theme.GreenColor
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 

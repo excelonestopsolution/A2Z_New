@@ -8,8 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.theme.LocalNavController
-import com.a2z.app.util.AppUtil
 import com.journeyapps.barcodescanner.CaptureManager
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 
@@ -41,7 +41,7 @@ fun AppQRScanScreen() {
     }
 
     Scaffold(
-        topBar = { NavTopBar(title = "QR Scan")}
+        topBar = { NavTopBar(title = "QR Scan") }
     ) {
         AndroidView(factory = { scanViewState }, modifier = Modifier.fillMaxSize())
     }

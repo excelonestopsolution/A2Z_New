@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.a2z.app.R
+import com.a2z.app.data.local.AppPreference
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.LocalNavController
@@ -41,10 +43,17 @@ fun ExceptionDialogComponent(exceptionState: MutableState<ExceptionState?>) {
 
     if(exceptionState.value == null) return
 
+    val context = LocalContext.current
+
+    val appPreference = AppPreference(context)
+
     fun onDismiss() {
         exceptionState.value = null
         when (exception) {
             is Exceptions.SessionExpiredException -> {
+                appPreference.latitude = ""
+                appPreference.longitude = ""
+                appPreference.user = null
                 navController.navigate(NavScreen.LoginScreen.route){
                     popUpTo(NavScreen.LoginScreen.route){
                         inclusive = true

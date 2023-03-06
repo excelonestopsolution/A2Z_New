@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,13 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.MainActivity
-import com.a2z.app.data.model.matm.MatmInitiate
-import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.theme.spacing
 import com.a2z.app.util.VoidCallback
 import com.a2z.app.util.extension.showToast

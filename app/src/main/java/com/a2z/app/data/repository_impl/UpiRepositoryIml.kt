@@ -16,6 +16,10 @@ class UpiRepositoryIml @Inject constructor(private val service: UpiService) :
         return service.searchSender(data)
     }
 
+    override suspend fun searchSender2(data: FieldMapData): Response<MoneySenderResponse> {
+        return service.searchSender2(data)
+    }
+
     override suspend fun beneficiaryList(data: FieldMapData): BeneficiaryListResponse {
         return service.beneficiaryList(data)
     }

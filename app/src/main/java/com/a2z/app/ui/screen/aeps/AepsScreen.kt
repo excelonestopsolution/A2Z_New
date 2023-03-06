@@ -1,7 +1,6 @@
 package com.a2z.app.ui.screen.aeps
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.bottomsheet.BottomSheetAepsDevice
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
@@ -25,6 +24,7 @@ import com.a2z.app.ui.component.common.*
 import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.SpinnerSearchDialog
+import com.a2z.app.ui.screen.home.component.HomeLocationServiceDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.util.AepsUtil
@@ -164,6 +164,8 @@ fun BuildMainContent() {
                         }
                     )
                 ))
+
+            HomeLocationServiceDialog()
         }
     )
 

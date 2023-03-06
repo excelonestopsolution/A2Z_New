@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -25,10 +24,11 @@ import com.a2z.app.data.model.dmt.BankDownResponse
 import com.a2z.app.data.model.dmt.SenderAccountDetail
 import com.a2z.app.ui.component.BankDownComponent
 import com.a2z.app.ui.component.BaseContent
-import com.a2z.app.ui.component.NavTopBar
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.AppTextField
 import com.a2z.app.ui.screen.dmt.util.DMTType
+import com.a2z.app.ui.screen.dmt.util.DMTUtil
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.CircularShape
 import com.a2z.app.ui.theme.GreenColor
@@ -197,8 +197,8 @@ private fun SearchSenderByComponent() {
                           if (viewModel.searchType.value == SenderSearchType.MOBILE) "Mobile" else "Account",
                   style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold)
               )
-              if (viewModel.dmtType != DMTType.UPI) Spacer(modifier = Modifier.height(8.dp))
-              if (viewModel.dmtType != DMTType.UPI) Row {
+              if (!DMTUtil.isUPI(viewModel.dmtType)) Spacer(modifier = Modifier.height(8.dp))
+              if (!DMTUtil.isUPI(viewModel.dmtType)) Row {
                   SearchButton(searchType = SenderSearchType.MOBILE) {
                       viewModel.onSearchTypeClick(SenderSearchType.MOBILE)
                   }

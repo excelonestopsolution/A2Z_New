@@ -29,6 +29,7 @@ import com.a2z.app.ui.component.*
 import com.a2z.app.ui.component.common.AmountTextField
 import com.a2z.app.ui.component.common.AppFormCard
 import com.a2z.app.ui.component.common.AppFormUI
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
@@ -83,7 +84,7 @@ fun DMTMoneyTransferScreen() {
 
                     LocationComponent(
                         onLocation = {
-                            if (viewModel.dmtType == DMTType.UPI) {
+                            if (DMTUtil.isUPI(viewModel.dmtType)) {
                                 viewModel.checkUpiAccountStatus()
                             } else {
                                 viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
@@ -107,7 +108,7 @@ fun DMTMoneyTransferScreen() {
                 }, cardContents = listOf(
                     AppFormCard { BuildTopSection(viewModel) },
                     AppFormCard(
-                        isVisible = viewModel.dmtType != DMTType.UPI,
+                        isVisible = !DMTUtil.isUPI(viewModel.dmtType),
                         title = "Transaction Type"
                     ) {
                         BuildTransactionType(viewModel)
@@ -248,7 +249,7 @@ fun DMTMoneyTransferScreen() {
                 amount = viewModel.input.amount.getValue(),
                 warningMessage = viewModel.upiWarningMessage.value,
                 successMessage = viewModel.upiSuccessMessage.value,
-                titleValues = if (viewModel.dmtType == DMTType.UPI) upiTitleValue else dmtTitleValue
+                titleValues = if (DMTUtil.isUPI(viewModel.dmtType)) upiTitleValue else dmtTitleValue
             ) {
                 viewModel.mpinDialogVisibleState.value = true
             }
@@ -365,7 +366,7 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 val bankNameValue =
-                    if (viewModel.dmtType == DMTType.UPI)
+                    if (DMTUtil.isUPI(viewModel.dmtType))
                         beneficiary.accountNumber else beneficiary.bankName
                 Text(
                     bankNameValue.orEmpty(),
@@ -374,9 +375,9 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                val ifscTitle = if (viewModel.dmtType == DMTType.UPI)
+                val ifscTitle = if (DMTUtil.isUPI(viewModel.dmtType))
                     "Provider  : " else "IFSC   : "
-                val ifscValue = if (viewModel.dmtType == DMTType.UPI)
+                val ifscValue = if (DMTUtil.isUPI(viewModel.dmtType))
                     beneficiary.bankName else beneficiary.ifsc
 
                 if (ifscValue.orEmpty().trim().isNotEmpty()) Text(
@@ -386,7 +387,7 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
                         fontWeight = FontWeight.SemiBold
                     )
                 )
-                if (viewModel.dmtType != DMTType.UPI) Text(
+                if (!DMTUtil.isUPI(viewModel.dmtType)) Text(
                     ("Name : " + beneficiary.name), style = TextStyle(
                         fontSize = 14.sp,
                         color = primaryColor.copy(alpha = 0.8f),
@@ -399,9 +400,9 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-        val accountTitle = if (viewModel.dmtType == DMTType.UPI) "UPI ID" else "Account Number"
-        val bankTitle = if (viewModel.dmtType == DMTType.UPI) "Upi Id" else "Bank"
-           if(viewModel.dmtType != DMTType.UPI){
+        val accountTitle = if (DMTUtil.isUPI(viewModel.dmtType)) "UPI ID" else "Account Number"
+        val bankTitle = if (DMTUtil.isUPI(viewModel.dmtType)) "Upi Id" else "Bank"
+           if(!DMTUtil.isUPI(viewModel.dmtType)){
                TitleValueVertically(title = accountTitle, value = beneficiary.accountNumber)
            }
 
@@ -417,7 +418,7 @@ private fun BuildTopSection(viewModel: DMTMoneyTransferViewModel) {
                     modifier = Modifier.size(20.dp)
                 )
             }
-        else BuildBlinkText(if (viewModel.dmtType == DMTType.UPI)
+        else BuildBlinkText(if (DMTUtil.isUPI(viewModel.dmtType))
             "Selected upi id is not verified!" else "Selected bank is not verified!")
     }
 

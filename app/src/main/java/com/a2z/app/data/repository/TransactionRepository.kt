@@ -20,6 +20,7 @@ interface TransactionRepository {
     suspend fun wallet3Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun dmt3Transaction(data : FieldMapData) : TransactionDetailResponse
     suspend fun upiTransaction(data : FieldMapData) : TransactionDetail
+    suspend fun upi2Transaction(data : FieldMapData) : TransactionDetail
     suspend fun upiVerifyPayment(data : FieldMapData) : UpiVerifyPayment
     suspend fun r2rTransfer(data : FieldMapData) : AppResponse
     suspend fun settlementTransfer(data : FieldMapData) : AppResponse

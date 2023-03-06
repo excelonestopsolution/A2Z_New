@@ -2,23 +2,15 @@ package com.a2z.app.ui.screen.report.ledger
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.*
+import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.screen.report.component.BaseReportItem
 import com.a2z.app.ui.screen.report.component.ReportNavActionButton
 import com.a2z.app.ui.screen.report.filter.LedgerFilterDialog
 import com.a2z.app.ui.theme.BackgroundColor
-import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.util.VoidCallback
 
 
@@ -62,7 +54,7 @@ private fun MainContent(
             ReportNavActionButton {
                 filterAction.invoke()
             }
-        })
+        }, useDefaultBack = false)
     }) { _ ->
         BaseContent(viewModel) {
 
@@ -74,10 +66,11 @@ private fun MainContent(
                     leftSideDate = it.txnTime,
                     leftSideId = it.id.toString(),
                     centerHeading1 = it.number,
-                    centerHeading2 = it.serviceName,
-                    centerHeading3 = it.senderNumber,
+                    centerHeading2 = it.beneName,
+                    centerHeading3 = it.serviceName,
                     rightAmount = it.amount,
                     rightStatus = it.statusDesc,
+                    rightCBal = it.clBalance,
                     isPrint = it.isPrint,
                     isComplaint = it.isComplain,
                     isCheckStatus = it.isCheckStatus,
