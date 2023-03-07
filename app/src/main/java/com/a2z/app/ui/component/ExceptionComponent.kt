@@ -51,8 +51,7 @@ fun ExceptionDialogComponent(exceptionState: MutableState<ExceptionState?>) {
         exceptionState.value = null
         when (exception) {
             is Exceptions.SessionExpiredException -> {
-                appPreference.latitude = ""
-                appPreference.longitude = ""
+                appPreference.locationFetched = false
                 appPreference.user = null
                 navController.navigate(NavScreen.LoginScreen.route){
                     popUpTo(NavScreen.LoginScreen.route){

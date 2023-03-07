@@ -60,10 +60,10 @@ fun LoginScreen(
 
     })
 
-//    LaunchedEffect(key1 = Unit) {
-//        val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
-//        if (shouldNavigate == true) viewModel.login()
-//    }
+   LaunchedEffect(key1 = Unit) {
+       val shouldNavigate = navBackStackEntry.singleResult<Boolean>("callLogin")
+        if (shouldNavigate == true) viewModel.login()
+   }
 
 
     BaseContent(viewModel) {

@@ -46,7 +46,7 @@ fun BluetoothServiceComponent(
     fun isPaired(bluetoothAdapter: BluetoothAdapter): Boolean {
         var isPaired = false
         bluetoothAdapter.bondedDevices.forEach { device ->
-            if (device.name.startsWith("QPOS")) isPaired = true
+            if (device.name.startsWith("QPOS") || device.name.startsWith("MPOS")) isPaired = true
         }
         return isPaired
     }
@@ -138,7 +138,7 @@ fun BluetoothServiceDialog(enable: MutableState<Boolean>) {
             Text(
                 text = "M-ATM device is not connected or paired with android device." +
                         " Please scan device and connect it manually. Device name should be " +
-                        "start with QPOS",
+                        "start with QPOS or MPOS",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.W500,
