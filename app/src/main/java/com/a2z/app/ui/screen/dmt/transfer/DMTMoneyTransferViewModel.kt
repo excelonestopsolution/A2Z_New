@@ -50,15 +50,13 @@ class DMTMoneyTransferViewModel @Inject constructor(
 
     val chargeState = mutableStateOf<DmtCommissionResponse?>(null)
     val confirmDialogState = mutableStateOf(false)
-    val verifyUpiAccountDialogState = mutableStateOf(false)
     val mpinDialogVisibleState = mutableStateOf(false)
     private val _walletTransactionResultFlow = resultShareFlow<TransactionDetailResponse>()
     private val _upiTransactionResultFlow = resultShareFlow<TransactionDetail>()
-    private val _upiAccountStatusCheck = resultShareFlow<AppResponse>()
-    private val _upiVerifyPaymentFlow = resultShareFlow<UpiVerifyPayment>()
 
-    val upiWarningMessage = mutableStateOf("")
-    val upiSuccessMessage = mutableStateOf("")
+
+    val upiWarningMessage = args.warningMessage
+    val upiSuccessMessage = args.successMessage
 
 
     var channel: String = "2"
@@ -66,10 +64,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
     val bankDownText = mutableStateOf("")
     var impsAllow = true
 
-    val upiMessage = appPreference.upiStateMessage
 
-    val paymentVerifyData = mutableStateOf<UpiVerifyPayment?>(null)
-    val paymentVerifyResultDialogStatus = mutableStateOf(false)
 
     init {
         fetchBankDown()
@@ -163,31 +158,7 @@ class DMTMoneyTransferViewModel @Inject constructor(
                 })
         }
 
-        _upiAccountStatusCheck.getLatest {
-            when (it.status) {
-                1 -> {
-                    upiSuccessMessage.value = upiMessage?.warningMessage?.get(0) ?: ""
-                    upiWarningMessage.value = ""
-                    mpinType.value = MoneyTransferMPinType.TRANSFER
-                    confirmDialogState.value = true
-                }
-                404 -> {
-                    verifyUpiAccountDialogState.value = true
-                }
-                else -> alertDialog(it.message)
-            }
-        }
 
-        _upiVerifyPaymentFlow.getLatest {
-            paymentVerifyData.value = it
-            when (it.status) {
-                1, 34, 3 -> {
-                    paymentVerifyResultDialogStatus.value = true
-                }
-                else -> alertDialog(it.message)
-            }
-
-        }
 
     }
 
@@ -284,35 +255,14 @@ class DMTMoneyTransferViewModel @Inject constructor(
         )
     }
 
-    fun checkUpiAccountStatus() {
-        val param = hashMapOf(
-            "upi_id" to beneficiary.accountNumber.toString()
-        )
-        callApiForShareFlow(
-            flow = _upiAccountStatusCheck,
-            call = { upiRepository.checkUpiAccountStatus(param) }
-        )
 
-    }
 
-    fun verifyUpiPayment(mpin: String) {
-        val param = hashMapOf(
-            "bene_id" to beneficiary.id.orEmpty(),
-            "upi_id" to beneficiary.accountNumber.toString(),
-            "sender_number" to moneySender.mobileNumber.toString(),
-            "txn_pin" to mpin,
-        )
-        callApiForShareFlow(
-            flow = _upiVerifyPaymentFlow,
-            call = { transactionRepository.upiVerifyPayment(param) }
-        )
 
-    }
 
 }
 
 enum class MoneyTransferMPinType {
-    COMMISSION, TRANSFER, UPI_VERIFY
+    COMMISSION, TRANSFER
 }
 
 enum class MoneyTransactionType {

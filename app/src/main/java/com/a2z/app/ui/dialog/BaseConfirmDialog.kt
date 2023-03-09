@@ -44,8 +44,8 @@ fun BaseConfirmDialog(
     amount: String? = null,
     title: String = "Confirm",
     titleValues: List<Pair<String, String>>,
-    warningMessage: String? = null,
-    successMessage: String? = null,
+    warningMessage: String = "",
+    successMessage: String = "",
     confirmAmount: Boolean = true,
     onConfirm: VoidCallback
 ) {
@@ -63,7 +63,11 @@ fun BaseConfirmDialog(
 
         val isChecked = rememberStateOf(value = true)
 
-        val message = (successMessage ?: warningMessage) ?: ""
+        var message = ""
+        if(successMessage.trim().isNotEmpty())
+            message = successMessage
+        else if(warningMessage.trim().isNotEmpty())
+            message = warningMessage
 
         LaunchedEffect(key1 = Unit, block = {
             if(message.isNotEmpty()) isChecked.value = false
@@ -111,8 +115,7 @@ fun BaseConfirmDialog(
                     )
                 )
 
-                val color = if (successMessage != null && successMessage.isNotEmpty()) GreenColor
-                else RedColor
+                val color = if (successMessage.isNotEmpty()) GreenColor else RedColor
 
                 if (message.isNotEmpty()) Row{
 
@@ -121,7 +124,7 @@ fun BaseConfirmDialog(
                     })
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = message.toString(),
+                        text = message,
                         textAlign = TextAlign.Start,
                         lineHeight = 22.sp,
                         color = color.copy(alpha = 0.8f),

@@ -76,6 +76,8 @@ fun UpiBeneficiaryRegisterScreen(
                 && !upiName.toLowerCase(Locale.ROOT).contains("amazonpaymerchant")
                 && !upiName.toLowerCase(Locale.ROOT).contains("amazonpay merchant")
                 && !upiName.toLowerCase(Locale.ROOT).contains("amazon pay merchant")
+                && !upiName.toLowerCase(Locale.ROOT).contains("merchant")
+                && !upiName.toLowerCase(Locale.ROOT).contains("paytmuser")
                 && !upiName.contains("*")
             ) {
                 viewModel.actionType.value = UpiBeneficiaryRegisterViewModel.ActionType.REGISTER

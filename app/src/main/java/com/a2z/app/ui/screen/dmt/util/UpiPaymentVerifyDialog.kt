@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -33,7 +34,7 @@ import com.a2z.app.util.VoidCallback
 fun UpiVerifyAccountDialog(
     state: MutableState<Boolean>,
     upiMessage: UpiStaticMessage?,
-    beneficiary: Beneficiary,
+    beneficiary: Beneficiary?,
     onConfirmWithoutVerify: VoidCallback,
     onConfirmVerifyUpiId: VoidCallback,
 
@@ -68,7 +69,7 @@ fun UpiVerifyAccountDialog(
 
             Divider(modifier = Modifier.padding(16.dp))
             Image(
-                imageVector = Icons.Default.Warning,
+                imageVector = Icons.Default.Info,
                 contentDescription = null,
                 modifier = Modifier.size(60.dp),
                 colorFilter = ColorFilter.tint(RedColor)
@@ -180,7 +181,7 @@ private fun ConfirmUnVerifyAccountDialog(
 
             Divider(modifier = Modifier.padding(16.dp))
             Image(
-                imageVector = Icons.Default.Warning,
+                imageVector = Icons.Default.Info,
                 contentDescription = null,
                 modifier = Modifier.size(60.dp),
                 colorFilter = ColorFilter.tint(RedColor)
@@ -237,7 +238,7 @@ private fun ConfirmUnVerifyAccountDialog(
 private fun UpiVerifyTxnDialog(
     state: MutableState<Boolean>,
     upiMessage: UpiStaticMessage?,
-    beneficiary: Beneficiary,
+    beneficiary: Beneficiary?,
     onProceed: VoidCallback
 ) {
 
@@ -248,9 +249,9 @@ private fun UpiVerifyTxnDialog(
      )*/
 
     val titleValues = listOf(
-        Pair("Sender Mobile", beneficiary.mobileNumber ?: ""),
-        Pair("UPI Id", beneficiary.accountNumber ?: ""),
-        Pair("Name", beneficiary.name ?: ""),
+        Pair("Sender Mobile", beneficiary?.mobileNumber ?: ""),
+        Pair("UPI Id", beneficiary?.accountNumber ?: ""),
+        Pair("Name", beneficiary?.name ?: ""),
         Pair("Amount", upiMessage?.chargeDetails?.txnAmount.toString()),
         Pair("Txn Charge", upiMessage?.chargeDetails?.txnCharge.toString()),
         Pair("Total", upiMessage?.chargeDetails?.totalAmount.toString()),

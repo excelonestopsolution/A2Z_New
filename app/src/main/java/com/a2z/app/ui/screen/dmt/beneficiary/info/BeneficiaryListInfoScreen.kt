@@ -35,13 +35,18 @@ import com.a2z.app.data.model.dmt.Beneficiary
 import com.a2z.app.nav.NavScreen
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.EmptyListComponent
+import com.a2z.app.ui.component.MpinInputComponent
 import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
 import com.a2z.app.ui.component.common.SearchTextField
+import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.ConfirmActionDialog
 import com.a2z.app.ui.dialog.OTPVerifyDialog
+import com.a2z.app.ui.screen.dmt.transfer.MoneyTransferMPinType
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.dmt.util.DMTUtil
+import com.a2z.app.ui.screen.dmt.util.UpiPaymentVerifyResultDialog
+import com.a2z.app.ui.screen.dmt.util.UpiVerifyAccountDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
@@ -122,6 +127,42 @@ fun BeneficiaryListInfoScreen(navBackStackEntry: NavBackStackEntry) {
             ) {
                 viewModel.deleteBeneficiaryOtp(it)
             }
+
+            UpiVerifyAccountDialog(
+                state = viewModel.verifyUpiAccountDialogState,
+                upiMessage = viewModel.upiMessage,
+                beneficiary = viewModel.beneficiary,
+                onConfirmWithoutVerify = {
+                    val warningMessage = viewModel.upiMessage?.warningMessage?.get(1) ?: ""
+                    viewModel.navigateToTransferScreen("",warningMessage)
+                },
+                onConfirmVerifyUpiId = {
+                    viewModel.mpinDialogVisibleState.value = true
+                }
+            )
+
+            UpiPaymentVerifyResultDialog(
+                state = viewModel.paymentVerifyResultDialogStatus,
+                data = viewModel.paymentVerifyData.value,
+                onProceed = {
+                    viewModel.checkUpiAccountStatus()
+                }
+            )
+
+            MpinInputComponent(
+                visibleState = viewModel.mpinDialogVisibleState,
+                amount = null,
+                onSubmit = { mpin ->
+                    viewModel.verifyUpiPayment(mpin)
+                })
+
+            val upiTitleValue = listOf(
+                "Name" to viewModel.beneficiary?.name.orEmpty(),
+                "Upi Id" to viewModel.beneficiary?.accountNumber.orEmpty(),
+                "Provider" to viewModel.beneficiary?.bankName.orEmpty(),
+                "DMT Type" to DMTUtil.dmtTypeToTitle(viewModel.dmtType),
+            )
+
         }
 
 
@@ -148,7 +189,11 @@ private fun BuildListItem(
     }
 
     Column(modifier = Modifier
-        .background(color = if (index == 0 && viewModel.swipeState.value) PrimaryColorDark.copy(0.1f) else Color.White)
+        .background(
+            color = if (index == 0 && viewModel.swipeState.value) PrimaryColorDark.copy(
+                0.1f
+            ) else Color.White
+        )
         .clickable {
             isVisible.value = !isVisible.value
         }) {
@@ -176,7 +221,7 @@ private fun BuildListItem(
                     text = beneficiary.name.orEmpty(),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (beneficiary.bankVerified == 1 ) GreenColor else Color.Gray
+                    color = if (beneficiary.bankVerified == 1) GreenColor else Color.Gray
                 )
                 if (!isUpi) Text(
                     text = beneficiary.bankName.orEmpty(),
@@ -223,7 +268,8 @@ private fun BuildListItem(
                         .rotate(-15f)
                         .clickable {
                             viewModel.onSendClick(beneficiary)
-                        }.padding(8.dp)
+                        }
+                        .padding(8.dp)
                 )
 
                 Text(
@@ -262,9 +308,12 @@ private fun BuildListItem(
                                 contentColor = Color.White
                             ), contentPadding = buttonPaddingValue
                         ) {
-                            Icon(imageVector = Icons.Default.Verified, contentDescription = "Verify")
+                            Icon(
+                                imageVector = Icons.Default.Verified,
+                                contentDescription = "Verify"
+                            )
                             Spacer(modifier = Modifier.width(5.dp))
-                            Text(text = if (beneficiary.bankVerified == 1 ) "Re-verified" else "Verified")
+                            Text(text = if (beneficiary.bankVerified == 1) "Re-verified" else "Verified")
                         }
                     }
                 }
@@ -298,7 +347,7 @@ private fun HeaderComponent() {
                         fontSize = 14.sp
                     )
                     Text(
-                        text = "Limit : ${AppConstant.RUPEE_SYMBOL} ${viewModel.moneySender.usedLimit}",
+                        text = "Limit : ${AppConstant.RUPEE_SYMBOL} ${viewModel.moneySender.remBal}",
                         fontWeight = FontWeight.Normal,
                         color = Color.DarkGray,
                         fontSize = 14.sp

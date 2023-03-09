@@ -12,6 +12,8 @@ import kotlinx.parcelize.Parcelize
 data class MoneyTransferArgs(
     val moneySender: MoneySender,
     val beneficiary: Beneficiary,
-    val dmtType: DMTType
+    val dmtType: DMTType,
+    val successMessage : String,
+    val warningMessage : String
 ) : Parcelable
 

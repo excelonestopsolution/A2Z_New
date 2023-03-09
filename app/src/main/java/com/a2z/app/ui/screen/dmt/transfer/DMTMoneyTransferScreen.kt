@@ -34,8 +34,6 @@ import com.a2z.app.ui.component.permission.LocationComponent
 import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.screen.dmt.util.DMTType
 import com.a2z.app.ui.screen.dmt.util.DMTUtil
-import com.a2z.app.ui.screen.dmt.util.UpiPaymentVerifyResultDialog
-import com.a2z.app.ui.screen.dmt.util.UpiVerifyAccountDialog
 import com.a2z.app.ui.theme.BackgroundColor
 import com.a2z.app.ui.theme.GreenColor
 import com.a2z.app.ui.theme.PrimaryColorDark
@@ -84,13 +82,11 @@ fun DMTMoneyTransferScreen() {
 
                     LocationComponent(
                         onLocation = {
-                            if (DMTUtil.isUPI(viewModel.dmtType)) {
-                                viewModel.checkUpiAccountStatus()
-                            } else {
+
                                 viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
                                 manager.clearFocus()
                                 viewModel.confirmDialogState.value = true
-                            }
+
                         }) {
                         Button(
                             onClick = {
@@ -247,8 +243,8 @@ fun DMTMoneyTransferScreen() {
                 title = "Please Confirm ?",
                 state = viewModel.confirmDialogState,
                 amount = viewModel.input.amount.getValue(),
-                warningMessage = viewModel.upiWarningMessage.value,
-                successMessage = viewModel.upiSuccessMessage.value,
+                warningMessage = viewModel.upiWarningMessage,
+                successMessage = viewModel.upiSuccessMessage,
                 titleValues = if (DMTUtil.isUPI(viewModel.dmtType)) upiTitleValue else dmtTitleValue
             ) {
                 viewModel.mpinDialogVisibleState.value = true
@@ -269,37 +265,9 @@ fun DMTMoneyTransferScreen() {
                             viewModel.proceedTransaction()
 
                         }
-                        MoneyTransferMPinType.UPI_VERIFY -> {
-                            manager.clearFocus()
-                            viewModel.verifyUpiPayment(mpin)
-                        }
                     }
                 })
 
-            UpiVerifyAccountDialog(
-                state = viewModel.verifyUpiAccountDialogState,
-                upiMessage = viewModel.upiMessage,
-                beneficiary = viewModel.beneficiary,
-                onConfirmWithoutVerify = {
-                    viewModel.upiWarningMessage.value =
-                        viewModel.upiMessage?.warningMessage?.get(2) ?: ""
-                    viewModel.mpinType.value = MoneyTransferMPinType.TRANSFER
-                    manager.clearFocus()
-                    viewModel.confirmDialogState.value = true
-                },
-                onConfirmVerifyUpiId = {
-                    viewModel.mpinType.value = MoneyTransferMPinType.UPI_VERIFY
-                    viewModel.mpinDialogVisibleState.value = true
-                }
-            )
-
-            UpiPaymentVerifyResultDialog(
-                state = viewModel.paymentVerifyResultDialogStatus,
-                data = viewModel.paymentVerifyData.value,
-                onProceed = {
-                    viewModel.checkUpiAccountStatus()
-                }
-            )
         }
 
     }
@@ -307,7 +275,7 @@ fun DMTMoneyTransferScreen() {
 }
 
 @Composable
-fun ColumnScope.BuildTransactionType(viewModel: DMTMoneyTransferViewModel) {
+fun BuildTransactionType(viewModel: DMTMoneyTransferViewModel) {
     Column {
         Row {
             BuildRadioButton(MoneyTransactionType.IMPS) {
