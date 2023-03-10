@@ -92,8 +92,10 @@ private fun BuildMoneyAEPService() {
                         padding = 12.dp,
                         color = color,
                         onClick = {
-                            if (viewModel.dmtAndAEPSKycPendingState.value)
-                                viewModel.checkKycInfo()
+                            if (viewModel.appPreference.user?.matm == "0")
+                                viewModel.alertDialog("Your M-ATM / M-POS service is not active"){
+                                    viewModel.navigateTo(NavScreen.DeviceOrderScreen.route)
+                                }
                             else navController.navigate(
                                 NavScreen.MatmScreen.passArgs(
                                     isMPos = false
@@ -107,8 +109,10 @@ private fun BuildMoneyAEPService() {
                         padding = 12.dp,
                         color = color,
                         onClick = {
-                            if (viewModel.dmtAndAEPSKycPendingState.value)
-                                viewModel.checkKycInfo()
+                            if (viewModel.appPreference.user?.matm == "0")
+                               viewModel.alertDialog("Your M-ATM / M-POS service is not active"){
+                                   viewModel.navigateTo(NavScreen.DeviceOrderScreen.route)
+                               }
                             else navController.navigate(
                                 NavScreen.MatmScreen.passArgs(
                                     isMPos = true
@@ -388,24 +392,25 @@ private fun BuildUtilityService() {
                         onClick = {
                             navigateToOperatorScreen(navController, OperatorType.GAS)
                         })
-                    BuildIconAndIconTitle(title = "Broadband",
+                    /*BuildIconAndIconTitle(title = "Broadband",
                         icon = R.drawable.ic_launcher_broadband,
                         color = color,
                         onClick = {
 
                             navigateToOperatorScreen(navController, OperatorType.BROADBAND)
-                        })
-
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Row {
-
+                        })*/
                     BuildIconAndIconTitle(title = "Insurance",
                         icon = R.drawable.ic_launcher_insurence,
                         color = color,
                         onClick = {
                             navigateToOperatorScreen(navController, OperatorType.INSURANCE)
                         })
+
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+
+
                     BuildIconAndIconTitle(title = "Loan Repayment",
                         icon = R.drawable.loan,
                         color = color,
@@ -418,6 +423,7 @@ private fun BuildUtilityService() {
                         onClick = {
                             navigateToOperatorScreen(navController, OperatorType.POSTPAID)
                         })
+                    Spacer(modifier = Modifier.weight(1f))
                     Spacer(modifier = Modifier.weight(1f))
 
                 }

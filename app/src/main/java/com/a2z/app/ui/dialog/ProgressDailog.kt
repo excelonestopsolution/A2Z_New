@@ -18,8 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.theme.PrimaryColorLight
 import com.a2z.app.util.VoidCallback
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ProgressDialog(
     text: String = "Loading",
@@ -27,29 +30,33 @@ fun ProgressDialog(
 ) {
     Dialog(
         onDismissRequest = { onClose() }, properties = DialogProperties(
-            dismissOnBackPress = true, dismissOnClickOutside = false
+            dismissOnBackPress = true, dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false
         )
     ) {
         Box(
             modifier = Modifier
-                .wrapContentSize()
-                .clip(shape = RoundedCornerShape(5.dp))
-                .background(color = Color.White), contentAlignment = Alignment.Center
+                .fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
 
-            Column(
-                modifier = Modifier.padding(horizontal = 48.dp, vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .clip(shape = RoundedCornerShape(2.dp))
+                    .background(Color.White)
+                    .padding(24.dp),
+                verticalAlignment = Alignment.CenterVertically,
 
                 ) {
 
                 CircularProgressIndicator()
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
                     text = text, style = MaterialTheme.typography.subtitle1.copy(
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
                     )
                 )
             }

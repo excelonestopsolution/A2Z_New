@@ -96,6 +96,8 @@ class LoginViewModel @Inject constructor(
                 navigateTo(NavScreen.LoginOtpScreen.passArgs(mobile))
             }
             else -> {
+                appPreference.user = null
+                appPreference.locationFetched = false
                 if (autoLogin) {
                     autoLogin = false
                 } else alertDialog(message)

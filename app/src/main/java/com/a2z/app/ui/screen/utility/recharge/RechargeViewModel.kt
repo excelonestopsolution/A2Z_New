@@ -71,6 +71,11 @@ class RechargeViewModel @Inject constructor(
         if (isPrepaid()) {
             offerList = null
             if (it.length == 10) fetchRechargePlan()
+            else{
+                rechargePlanState.value = null
+                input.amountInputWrapper.setValue("")
+                input.amountInputWrapper.clearFormError()
+            }
         }
 
     }

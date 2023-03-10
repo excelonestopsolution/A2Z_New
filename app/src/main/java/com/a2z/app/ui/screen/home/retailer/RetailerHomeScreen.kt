@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -24,8 +25,7 @@ import com.a2z.app.ui.screen.home.retailer.component.*
 import com.a2z.app.ui.theme.BackgroundColor2
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
-
-
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -36,72 +36,70 @@ fun RetailerHomeScreen(
 
 ) {
 
-    val navController = LocalNavController.current
+    BaseContent(viewModel) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            HomeAppBarWidget(dashboardViewModel)
+            Spacer(modifier = Modifier.height(2.dp))
+            LazyColumn(
+                modifier = Modifier
+                    .background(color = BackgroundColor2)
+                    .fillMaxSize()
+                    .weight(1f)
 
-   BaseContent(viewModel) {
-       Column(
-           modifier = Modifier.fillMaxSize()
-       ) {
-           HomeAppBarWidget(dashboardViewModel)
-           Spacer(modifier = Modifier.height(2.dp))
-           LazyColumn(
-               modifier = Modifier
-                   .background(color = BackgroundColor2)
-                   .fillMaxSize()
-                   .weight(1f)
+            ) {
+                items(1) {
 
-           ) {
-               items(1) {
+                    val newsState = dashboardViewModel.newsResponseState.value
 
-                   val newsState = dashboardViewModel.newsResponseState.value
+                    HomeWalletWidget()
+                    HomeCarouselWidget()
+                    HomeKycComponent(viewModel)
+                    HomeNewsComponent(newsState)
+                    HomeServiceWidget()
+                }
 
-                   HomeWalletWidget()
-                   HomeCarouselWidget()
-                   HomeKycComponent(viewModel)
-                   HomeNewsComponent(newsState)
-                   HomeServiceWidget()
-               }
+            }
+        }
 
-           }
-       }
+        KycWarningDialog(viewModel.kycDialogState, viewModel.kycInfo()) {
+            viewModel.navigateKycScreen(it)
+        }
 
-       KycWarningDialog(viewModel.kycDialogState, viewModel.kycInfo()){
-           viewModel.navigateKycScreen(it)
-       }
+        val context = LocalContext.current
 
-       val context = LocalContext.current
+        CollectLatestWithScope(flow = viewModel.hotelFlightDirectUrlFlow, callback = {
+            when (it) {
+                is ResultType.Failure -> viewModel.alertDialog("Something went wrong!, please try again")
+                is ResultType.Loading -> viewModel.progressDialog()
+                is ResultType.Success -> {
+                    if (it.data.status == 1) {
+                        viewModel.dismissDialog()
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = Uri.parse(it.data.url.toString())
+                        context.startActivity(i)
+                    } else viewModel.failureDialog(it.data.message.toString())
+                }
+            }
+        })
 
-       CollectLatestWithScope(flow = viewModel.hotelFlightDirectUrlFlow, callback = {
-           when (it) {
-               is ResultType.Failure -> viewModel.alertDialog("Something went wrong!, please try again")
-               is ResultType.Loading -> viewModel.progressDialog()
-               is ResultType.Success -> {
-                   if (it.data.status == 1) {
-                       viewModel.dismissDialog()
-                       val i = Intent(Intent.ACTION_VIEW)
-                       i.data = Uri.parse(it.data.url.toString())
-                       context.startActivity(i)
-                   } else viewModel.failureDialog(it.data.message.toString())
-               }
-           }
-       })
+        CollectLatestWithScope(flow = viewModel.panAutoLogFlow, callback = {
+            when (it) {
+                is ResultType.Failure -> viewModel.alertDialog("Something went wrong!, please try again")
+                is ResultType.Loading -> viewModel.progressDialog()
+                is ResultType.Success -> {
+                    if (it.data.status == 1) {
+                        viewModel.dismissDialog()
+                        val i = Intent(Intent.ACTION_VIEW)
+                        i.data = Uri.parse(it.data.url.toString())
+                        context.startActivity(i)
+                    } else viewModel.failureDialog(it.data.message.toString())
+                }
+            }
+        })
 
-       CollectLatestWithScope(flow = viewModel.panAutoLogFlow, callback = {
-           when (it) {
-               is ResultType.Failure -> viewModel.alertDialog("Something went wrong!, please try again")
-               is ResultType.Loading -> viewModel.progressDialog()
-               is ResultType.Success -> {
-                   if (it.data.status == 1) {
-                       viewModel.dismissDialog()
-                       val i = Intent(Intent.ACTION_VIEW)
-                       i.data = Uri.parse(it.data.url.toString())
-                       context.startActivity(i)
-                   } else viewModel.failureDialog(it.data.message.toString())
-               }
-           }
-       })
-
-   }
+    }
 }
 
 
