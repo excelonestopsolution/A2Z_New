@@ -3,8 +3,10 @@ package com.a2z.app.ui.screen.aeps
 import android.annotation.SuppressLint
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.ui.component.BaseContent
 import com.a2z.app.ui.component.common.NavTopBar
 import com.a2z.app.ui.component.ObsComponent
+import com.a2z.app.ui.component.TitleValueHorizontally
 import com.a2z.app.ui.component.bottomsheet.BottomSheetAepsDevice
 import com.a2z.app.ui.component.bottomsheet.BottomSheetComponent
 import com.a2z.app.ui.component.common.*
@@ -26,6 +29,9 @@ import com.a2z.app.ui.dialog.BaseConfirmDialog
 import com.a2z.app.ui.dialog.SpinnerSearchDialog
 import com.a2z.app.ui.screen.home.component.HomeLocationServiceDialog
 import com.a2z.app.ui.theme.BackgroundColor
+import com.a2z.app.ui.theme.GreenColor
+import com.a2z.app.ui.theme.PrimaryColorDark
+import com.a2z.app.ui.theme.RedColor
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.util.AepsUtil
 import com.a2z.app.util.VoidCallback
@@ -36,7 +42,7 @@ fun AepsScreen() {
     val viewModel: AepsViewModel = hiltViewModel()
     Scaffold(
         backgroundColor = BackgroundColor,
-        topBar = { NavTopBar(title = viewModel.title) }
+        topBar = { NavTopBar(title = "AEPS Transaction") }
     ) {
         BaseContent(viewModels = arrayOf(viewModel)) {
             ObsComponent(flow = viewModel.bankListResponseFlow) {
@@ -100,35 +106,32 @@ fun BuildMainContent() {
                     }
                 },
                 cardContents = listOf(
+
                     AppFormCard(
-                        title = "Fill Details",
                         contents = {
 
-                            DropDownTextField(
+                            BuildAepsTypeContent(viewModel)
+
+                            DropDownTextField2(
                                 value = viewModel.selectedBank.value?.bankName ?: "",
-                                hint = "Select Bank",
-                                paddingValues = PaddingValues(horizontal = 0.dp)
+                                label = "Aeps Bank",
+                                hint = "Select Bank"
                             ) {
                                 viewModel.spinnerDialogState.value = true
                             }
-                            Text(
-                                text = "Select AEPS Bank", style = TextStyle(
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.W500,
-                                    color = Color.Black.copy(alpha = 0.6f)
-                                )
-                            )
 
 
                             AadhaarTextField(
                                 value = input.aadhaarInputWrapper.getValue(),
                                 onChange = { input.aadhaarInputWrapper.setValue(it) },
-                                error = input.aadhaarInputWrapper.formError()
+                                error = input.aadhaarInputWrapper.formError(),
+                                downText = null
                             )
                             MobileTextField(
                                 value = input.mobileInputWrapper.getValue(),
                                 onChange = { input.mobileInputWrapper.setValue(it) },
-                                error = input.mobileInputWrapper.formError()
+                                error = input.mobileInputWrapper.formError(),
+                                downText = null
                             )
                         }
                     ),
@@ -161,8 +164,45 @@ fun BuildMainContent() {
                                 error = input.amountInputWrapper.formError(),
                                 isOutline = true
                             )
+
+
+                        }
+                    ),
+                    AppFormCard(
+                        isVisible = viewModel.aepsLimit != null,
+                        contents = {
+                            TitleValueHorizontally(
+                                title = "Daily Max Txn Count",
+                                value = viewModel.aepsLimit?.daily_limit_count,
+                                titleWeight = 2f
+                            )
+                            TitleValueHorizontally(
+                                title = "Daily Max Txn Amount",
+                                value = viewModel.aepsLimit?.daily_txn_amount,
+                                titleWeight = 2f
+                            )
+                            Divider(color = PrimaryColorDark, thickness = 1.5.dp)
+                            TitleValueHorizontally(
+                                title = "Monthly Max Txn Count",
+                                value = viewModel.aepsLimit?.monthly_txn_count,
+                                titleWeight = 2f
+                            )
+                            TitleValueHorizontally(
+                                title = "Monthly Max Txn Amount",
+                                value = viewModel.aepsLimit?.monthly_txn_max_amount,
+                                titleWeight = 2f
+                            )
+                            Divider(color = PrimaryColorDark, thickness = 1.5.dp)
+                            val isAadhaarPay = viewModel.aepsLimit?.is_aadhaar_pay_serice_available == "1"
+                            TitleValueHorizontally(
+                                title = "Aadhaar Pay",
+                                value = if (isAadhaarPay) "Yes" else "NO",
+                                color = if(isAadhaarPay) GreenColor else RedColor,
+                                titleWeight = 2f
+                            )
                         }
                     )
+
                 ))
 
             HomeLocationServiceDialog()
@@ -201,6 +241,54 @@ fun BuildMainContent() {
 
 
 @Composable
+private fun BuildAepsTypeContent(viewModel: AepsViewModel) {
+
+
+    @Composable
+    fun RowScope.AepsTypeButton(aepsType: AepsType, onClick: (AepsType) -> Unit) {
+
+        val title = when (aepsType) {
+            AepsType.ICICI -> "ICICI"
+            AepsType.FINO -> "FINO"
+            AepsType.PAYTM -> "PAYTM"
+        }
+
+
+        val color = if (aepsType == viewModel.aepsType.value)
+            GreenColor else Color.Gray
+
+        Button(
+            onClick = { onClick.invoke(aepsType) },
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 3.dp),
+            contentPadding = PaddingValues(horizontal = 2.dp),
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = color,
+                contentColor = Color.White
+            )
+        ) {
+            Text(title)
+        }
+    }
+
+    Row(Modifier.fillMaxWidth()) {
+        AepsTypeButton(aepsType = AepsType.ICICI, onClick = {
+            viewModel.onAepsSelect(it)
+        })
+        AepsTypeButton(aepsType = AepsType.FINO, onClick = {
+            viewModel.onAepsSelect(it)
+        })
+        AepsTypeButton(aepsType = AepsType.PAYTM, onClick = {
+            viewModel.onAepsSelect(it)
+        })
+
+    }
+}
+
+
+@Composable
 fun RowScope.TransactionTypeButton(transactionType: AepsTransactionType, onClick: VoidCallback) {
 
 
@@ -227,10 +315,10 @@ fun RowScope.TransactionTypeButton(transactionType: AepsTransactionType, onClick
         onClick = onClick,
         modifier = Modifier
             .weight(1f)
-            .padding(horizontal = 5.dp),
+            .padding(horizontal = 2.dp),
         colors = style,
         shape = CircleShape
     ) {
-        Text(text = title, fontSize = 12.sp)
+        Text(text = title, fontSize = 10.sp)
     }
 }

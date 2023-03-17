@@ -24,7 +24,8 @@ interface TransactionRepository {
     suspend fun upiVerifyPayment(data : FieldMapData) : UpiVerifyPayment
     suspend fun r2rTransfer(data : FieldMapData) : AppResponse
     suspend fun settlementTransfer(data : FieldMapData) : AppResponse
-    suspend fun aepsTransaction(data : FieldMapData) : AepsTransaction
+    suspend fun aeps1Transaction(data : FieldMapData) : AepsTransaction
+    suspend fun aeps2Transaction(data : FieldMapData) : AepsTransaction
     suspend fun aeps3Transaction(data : FieldMapData) : AepsTransaction
     suspend fun parentPaymentFundReturn(data : FieldMapData) : AppResponse
     suspend fun approveFundRequest(data : FieldMapData) : AppResponse

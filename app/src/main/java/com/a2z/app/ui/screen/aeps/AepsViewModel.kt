@@ -1,15 +1,12 @@
 package com.a2z.app.ui.screen.aeps
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
-import com.a2z.app.data.model.aeps.AepsBank
-import com.a2z.app.data.model.aeps.AepsBankListResponse
-import com.a2z.app.data.model.aeps.AepsTransaction
-import com.a2z.app.data.model.aeps.RDService
+import com.a2z.app.data.model.aeps.*
 import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.nav.NavScreen
@@ -17,10 +14,7 @@ import com.a2z.app.service.firebase.FBAppLog
 import com.a2z.app.service.firebase.FirebaseDatabase
 import com.a2z.app.ui.util.BaseViewModel
 import com.a2z.app.ui.util.extension.callApiForShareFlow
-import com.a2z.app.ui.util.extension.safeSerializable
-import com.a2z.app.ui.util.rememberStateOf
 import com.a2z.app.ui.util.resource.ResultType
-import com.a2z.app.util.DateUtil
 import com.a2z.app.util.resultShareFlow
 import com.a2z.app.util.resultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +22,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,7 +32,7 @@ class AepsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    private val aepsType: AepsType = savedStateHandle.safeSerializable("aeps_type")!!
+    val aepsType = mutableStateOf(AepsType.ICICI)
 
     lateinit var biometricDevice: RDService
     val transactionType = mutableStateOf(AepsTransactionType.CASH_WITHDRAWAL)
@@ -63,15 +56,19 @@ class AepsViewModel @Inject constructor(
     private val _transactionResultFlow = resultShareFlow<AepsTransaction>()
     private val _tableCheckStatusResultFlow = resultShareFlow<AepsTransaction>()
     private val _bankCheckStatusResultFlow = resultShareFlow<AepsTransaction>()
+    private val _aepsLimitResultFlow = resultShareFlow<AepsLimitResponse>()
 
+    var aepsLimit by mutableStateOf<AepsLimit?>(null)
 
     private var checkStatusCountTotal = 0
     private var checkStatusCount = 0
 
-    val title = when (aepsType) {
-        AepsType.AEPS_1 -> "AEPS - 1"
-        AepsType.AEPS_3 -> "AEPS - 3"
-    }
+    val title: String
+        get() = when (aepsType.value) {
+            AepsType.ICICI -> "AEPS - ICICI"
+            AepsType.FINO -> "AEPS - FINO"
+            AepsType.PAYTM -> "AEPS - PAYTM"
+        }
 
     init {
         fetchBankList()
@@ -127,6 +124,10 @@ class AepsViewModel @Inject constructor(
                 }
             }
         }
+
+        _aepsLimitResultFlow.getLatest {
+            aepsLimit = it.data
+        }
     }
 
     private fun transactionResult(data: AepsTransaction) {
@@ -142,6 +143,16 @@ class AepsViewModel @Inject constructor(
         }
     }
 
+    private fun fetchAepsLimit(iin : String) {
+
+        callApiForShareFlow(_aepsLimitResultFlow) {
+            repository.aepsLimit(
+                hashMapOf(
+                    "iin" to iin
+                )
+            )
+        }
+    }
 
     private fun checkStatusForTransaction() {
 
@@ -245,8 +256,9 @@ class AepsViewModel @Inject constructor(
     fun setTransactionType(type: AepsTransactionType) {
         transactionType.value = type
 
-        if(transactionType.value == AepsTransactionType.MINI_STATEMENT ||
-                transactionType.value == AepsTransactionType.BALANCE_ENQUIRY){
+        if (transactionType.value == AepsTransactionType.MINI_STATEMENT ||
+            transactionType.value == AepsTransactionType.BALANCE_ENQUIRY
+        ) {
             input.amountInputWrapper.setValue("0")
         }
         setFormValid()
@@ -270,6 +282,7 @@ class AepsViewModel @Inject constructor(
     fun onBankChange(value: String) {
         selectedBank.value = bankNameToAepsBank(value)
         setFormValid()
+        fetchAepsLimit(selectedBank.value?.bankInnNumber.toString())
     }
 
     val transactionTypeText: String
@@ -322,40 +335,19 @@ class AepsViewModel @Inject constructor(
         )
 
         val call = suspend {
-            when (aepsType) {
-                AepsType.AEPS_1 -> transactionRepository.aepsTransaction(param)
-                AepsType.AEPS_3 -> transactionRepository.aeps3Transaction(param)
+            when (aepsType.value) {
+                AepsType.ICICI -> transactionRepository.aeps1Transaction(param)
+                AepsType.FINO -> transactionRepository.aeps2Transaction(param)
+                AepsType.PAYTM -> transactionRepository.aeps3Transaction(param)
             }
         }
         callApiForShareFlow(
             flow = _transactionResultFlow, call = call,
-            beforeEmit = {
-                val db = FirebaseDatabase()
-
-                val apiName = when (aepsType) {
-                    AepsType.AEPS_1 -> "aeps/one-new"
-                    AepsType.AEPS_3 -> "aeps/three-new"
-                }
-
-                if (it is ResultType.Success) {
-                    db.insertLog(
-                        FBAppLog(
-                            logs = it.data.toString(),
-                            apiName = apiName,
-                            isSuccess = true
-                        )
-                    )
-                } else if (it is ResultType.Failure) {
-                    db.insertLog(
-                        FBAppLog(
-                            logs = it.exception.message.toString(),
-                            apiName = apiName,
-                            isSuccess = false
-                        )
-                    )
-                }
-            }
         )
+    }
+
+    fun onAepsSelect(it: AepsType) {
+        aepsType.value = it
     }
 }
 
@@ -364,5 +356,5 @@ enum class AepsTransactionType {
 }
 
 enum class AepsType {
-    AEPS_1, AEPS_3
+    ICICI, FINO, PAYTM
 }

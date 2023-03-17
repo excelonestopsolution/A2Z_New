@@ -2,6 +2,7 @@ package com.a2z.app.data.repository_impl
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsBankListResponse
+import com.a2z.app.data.model.aeps.AepsLimitResponse
 import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
 import com.a2z.app.data.model.settlement.SettlementBankListResponse
@@ -32,6 +33,10 @@ class AepsRepositoryImpl @Inject constructor(private val service: AepsService) :
 
     override suspend fun tableCheckStatus(data: FieldMapData): AepsTransaction {
         return service.tableCheckStatus(data)
+    }
+
+    override suspend fun aepsLimit(data: FieldMapData): AepsLimitResponse {
+        return service.aepsLimit(data)
     }
 
     override suspend fun bankCheckStatus(data: FieldMapData): AepsTransaction {

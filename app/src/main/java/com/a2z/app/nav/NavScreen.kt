@@ -182,13 +182,7 @@ sealed class NavScreen(val route: String) {
     object ShowQRScreen : NavScreen("show-qr-screen") {
 
     }
-
-    object TestScreen : NavScreen("test-screen")
-    object AepsScreen : NavScreen("aeps-screen".params("aeps_type")) {
-        fun passArgs(aepsType: AepsType) =
-            "aeps-screen".args("aeps_type" to aepsType.toEncodedString())
-    }
-
+    object AepsScreen : NavScreen("aeps-screen")
     object MatmScreen : NavScreen("matm-screen".params("isMPos")) {
         fun passArgs(isMPos: Boolean) = "matm-screen".args("isMPos" to isMPos.toString())
     }

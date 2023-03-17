@@ -38,8 +38,8 @@ class RechargeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     appPreference: AppPreference
 ) : BaseViewModel() {
-    
-    val countryState : Pair<String,String> = savedStateHandle.safeSerializable("countryState")!!
+
+    val countryState: Pair<String, String> = savedStateHandle.safeSerializable("countryState")!!
 
     val operator: Operator = savedStateHandle.safeParcelable("operator")!!
     private var operatorType: OperatorType = savedStateHandle.safeSerializable("operatorType")!!
@@ -65,13 +65,15 @@ class RechargeViewModel @Inject constructor(
     var rechargePlanDialogState = mutableStateOf(false)
     var rechargePlanState = mutableStateOf<RechargePlan?>(null)
     var confirmDialogState = mutableStateOf(false)
-    var offerList: List<RechargePlan>? = null
+    var offerList: List<RechargePlan> = emptyList()
 
     fun onNumberChange(it: String) {
         if (isPrepaid()) {
-            offerList = null
-            if (it.length == 10) fetchRechargePlan()
-            else{
+            offerList = emptyList()
+            if (it.length == 10) {
+                fetchRechargePlan()
+                fetchROffer()
+            } else {
                 rechargePlanState.value = null
                 input.amountInputWrapper.setValue("")
                 input.amountInputWrapper.clearFormError()
@@ -83,8 +85,8 @@ class RechargeViewModel @Inject constructor(
     fun onAmountChange(amount: String) {
 
         if (isPrepaid()) {
-            if (offerList == null) return
-            rechargePlanState.value = offerList?.find {
+            if (offerList.isEmpty()) return
+            rechargePlanState.value = offerList.find {
                 it.rs.nullOrEmptyToDouble() == amount.nullOrEmptyToDouble()
             }
         }
@@ -93,59 +95,68 @@ class RechargeViewModel @Inject constructor(
 
     val rOfferFlow = resultStateFlow<ROfferResponse>()
     private fun fetchROffer() {
-        callApiForStateFlow(rOfferFlow, beforeEmit = {
-            if (it is ResultType.Success) {
-                if (it.data.status.equals("success", ignoreCase = true)) {
-                    offerList = it.data.offers
+
+        val rOfferList = offerList.filter { it.isROffer }
+        if (rOfferList.isEmpty())
+            callApiForStateFlow(rOfferFlow, beforeEmit = {
+                if (it is ResultType.Success) {
+                    if (it.data.status.equals("success", ignoreCase = true)) {
+                        offerList.plus(it.data.offers.map { e ->
+                            e.apply {
+                                this.isROffer = true
+                            }
+                        })
+                    }
                 }
+            }) {
+                repository.fetchRechargeOffer(
+                    "mobile_number" to input.numberInputWrapper.input.value,
+                    "provider" to operator.operatorName.toString()
+                )
             }
-        }) {
-            repository.fetchRechargeOffer(
-                "mobile_number" to input.numberInputWrapper.input.value,
-                "provider" to operator.operatorName.toString()
-            )
-        }
     }
 
 
     val rechargePlanResponseFlow = resultStateFlow<Any>()
     private fun fetchRechargePlan() {
-        callApiForStateFlow(rechargePlanResponseFlow, beforeEmit = {
-            if(it is ResultType.Success){
-                val rechargePlans = arrayListOf<RechargePlan>()
+        val simpleList = offerList.filter { !it.isROffer }
+        if (simpleList.isEmpty())
+            callApiForStateFlow(rechargePlanResponseFlow, beforeEmit = {
+                if (it is ResultType.Success) {
+                    val rechargePlans = arrayListOf<RechargePlan>()
 
-                val response = JSONObject(Gson().toJson(it.data))
-                val status = response.getInt("status")
-                if (status == 1) {
-                    val records = response.getJSONObject("records")
-                    val keys = records.keys()
-                    keys.forEach { key ->
-                        val mArray = records.getJSONArray(key)
-                        for (i in 0 until mArray.length()) {
-                            rechargePlans.add(
-                                RechargePlan(
-                                    rs = mArray.getJSONObject(i).optString("rs"),
-                                    desc = mArray.getJSONObject(i).optString("desc"),
-                                    validity = mArray.getJSONObject(i).optString("validity"),
-                                    remark = mArray.getJSONObject(i).optString("remark"),
-                                    discontinued = mArray.getJSONObject(i)
-                                        .optString("discontinued"),
+                    val response = JSONObject(Gson().toJson(it.data))
+                    val status = response.getInt("status")
+                    if (status == 1) {
+                        val records = response.getJSONObject("records")
+                        val keys = records.keys()
+                        keys.forEach { key ->
+                            val mArray = records.getJSONArray(key)
+                            for (i in 0 until mArray.length()) {
+                                rechargePlans.add(
+                                    RechargePlan(
+                                        rs = mArray.getJSONObject(i).optString("rs"),
+                                        desc = mArray.getJSONObject(i).optString("desc"),
+                                        validity = mArray.getJSONObject(i).optString("validity"),
+                                        remark = mArray.getJSONObject(i).optString("remark"),
+                                        discontinued = mArray.getJSONObject(i)
+                                            .optString("discontinued"),
+                                    )
                                 )
-                            )
 
+                            }
                         }
+                        offerList.plus(rechargePlans)
                     }
-                    offerList = rechargePlans
+
+
                 }
-
-
+            }) {
+                repository.fetchRechargePlan(
+                    "state" to countryState.first,
+                    "provider" to operator.id.toString()
+                )
             }
-        }) {
-            repository.fetchRechargePlan(
-                "state" to countryState.first,
-                "provider" to operator.id.toString()
-            )
-        }
     }
 
     val dthInfoState = mutableStateOf<RechargeDthInfo?>(null)

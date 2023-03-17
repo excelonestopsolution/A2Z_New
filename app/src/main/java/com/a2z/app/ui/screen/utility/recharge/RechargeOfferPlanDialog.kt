@@ -69,11 +69,12 @@ fun RechargeOfferPlanDialog(viewModel: RechargeViewModel = hiltViewModel()) {
                                     remark = mArray.getJSONObject(i).optString("remark"),
                                     discontinued = mArray.getJSONObject(i)
                                         .optString("discontinued"),
+                                    isROffer = false
                                 )
                             )
 
                         }
-                        viewModel.offerList = viewModel.offerList?.plus(rechargePlans)
+                        viewModel.offerList = viewModel.offerList.plus(rechargePlans)
                         tabs.add(RechargePlanTab(key, rechargePlans))
 
                     }

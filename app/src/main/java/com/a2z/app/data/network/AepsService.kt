@@ -2,14 +2,12 @@ package com.a2z.app.data.network
 
 import com.a2z.app.data.model.AppResponse
 import com.a2z.app.data.model.aeps.AepsBankListResponse
+import com.a2z.app.data.model.aeps.AepsLimitResponse
 import com.a2z.app.data.model.aeps.AepsTransaction
 import com.a2z.app.data.model.settlement.SettlementAddedBankListResponse
 import com.a2z.app.data.model.settlement.SettlementBankListResponse
 import com.a2z.app.util.FieldMapData
-import retrofit2.http.FieldMap
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AepsService {
 
@@ -37,6 +35,9 @@ interface AepsService {
     @POST("aeps/three/checkstatus")
     @FormUrlEncoded
     suspend fun bankCheckStatus(@FieldMap data: FieldMapData): AepsTransaction
+
+    @GET("aeps/bank/limit")
+    suspend fun aepsLimit(@QueryMap data: FieldMapData): AepsLimitResponse
 
 
 }

@@ -40,8 +40,13 @@ fun TitleValueHorizontally(
     title: String,
     value: String?,
     useNA: Boolean = false,
-    color : Color ? = null
+    color : Color ? = null,
+    titleWeight : Float?=null,
+    valueWeight: Float? = null
 ) {
+
+
+
   if(value !=null && value.toString().isNotEmpty())  Column {
         Row(modifier = Modifier.padding(vertical = 4.dp).fillMaxWidth()) {
             Text(
@@ -50,12 +55,12 @@ fun TitleValueHorizontally(
                     fontWeight = FontWeight.SemiBold,
                     color = color ?: Color.Black.copy(alpha = 0.7f)
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(titleWeight ?: 1f)
             )
             Text(" : ")
             Text(value ?: if (useNA) "Not Available" else "",
                 color = color ?: TextStyle.Default.color,
-                modifier = Modifier.weight(2f))
+                modifier = Modifier.weight(valueWeight ?: 2f))
 
 
         }

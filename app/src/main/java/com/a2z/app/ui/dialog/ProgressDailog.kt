@@ -12,14 +12,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.a2z.app.ui.theme.PrimaryColorDark
-import com.a2z.app.ui.theme.PrimaryColorLight
 import com.a2z.app.util.VoidCallback
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -28,6 +25,7 @@ fun ProgressDialog(
     text: String = "Loading",
     onClose: VoidCallback = {}
 ) {
+    javax.xml.crypto.g()
     Dialog(
         onDismissRequest = { onClose() }, properties = DialogProperties(
             dismissOnBackPress = true, dismissOnClickOutside = false,
@@ -104,5 +102,6 @@ fun ProgressFullScreenDialog(
             }
         }
     }
-}
 
+
+}

@@ -57,35 +57,17 @@ private fun BuildMoneyAEPService() {
 
                 Row {
                     BuildIconAndIconTitle(
-                        title = "AEPS 1",
+                        title = "AEPS",
                         icon = R.drawable.ic_launcher_aeps2,
                         padding = 14.dp,
                         color = color,
                         onClick = {
                             if (viewModel.dmtAndAEPSKycPendingState.value)
                                 viewModel.checkKycInfo()
-                            else navController.navigate(
-                                NavScreen.AepsScreen.passArgs(
-                                    aepsType = AepsType.AEPS_1
-                                )
-                            )
+                            else navController.navigate(NavScreen.AepsScreen.route)
                         }
                     )
-                    BuildIconAndIconTitle(
-                        title = "AEPS 3",
-                        icon = R.drawable.ic_launcher_aeps2,
-                        padding = 14.dp,
-                        color = color,
-                        onClick = {
-                            if (viewModel.dmtAndAEPSKycPendingState.value)
-                                viewModel.checkKycInfo()
-                            else navController.navigate(
-                                NavScreen.AepsScreen.passArgs(
-                                    aepsType = AepsType.AEPS_3
-                                )
-                            )
-                        }
-                    )
+
                     BuildIconAndIconTitle(
                         title = "M-ATM",
                         icon = R.drawable.ic_launcher_matm,
@@ -120,6 +102,7 @@ private fun BuildMoneyAEPService() {
                             )
                         }
                     )
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }

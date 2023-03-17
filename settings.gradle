@@ -4,6 +4,7 @@ pluginManagement {
         mavenCentral()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
         gradlePluginPortal()
     }
 }
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
         mavenCentral()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/' }
     }
 }
 rootProject.name = "A2Z_2022"

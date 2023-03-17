@@ -36,7 +36,7 @@ fun ROfferDialog(viewModel: RechargeViewModel = hiltViewModel()) {
         },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Surface(modifier = Modifier.fillMaxSize(), color = BackgroundColor) {
+        Surface(modifier = Modifier.fillMaxSize()) {
             ObsComponent(flow = viewModel.rOfferFlow) {
                 Column(
                     modifier = Modifier
@@ -75,13 +75,15 @@ fun ROfferDialog(viewModel: RechargeViewModel = hiltViewModel()) {
 @Composable
 private fun BuildList(it: List<RechargePlan>, onClick: (RechargePlan) -> Unit) {
     LazyColumn(content = {
-        items(it) {
+        items(it.filter { it.isROffer }) {
             Card(modifier = Modifier
                 .padding(horizontal = 12.dp, vertical = 5.dp)
                 .fillMaxWidth()
                 .clickable {
                     onClick(it)
-                }
+                },
+                shape = MaterialTheme.shapes.small,
+                elevation = 5.dp
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
@@ -95,7 +97,7 @@ private fun BuildList(it: List<RechargePlan>, onClick: (RechargePlan) -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        it.rs.toString(), style = MaterialTheme.typography.subtitle1.copy(
+                        it.desc.toString(), style = MaterialTheme.typography.subtitle1.copy(
                             color = Color.Gray,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 12.sp,

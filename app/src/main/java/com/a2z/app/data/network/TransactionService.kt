@@ -72,10 +72,16 @@ interface TransactionService {
 
     @POST("aeps/one-new")
     @FormUrlEncoded
-    suspend fun aepsTransaction(
+    suspend fun aeps1Transaction(
         @FieldMap data : FieldMapData
     ) : AepsTransaction
 
+
+    @POST("aeps/two-new")
+    @FormUrlEncoded
+    suspend fun aeps2Transaction(
+        @FieldMap data : FieldMapData
+    ) : AepsTransaction
 
     @POST("aeps/three-new")
     @FormUrlEncoded

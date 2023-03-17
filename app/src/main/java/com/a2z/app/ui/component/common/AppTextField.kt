@@ -454,10 +454,10 @@ fun AmountTextField(
         isOutline = isOutline,
         topSpace = topSpace,
         textStyle = TextStyle.Default.copy(
-            fontSize = 24.sp, fontWeight = FontWeight.Bold
+            fontSize = 20.sp, fontWeight = FontWeight.Bold
         ),
         hintTextStyle = TextStyle.Default.copy(
-            fontSize = 20.sp, fontWeight = FontWeight.SemiBold
+            fontSize = 18.sp, fontWeight = FontWeight.SemiBold
         ),
         downText = downText,
         readOnly = readOnly
@@ -524,6 +524,33 @@ fun DropDownTextField(
     }
 }
 
+@Composable
+fun DropDownTextField2(
+    value: String,
+    label: String,
+    hint: String,
+    error: FormFieldError = FormErrorType.Initial,
+    onClick: VoidCallback,
+    ) {
+
+
+    val source = remember {
+        MutableInteractionSource()
+    }
+    if (source.collectIsPressedAsState().value) {
+        onClick.invoke()
+    }
+    AppTextField(
+        value = value,
+        label = label,
+        hint = hint,
+        interactionSource = source,
+        readOnly = true,
+        leadingIcon = Icons.Default.Input,
+        error = error,
+    )
+}
+
 
 @Composable
 fun FileTextField(
@@ -558,6 +585,8 @@ fun FileTextField(
         }
     )
 }
+
+
 
 @Composable
 fun SearchTextField(

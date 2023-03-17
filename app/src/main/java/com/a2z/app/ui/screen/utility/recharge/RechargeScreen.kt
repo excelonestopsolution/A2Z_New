@@ -1,5 +1,6 @@
 package com.a2z.app.ui.screen.utility.recharge
 
+import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,7 +58,7 @@ fun RechargeScreen(
                 button = { FormButton(viewModel) },
                 cardContents = listOf(AppFormCard { FormCard(viewModel) })
             )
-           /* ROfferDialog()*/
+            ROfferDialog()
             RechargeOfferPlanDialog()
 
             val scope = rememberCoroutineScope()
@@ -140,7 +141,7 @@ private fun FormCard(viewModel: RechargeViewModel) {
     @Composable
     fun ROfferButton() {
         Button(onClick = {
-            viewModel.onFetchInfoButtonClick()
+
         }, modifier = Modifier.padding(horizontal = 12.dp)) {
             Text(text = viewModel.getFetchInfoButtonText())
         }
@@ -167,7 +168,7 @@ private fun FormCard(viewModel: RechargeViewModel) {
                 style = MaterialTheme.typography.body1.copy(
                     fontWeight = FontWeight.Bold,
 
-                )
+                    )
             )
         }
     }
@@ -189,12 +190,49 @@ private fun FormCard(viewModel: RechargeViewModel) {
             viewModel.onNumberChange(it)
         },
         error = numberInputWrapper.formError(),
-        trailingIcon = { if (numberInputWrapper.isValid()) ROfferButton() },
         maxLength = viewModel.inputMaxLength,
         keyboardType = KeyboardType.Number,
         downText = viewModel.inputDownText
 
     )
+
+    if (numberInputWrapper.isValid())
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+
+            if (viewModel.isPrepaid()) {
+                Button(
+                    onClick = { viewModel.onFetchInfoButtonClick() },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 2.dp)
+                ) {
+                    Text(text = "Simple Plan",
+                    fontSize = 12.sp)
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Button(onClick = { viewModel.rOfferDialogState.value = true },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 2.dp)
+                ) {
+                    Text(text = "Special Recharge",
+                    fontSize = 12.sp)
+                }
+            } else {
+                Button(
+                    onClick = { viewModel.onFetchInfoButtonClick() },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 2.dp)
+                ) {
+                    Text(text = "Customer Info",
+                    fontSize = 12.sp)
+                }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+        }
 
 
 
@@ -206,7 +244,8 @@ private fun FormCard(viewModel: RechargeViewModel) {
             viewModel.onAmountChange(it)
         },
         error = amountInputWrapper.formError(),
-        downText = "Enter amount ${viewModel.inputMinAmount} to 10000"
+        downText = "Enter amount ${viewModel.inputMinAmount} to 10000",
+        isOutline = true
     )
 
     if (viewModel.rechargePlanState.value != null)
@@ -244,14 +283,14 @@ private fun FormCard(viewModel: RechargeViewModel) {
 
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "₹ " + viewModel.rechargePlanState.value!!.rs.toString(),
+                    text = "₹ " + viewModel.rechargePlanState.value?.rs.toString(),
                     style = MaterialTheme.typography.subtitle1.copy(
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                     )
                 )
                 Text(
-                    text = viewModel.rechargePlanState.value!!.desc.toString(), style = TextStyle(
+                    text = viewModel.rechargePlanState.value?.desc.toString(), style = TextStyle(
                         fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Color.Gray
                     )
                 )
