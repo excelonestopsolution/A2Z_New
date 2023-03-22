@@ -125,7 +125,9 @@ class DMTMoneyTransferViewModel @Inject constructor(
                             it.data?.status == 34 ||
                             it.data?.status == 37
                         ) {
+                            navigateUpWithResult()
                             navigateTo(NavScreen.DMTTxnScreen.passArgs(it.data!!))
+
                         } else alertDialog(it.message.toString())
                     } else alertDialog(it.message.toString())
                 },
@@ -145,7 +147,9 @@ class DMTMoneyTransferViewModel @Inject constructor(
                         it.status == 1 || it.status == 2 || it.status == 3 ||
                         it.status == 34 || it.status == 37
                     ) {
+                        navigateUpWithResult()
                         navigateTo(NavScreen.UPITxnScreen.passArgs(it))
+
                     } else alertDialog(it.message.toString())
                 },
                 failure = {

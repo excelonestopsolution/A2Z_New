@@ -91,6 +91,7 @@ class INTransferViewModel @Inject constructor(
                 transactionProgressDialog()
             },
             failure = {
+                navigateUpWithResult()
                 navigateTo(NavScreen.IndoNepalTxnScreen.passArgs(response!!.apply {
                     this.isTransaction = true
                 }))
@@ -100,6 +101,7 @@ class INTransferViewModel @Inject constructor(
                     response?.status = 1
                     response?.message = it.message
                 }
+                navigateUpWithResult()
                 navigateTo(NavScreen.IndoNepalTxnScreen.passArgs(response!!.apply {
                     this.isTransaction = true
                 }))

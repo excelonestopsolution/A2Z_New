@@ -9,11 +9,13 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Whatsapp
 import androidx.compose.runtime.Composable
@@ -30,7 +32,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -50,7 +51,6 @@ import com.a2z.app.ui.util.pdf.ReceiptDownloadUtil
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.util.AppConstant
 import com.a2z.app.util.VoidCallback
-import com.a2z.app.util.extension.showToast
 import com.a2z.app.util.storage.StorageHelper
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -81,117 +81,172 @@ fun BaseResultComponent(
 
     val viewModel: TxnResultViewModel = hiltViewModel()
 
-    BackPressHandler(onBack = {
-        navController.navigate(NavScreen.DashboardScreen.route) {
-            popUpTo(NavScreen.DashboardScreen.route) {
-                inclusive = true
-            }
-        }
-    }, enabled = backPressHandle) {
-        Scaffold(
-            backgroundColor = BackgroundColor
-        ) { _ ->
 
-            BaseContent(viewModel) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
+    Scaffold(
+        backgroundColor = BackgroundColor
+    ) { _ ->
 
-                    AndroidView(factory = {
-                        val view = LayoutInflater.from(context)
-                            .inflate(R.layout.view_receipt, null, false)
-                        view
-                    }, update = {
-                        scrollView = it.findViewById(R.id.scroll_view)
+        BaseContent(viewModel) {
 
-                        val mainView = ComposeView(context = context).apply {
-                            this.setContent {
-                                BuildContent(
-                                    statusId = statusId,
-                                    message = message,
-                                    status = status,
-                                    dateTime = dateTime,
-                                    serviceName = amountTopText,
-                                    providerName = amountBelowText,
-                                    amount = amount,
-                                    availableBalance = availableBalance,
-                                    dmtInfo = dmtInfo,
-                                    isPaymentAmount = isPaymentAmount,
-                                    serviceIconRes = serviceIconRes,
-                                    serviceIconNet = serviceIconNet,
-                                    titleValues = titleValues,
-                                    iconSize = iconSize,
-                                    statement = statement
-                                )
-                            }
-                        }
-                        val spaceView = TextView(context).apply {
-                            layoutParams =
-                                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300)
-                        }
 
-                        val linearLayout = LinearLayout(context).apply {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
 
-                            //layout params
-                            this.orientation = LinearLayout.VERTICAL
-                            this.layoutParams = LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT
+
+                AndroidView(factory = {
+                    val view = LayoutInflater.from(context)
+                        .inflate(R.layout.view_receipt, null, false)
+                    view
+                }, update = {
+                    scrollView = it.findViewById(R.id.scroll_view)
+
+                    val mainView = ComposeView(context = context).apply {
+                        this.setContent {
+                            BuildContent(
+                                statusId = statusId,
+                                message = message,
+                                status = status,
+                                dateTime = dateTime,
+                                serviceName = amountTopText,
+                                providerName = amountBelowText,
+                                amount = amount,
+                                availableBalance = availableBalance,
+                                dmtInfo = dmtInfo,
+                                isPaymentAmount = isPaymentAmount,
+                                serviceIconRes = serviceIconRes,
+                                serviceIconNet = serviceIconNet,
+                                titleValues = titleValues,
+                                iconSize = iconSize,
+                                statement = statement
                             )
-                            //add views
-                            this.addView(mainView)
-                            this.addView(spaceView)
-                        }
-
-                        scrollView?.let { sv ->
-                            if (sv.childCount == 0) sv.addView(linearLayout)
-                        }
-
-
-                    }, modifier = Modifier.padding(16.dp))
-
-
-                    BuildShareButtons(
-                        onShare = { saveAndShare(scrollView!!) },
-                        onWhatsapp = { saveAndShare(scrollView!!, true) },
-                        onDownload = {
-                            viewModel.downloadReceiptData()
-                        })
-
-                }
-
-                CollectLatestWithScope(flow = viewModel.resultFlow, callback = {
-                    when (it) {
-                        is ResultType.Failure -> viewModel.failureDialog("Opps something went wrong")
-                        is ResultType.Loading -> viewModel.progressDialog("Downloading...")
-                        is ResultType.Success -> {
-                            viewModel.response = it.data
-                            viewModel.dismissDialog()
-                            if (!commissionAmount)
-                                ReceiptDownloadUtil.download(
-                                    context = context,
-                                    data = it.data,
-                                    txnResultPrintReceiptType = viewModel.receiptType,
-                                    commission = null
-                                )
-                            else viewModel.commissionAmountDialog.value = true
                         }
                     }
-                })
+                    val spaceViewBottom = TextView(context).apply {
+                        layoutParams =
+                            ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                300
+                            )
+                    }
+                    val spaceViewTop = TextView(context).apply {
+                        layoutParams =
+                            ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                150
+                            )
+                    }
+
+                    val linearLayout = LinearLayout(context).apply {
+
+                        //layout params
+                        this.orientation = LinearLayout.VERTICAL
+                        this.layoutParams = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        //add views
+                        this.addView(spaceViewTop)
+                        this.addView(mainView)
+                        this.addView(spaceViewBottom)
+                    }
+
+                    scrollView?.let { sv ->
+                        if (sv.childCount == 0) sv.addView(linearLayout)
+                    }
 
 
-                DMTCommissionDialog(state = viewModel.commissionAmountDialog, onProceed = {
-                    ReceiptDownloadUtil.download(
-                        context = context,
-                        data = viewModel.response,
-                        txnResultPrintReceiptType = viewModel.receiptType,
-                        commission = it
-                    )
-                })
+                }, modifier = Modifier.padding(horizontal = 12.dp))
+
+
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxWidth()
+                        .background(Color.Black.copy(0.1f))
+                        .padding(start = 12.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                ) {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.cancel),
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Button(
+                        onClick = {
+                            navController.navigate(NavScreen.DashboardScreen.route) {
+                                popUpTo(NavScreen.DashboardScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+
+                        },
+                        shape = CircularShape,
+                        modifier = Modifier.height(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Home, contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(text = "Home")
+                    }
+                }
+                BuildShareButtons(
+                    onShare = { saveAndShare(scrollView!!) },
+                    onWhatsapp = { viewModel.whatsAppDialog.value = true },
+                    onDownload = {
+                        viewModel.downloadReceiptData()
+                    })
+
             }
+
+
+            CollectLatestWithScope(flow = viewModel.resultFlow, callback = {
+                when (it) {
+                    is ResultType.Failure -> viewModel.failureDialog("Opps something went wrong")
+                    is ResultType.Loading -> viewModel.progressDialog("Downloading...")
+                    is ResultType.Success -> {
+                        viewModel.response = it.data
+                        viewModel.dismissDialog()
+                        if (!commissionAmount)
+                            ReceiptDownloadUtil.download(
+                                context = context,
+                                data = it.data,
+                                txnResultPrintReceiptType = viewModel.receiptType,
+                                commission = null
+                            )
+                        else viewModel.commissionAmountDialog.value = true
+                    }
+                }
+            })
+
+
+            DMTCommissionDialog(state = viewModel.commissionAmountDialog, onProceed = {
+                ReceiptDownloadUtil.download(
+                    context = context,
+                    data = viewModel.response,
+                    txnResultPrintReceiptType = viewModel.receiptType,
+                    commission = it
+                )
+            })
+
+            WhatsAppSendDialog(state = viewModel.whatsAppDialog,
+                withContact = {
+                    saveAndShare(scrollView!!, true)
+                }, withNumber = {
+                    saveAndShare(scrollView!!, true, whatsappNumber = it)
+                })
         }
     }
+
 }
 
 
@@ -665,7 +720,11 @@ private fun BoxScope.BuildShareButtons(
 
 }
 
-private fun saveAndShare(scrollView: ScrollView, whatsapp: Boolean = false) {
+private fun saveAndShare(
+    scrollView: ScrollView,
+    whatsapp: Boolean = false,
+    whatsappNumber: String? = null
+) {
     scrollView.setBackgroundColor(ContextCompat.getColor(scrollView.context, R.color.black))
     val bitmap: Bitmap? = StorageHelper.getBitmapFromView(scrollView = scrollView)
     scrollView.setBackgroundColor(
@@ -680,7 +739,7 @@ private fun saveAndShare(scrollView: ScrollView, whatsapp: Boolean = false) {
         fileName = "transaction_receipt.jpg",
 
         )
-    StorageHelper.shareImage(imageFileUri, scrollView.context, whatsapp)
+    StorageHelper.shareImage(imageFileUri, scrollView.context, whatsapp, whatsappNumber)
 
 }
 

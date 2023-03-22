@@ -160,9 +160,11 @@ dependencies {
 
     //matm
     implementation files('libs/matm_mos.aar')
+    //implementation files('libs/matm_fingpay.aar')
+    //implementation files('libs/matm_mosambeelib.aar')
 
     // implementation files('libs/matm_fingpay.aar')
-    // implementation files('libs/mosambeelib_v_1.1.0.0007.08.aar')
+    // implementation files('libs/mosambeelib.aar')
     //implementation files('libs/morefun_mpos_sdk_v2.1.20210628.jar')
 
 

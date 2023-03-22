@@ -1,14 +1,17 @@
 package com.a2z.app.util.storage
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
+import android.telephony.PhoneNumberUtils
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileNotFoundException
@@ -48,16 +51,28 @@ object StorageHelper {
         )
     }
 
-    fun shareImage(uri: Uri, context: Context, isWhatsAppOnly: Boolean) {
+    fun shareImage(
+        uri: Uri,
+        context: Context,
+        isWhatsAppOnly: Boolean,
+        whatsappNumber: String? = null
+    ) {
 
-        val intent = Intent(Intent.ACTION_SEND)
-        val whatsAppPackageName = "com.whatsapp"
-        if (isWhatsAppOnly) intent.setPackage(whatsAppPackageName)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.type = "image/jpg"
-        context.startActivity(Intent.createChooser(intent, "A2Z Suvidhaa Transaction"))
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        if (isWhatsAppOnly) {
+            val whatsAppPackageName = "com.whatsapp"
+            sendIntent.setPackage(whatsAppPackageName)
+            if (whatsappNumber != null) sendIntent.putExtra(
+                "jid",
+                PhoneNumberUtils.stripSeparators("91$whatsappNumber") + "@s.whatsapp.net"
+            )
+
+        }
+        sendIntent.type = "image/jpg"
+        sendIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        sendIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        context.startActivity(Intent.createChooser(sendIntent, "A2Z Suvidhaa Transaction"))
     }
 
     fun getBitmapFromView(scrollView: ScrollView): Bitmap? {

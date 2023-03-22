@@ -32,6 +32,7 @@ import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
@@ -106,6 +107,7 @@ private fun proceedToRecharge(
                         1, 2, 3, 34 -> {
                             viewModel.dialogState.value = StatusDialogType.None
                             val response = it.data
+                            navController.navigateUp()
                             navController
                                 .navigate(NavScreen.RechargeTxnScreen.passArgs(
                                     response.apply {

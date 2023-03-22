@@ -21,6 +21,7 @@ class TxnResultViewModel @Inject constructor(
     val resultFlow = resultShareFlow<TransactionDetailResponse>()
 
     val commissionAmountDialog = mutableStateOf(false)
+    val whatsAppDialog = mutableStateOf(false)
     fun downloadReceiptData() {
 
         val call = suspend {

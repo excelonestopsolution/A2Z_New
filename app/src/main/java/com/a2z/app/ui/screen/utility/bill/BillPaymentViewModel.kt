@@ -88,6 +88,7 @@ class BillPaymentViewModel @Inject constructor(
         ) {
             val status: Int = it.status
             if (status == 1 || status == 3 || status == 24 || status == 34) {
+                navigateUpWithResult()
                 navigateTo(NavScreen.BillPaymentTxnScreen.passArgs(
                     response = it.apply {
                         this.numberTitle = operator.dealerName

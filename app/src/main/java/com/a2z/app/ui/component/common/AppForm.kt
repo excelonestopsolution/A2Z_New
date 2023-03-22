@@ -19,7 +19,7 @@ data class AppFormCard(
     val title: String? = null,
     val isVisible: Boolean = true,
     val contents: @Composable ColumnScope.() -> Unit,
-    val topPadding : Int ? = null
+
 )
 
 
