@@ -1,6 +1,7 @@
 package com.a2z.app.data.local
 
 import android.content.Context
+import com.a2z.app.data.model.auth.AepsDriver
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.model.dmt.UpiStaticMessage
 import com.a2z.app.data.model.indonepal.INStaticData

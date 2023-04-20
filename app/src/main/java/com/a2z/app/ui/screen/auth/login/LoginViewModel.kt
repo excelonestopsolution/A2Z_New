@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
+import com.a2z.app.data.model.auth.AepsDriver
 import com.a2z.app.data.model.auth.User
 import com.a2z.app.data.repository.AuthRepository
 import com.a2z.app.nav.NavScreen
@@ -30,7 +31,8 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val appUtilDI: AppUtilDI,
     val appPreference: AppPreference,
-) : BaseViewModel() {
+) : BaseViewModel()
+{
 
     var input = LoginInput()
     var loginCheckState = mutableStateOf(false)
@@ -133,6 +135,9 @@ class LoginViewModel @Inject constructor(
     private fun saveData(it: User) {
 
         appPreference.user = it
+
+        aepsDrivers = it.aepsDrivers as MutableList<AepsDriver>
+
         if (loginCheckState.value) {
             appPreference.loginCheck = true
             appPreference.loginId = input.userIdWrapper.input.value

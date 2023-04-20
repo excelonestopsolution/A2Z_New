@@ -12,7 +12,8 @@ data class AepsBankListResponse(
     val status : Int,
     val message : String,
     @SerializedName("data")
-    val banks : List<AepsBank> ?
+    val banks : List<AepsBank> ?,
+    val default_aeps_service : String
 ) : Parcelable
 
 @Keep

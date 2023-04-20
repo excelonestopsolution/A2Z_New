@@ -28,7 +28,7 @@ class AEPSKycViewModel @Inject constructor(
 
     val input = InputForm()
     lateinit var pidData: String
-
+    val driver = aepsDrivers
     val kycDetailResultFlow = resultStateFlow<AepsKycDetailResponse>()
     private val _requestOtpResultFlow = resultShareFlow<AppResponse>()
     private val _verifyOtpResultFlow = resultShareFlow<AppResponse>()

@@ -47,6 +47,11 @@ fun AepsScreen() {
         BaseContent(viewModels = arrayOf(viewModel)) {
             ObsComponent(flow = viewModel.bankListResponseFlow) {
                 viewModel.bankList = it.banks
+                when(it.default_aeps_service){
+                    "FINO" -> viewModel.aepsType.value = AepsType.FINO
+                    "ICICI" -> viewModel.aepsType.value = AepsType.ICICI
+                    "PAYTM" -> viewModel.aepsType.value = AepsType.PAYTM
+                }
                 BuildMainContent()
             }
         }
@@ -74,11 +79,17 @@ fun BuildMainContent() {
 
     BottomSheetComponent(
         sheetContent = { closeAction ->
-            BottomSheetAepsDevice {
+            BottomSheetAepsDevice(aepsDrivers = viewModel.drivers) {
                 closeAction.invoke()
                 try {
+                    if (it.driver_name == "Iris"){
+                        viewModel.IrisValue = "1"
+                    }
+                    else{
+                        viewModel.IrisValue = "2"
+                    }
                     viewModel.biometricDevice = it
-                    pidLauncher.launch(AepsUtil.pidIntent(it.packageName))
+                    pidLauncher.launch(AepsUtil.pidIntent(it))
                 } catch (e: Exception) {
                     viewModel.bannerState.value = BannerType.Failure("RD Service", "not found!")
                 }

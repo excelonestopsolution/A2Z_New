@@ -176,7 +176,6 @@ sealed class NavScreen(val route: String) {
             return "permission-screen".args("permissionType" to Uri.encode(json))
         }
 
-
     }
 
     object ShowQRScreen : NavScreen("show-qr-screen") {

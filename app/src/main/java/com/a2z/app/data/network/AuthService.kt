@@ -21,7 +21,6 @@ interface AuthService {
     @POST("verify-device")
     suspend fun verifyLoginOtp(@FieldMap data: Map<String, String>): AppResponse
 
-
     @FormUrlEncoded
     @POST("resend-device-otp")
     suspend fun verifyLoginResendOtp(@FieldMap data: FieldMapData): AppResponse

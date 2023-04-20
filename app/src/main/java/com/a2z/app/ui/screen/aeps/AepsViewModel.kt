@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.a2z.app.data.local.AppPreference
 import com.a2z.app.data.model.aeps.*
+import com.a2z.app.data.model.auth.AepsDriver
 import com.a2z.app.data.repository.AepsRepository
 import com.a2z.app.data.repository.TransactionRepository
 import com.a2z.app.nav.NavScreen
@@ -33,8 +34,9 @@ class AepsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val aepsType = mutableStateOf(AepsType.ICICI)
-
-    lateinit var biometricDevice: RDService
+    val drivers = aepsDrivers
+    var IrisValue = "1"
+    lateinit var biometricDevice: AepsDriver
     val transactionType = mutableStateOf(AepsTransactionType.CASH_WITHDRAWAL)
     var spinnerDialogState = mutableStateOf(false)
     var selectedBank = mutableStateOf<AepsBank?>(null)
@@ -319,8 +321,6 @@ class AepsViewModel @Inject constructor(
         }
 
     fun onConfirmTransaction() {
-
-
         val amount = if (isCashTransaction) input.amountInputWrapper.getValue()
         else "0"
         checkStatusCountTotal = 0
@@ -333,10 +333,11 @@ class AepsViewModel @Inject constructor(
             "transactionType" to getTransactionTypeParam(),
             "txtPidData" to pidData,
             "amount" to amount,
-            "deviceName" to biometricDevice.deviceName,
+            "deviceName" to biometricDevice.driver_name,
             "aadhaarNumber" to input.aadhaarInputWrapper.getValue(),
             "latitude" to appPreference.latitude,
             "longitude" to appPreference.longitude,
+            "IsIris" to IrisValue
         )
 
         val call = suspend {

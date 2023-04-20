@@ -3,6 +3,7 @@ package com.a2z.app.ui.util
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.a2z.app.data.model.auth.AepsDriver
 import com.a2z.app.ui.util.resource.BannerType
 import com.a2z.app.ui.util.resource.ResultType
 import com.a2z.app.ui.util.resource.StatusDialogType
@@ -34,6 +35,10 @@ open class BaseViewModel : ViewModel() {
     val dashboardState = MutableSharedFlow<Boolean>()
     val navigateToFlow = MutableSharedFlow<NavigateTo>()
     val navigateUpWithResultFlow = MutableSharedFlow<Map<String, Any>>()
+
+    companion object{
+        var aepsDrivers = mutableListOf<AepsDriver>()
+    }
 
     fun showExceptionDialog(e: Exception, popUpScreen: Boolean = true) {
         val exception = ExceptionState(e, popUpScreen)

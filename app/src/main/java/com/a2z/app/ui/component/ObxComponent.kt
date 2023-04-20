@@ -15,7 +15,6 @@ import com.a2z.app.util.VoidCallback
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-
 @Composable
 fun <T> ObsComponent(
     flow: StateFlow<ResultType<T>>,

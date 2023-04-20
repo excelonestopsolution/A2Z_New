@@ -3,6 +3,7 @@ package com.a2z.app.util
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResult
+import com.a2z.app.data.model.auth.AepsDriver
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
@@ -11,14 +12,26 @@ import java.io.StringReader
 
 object AepsUtil {
 
-    const val PIP_OPTION = """<PidOptions ver="1.0">
+    var PIP_OPTION = ""
+    var action = ""
+
+    fun pidIntent(aepsDriver: AepsDriver): Intent {
+
+        if (aepsDriver.driver_name == "Iris"){
+            PIP_OPTION = """<PidOptions ver="1.0">
+       <Opts env="P" format="0" iCount="1" iType="0" pidVer="2.0" timeout="10000"/>
+    </PidOptions>"""
+            action = "in.gov.uidai.rdservice.iris.CAPTURE"
+        }
+        else{
+            PIP_OPTION = """<PidOptions ver="1.0">
        <Opts env="P" fCount="1" fType="2" format="0" iCount="0" iType="0" pCount="0" pType="0" pidVer="2.0" posh="UNKNOWN" timeout="10000"/>
     </PidOptions>"""
-
-    fun pidIntent(packageName: String): Intent {
+            action = "in.gov.uidai.rdservice.fp.CAPTURE"
+        }
         val intent = Intent()
-        intent.setPackage(packageName)
-        intent.action = "in.gov.uidai.rdservice.fp.CAPTURE"
+        intent.setPackage(aepsDriver.package_name)
+        intent.action = action
         intent.putExtra("PID_OPTIONS", PIP_OPTION)
         return intent
     }

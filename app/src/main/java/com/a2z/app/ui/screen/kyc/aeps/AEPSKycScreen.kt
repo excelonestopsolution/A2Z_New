@@ -58,10 +58,10 @@ fun AEPSKycScreen() {
         BaseContent(viewModel) {
 
             BottomSheetComponent(sheetContent = { action ->
-                BottomSheetAepsDevice(onSelect = {
+                BottomSheetAepsDevice(viewModel.driver,onSelect = {
                     action.invoke()
                     try {
-                        pidLauncher.launch(AepsUtil.pidIntent(it.packageName))
+                        pidLauncher.launch(AepsUtil.pidIntent(it))
                     } catch (e: Exception) {
                         viewModel.bannerState.value = BannerType.Failure("RD Service", "not found!")
                     }

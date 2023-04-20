@@ -18,18 +18,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.a2z.app.data.model.aeps.RDService
+import com.a2z.app.data.model.auth.AepsDriver
 import com.a2z.app.ui.screen.AppViewModel
 import com.a2z.app.ui.theme.LocalNavController
 import com.a2z.app.util.extension.showToast
 
-private val rdServiceList = listOf(
-    RDService(deviceName = "Morpho", "com.scl.rdservice"),
-    RDService(deviceName = "Mantra", "com.mantra.rdservice"),
-    RDService(deviceName = "StartTek", "com.acpl.registersdk"),
-)
+//private val rdServiceList = listOf(
+//    RDService(deviceName = "Morpho", "com.scl.rdservice"),
+//    RDService(deviceName = "Mantra", "com.mantra.rdservice"),
+//    RDService(deviceName = "StartTek", "com.acpl.registersdk"),
+//)
+//private val rdServiceList = mutableListOf<RDService>()
 
 @Composable
-fun BottomSheetAepsDevice(onSelect : (RDService)->Unit) {
+fun BottomSheetAepsDevice(aepsDrivers : List<AepsDriver>,onSelect : (AepsDriver)->Unit) {
 
     val context  = LocalContext.current
 
@@ -51,7 +53,7 @@ fun BottomSheetAepsDevice(onSelect : (RDService)->Unit) {
             ))
             Spacer(modifier = Modifier.height(32.dp))
 
-            rdServiceList.forEachIndexed { index, it ->
+            aepsDrivers.forEachIndexed { index, it ->
                 TextButton(onClick = {
                     try {
                         onSelect.invoke(it)
@@ -60,7 +62,7 @@ fun BottomSheetAepsDevice(onSelect : (RDService)->Unit) {
                     }
                 }, ) {
                     Text(
-                        text = (index +1).toString() +".  "+it.deviceName,
+                        text = (index +1).toString() +".  "+it.driver_name,
                         style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colors.primary),
                         modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth()

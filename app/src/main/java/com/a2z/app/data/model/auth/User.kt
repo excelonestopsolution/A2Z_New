@@ -48,5 +48,6 @@ data class User(
     @SerializedName("matm") val matm: String,
     @SerializedName("mpos") val mpos: String,
     @SerializedName("indoNepal") val indoNepal: String,
+    @SerializedName("aeps_drivers") val aepsDrivers : List<AepsDriver>
 
     ) : Parcelable
